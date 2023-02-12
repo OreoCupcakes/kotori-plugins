@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Owain van Brakel <https:github.com/Owain94>
+ * Copyright (c) 2019 Im2be <https://github.com/Im2be>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -23,20 +23,15 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-rootProject.name = "kotori-ported-plugins"
+package com.theplug.kotori.cerberushelper.domain;
 
-include(":javaexample")
-include(":alchemicalhydra")
-include(":cerberushelper")
-include(":demonicgorillas")
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-for (project in rootProject.children) {
-    project.apply {
-        projectDir = file(name)
-        buildFileName = "$name.gradle.kts"
-
-        require(projectDir.isDirectory) { "Project '${project.path} must have a $projectDir directory" }
-        require(buildFile.isFile) { "Project '${project.path} must have a $buildFile build script" }
-    }
+@Getter
+@RequiredArgsConstructor
+public class CerberusAttack
+{
+	private final int tick;
+	private final Cerberus.Attack attack;
 }
-include("demonicgorillas")

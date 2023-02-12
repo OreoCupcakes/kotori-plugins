@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Owain van Brakel <https:github.com/Owain94>
+ * Copyright (c) 2019 Im2be <https://github.com/Im2be>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -23,20 +23,24 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-rootProject.name = "kotori-ported-plugins"
+package com.theplug.kotori.cerberushelper.domain;
 
-include(":javaexample")
-include(":alchemicalhydra")
-include(":cerberushelper")
-include(":demonicgorillas")
+import java.awt.Color;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import net.runelite.api.Skill;
 
-for (project in rootProject.children) {
-    project.apply {
-        projectDir = file(name)
-        buildFileName = "$name.gradle.kts"
+@Getter
+@RequiredArgsConstructor
+public enum Phase
+{
+	SPAWNING(null, 4, null),
+	AUTO(Skill.ATTACK, 6, null),
+	TRIPLE(Skill.FLETCHING, 6, new Color(153, 214, 255)),
+	GHOSTS(Skill.PRAYER, 8, new Color(255, 255, 255)),
+	LAVA(Skill.FIREMAKING, 8, new Color(255, 153, 153));
 
-        require(projectDir.isDirectory) { "Project '${project.path} must have a $projectDir directory" }
-        require(buildFile.isFile) { "Project '${project.path} must have a $buildFile build script" }
-    }
+	private final Skill type;
+	private final int tickDelay;
+	private final Color textColor;
 }
-include("demonicgorillas")

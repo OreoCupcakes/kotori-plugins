@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Owain van Brakel <https:github.com/Owain94>
+ * Copyright (c) 2019 Im2be <https://github.com/Im2be>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -23,20 +23,45 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-rootProject.name = "kotori-ported-plugins"
+package com.theplug.kotori.cerberushelper.domain;
 
-include(":javaexample")
-include(":alchemicalhydra")
-include(":cerberushelper")
-include(":demonicgorillas")
+import javax.annotation.Nullable;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import net.runelite.api.coords.WorldPoint;
 
-for (project in rootProject.children) {
-    project.apply {
-        projectDir = file(name)
-        buildFileName = "$name.gradle.kts"
+@Getter
+@RequiredArgsConstructor
+public enum Arena
+{
+	WEST(1231, 1249, 1243, 1257),
+	NORTH(1295, 1313, 1307, 1321),
+	EAST(1359, 1377, 1243, 1257);
 
-        require(projectDir.isDirectory) { "Project '${project.path} must have a $projectDir directory" }
-        require(buildFile.isFile) { "Project '${project.path} must have a $buildFile build script" }
-    }
+	private final int x1, x2, y1, y2;
+
+	@Nullable
+	public static Arena getArena(final WorldPoint worldPoint)
+	{
+		for (final Arena arena : Arena.values())
+		{
+			if (worldPoint.getX() >= arena.getX1() && worldPoint.getX() <= arena.getX2() &&
+				worldPoint.getY() >= arena.getY1() && worldPoint.getY() <= arena.getY2())
+			{
+				return arena;
+			}
+		}
+
+		return null;
+	}
+
+	public WorldPoint getGhostTile(final int ghostIndex)
+	{
+		if (ghostIndex > 2 || ghostIndex < 0)
+		{
+			return null;
+		}
+
+		return new WorldPoint(x1 + 8 + ghostIndex, y1 + 13, 0);
+	}
 }
-include("demonicgorillas")
