@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Owain van Brakel <https:github.com/Owain94>
+ * Copyright (c) 2022, Kotori <https://github.com/OreoCupcakes/>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -10,7 +10,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -22,21 +21,41 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package com.theplug.kotori.vorkath.utils;
 
-rootProject.name = "kotori-ported-plugins"
+import java.lang.reflect.*;
 
-include(":javaexample")
-include(":alchemicalhydra")
-include(":cerberushelper")
-include(":demonicgorillas")
-include(":vorkathoverlay")
+import net.runelite.api.Client;
+import net.runelite.api.NPC;
+import net.runelite.api.Actor;
 
-for (project in rootProject.children) {
-    project.apply {
-        projectDir = file(name)
-        buildFileName = "$name.gradle.kts"
+public class NPCAnimationID {
 
-        require(projectDir.isDirectory) { "Project '${project.path} must have a $projectDir directory" }
-        require(buildFile.isFile) { "Project '${project.path} must have a $buildFile build script" }
+    private Client client;
+    private NPC npc;
+    private int animationID;
+
+    final private String className = "cb";
+    final private String fieldName = "bc";
+    final private int obfuscatedGetter = -1519553247;
+
+    public NPCAnimationID(Client client, NPC npc) {
+        this.client = client;
+        this.npc = npc;
     }
+
+    public int getNPCAnimationID() {
+        try {
+            Field sequence = client.getClass().getClassLoader().loadClass(className).getDeclaredField(fieldName);
+            sequence.setAccessible(true);
+            int obfuscatedSequenceValue = sequence.getInt(npc);
+            sequence.setAccessible(false);
+            animationID = obfuscatedSequenceValue * obfuscatedGetter;
+        } catch (Exception e) {
+            System.err.println(e);
+        }
+
+        return animationID;
+    }
+
 }
