@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Owain van Brakel <https:github.com/Owain94>
+ * Copyright (c) 2019, TheStonedTurtle <https://github.com/TheStonedTurtle>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -23,21 +23,20 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-rootProject.name = "kotori-ported-plugins"
+package com.theplug.kotori.gauntletextended.utils;
 
-include(":javaexample")
-include(":alchemicalhydra")
-include(":cerberushelper")
-include(":demonicgorillas")
-include(":vorkathoverlay")
-include(":gauntletextended")
+import java.awt.Color;
+import java.util.Collections;
+import java.util.List;
+import lombok.Builder;
+import lombok.Data;
 
-for (project in rootProject.children) {
-    project.apply {
-        projectDir = file(name)
-        buildFileName = "$name.gradle.kts"
-
-        require(projectDir.isDirectory) { "Project '${project.path} must have a $projectDir directory" }
-        require(buildFile.isFile) { "Project '${project.path} must have a $buildFile build script" }
-    }
+@Data
+@Builder
+public class TableRow
+{
+    Color rowColor;
+    TableAlignment rowAlignment;
+    @Builder.Default
+    List<TableElement> elements = Collections.emptyList();
 }

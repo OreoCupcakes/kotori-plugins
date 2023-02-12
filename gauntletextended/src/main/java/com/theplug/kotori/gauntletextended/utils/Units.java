@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, Andrew EP | ElPinche256 <https://github.com/ElPinche256>
+ * Copyright (c) 2020, Hydrox6 <ikada@protonmail.ch>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -22,24 +22,33 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.example.javaexample;
 
-import net.runelite.client.config.Config;
-import net.runelite.client.config.ConfigGroup;
-import net.runelite.client.config.ConfigItem;
+package com.theplug.kotori.gauntletextended.utils;
 
-@ConfigGroup("JavaExampleConfig")
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public interface JavaExampleConfig extends Config
+/**
+ * Used with ConfigItem, defines what units are shown to the side of the box.
+ */
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+@Documented
+public @interface Units
 {
-	@ConfigItem(
-		keyName = "example",
-		name = "Example config item",
-		description = "Example",
-		position = 0
-	)
-	default boolean example()
-	{
-		return true;
-	}
+    String MILLISECONDS = "ms";
+    String MINUTES = " mins";
+    String PERCENT = "%";
+    String PIXELS = "px";
+    String POINTS = "pt";
+    String SECONDS = "s";
+    String TICKS = " ticks";
+    String LEVELS = " lvls";
+    String FPS = " fps";
+    String GP = " GP";
+
+    String value();
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Owain van Brakel <https:github.com/Owain94>
+ * Copyright (c) 2020, dutta64 <https://github.com/dutta64>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -10,7 +10,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,21 +22,54 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-rootProject.name = "kotori-ported-plugins"
+package com.theplug.kotori.gauntletextended.entity;
 
-include(":javaexample")
-include(":alchemicalhydra")
-include(":cerberushelper")
-include(":demonicgorillas")
-include(":vorkathoverlay")
-include(":gauntletextended")
+import java.awt.Color;
+import java.util.Set;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import net.runelite.api.NPC;
+import net.runelite.api.NpcID;
 
-for (project in rootProject.children) {
-    project.apply {
-        projectDir = file(name)
-        buildFileName = "$name.gradle.kts"
+@Getter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+public class Demiboss
+{
+	@EqualsAndHashCode.Include
+	private final NPC npc;
 
-        require(projectDir.isDirectory) { "Project '${project.path} must have a $projectDir directory" }
-        require(buildFile.isFile) { "Project '${project.path} must have a $buildFile build script" }
-    }
+	private final Type type;
+
+	public Demiboss(final NPC npc)
+	{
+		this.npc = npc;
+		this.type = Type.fromId(npc.getId());
+	}
+
+	@AllArgsConstructor
+	public enum Type
+	{
+		BEAR(Set.of(NpcID.CRYSTALLINE_BEAR, NpcID.CORRUPTED_BEAR), Color.RED),
+		DARK_BEAST(Set.of(NpcID.CRYSTALLINE_DARK_BEAST, NpcID.CORRUPTED_DARK_BEAST), Color.GREEN),
+		DRAGON(Set.of(NpcID.CRYSTALLINE_DRAGON, NpcID.CORRUPTED_DRAGON), Color.BLUE);
+
+		private final Set<Integer> ids;
+
+		@Getter
+		private final Color outlineColor;
+
+		static Type fromId(final int id)
+		{
+			for (final Type type : Type.values())
+			{
+				if (type.ids.contains(id))
+				{
+					return type;
+				}
+			}
+
+			return null;
+		}
+	}
 }

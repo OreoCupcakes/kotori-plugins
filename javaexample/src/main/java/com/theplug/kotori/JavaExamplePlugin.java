@@ -1,4 +1,4 @@
-package com.example.javaexample;
+package com.theplug.kotori;
 
 import com.google.inject.Provides;
 import javax.inject.Inject;
@@ -8,9 +8,7 @@ import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
-import org.pf4j.Extension;
 
-@Extension
 @PluginDescriptor(
 	name = "Java example",
 	description = "Java example"

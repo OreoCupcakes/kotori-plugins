@@ -27,7 +27,7 @@ tasks.named("bootstrapPlugins") {
 tasks.register<Copy>("copyBootstrap") {
     println("Copying bootstrap to main dir.")
     from("./build/bootstrap/")
-    into("./release")
+    into(System.getProperty("user.home") + "/Documents/RuneLitePlugins/Jars")
     eachFile {
         if (this.relativePath.getFile(destinationDir).exists() && this.sourceName != "plugins.json") {
             this.exclude()
