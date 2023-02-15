@@ -26,7 +26,7 @@ open class VersionsTask : DefaultTask() {
     @Suppress("UnstableApiUsage")
     @set:Option(option = "patch", description = "Bump patch version")
     @get:Input
-    var patch: Boolean = false
+    var patch: Boolean = true
 
     private fun readFile(fileName: Path): List<String>
             = fileName.toFile().useLines { it.toList() }

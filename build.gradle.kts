@@ -9,7 +9,7 @@ plugins {
     checkstyle
 }
 
-project.extra["GithubUrl"] = "https://github.com/OreoCupcakes/kotori-plugins"
+project.extra["GithubUrl"] = "https://github.com/OreoCupcakes/kotori-ported-plugins-hosting"
 
 apply<BootstrapPlugin>()
 apply<VersionPlugin>()

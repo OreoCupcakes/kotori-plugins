@@ -23,20 +23,20 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "1.0.16"
+version = "0.0.1"
 
-project.extra["PluginName"] = "Gauntlet Extended" // This is the name that is used in the external plugin manager panel
-project.extra["PluginDescription"] = "All-in-one plugin for the Gauntlet." // This is the description that is used in the external plugin manager panel
+project.extra["PluginName"] = "Kotori Plugin Loader" // This is the name that is used in the external plugin manager panel
+project.extra["PluginDescription"] = "Loads plugins ported by Kotori" // This is the description that is used in the external plugin manager panel
 
 tasks {
     jar {
         manifest {
             attributes(mapOf(
-                "Plugin-Version" to project.version,
-                "Plugin-Id" to nameToId(project.extra["PluginName"] as String),
-                "Plugin-Provider" to project.extra["PluginProvider"],
-                "Plugin-Description" to project.extra["PluginDescription"],
-                "Plugin-License" to project.extra["PluginLicense"]
+                    "Plugin-Version" to project.version,
+                    "Plugin-Id" to nameToId(project.extra["PluginName"] as String),
+                    "Plugin-Provider" to project.extra["PluginProvider"],
+                    "Plugin-Description" to project.extra["PluginDescription"],
+                    "Plugin-License" to project.extra["PluginLicense"]
             ))
         }
     }
