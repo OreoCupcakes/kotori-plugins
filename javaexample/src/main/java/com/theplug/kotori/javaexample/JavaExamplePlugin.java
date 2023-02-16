@@ -1,4 +1,4 @@
-package com.theplug.kotori;
+package com.theplug.kotori.javaexample;
 
 import com.google.inject.Provides;
 import javax.inject.Inject;

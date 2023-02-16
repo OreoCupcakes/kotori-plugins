@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, Andrew EP | ElPinche256 <https://github.com/ElPinche256>
+ * Copyright (c) 2022, Kotori <https://github.com/OreoCupcakes/>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -10,7 +10,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -22,24 +21,40 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.theplug.kotori;
+package com.theplug.kotori.vorkathoverlay.utils;
 
-import net.runelite.client.config.Config;
-import net.runelite.client.config.ConfigGroup;
-import net.runelite.client.config.ConfigItem;
+import java.lang.reflect.*;
 
-@ConfigGroup("JavaExampleConfig")
+import net.runelite.api.Client;
+import net.runelite.api.NPC;
 
-public interface JavaExampleConfig extends Config
-{
-	@ConfigItem(
-		keyName = "example",
-		name = "Example config item",
-		description = "Example",
-		position = 0
-	)
-	default boolean example()
-	{
-		return true;
-	}
+public class NPCAnimationID {
+
+    private Client client;
+    private NPC npc;
+    private int animationID;
+
+    final private String className = "cb";
+    final private String fieldName = "bc";
+    final private int obfuscatedGetter = -1519553247;
+
+    public NPCAnimationID(Client client, NPC npc) {
+        this.client = client;
+        this.npc = npc;
+    }
+
+    public int getNPCAnimationID() {
+        try {
+            Field sequence = client.getClass().getClassLoader().loadClass(className).getDeclaredField(fieldName);
+            sequence.setAccessible(true);
+            int obfuscatedSequenceValue = sequence.getInt(npc);
+            sequence.setAccessible(false);
+            animationID = obfuscatedSequenceValue * obfuscatedGetter;
+        } catch (Exception e) {
+            System.err.println(e);
+        }
+
+        return animationID;
+    }
+
 }

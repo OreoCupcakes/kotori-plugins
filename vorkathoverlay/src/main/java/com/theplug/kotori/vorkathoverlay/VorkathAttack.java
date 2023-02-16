@@ -23,9 +23,9 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.theplug.kotori.vorkath;
+package com.theplug.kotori.vorkathoverlay;
 
-import com.theplug.kotori.vorkath.utils.GraphicIDPlus;
+import com.theplug.kotori.vorkathoverlay.utils.GraphicIDPlus;
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
 import lombok.AccessLevel;

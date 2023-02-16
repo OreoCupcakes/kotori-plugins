@@ -44,7 +44,8 @@ open class BootstrapTask : DefaultTask() {
             val baseBootstrap = getBootstrap("$bootstrapDir/plugins.json") ?: throw RuntimeException("Base bootstrap is null!")
 
             project.subprojects.forEach {
-                if (it.project.properties.containsKey("PluginName") && it.project.properties.containsKey("PluginDescription")) {
+                if (it.project.properties.containsKey("PluginName") && it.project.properties.containsKey("PluginDescription")
+                    && it.project.properties.containsKey("PluginPackageId") && it.project.properties.containsKey("PluginMainClassName")) {
                     var pluginAdded = false
                     val plugin = it.project.tasks["jar"].outputs.files.singleFile
 
@@ -62,6 +63,8 @@ open class BootstrapTask : DefaultTask() {
                             "name" to it.project.extra.get("PluginName"),
                             "id" to nameToId(it.project.extra.get("PluginName") as String),
                             "description" to it.project.extra.get("PluginDescription"),
+                            "packageId" to it.project.extra.get("PluginPackageId"),
+                            "mainClassName" to it.project.extra.get("PluginMainClassName"),
                             "provider" to it.project.extra.get("PluginProvider"),
                             "projectUrl" to it.project.extra.get("ProjectSupportUrl"),
                             "releases" to releases.toTypedArray()

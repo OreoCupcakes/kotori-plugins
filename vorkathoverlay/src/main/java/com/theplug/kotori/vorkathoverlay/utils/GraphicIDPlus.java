@@ -24,7 +24,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.theplug.kotori.vorkath.utils;
+package com.theplug.kotori.vorkathoverlay.utils;
 
 
 /**

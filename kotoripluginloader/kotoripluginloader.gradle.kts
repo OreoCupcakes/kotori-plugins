@@ -27,6 +27,8 @@ version = "0.0.1"
 
 project.extra["PluginName"] = "Kotori Plugin Loader" // This is the name that is used in the external plugin manager panel
 project.extra["PluginDescription"] = "Loads plugins ported by Kotori" // This is the description that is used in the external plugin manager panel
+project.extra["PluginPackageId"] = "kotoripluginloader" // This is the plugin package folder after the default group package.
+project.extra["PluginMainClassName"] = "KotoriPluginLoader" // This is the plugin's main class which extends Plugin
 
 tasks {
     jar {

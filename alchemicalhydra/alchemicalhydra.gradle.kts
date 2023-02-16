@@ -27,6 +27,9 @@ version = "1.0.5"
 
 project.extra["PluginName"] = "Alchemical Hydra" // This is the name that is used in the external plugin manager panel
 project.extra["PluginDescription"] = "An overlay plugin for the Alchemical Hydra boss." // This is the description that is used in the external plugin manager panel
+project.extra["PluginPackageId"] = "alchemicalhydra" // This is the plugin package folder after the default group package.
+project.extra["PluginMainClassName"] = "AlchemicalHydraPlugin" // This is the plugin's main class which extends Plugin
+
 
 tasks {
     jar {

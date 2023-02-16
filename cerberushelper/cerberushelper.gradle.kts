@@ -26,7 +26,9 @@
 version = "1.0.6"
 
 project.extra["PluginName"] = "Cerberus Helper" // This is the name that is used in the external plugin manager panel
-project.extra["PluginDescription"] = "A plugin for the Cerberus boss." // This is the description that is used in the external plugin manager panel
+project.extra["PluginDescription"] = "A helper plugin for the Cerberus boss. Comes with overlays and auto prayers." // This is the description that is used in the external plugin manager panel
+project.extra["PluginPackageId"] = "cerberushelper" // This is the plugin package folder after the default group package.
+project.extra["PluginMainClassName"] = "CerberusPlugin" // This is the plugin's main class which extends Plugin
 
 tasks {
     jar {

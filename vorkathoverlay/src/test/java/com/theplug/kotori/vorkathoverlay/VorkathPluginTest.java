@@ -1,4 +1,4 @@
-package com.theplug.kotori.vorkath;
+package com.theplug.kotori.vorkathoverlay;
 
 import net.runelite.client.RuneLite;
 import net.runelite.client.externalplugins.ExternalPluginManager;

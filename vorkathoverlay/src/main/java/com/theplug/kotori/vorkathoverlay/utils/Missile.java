@@ -1,4 +1,4 @@
-package com.theplug.kotori.vorkath.utils;
+package com.theplug.kotori.vorkathoverlay.utils;
 
 import lombok.Getter;
 import net.runelite.api.Projectile;

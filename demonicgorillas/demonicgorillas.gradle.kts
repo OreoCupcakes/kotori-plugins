@@ -27,6 +27,8 @@ version = "1.0.5"
 
 project.extra["PluginName"] = "Demonic Gorillas" // This is the name that is used in the external plugin manager panel
 project.extra["PluginDescription"] = "An overlay plugin for the Demonic Gorillas." // This is the description that is used in the external plugin manager panel
+project.extra["PluginPackageId"] = "demonicgorillas" // This is the plugin package folder after the default group package.
+project.extra["PluginMainClassName"] = "DemonicGorillaPlugin" // This is the plugin's main class which extends Plugin
 
 tasks {
     jar {

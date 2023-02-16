@@ -24,7 +24,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.theplug.kotori.vorkath;
+package com.theplug.kotori.vorkathoverlay;
 
 import com.google.inject.Inject;
 import com.google.inject.Provides;
@@ -33,9 +33,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.theplug.kotori.vorkath.utils.GraphicIDPlus;
-import com.theplug.kotori.vorkath.utils.Missile;
-import com.theplug.kotori.vorkath.utils.NPCAnimationID;
+import com.theplug.kotori.vorkathoverlay.utils.GraphicIDPlus;
+import com.theplug.kotori.vorkathoverlay.utils.Missile;
+import com.theplug.kotori.vorkathoverlay.utils.NPCAnimationID;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;

@@ -27,6 +27,8 @@ version = "0.0.2"
 
 project.extra["PluginName"] = "Java example plugin" // This is the name that is used in the external plugin manager panel
 project.extra["PluginDescription"] = "Java example plugin" // This is the description that is used in the external plugin manager panel
+project.extra["PluginPackageId"] = "javaexample" // This is the plugin package folder after the default group package.
+project.extra["PluginMainClassName"] = "JavaExamplePlugin" // This is the plugin's main class which extends Plugin
 
 tasks {
     jar {
