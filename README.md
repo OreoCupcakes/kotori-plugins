@@ -1,1 +1,1 @@
-# Source Code Of "Illegal" Ported OpenOSRS Plugins Into RuneLite
+# Source Code Of Ported OpenOSRS Plugins For RuneLite
