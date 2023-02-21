@@ -46,6 +46,8 @@ public class KotoriPluginLoader extends Plugin
     private boolean gameRevisionCheck;
     private Project[] jsonProjects;
     private ArrayList<URL> pluginUrlList = new ArrayList<>();
+    private ArrayList<String> pluginPackageIdList = new ArrayList<>();
+    private ArrayList<String> pluginMainClassList = new ArrayList<>();
     private List<Plugin> scannedPlugins;
 
 
@@ -55,7 +57,6 @@ public class KotoriPluginLoader extends Plugin
         // runs on plugin startup
         log.info("Plugin started");
         parsePluginsJson();
-        getPluginURLs();
         loadExternalPlugins();
     }
 
@@ -115,18 +116,19 @@ public class KotoriPluginLoader extends Plugin
 
         if (jsonProjects != null)
         {
+            for (Project json : jsonProjects)
+            {
+                pluginPackageIdList.add(json.getPackageId());
+                pluginMainClassList.add(json.getMainClassName());
+
+                List<Releases> releasesList = json.getReleases();
+                int latestReleaseIndex = releasesList.size() - 1;
+                pluginUrlList.add(releasesList.get(latestReleaseIndex).getUrl());
+            }
             return true;
         }
 
         return false;
-    }
-
-    private void getPluginURLs()
-    {
-        for (Project json : jsonProjects)
-        {
-            pluginUrlList.add(json.getReleases().get(0).getUrl());
-        }
     }
 
     private void loadExternalPlugins()
@@ -139,7 +141,7 @@ public class KotoriPluginLoader extends Plugin
             loadedClasses.add(urlClassLoader.loadClass("com.theplug.kotori.gauntletextended.GauntletExtendedPlugin"));
             loadedClasses.add(urlClassLoader.loadClass("com.theplug.kotori.alchemicalhydra.AlchemicalHydraPlugin"));
             loadedClasses.add(urlClassLoader.loadClass("com.theplug.kotori.cerberushelper.CerberusPlugin"));
-            loadedClasses.add(urlClassLoader.loadClass("com.theplug.kotori.vorkath.VorkathPlugin"));
+            loadedClasses.add(urlClassLoader.loadClass("com.theplug.kotori.vorkathoverlay.VorkathPlugin"));
             loadedClasses.add(urlClassLoader.loadClass("com.theplug.kotori.demonicgorillas.DemonicGorillaPlugin"));
             scannedPlugins = manager.loadPlugins(loadedClasses,null);
 

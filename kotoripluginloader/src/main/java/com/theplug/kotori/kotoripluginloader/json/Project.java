@@ -15,7 +15,11 @@ public class Project
     @Getter
     private String name;
     @Getter
+    private String packageId;
+    @Getter
     private String description;
+    @Getter
+    private String mainClassName;
     @Getter
     private String id;
     @Getter

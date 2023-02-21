@@ -32,6 +32,14 @@ include(":demonicgorillas")
 include(":vorkathoverlay")
 include(":gauntletextended")
 include(":kotoripluginloader")
+include(":houseoverlay")
+include(":dagannothkings")
+include(":multiindicators")
+include(":hallowedsepulchre")
+include(":zulrahoverlay")
+include(":hallowedhelper")
+include(":effecttimers")
+include(":alchemicalhydrarlpl")
 
 for (project in rootProject.children) {
     project.apply {
@@ -42,3 +50,5 @@ for (project in rootProject.children) {
         require(buildFile.isFile) { "Project '${project.path} must have a $buildFile build script" }
     }
 }
+include("vorkathoverlayrlpl")
+include("kotoriutils")

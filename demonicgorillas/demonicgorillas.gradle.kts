@@ -23,7 +23,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "1.0.5"
+version = "1.0.6"
 
 project.extra["PluginName"] = "Demonic Gorillas" // This is the name that is used in the external plugin manager panel
 project.extra["PluginDescription"] = "An overlay plugin for the Demonic Gorillas." // This is the description that is used in the external plugin manager panel
