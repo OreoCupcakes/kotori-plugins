@@ -51,8 +51,4 @@ public class MenusLibrary
     private String menuEntryTypesArrayClassName;
     @Setter
     private String menuEntryTypesArrayFieldName;
-
-    public MenusLibrary(Client client) {
-        this.client = client;
-    }
 }

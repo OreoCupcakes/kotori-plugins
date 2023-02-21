@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Owain van Brakel <https:github.com/Owain94>
+ * Copyright (c) 2019 Owain van Brakel <https://github.com/Owain94>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -23,32 +23,23 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-rootProject.name = "kotori-ported-plugins"
+version = "1.0.0"
 
-include(":alchemicalhydra")
-include(":alchemicalhydrarlpl")
-include(":cerberushelper")
-include(":dagannothkings")
-include(":demonicgorillas")
-include(":effecttimers")
-include(":gauntletextended")
-include(":hallowedhelper")
-include(":hallowedsepulchre")
-include(":houseoverlay")
-include(":javaexample")
-include(":kotoripluginloader")
-include(":kotoriutils")
-include(":multiindicators")
-include(":vorkathoverlay")
-include(":vorkathoverlayrlpl")
-include(":zulrahoverlay")
+project.extra["PluginName"] = "Kotori Plugin Utils" // This is the name that is used in the external plugin manager panel
+project.extra["PluginDescription"] = "Utilities needed for certain ported plugins to work." // This is the description that is used in the external plugin manager panel
+project.extra["PluginPackageId"] = "kotoriutils" // This is the plugin package folder after the default group package.
+project.extra["PluginMainClassName"] = "KotoriUtils" // This is the plugin's main class which extends Plugin
 
-for (project in rootProject.children) {
-    project.apply {
-        projectDir = file(name)
-        buildFileName = "$name.gradle.kts"
-
-        require(projectDir.isDirectory) { "Project '${project.path} must have a $projectDir directory" }
-        require(buildFile.isFile) { "Project '${project.path} must have a $buildFile build script" }
+tasks {
+    jar {
+        manifest {
+            attributes(mapOf(
+                "Plugin-Version" to project.version,
+                "Plugin-Id" to nameToId(project.extra["PluginName"] as String),
+                "Plugin-Provider" to project.extra["PluginProvider"],
+                "Plugin-Description" to project.extra["PluginDescription"],
+                "Plugin-License" to project.extra["PluginLicense"]
+            ))
+        }
     }
 }

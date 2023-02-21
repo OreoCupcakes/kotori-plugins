@@ -34,10 +34,6 @@ public class NPCsLibrary {
     private int animationId;
     private HeadIcon headIcon;
 
-    public NPCsLibrary(Client client) {
-        this.client = client;
-    }
-
     public int getNPCAnimationID() {
         try {
             Field sequence = client.getClass().getClassLoader().loadClass(actorClassName).getDeclaredField(sequenceFieldName);

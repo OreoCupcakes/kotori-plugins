@@ -30,10 +30,6 @@ public class WalkingLibrary {
     @Setter
     private String checkClickFieldName;
 
-    public WalkingLibrary(Client client) {
-        this.client = client;
-    }
-
     public void setXandYCoordinates(int x, int y) {
         try {
             Class classWithSetXandY = client.getClass().getClassLoader().loadClass(setXandYClassName);

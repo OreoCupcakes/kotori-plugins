@@ -21,10 +21,6 @@ public class InvokesLibrary {
     @Setter
     private int invokeMenuActionGarbageValue;
 
-    public InvokesLibrary(Client client) {
-        this.client = client;
-    }
-
     public void invoke(int param0, int param1, int opcode, int identifier, int itemid, String option, String target, int x, int y)
     {
         try
@@ -39,10 +35,12 @@ public class InvokesLibrary {
 
             // When invoking, static methods need null as the first parameter
             menuAction.setAccessible(true);
-
-            if (invokeMenuActionGarbageValue < 128 && invokeMenuActionGarbageValue >= -128) {
+            if (invokeMenuActionGarbageValue < 128 && invokeMenuActionGarbageValue >= -128)
+            {
                 menuAction.invoke(null,param0,param1,opcode,identifier,itemid,option,target,x,y,(byte)invokeMenuActionGarbageValue);
-            } else {
+            }
+            else
+            {
                 menuAction.invoke(null, param0, param1, opcode, identifier, itemid, option, target, x, y, invokeMenuActionGarbageValue);
             }
             menuAction.setAccessible(false);

@@ -34,10 +34,6 @@ public class SpellsLibrary {
     @Setter
     private int selectedSpellItemIDMultiplier;
 
-    public SpellsLibrary(Client client) {
-        this.client = client;
-    }
-
     // Passed as the Widget's grouped ID
     public void setSelectedSpellWidget(int widgetGroupId) {
         try {

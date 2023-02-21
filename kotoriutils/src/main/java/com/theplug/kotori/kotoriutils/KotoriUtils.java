@@ -1,6 +1,7 @@
 package com.theplug.kotori.kotoriutils;
 
 import com.google.gson.*;
+import com.theplug.kotori.kotoriutils.gson.Hooks;
 import com.theplug.kotori.kotoriutils.libs.*;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -30,44 +31,27 @@ public class KotoriUtils extends Plugin {
 
     final private String hooksFileURL = "https://github.com/OreoCupcakes/kotori-ported-plugins-hosting/blob/master/hooks.json?raw=true";
 
-    @Getter
+    @Inject
     private NPCsLibrary npcsLibrary;
-    @Getter
+    @Inject
     private InvokesLibrary invokesLibrary;
-    @Getter
+    @Inject
     private SpellsLibrary spellsLibrary;
-    @Getter
+    @Inject
     private MenusLibrary menusLibrary;
-    @Getter
+    @Inject
     private WalkingLibrary walkingLibrary;
-
-    public KotoriUtils() {
-        this.invokesLibrary = new InvokesLibrary(this.client);
-        this.npcsLibrary = new NPCsLibrary(this.client);
-        this.spellsLibrary = new SpellsLibrary(this.client);
-        this.menusLibrary = new MenusLibrary(this.client);
-        this.walkingLibrary = new WalkingLibrary(this.client);
-
-        getObfuscatedClassHooks();
-    }
-
-    public KotoriUtils(Client client) {
-        this.invokesLibrary = new InvokesLibrary(client);
-        this.npcsLibrary = new NPCsLibrary(client);
-        this.spellsLibrary = new SpellsLibrary(client);
-        this.menusLibrary = new MenusLibrary(client);
-        this.walkingLibrary = new WalkingLibrary(client);
-
-        getObfuscatedClassHooks();
-    }
+    private Hooks rsHooks;
 
     @Override
-    protected void startUp() {
+    protected void startUp()
+    {
         getObfuscatedHooks();
     }
 
     @Override
-    protected void shutDown() {
+    protected void shutDown()
+    {
 
     }
 
@@ -76,127 +60,84 @@ public class KotoriUtils extends Plugin {
         try {
             URL url = new URL(hooksFileURL);
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
-            JsonElement rootNode = JsonParser.parseReader(bufferedReader);
+            Gson gson = new Gson();
+            rsHooks = gson.fromJson(bufferedReader,Hooks.class);
 
-            if (rootNode.isJsonArray()) {
-                System.out.println("Node is array");
-            } else if (rootNode.isJsonObject()) {
-                System.out.println("Node is object");
-            } else if (rootNode.isJsonPrimitive()) {
-                System.out.println("Node is primitive");
-            } else if (rootNode.isJsonNull()) {
-                System.out.println("Node is null");
-            }
+            //Set the game hooks
+            //invokeMenuAction Hooks
+            invokesLibrary.setWorldMapData_0_ClassName(getClassName(rsHooks.getInvokeMenuActionHook()));
+            invokesLibrary.setInvokeMenuActionMethodName(getFieldOrMethodName(rsHooks.getInvokeMenuActionHook()));
+            invokesLibrary.setInvokeMenuActionGarbageValue(rsHooks.getInvokeMenuActionHookJunkValue());
+            //NPC Overhead Icons Hook
+            npcsLibrary.setNpcCompositionClassName(getClassName(rsHooks.getGetNpcCompositionOverheadIcon()));
+            npcsLibrary.setOverheadIconFieldName(getFieldOrMethodName(rsHooks.getGetNpcCompositionOverheadIcon()));
+            //NPC Animation IDs Hook
+            npcsLibrary.setActorClassName(getClassName(rsHooks.getGetActorAnimationIdFieldHook()));
+            npcsLibrary.setSequenceFieldName(getFieldOrMethodName(rsHooks.getGetActorAnimationIdFieldHook()));
+            npcsLibrary.setSequenceGetterMultiplier(rsHooks.getGetActorAnimationIdMultiplier());
+            //Scene Walking Set X and Y Hook
+            walkingLibrary.setSetXandYClassName(getClassName(rsHooks.getSetXandYHook()));
+            walkingLibrary.setSetXandYMethodName(getFieldOrMethodName(rsHooks.getSetXandYHook()));
+            //Scene Walking Set Viewport Walking Hook
+            walkingLibrary.setSetViewportWalkingClassName(getClassName(rsHooks.getSetViewportWalkingFieldHook()));
+            walkingLibrary.setSetViewportWalkingFieldName(getFieldOrMethodName(rsHooks.getSetViewportWalkingFieldHook()));
+            //Scene Walking Check Click Field Hook
+            walkingLibrary.setCheckClickClassName(getClassName(rsHooks.getCheckClickFieldHook()));
+            walkingLibrary.setCheckClickFieldName(getFieldOrMethodName(rsHooks.getCheckClickFieldHook()));
+            //Selected Spell Widget Hook
+            spellsLibrary.setSelectedSpellWidgetClassName(getClassName(rsHooks.getSetSelectedSpellWidgetHook()));
+            spellsLibrary.setSelectedSpellWidgetFieldName(getFieldOrMethodName(rsHooks.getSetSelectedSpellWidgetHook()));
+            spellsLibrary.setSelectedSpellWidgetMultiplier(rsHooks.getSetSelectedSpellWidgetMultiplier());
+            //Selected Spell Child Hook
+            spellsLibrary.setSelectedSpellChildIndexClassName(getClassName(rsHooks.getSetSelectedSpellChildIndexHook()));
+            spellsLibrary.setSelectedSpellChildIndexFieldName(getFieldOrMethodName(rsHooks.getSetSelectedSpellChildIndexHook()));
+            spellsLibrary.setSelectedSpellChildIndexMultiplier(rsHooks.getSetSelectedSpellChildIndexMultiplier());
+            //Selected Spell Item Hook
+            spellsLibrary.setSelectedSpellItemIDClassName(getClassName(rsHooks.getSetSelectedSpellItemIDHook()));
+            spellsLibrary.setSelectedSpellItemIDFieldName(getFieldOrMethodName(rsHooks.getSetSelectedSpellItemIDHook()));
+            spellsLibrary.setSelectedSpellItemIDMultiplier(rsHooks.getSetSelectedSpellItemIDMultiplier());
+            //MenuEntry Index Hook
+            menusLibrary.setMenuEntryIndexClassName(getClassName(rsHooks.getMenuEntryIndexFieldHook()));
+            menusLibrary.setMenuEntryIndexFieldName(getFieldOrMethodName(rsHooks.getMenuEntryIndexFieldHook()));
+            //MenuEntry Identifiers Hook
+            menusLibrary.setMenuEntryIdentifiersArrayClassName(getClassName(rsHooks.getMenuEntryIdentifiersArrayFieldHook()));
+            menusLibrary.setMenuEntryIdentifiersArrayFieldName(getFieldOrMethodName(rsHooks.getMenuEntryIdentifiersArrayFieldHook()));
+            //MenuEntry Item Ids Hook
+            menusLibrary.setMenuEntryItemIdsArrayClassName(getClassName(rsHooks.getMenuEntryItemIdsArrayFieldHook()));
+            menusLibrary.setMenuEntryItemIdsArrayFieldName(getFieldOrMethodName(rsHooks.getMenuEntryItemIdsArrayFieldHook()));
+            //MenuEntry Options Hook
+            menusLibrary.setMenuEntryOptionsArrayClassName(getClassName(rsHooks.getMenuEntryOptionsArrayFieldHook()));
+            menusLibrary.setMenuEntryOptionsArrayFieldName(getFieldOrMethodName(rsHooks.getMenuEntryOptionsArrayFieldHook()));
+            //MenuEntry Param0 Hook
+            menusLibrary.setMenuEntryParam0ArrayClassName(getClassName(rsHooks.getMenuEntryParam0ArrayFieldHook()));
+            menusLibrary.setMenuEntryParam0ArrayFieldName(getFieldOrMethodName(rsHooks.getMenuEntryParam0ArrayFieldHook()));
+            //MenuEntry Param1 Hook
+            menusLibrary.setMenuEntryParam1ArrayClassName(getClassName(rsHooks.getMenuEntryParam1ArrayFieldHook()));
+            menusLibrary.setMenuEntryParam1ArrayFieldName(getFieldOrMethodName(rsHooks.getMenuEntryParam1ArrayFieldHook()));
+            //MenuEntry Targets Hook
+            menusLibrary.setMenuEntryTargetsArrayClassName(getClassName(rsHooks.getMenuEntryTargetsArrayFieldHook()));
+            menusLibrary.setMenuEntryTargetsArrayFieldName(getFieldOrMethodName(rsHooks.getMenuEntryTargetsArrayFieldHook()));
+            //MenuEntry Types Hook
+            menusLibrary.setMenuEntryTypesArrayClassName(getClassName(rsHooks.getMenuEntryTypesArrayFieldHook()));
+            menusLibrary.setMenuEntryTypesArrayFieldName(getFieldOrMethodName(rsHooks.getMenuEntryTypesArrayFieldHook()));
         }
         catch (Exception e)
         {
-            log.error("Unable to get necessary game hooks.", e);
+            log.error("Unable to get necessary game hooks from URL.", e);
         }
     }
 
-    private void getObfuscatedClassHooks() {
-        try {
-            URL url = new URL(hooksFileURL);
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
-            String lineToParse;
-            while ((lineToParse = bufferedReader.readLine()) != null) {
-                String[] hookLinesArray = lineToParse.replaceAll("[^[a-zA-Z0-9|\\-|\\:|\\.]]","").split(":|\\.");
-                String caseString = hookLinesArray[0];
-
-                switch (caseString) {
-                    case "rsversion":
-                    //    rsVersion = Integer.parseInt(hookLinesArray[1]);
-                        break;
-                    case "invokeMenuActionHook":
-                        invokesLibrary.setWorldMapData_0_ClassName(hookLinesArray[1]);
-                        invokesLibrary.setInvokeMenuActionMethodName(hookLinesArray[2]);
-                        break;
-                    case "invokeMenuActionHookJunkValue":
-                        invokesLibrary.setInvokeMenuActionGarbageValue(Integer.parseInt(hookLinesArray[1]));
-                        break;
-                    case "setXandYHook":
-                        walkingLibrary.setSetXandYClassName(hookLinesArray[1]);
-                        walkingLibrary.setSetXandYMethodName(hookLinesArray[2]);
-                        break;
-                    case "setViewportWalkingFieldHook":
-                        walkingLibrary.setSetViewportWalkingClassName(hookLinesArray[1]);
-                        walkingLibrary.setSetViewportWalkingFieldName(hookLinesArray[2]);
-                        break;
-                    case "checkClickFieldHook":
-                        walkingLibrary.setCheckClickClassName(hookLinesArray[1]);
-                        walkingLibrary.setCheckClickFieldName(hookLinesArray[2]);
-                        break;
-                    case "setSelectedSpellWidgetHook":
-                        spellsLibrary.setSelectedSpellWidgetClassName(hookLinesArray[1]);
-                        spellsLibrary.setSelectedSpellWidgetFieldName(hookLinesArray[2]);
-                        break;
-                    case  "setSelectedSpellWidgetMultiplier":
-                        spellsLibrary.setSelectedSpellWidgetMultiplier(Integer.parseInt(hookLinesArray[1]));
-                        break;
-                    case "setSelectedSpellChildIndexHook":
-                        spellsLibrary.setSelectedSpellChildIndexClassName(hookLinesArray[1]);
-                        spellsLibrary.setSelectedSpellChildIndexFieldName(hookLinesArray[2]);
-                        break;
-                    case "setSelectedSpellChildIndexMultiplier":
-                        spellsLibrary.setSelectedSpellChildIndexMultiplier(Integer.parseInt(hookLinesArray[1]));
-                        break;
-                    case "setSelectedSpellItemIDHook":
-                        spellsLibrary.setSelectedSpellItemIDClassName(hookLinesArray[1]);
-                        spellsLibrary.setSelectedSpellItemIDFieldName(hookLinesArray[2]);
-                        break;
-                    case "setSelectedSpellItemIDMultiplier":
-                        spellsLibrary.setSelectedSpellItemIDMultiplier(Integer.parseInt(hookLinesArray[1]));
-                        break;
-                    case "getNpcCompositionOverheadIcon":
-                        npcsLibrary.setNpcCompositionClassName(hookLinesArray[1]);
-                        npcsLibrary.setOverheadIconFieldName(hookLinesArray[2]);
-                        break;
-                    case "menuEntryIndexFieldHook":
-                        menusLibrary.setMenuEntryIndexClassName(hookLinesArray[1]);
-                        menusLibrary.setMenuEntryIndexFieldName(hookLinesArray[2]);
-                        break;
-                    case "menuEntryIdentifiersArrayFieldHook":
-                        menusLibrary.setMenuEntryIdentifiersArrayClassName(hookLinesArray[1]);
-                        menusLibrary.setMenuEntryIdentifiersArrayFieldName(hookLinesArray[2]);
-                        break;
-                    case "menuEntryItemIdsArrayFieldHook":
-                        menusLibrary.setMenuEntryItemIdsArrayClassName(hookLinesArray[1]);
-                        menusLibrary.setMenuEntryItemIdsArrayFieldName(hookLinesArray[2]);
-                        break;
-                    case "menuEntryOptionsArrayFieldHook":
-                        menusLibrary.setMenuEntryOptionsArrayClassName(hookLinesArray[1]);
-                        menusLibrary.setMenuEntryOptionsArrayFieldName(hookLinesArray[2]);
-                        break;
-                    case "menuEntryParam0ArrayFieldHook":
-                        menusLibrary.setMenuEntryParam0ArrayClassName(hookLinesArray[1]);
-                        menusLibrary.setMenuEntryParam0ArrayFieldName(hookLinesArray[2]);
-                        break;
-                    case "menuEntryParam1ArrayFieldHook":
-                        menusLibrary.setMenuEntryParam1ArrayClassName(hookLinesArray[1]);
-                        menusLibrary.setMenuEntryParam1ArrayFieldName(hookLinesArray[2]);
-                        break;
-                    case "menuEntryTargetsArrayFieldHook":
-                        menusLibrary.setMenuEntryTargetsArrayClassName(hookLinesArray[1]);
-                        menusLibrary.setMenuEntryTargetsArrayFieldName(hookLinesArray[2]);
-                        break;
-                    case "menuEntryTypesArrayFieldHook":
-                        menusLibrary.setMenuEntryTypesArrayClassName(hookLinesArray[1]);
-                        menusLibrary.setMenuEntryTypesArrayFieldName(hookLinesArray[2]);
-                        break;
-                    case "getActorAnimationIdFieldHook":
-                        npcsLibrary.setActorClassName(hookLinesArray[1]);
-                        npcsLibrary.setSequenceFieldName(hookLinesArray[2]);
-                        break;
-                    case "getActorAnimationIdMultiplier":
-                        npcsLibrary.setSequenceGetterMultiplier(Integer.parseInt(hookLinesArray[1]));
-                        break;
-                    default:
-                        break;
-                }
-            }
-            bufferedReader.close();
-        } catch (Exception e) {
-            log.error("Failed to load the hooks from URL.",e);
-        }
+    private String getClassName(String jsonString)
+    {
+        String[] jsonSplit = jsonString.split("\\.");
+        return jsonSplit[0];
     }
+
+    private String getFieldOrMethodName(String jsonString)
+    {
+        String[] jsonSplit = jsonString.split("\\.");
+        return jsonSplit[1];
+    }
+
+
 }
