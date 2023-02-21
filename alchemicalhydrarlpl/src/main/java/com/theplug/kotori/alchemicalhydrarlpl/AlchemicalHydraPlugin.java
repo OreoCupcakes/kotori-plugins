@@ -68,7 +68,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Singleton
 @PluginDescriptor(
-	name = "Alchemical Hydra",
+	name = "Alchemical Hydra (RLPL)",
 	enabledByDefault = false,
 	description = "A plugin for the Alchemical Hydra boss.",
 	tags = {"alchemical", "hydra", "ported"}

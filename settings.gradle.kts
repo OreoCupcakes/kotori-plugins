@@ -52,3 +52,4 @@ for (project in rootProject.children) {
 }
 include("vorkathoverlayrlpl")
 include("kotoriutils")
+include("kotoriutils")

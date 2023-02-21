@@ -40,7 +40,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @PluginDescriptor(
-	name = "Hallowed Sepulchre (Basic)",
+	name = "Hallowed Sepulchre (Lightweight)",
 	enabledByDefault = false,
 	description = "A plugin for the Hallowed Sepulchre agility minigame.",
 	tags = {"sepulchre", "hallowed", "darkmeyer", "agility", "course", "minigame", "ported"}

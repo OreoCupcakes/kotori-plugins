@@ -23,9 +23,9 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "1.0.0"
+version = "1.1.0"
 
-project.extra["PluginName"] = "Hallowed Sepulchre (Basic)" // This is the name that is used in the external plugin manager panel
+project.extra["PluginName"] = "Hallowed Sepulchre (Lightweight)" // This is the name that is used in the external plugin manager panel
 project.extra["PluginDescription"] = "A plugin for the Hallowed Sepulchre agility minigame." // This is the description that is used in the external plugin manager panel
 project.extra["PluginPackageId"] = "hallowedsepulchre" // This is the plugin package folder after the default group package.
 project.extra["PluginMainClassName"] = "HallowedSepulchrePlugin" // This is the plugin's main class which extends Plugin

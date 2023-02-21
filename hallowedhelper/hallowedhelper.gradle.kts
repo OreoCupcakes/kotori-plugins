@@ -23,9 +23,9 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "1.0.0"
+version = "1.1.0"
 
-project.extra["PluginName"] = "Hallowed Helper" // This is the name that is used in the external plugin manager panel
+project.extra["PluginName"] = "Hallowed Sepulchre (Deluxe)" // This is the name that is used in the external plugin manager panel
 project.extra["PluginDescription"] = "Hallowed Sepulchre helper with tons of overlays" // This is the description that is used in the external plugin manager panel
 project.extra["PluginPackageId"] = "hallowedhelper" // This is the plugin package folder after the default group package.
 project.extra["PluginMainClassName"] = "HallowedHelperPlugin" // This is the plugin's main class which extends Plugin
