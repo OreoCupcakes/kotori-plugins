@@ -5,10 +5,12 @@ import com.google.gson.*;
 import javax.inject.Inject;
 import javax.swing.*;
 
+import com.google.inject.Provides;
 import com.theplug.kotori.kotoripluginloader.json.Project;
 import com.theplug.kotori.kotoripluginloader.json.Releases;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
+import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.events.ExternalPluginsChanged;
 import net.runelite.client.plugins.*;
@@ -31,10 +33,13 @@ import java.util.List;
 public class KotoriPluginLoader extends Plugin
 {
     final private String pluginsJson = "https://github.com/OreoCupcakes/kotori-ported-plugins-hosting/blob/master/plugins.json?raw=true";
-    final private String hooksFile = "https://github.com/OreoCupcakes/kotori-ported-plugins-hosting/blob/master/hooks.txt?raw=true";
+    final private String infoJson = "https://github.com/OreoCupcakes/kotori-ported-plugins-hosting/blob/master/info.json?raw=true";
 
     @Inject
     private Client client;
+
+    @Inject
+    private KotoriPluginLoaderConfig config;
 
     @Inject
     private PluginManager manager;
@@ -50,6 +55,11 @@ public class KotoriPluginLoader extends Plugin
     private ArrayList<String> pluginMainClassList = new ArrayList<>();
     private List<Plugin> scannedPlugins;
 
+    @Provides
+    KotoriPluginLoaderConfig provideConfig(ConfigManager configManager)
+    {
+        return configManager.getConfig(KotoriPluginLoaderConfig.class);
+    }
 
     @Override
     protected void startUp()
@@ -71,7 +81,7 @@ public class KotoriPluginLoader extends Plugin
     {
         try
         {
-            URL hooksURL = new URL(hooksFile);
+            URL hooksURL = new URL(infoJson);
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(hooksURL.openStream()));
             String lineToParse;
             while ((lineToParse = bufferedReader.readLine()) != null)

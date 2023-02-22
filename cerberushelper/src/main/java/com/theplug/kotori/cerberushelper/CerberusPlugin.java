@@ -323,7 +323,7 @@ public class CerberusPlugin extends Plugin
 			}
 		}
 
-		if (config.drinkPPotsAlways())
+		if (config.whenToDrinkPPots().getDrinkArgument().equalsIgnoreCase("Always"))
 		{
 			handlePrayerPotionDrinking();
 		}
@@ -412,7 +412,10 @@ public class CerberusPlugin extends Plugin
 				if ((projectilesArray[2] == null) || (projectile.getStartCycle() > projectilesArray[2].getProjectile().getStartCycle()))
 				{
 					projectilesArray[2] = new Missile(projectile);
-					handlePrayerPotionDrinking();
+					if (config.whenToDrinkPPots().getDrinkArgument().equalsIgnoreCase("Ghosts"))
+					{
+						handlePrayerPotionDrinking();
+					}
 				}
 				else
 				{
@@ -428,7 +431,10 @@ public class CerberusPlugin extends Plugin
 				if ((projectilesArray[3] == null) || (projectile.getStartCycle() > projectilesArray[3].getProjectile().getStartCycle()))
 				{
 					projectilesArray[3] = new Missile(projectile);
-					handlePrayerPotionDrinking();
+					if (config.whenToDrinkPPots().getDrinkArgument().equalsIgnoreCase("Ghosts"))
+					{
+						handlePrayerPotionDrinking();
+					}
 				}
 				else
 				{
@@ -444,7 +450,10 @@ public class CerberusPlugin extends Plugin
 				if ((projectilesArray[4] == null) || (projectile.getStartCycle() > projectilesArray[4].getProjectile().getStartCycle()))
 				{
 					projectilesArray[4] = new Missile(projectile);
-					handlePrayerPotionDrinking();
+					if (config.whenToDrinkPPots().getDrinkArgument().equalsIgnoreCase("Ghosts"))
+					{
+						handlePrayerPotionDrinking();
+					}
 				}
 				else
 				{
@@ -525,7 +534,10 @@ public class CerberusPlugin extends Plugin
 				cerberus.setLastGhostYellTime(System.currentTimeMillis());
 				cerberus.doProjectileOrAnimation(gameTick, Cerberus.Attack.GHOSTS);
 				//Auto action, drink prayer potions if necessary now
-				handlePrayerPotionDrinking();
+				if (config.whenToDrinkPPots().getDrinkArgument().equalsIgnoreCase("Ghosts"))
+				{
+					handlePrayerPotionDrinking();
+				}
 				if (config.conservePrayerGhostSkip())
 				{
 					prayOffensively();
@@ -890,11 +902,6 @@ public class CerberusPlugin extends Plugin
 
 	private void handlePrayerPotionDrinking()
 	{
-		if (!config.drinkPPotsGhosts() && !config.drinkPPotsAlways())
-		{
-			return;
-		}
-
 		final int valueToDrinkAt = config.prayerPointsToDrinkAt();
 
 		if (client.getBoostedSkillLevel(Skill.PRAYER) <= valueToDrinkAt)

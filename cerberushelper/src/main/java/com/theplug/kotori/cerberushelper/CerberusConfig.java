@@ -266,7 +266,7 @@ public interface CerberusConfig extends Config
 	@ConfigItem(
 			keyName = "conservePrayerGhostSkip",
 			name = "Ghost Skip? No Offensive Prayer",
-			description = "Are you ghost skipping? Conserve prayer by not using an offensive prayer\n" +
+			description = "Are you ghost skipping? Conserve prayer by not using an offensive prayer<br>" +
 					"until the 15th attack from Cerberus or when ghosts spawn.",
 			position = 3,
 			section = autoSection
@@ -274,24 +274,18 @@ public interface CerberusConfig extends Config
 	default boolean conservePrayerGhostSkip() { return false; }
 
 	@ConfigItem(
-			keyName = "drinkPPotsGhosts",
-			name = "Drink Prayer For Ghosts Only",
-			description = "Drink prayer potions, if below threshold, for the Ghost phase.\n" +
-					"This will trigger during the start of Ghost phase and during Ghost attacks.",
+			keyName = "whenToDrinkPPots",
+			name = "Drink Prayer Potions?",
+			description =
+					"<html><b><u>Off</u>:</b> I won't drink prayer potions at all during the fight." +
+					"<br><b><u>Ghosts</u>:</b> I will only drink prayer potions during the start of Ghost" +
+					"<br>phase and during Ghost attacks." +
+					"<br><b><u>Always</u>:</b> I'll drink prayer potions anytime your prayer points drop below" +
+					"<br>the threshold you selected, as long as Cerberus is alive.</html>",
 			position = 4,
 			section = autoSection
 	)
-	default boolean drinkPPotsGhosts() { return false; }
-
-	@ConfigItem(
-			keyName = "drinkPPotsAlways",
-			name = "Always Drink Under Threshold?",
-			description = "Do you want to always drink prayer potions when under the threshold below? " +
-					"This will check and trigger every game tick that Cerberus is alive.",
-			position = 5,
-			section = autoSection
-	)
-	default boolean drinkPPotsAlways() { return false; }
+	default DrinkArgument whenToDrinkPPots() { return DrinkArgument.NO; }
 
 	@Range(
 			min = 1,
@@ -301,7 +295,7 @@ public interface CerberusConfig extends Config
 			keyName = "prayerPointsToDrinkAt",
 			name = "Drink At",
 			description = "Prayer point threshold to drink prayer potions.",
-			position = 6,
+			position = 5,
 			section = autoSection
 	)
 	default int prayerPointsToDrinkAt() { return 60; }
@@ -354,5 +348,19 @@ public interface CerberusConfig extends Config
 
 		@Override
 		public String toString() { return prayerName; }
+	}
+
+	@Getter
+	@RequiredArgsConstructor
+	enum DrinkArgument
+	{
+		NO("Off"),
+		GHOSTS("Ghosts"),
+		ALWAYS("Always");
+
+		private final String drinkArgument;
+
+		@Override
+		public String toString() { return drinkArgument; }
 	}
 }
