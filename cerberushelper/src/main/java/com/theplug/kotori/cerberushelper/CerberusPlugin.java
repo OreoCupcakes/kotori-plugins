@@ -31,7 +31,6 @@ import com.theplug.kotori.cerberushelper.overlays.CurrentAttackOverlay;
 import com.theplug.kotori.cerberushelper.overlays.PrayerOverlay;
 import com.theplug.kotori.cerberushelper.overlays.SceneOverlay;
 import com.theplug.kotori.cerberushelper.overlays.UpcomingAttackOverlay;
-import com.theplug.kotori.cerberushelper.util.InvokeMenuAction;
 import com.theplug.kotori.cerberushelper.util.PrayerExtended;
 import com.google.common.collect.ComparisonChain;
 import com.google.inject.Provides;
@@ -42,6 +41,8 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import com.theplug.kotori.kotoriutils.KotoriUtils;
+import com.theplug.kotori.kotoriutils.libs.InvokesLibrary;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
@@ -56,6 +57,7 @@ import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.plugins.Plugin;
+import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.http.api.item.ItemEquipmentStats;
@@ -63,6 +65,7 @@ import net.runelite.http.api.item.ItemStats;
 
 @Slf4j
 @Singleton
+@PluginDependency(KotoriUtils.class)
 @PluginDescriptor(
 	name = "Cerberus Helper",
 	enabledByDefault = false,
@@ -117,6 +120,9 @@ public class CerberusPlugin extends Plugin
 	@Inject
 	private UpcomingAttackOverlay upcomingAttackOverlay;
 
+	@Inject
+	private KotoriUtils kotoriUtils;
+
 	@Getter
 	private final List<NPC> ghosts = new ArrayList<>();
 
@@ -135,8 +141,6 @@ public class CerberusPlugin extends Plugin
 
 	private Missile[] projectilesArray = new Missile[7];
 
-	private InvokeMenuAction invokeMenuAction;
-
 	@Getter
 	private int gameTick;
 
@@ -147,7 +151,9 @@ public class CerberusPlugin extends Plugin
 
 	private boolean inArena;
 
-	public CerberusPlugin() {
+	public CerberusPlugin()
+	{
+
 	}
 
 	@Provides
@@ -175,8 +181,6 @@ public class CerberusPlugin extends Plugin
 		overlayManager.add(prayerOverlay);
 		overlayManager.add(currentAttackOverlay);
 		overlayManager.add(upcomingAttackOverlay);
-
-		invokeMenuAction = new InvokeMenuAction(client);
 	}
 
 	@Override
@@ -294,9 +298,34 @@ public class CerberusPlugin extends Plugin
 				.result());
 		}
 
-		if (config.autoPrayer())
+		if (config.autoDefensivePrayers())
 		{
 			prayAgainstCerberus();
+		}
+
+		if (config.autoOffensivePrayers())
+		{
+			if (upcomingAttacks.isEmpty())
+			{
+				return;
+			}
+
+			if (config.conservePrayerGhostSkip())
+			{
+				if (cerberus.getPhaseCount() >= 14)
+				{
+					prayOffensively();
+				}
+			}
+			else
+			{
+				prayOffensively();
+			}
+		}
+
+		if (config.drinkPPotsAlways())
+		{
+			handlePrayerPotionDrinking();
 		}
 
 		/*
@@ -383,6 +412,7 @@ public class CerberusPlugin extends Plugin
 				if ((projectilesArray[2] == null) || (projectile.getStartCycle() > projectilesArray[2].getProjectile().getStartCycle()))
 				{
 					projectilesArray[2] = new Missile(projectile);
+					handlePrayerPotionDrinking();
 				}
 				else
 				{
@@ -398,6 +428,7 @@ public class CerberusPlugin extends Plugin
 				if ((projectilesArray[3] == null) || (projectile.getStartCycle() > projectilesArray[3].getProjectile().getStartCycle()))
 				{
 					projectilesArray[3] = new Missile(projectile);
+					handlePrayerPotionDrinking();
 				}
 				else
 				{
@@ -413,6 +444,7 @@ public class CerberusPlugin extends Plugin
 				if ((projectilesArray[4] == null) || (projectile.getStartCycle() > projectilesArray[4].getProjectile().getStartCycle()))
 				{
 					projectilesArray[4] = new Missile(projectile);
+					handlePrayerPotionDrinking();
 				}
 				else
 				{
@@ -493,7 +525,11 @@ public class CerberusPlugin extends Plugin
 				cerberus.setLastGhostYellTime(System.currentTimeMillis());
 				cerberus.doProjectileOrAnimation(gameTick, Cerberus.Attack.GHOSTS);
 				//Auto action, drink prayer potions if necessary now
-				handleGhostsDrinking();
+				handlePrayerPotionDrinking();
+				if (config.conservePrayerGhostSkip())
+				{
+					prayOffensively();
+				}
 				break;
 			case ANIMATION_ID_SIT_DOWN:
 			case ANIMATION_ID_STAND_UP:
@@ -560,6 +596,7 @@ public class CerberusPlugin extends Plugin
 		{
 			cerberus = null;
 			ghosts.clear();
+			deactivatePrayers();
 
 			log.debug("onNpcDespawned name={}, id={}", npc.getName(), npc.getId());
 		}
@@ -770,7 +807,7 @@ public class CerberusPlugin extends Plugin
 
 	private void prayAgainstCerberus()
 	{
-		if (upcomingAttacks.isEmpty())
+		if (upcomingAttacks.isEmpty() || cerberus == null)
 		{
 			return;
 		}
@@ -800,12 +837,60 @@ public class CerberusPlugin extends Plugin
 
 		final Prayer prayer = Prayer.valueOf(prayerToInvoke.name());
 
-		invokeMenuAction.invokePrayer(prayer);
+		kotoriUtils.getInvokesLibrary().invokePrayer(prayer);
 	}
 
-	private void handleGhostsDrinking()
+	private void prayOffensively()
 	{
-		if (!config.autoDrinkPPots())
+		if (cerberus == null)
+		{
+			return;
+		}
+
+		final Prayer prayer = config.offensivePrayerChoice().getPrayer();
+
+		if (client.isPrayerActive(prayer))
+		{
+			return;
+		}
+
+		kotoriUtils.getInvokesLibrary().invokePrayer(prayer);
+	}
+
+	private void deactivatePrayers()
+	{
+		if (cerberus != null)
+		{
+			return;
+		}
+
+		if (config.autoDefensivePrayers())
+		{
+			if (client.isPrayerActive(Prayer.PROTECT_FROM_MAGIC))
+			{
+				kotoriUtils.getInvokesLibrary().deactivatePrayer(Prayer.PROTECT_FROM_MAGIC);
+			}
+			else if (client.isPrayerActive(Prayer.PROTECT_FROM_MISSILES))
+			{
+				kotoriUtils.getInvokesLibrary().deactivatePrayer(Prayer.PROTECT_FROM_MISSILES);
+			}
+			else if (client.isPrayerActive(Prayer.PROTECT_FROM_MELEE))
+			{
+				kotoriUtils.getInvokesLibrary().deactivatePrayer(Prayer.PROTECT_FROM_MELEE);
+			}
+		}
+
+		if (config.autoOffensivePrayers())
+		{
+			final Prayer prayer = config.offensivePrayerChoice().getPrayer();
+
+			kotoriUtils.getInvokesLibrary().deactivatePrayer(prayer);
+		}
+	}
+
+	private void handlePrayerPotionDrinking()
+	{
+		if (!config.drinkPPotsGhosts() && !config.drinkPPotsAlways())
 		{
 			return;
 		}
@@ -814,7 +899,7 @@ public class CerberusPlugin extends Plugin
 
 		if (client.getBoostedSkillLevel(Skill.PRAYER) <= valueToDrinkAt)
 		{
-			invokeMenuAction.invokePPotDrinking();
+			kotoriUtils.getInvokesLibrary().invokePPotDrinking();
 		}
 	}
 

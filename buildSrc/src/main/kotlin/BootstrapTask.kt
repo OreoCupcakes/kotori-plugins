@@ -26,13 +26,15 @@ open class BootstrapTask : DefaultTask() {
         return MessageDigest.getInstance("SHA-512").digest(file).fold("", { str, it -> str + "%02x".format(it) }).toUpperCase()
     }
 
-    /*
+    /**/
     private fun getBootstrap(filename: String): JSONArray? {
         val bootstrapFile = File(filename).readLines()
 
         return JSONObject("{\"plugins\":$bootstrapFile}").getJSONArray("plugins")
     }
-     */
+    /* */
+
+    /*
     private fun getBootstrap(): JSONArray? {
         val client = OkHttpClient()
 
@@ -43,6 +45,7 @@ open class BootstrapTask : DefaultTask() {
 
         client.newCall(request).execute().use { response -> return JSONObject("{\"plugins\":${response.body!!.string()}}").getJSONArray("plugins") }
     }
+     */
 
     @TaskAction
     fun boostrap() {
@@ -53,8 +56,8 @@ open class BootstrapTask : DefaultTask() {
             bootstrapReleaseDir.mkdirs()
 
             val plugins = ArrayList<JSONObject>()
-        //    val baseBootstrap = getBootstrap("$bootstrapDir/plugins.json") ?: throw RuntimeException("Base bootstrap is null!")
-            val baseBootstrap = getBootstrap() ?: throw RuntimeException("Base bootstrap is null!")
+            val baseBootstrap = getBootstrap("$bootstrapDir/plugins.json") ?: throw RuntimeException("Base bootstrap is null!")
+        //    val baseBootstrap = getBootstrap() ?: throw RuntimeException("Base bootstrap is null!")
 
             project.subprojects.forEach {
                 if (it.project.properties.containsKey("PluginName") && it.project.properties.containsKey("PluginDescription")

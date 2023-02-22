@@ -51,19 +51,16 @@ public class InvokesLibrary {
         }
     }
 
-    public void invokePrayer(Prayer prayer) {
-
+    public void invokePrayer(Prayer prayer)
+    {
         //do nothing if prayer is already active or prayer points is at 0
-        if (client.isPrayerActive(prayer))
-        {
-            return;
-        }
-        if (client.getBoostedSkillLevel(Skill.PRAYER) <= 0)
+        if (client.isPrayerActive(prayer) || client.getBoostedSkillLevel(Skill.PRAYER) <= 0)
         {
             return;
         }
 
-        switch (prayer.name()) {
+        switch (prayer.name())
+        {
             case "PROTECT_FROM_MAGIC":
                 //Invokes Protect from Magic
                 invoke(-1, 35454993, MenuAction.CC_OP.getId(), 1, -1, "Activate", "<col=ff9040>Protect from Magic</col>", 0, 0);
@@ -102,7 +99,56 @@ public class InvokesLibrary {
         }
     }
 
-    public void invokePPotDrinking() {
+    public void deactivatePrayer(Prayer prayer)
+    {
+        //do nothing if prayer is not active or prayer points is at 0
+        if (!client.isPrayerActive(prayer) || client.getBoostedSkillLevel(Skill.PRAYER) <= 0)
+        {
+            return;
+        }
+
+        switch (prayer.name())
+        {
+            case "PROTECT_FROM_MAGIC":
+                //Invokes Protect from Magic
+                invoke(-1, 35454993, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Protect from Magic</col>", 0, 0);
+                break;
+            case "PROTECT_FROM_MISSILES":
+                //Invokes Protect from Missiles
+                invoke(-1, 35454994, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Protect from Missiles</col>", 0, 0);
+                break;
+            case "PROTECT_FROM_MELEE":
+                //Invokes Protect from Melee
+                invoke(-1, 35454995, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Protect from Melee</col>", 0, 0);
+                break;
+            case "PIETY":
+                invoke(-1, 35455006, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Piety</col>", 0, 0);
+                break;
+            case "RIGOUR":
+                if (client.getVarbitValue(5451) == 1)
+                {
+                    invoke(-1, 35455007, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Rigour</col>", 0, 0);
+                }
+                break;
+            case "AUGURY":
+                if (client.getVarbitValue(5452) == 1)
+                {
+                    invoke(-1, 35455008, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Augury</col>", 0, 0);
+                }
+                break;
+            case "EAGLE_EYE":
+                invoke(-1, 35455003, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Mystic Might</col>", 0, 0);
+                break;
+            case "MYSTIC_MIGHT":
+                invoke(-1, 35455004, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Eagle Eye</col>", 0, 0);
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void invokePPotDrinking()
+    {
         // Prayer restoring potion item IDs array, Prayer potions, Super restores, Sanfew Serums
         final int[] prayerRestoringItemIDs = {2434,139,141,143,3024,3026,3028,3030,10925,10927,10929,10931};
         final int prayerDrinkingParam1 = 9764864;

@@ -30,6 +30,7 @@ package com.theplug.kotori.cerberushelper;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import net.runelite.api.Prayer;
 import net.runelite.client.config.*;
 import net.runelite.client.ui.overlay.components.ComponentOrientation;
 
@@ -236,23 +237,61 @@ public interface CerberusConfig extends Config
 	}
 
 	@ConfigItem(
-			keyName = "autoPrayer",
-			name = "Auto Cerberus Prayers",
+			keyName = "autoDefensivePrayers",
+			name = "Auto Defensive Prayers",
 			description = "Automatically pray against Cerberus' attacks.",
 			position = 0,
 			section = autoSection
 	)
-	default boolean autoPrayer() { return false; }
+	default boolean autoDefensivePrayers() { return false; }
 
 	@ConfigItem(
-			keyName = "autoDrinkPPots",
-			name = "Auto Drink Prayer Potions",
-			description = "Automatically drink prayer potions, if needed, for the Ghost phase. " +
-					"Prioritizes Prayer potions, then Super restores, then Sanfew Serums.",
+			keyName = "autoOffensivePrayers",
+			name = "Auto Offensive Prayers",
+			description = "Automatically offensive pray to fight Cerberus.",
 			position = 1,
 			section = autoSection
 	)
-	default boolean autoDrinkPPots() { return false; }
+	default boolean autoOffensivePrayers() { return false; }
+
+	@ConfigItem(
+			keyName = "offensivePrayerChoice",
+			name = "Offensive Prayer",
+			description = "Which offensive prayer to use?",
+			position = 2,
+			section = autoSection
+	)
+	default OffensivePrayers offensivePrayerChoice() { return OffensivePrayers.PIETY; }
+
+	@ConfigItem(
+			keyName = "conservePrayerGhostSkip",
+			name = "Ghost Skip? No Offensive Prayer",
+			description = "Are you ghost skipping? Conserve prayer by not using an offensive prayer\n" +
+					"until the 15th attack from Cerberus or when ghosts spawn.",
+			position = 3,
+			section = autoSection
+	)
+	default boolean conservePrayerGhostSkip() { return false; }
+
+	@ConfigItem(
+			keyName = "drinkPPotsGhosts",
+			name = "Drink Prayer For Ghosts Only",
+			description = "Drink prayer potions, if below threshold, for the Ghost phase.\n" +
+					"This will trigger during the start of Ghost phase and during Ghost attacks.",
+			position = 4,
+			section = autoSection
+	)
+	default boolean drinkPPotsGhosts() { return false; }
+
+	@ConfigItem(
+			keyName = "drinkPPotsAlways",
+			name = "Always Drink Under Threshold?",
+			description = "Do you want to always drink prayer potions when under the threshold below? " +
+					"This will check and trigger every game tick that Cerberus is alive.",
+			position = 5,
+			section = autoSection
+	)
+	default boolean drinkPPotsAlways() { return false; }
 
 	@Range(
 			min = 1,
@@ -262,7 +301,7 @@ public interface CerberusConfig extends Config
 			keyName = "prayerPointsToDrinkAt",
 			name = "Drink At",
 			description = "Prayer point threshold to drink prayer potions.",
-			position = 2,
+			position = 6,
 			section = autoSection
 	)
 	default int prayerPointsToDrinkAt() { return 60; }
@@ -300,5 +339,20 @@ public interface CerberusConfig extends Config
 		{
 			return name;
 		}
+	}
+
+	@Getter
+	@RequiredArgsConstructor
+	enum OffensivePrayers
+	{
+		PIETY("Piety", Prayer.PIETY),
+		RIGOUR("Rigour",Prayer.RIGOUR),
+		EAGLE_EYE("Eagle Eye",Prayer.EAGLE_EYE);
+
+		private final String prayerName;
+		private final Prayer prayer;
+
+		@Override
+		public String toString() { return prayerName; }
 	}
 }

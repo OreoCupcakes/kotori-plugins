@@ -30,6 +30,10 @@ project.extra["PluginDescription"] = "A helper plugin for the Cerberus boss. Com
 project.extra["PluginPackageId"] = "cerberushelper" // This is the plugin package folder after the default group package.
 project.extra["PluginMainClassName"] = "CerberusPlugin" // This is the plugin's main class which extends Plugin
 
+dependencies {
+    compileOnly(project(":kotoriutils"))
+}
+
 tasks {
     jar {
         manifest {

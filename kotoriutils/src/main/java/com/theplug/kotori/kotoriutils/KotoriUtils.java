@@ -11,11 +11,13 @@ import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 
 @Slf4j
+@Singleton
 @PluginDescriptor(
         name = "Kotori Plugin Utils",
         enabledByDefault = true,
@@ -26,21 +28,25 @@ public class KotoriUtils extends Plugin {
 
     @Inject
     private Client client;
-    @Inject
-    private ClientThread clientThread;
 
     final private String hooksFileURL = "https://github.com/OreoCupcakes/kotori-ported-plugins-hosting/blob/master/hooks.json?raw=true";
 
     @Inject
+    @Getter
     private NPCsLibrary npcsLibrary;
     @Inject
+    @Getter
     private InvokesLibrary invokesLibrary;
     @Inject
+    @Getter
     private SpellsLibrary spellsLibrary;
     @Inject
+    @Getter
     private MenusLibrary menusLibrary;
     @Inject
+    @Getter
     private WalkingLibrary walkingLibrary;
+
     private Hooks rsHooks;
 
     @Override
@@ -57,11 +63,15 @@ public class KotoriUtils extends Plugin {
 
     private void getObfuscatedHooks()
     {
-        try {
-            URL url = new URL(hooksFileURL);
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
-            Gson gson = new Gson();
-            rsHooks = gson.fromJson(bufferedReader,Hooks.class);
+        try
+        {
+            if (rsHooks == null)
+            {
+                URL url = new URL(hooksFileURL);
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
+                Gson gson = new Gson();
+                rsHooks = gson.fromJson(bufferedReader, Hooks.class);
+            }
 
             //Set the game hooks
             //invokeMenuAction Hooks
@@ -138,6 +148,5 @@ public class KotoriUtils extends Plugin {
         String[] jsonSplit = jsonString.split("\\.");
         return jsonSplit[1];
     }
-
 
 }
