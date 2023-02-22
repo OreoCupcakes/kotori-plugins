@@ -30,6 +30,10 @@ project.extra["PluginDescription"] = "Count Vorkath attacks, indicate next phase
 project.extra["PluginPackageId"] = "vorkathoverlay" // This is the plugin package folder after the default group package.
 project.extra["PluginMainClassName"] = "VorkathPlugin" // This is the plugin's main class which extends Plugin
 
+dependencies {
+    compileOnly(project(":kotoriutils"))
+}
+
 tasks {
     jar {
         manifest {

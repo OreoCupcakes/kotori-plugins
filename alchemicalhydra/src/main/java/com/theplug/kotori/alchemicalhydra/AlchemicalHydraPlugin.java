@@ -34,10 +34,10 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import com.theplug.kotori.alchemicalhydra.overlay.AttackOverlay;
-import com.theplug.kotori.alchemicalhydra.utils.NPCAnimationID;
 import com.theplug.kotori.alchemicalhydra.entity.Hydra;
 import com.theplug.kotori.alchemicalhydra.entity.HydraPhase;
 import com.theplug.kotori.alchemicalhydra.overlay.SceneOverlay;
+import com.theplug.kotori.kotoriutils.KotoriUtils;
 import lombok.Getter;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
@@ -60,6 +60,7 @@ import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
+import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
 import com.theplug.kotori.alchemicalhydra.overlay.PrayerOverlay;
 import net.runelite.client.ui.overlay.OverlayManager;
@@ -67,6 +68,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Singleton
+@PluginDependency(KotoriUtils.class)
 @PluginDescriptor(
 	name = "Alchemical Hydra",
 	enabledByDefault = false,
@@ -86,6 +88,9 @@ public class AlchemicalHydraPlugin extends Plugin
 	@Getter
 	@Inject
 	private ClientThread clientThread;
+
+	@Inject
+	private KotoriUtils kotoriUtils;
 
 	@Inject
 	private OverlayManager overlayManager;
@@ -241,9 +246,7 @@ public class AlchemicalHydraPlugin extends Plugin
 			return;
 		}
 
-		NPCAnimationID npcAnimationID = new NPCAnimationID(client, hydra.getNpc());
-
-		int currentAnimationID = npcAnimationID.getNPCAnimationID();
+		int currentAnimationID = kotoriUtils.getNpcsLibrary().getNPCAnimationID(hydra.getNpc());
 
 		//Compare the animation ID of current game tick with previous game tick. Execute function only if the animation changed.
 		if (lastNPCAnim != currentAnimationID) {

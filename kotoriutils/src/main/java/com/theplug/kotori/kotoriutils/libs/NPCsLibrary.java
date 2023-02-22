@@ -17,10 +17,6 @@ public class NPCsLibrary {
     private Client client;
 
     @Setter
-    private NPC npc;
-    @Setter
-    private NPCComposition npcComposition;
-    @Setter
     private String actorClassName;
     @Setter
     private String sequenceFieldName;
@@ -34,7 +30,7 @@ public class NPCsLibrary {
     private int animationId;
     private HeadIcon headIcon;
 
-    public int getNPCAnimationID() {
+    public int getNPCAnimationID(NPC npc) {
         try {
             Field sequence = client.getClass().getClassLoader().loadClass(actorClassName).getDeclaredField(sequenceFieldName);
             sequence.setAccessible(true);
@@ -48,7 +44,7 @@ public class NPCsLibrary {
         return animationId;
     }
 
-    public HeadIcon getNPCHeadIcon() {
+    public HeadIcon getNPCHeadIcon(NPCComposition npcComposition) {
         try {
             Field headIconSpriteIndexes = client.getClass().getClassLoader().loadClass(npcCompositionClassName).getDeclaredField(overheadIconFieldName);
             headIconSpriteIndexes.setAccessible(true);

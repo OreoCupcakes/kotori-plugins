@@ -33,9 +33,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.theplug.kotori.kotoriutils.KotoriUtils;
 import com.theplug.kotori.vorkathoverlay.utils.GraphicIDPlus;
 import com.theplug.kotori.vorkathoverlay.utils.Missile;
-import com.theplug.kotori.vorkathoverlay.utils.NPCAnimationID;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -58,10 +58,12 @@ import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
+import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
 import org.apache.commons.lang3.ArrayUtils;
 
+@PluginDependency(KotoriUtils.class)
 @PluginDescriptor(
 	name = "Vorkath",
 	enabledByDefault = false,
@@ -75,6 +77,9 @@ public class VorkathPlugin extends Plugin
 
 	@Inject
 	private Client client;
+
+	@Inject
+	private KotoriUtils kotoriUtils;
 
 	@Inject
 	private OverlayManager overlayManager;
@@ -319,9 +324,7 @@ public class VorkathPlugin extends Plugin
 			return;
 		}
 
-		NPCAnimationID npcAnimationID = new NPCAnimationID(client,vorkath.getVorkath());
-
-		int currentAnimationID = npcAnimationID.getNPCAnimationID();
+		int currentAnimationID = kotoriUtils.getNpcsLibrary().getNPCAnimationID(vorkath.getVorkath());
 
 		if (lastNPCAnim != currentAnimationID)
 		{

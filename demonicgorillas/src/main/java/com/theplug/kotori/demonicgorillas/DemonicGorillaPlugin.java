@@ -37,6 +37,7 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import com.theplug.kotori.demonicgorillas.utils.Missile;
 import com.theplug.kotori.demonicgorillas.utils.GraphicIDPlus;
+import com.theplug.kotori.kotoriutils.KotoriUtils;
 import lombok.AccessLevel;
 import lombok.Getter;
 import net.runelite.api.*;
@@ -53,9 +54,11 @@ import net.runelite.api.events.ProjectileMoved;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
+import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
 
+@PluginDependency(KotoriUtils.class)
 @PluginDescriptor(
 	name = "Demonic Gorillas",
 	enabledByDefault = false,

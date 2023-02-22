@@ -28,12 +28,14 @@ package com.theplug.kotori.demonicgorillas;
 import java.util.Arrays;
 import java.util.List;
 
-import com.theplug.kotori.demonicgorillas.utils.NPCCompositionHeadIcon;
+import com.theplug.kotori.kotoriutils.KotoriUtils;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import net.runelite.api.*;
 import net.runelite.api.coords.WorldArea;
+
+import javax.inject.Inject;
 
 class DemonicGorilla
 {
@@ -121,6 +123,9 @@ class DemonicGorilla
 	@Setter(AccessLevel.PACKAGE)
 	private int disabledMeleeMovementForTicks;
 
+	@Inject
+	private KotoriUtils kotoriUtils;
+
 	DemonicGorilla(NPC npc, Client client)
 	{
 		this.client = client;
@@ -136,8 +141,7 @@ class DemonicGorilla
 		NPCComposition composition = this.npc.getComposition();
 		if (composition != null)
 		{
-			NPCCompositionHeadIcon npcCompositionHeadIcon = new NPCCompositionHeadIcon(client, composition);
-			return npcCompositionHeadIcon.getNPCHeadIcon();
+			return kotoriUtils.getNpcsLibrary().getNPCHeadIcon(composition);
 		}
 		return null;
 	}

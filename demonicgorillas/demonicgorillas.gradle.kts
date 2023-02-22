@@ -30,6 +30,10 @@ project.extra["PluginDescription"] = "An overlay plugin for the Demonic Gorillas
 project.extra["PluginPackageId"] = "demonicgorillas" // This is the plugin package folder after the default group package.
 project.extra["PluginMainClassName"] = "DemonicGorillaPlugin" // This is the plugin's main class which extends Plugin
 
+dependencies {
+    compileOnly(project(":kotoriutils"))
+}
+
 tasks {
     jar {
         manifest {

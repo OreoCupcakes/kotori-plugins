@@ -30,7 +30,6 @@ package com.theplug.kotori.gauntletextended;
 
 import com.google.inject.Provides;
 
-import java.lang.reflect.*;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -41,7 +40,7 @@ import javax.inject.Singleton;
 import com.theplug.kotori.gauntletextended.resource.ResourceManager;
 import com.theplug.kotori.gauntletextended.utils.GameObjectQuery;
 import com.theplug.kotori.gauntletextended.utils.GraphicIDPlus;
-import com.theplug.kotori.gauntletextended.utils.NPCCompositionHeadIcon;
+import com.theplug.kotori.kotoriutils.KotoriUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -65,6 +64,7 @@ import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.game.SkillIconManager;
 import net.runelite.client.plugins.Plugin;
+import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
 import com.theplug.kotori.gauntletextended.entity.Demiboss;
 import com.theplug.kotori.gauntletextended.entity.Hunllef;
@@ -78,10 +78,9 @@ import com.theplug.kotori.gauntletextended.overlay.OverlayPrayerBox;
 import com.theplug.kotori.gauntletextended.overlay.OverlayPrayerWidget;
 import com.theplug.kotori.gauntletextended.overlay.OverlayTimer;
 import net.runelite.client.ui.overlay.OverlayManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Slf4j
+@PluginDependency(KotoriUtils.class)
 @PluginDescriptor(
 	name = "Gauntlet Extended",
 	enabledByDefault = false,
@@ -188,6 +187,9 @@ public class GauntletExtendedPlugin extends Plugin
 
 	@Inject
 	private ClientThread clientThread;
+
+	@Inject
+	private KotoriUtils kotoriUtils;
 
 	@Inject
 	private GauntletExtendedConfig config;
@@ -640,8 +642,7 @@ public class GauntletExtendedPlugin extends Plugin
 		HeadIcon headIcon = null;
 
 		NPCComposition hunllefComposition = hunllef.getNpc().getComposition();
-		NPCCompositionHeadIcon npcCompositionHeadIcon = new NPCCompositionHeadIcon(client, hunllefComposition);
-		headIcon = npcCompositionHeadIcon.getNPCHeadIcon();
+		headIcon = kotoriUtils.getNpcsLibrary().getNPCHeadIcon(hunllefComposition);
 		/*
 			Old API code
 			final HeadIcon headIcon = hunllef.getNpc().getComposition().getOverheadIcon();

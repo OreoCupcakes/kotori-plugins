@@ -30,6 +30,9 @@ project.extra["PluginDescription"] = "An overlay plugin for the Alchemical Hydra
 project.extra["PluginPackageId"] = "alchemicalhydra" // This is the plugin package folder after the default group package.
 project.extra["PluginMainClassName"] = "AlchemicalHydraPlugin" // This is the plugin's main class which extends Plugin
 
+dependencies {
+    compileOnly(project(":kotoriutils"))
+}
 
 tasks {
     jar {

@@ -30,6 +30,10 @@ project.extra["PluginDescription"] = "All-in-one plugin for the Gauntlet." // Th
 project.extra["PluginPackageId"] = "gauntletextended" // This is the plugin package folder after the default group package.
 project.extra["PluginMainClassName"] = "GauntletExtendedPlugin" // This is the plugin's main class which extends Plugin
 
+dependencies {
+    compileOnly(project(":kotoriutils"))
+}
+
 tasks {
     jar {
         manifest {
