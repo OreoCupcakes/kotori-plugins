@@ -538,9 +538,12 @@ public class CerberusPlugin extends Plugin
 				{
 					handlePrayerPotionDrinking();
 				}
-				if (config.conservePrayerGhostSkip())
+				if (config.autoOffensivePrayers())
 				{
-					prayOffensively();
+					if (config.conservePrayerGhostSkip())
+					{
+						prayOffensively();
+					}
 				}
 				break;
 			case ANIMATION_ID_SIT_DOWN:
