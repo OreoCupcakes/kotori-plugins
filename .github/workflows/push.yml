@@ -76,7 +76,7 @@ jobs:
           cache: 'gradle'
 
       - name: Checkout plugins
-      - uses: actions/checkout@v3
+        uses: actions/checkout@v3
 
       - name: Checkout plugins
         uses: actions/checkout@v3
@@ -124,9 +124,7 @@ jobs:
 
       - name: Commit bootstrap
         run: |
-          git add $(git ls-files -o --exclude-standard) plugins.json
-          git add $(git ls-files -o --exclude-standard) info.json
-          git add $(git ls-files -o --exclude-standard) hooks.json
+          git add $(git ls-files -o --exclude-standard) plugins.json info.json hooks.json
           git diff-index --quiet HEAD \
           || git -c user.name="GitHub" -c user.email="noreply@github.com" commit \
             --author="github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>" \
