@@ -6,12 +6,14 @@ import javax.inject.Inject;
 import javax.swing.*;
 
 import com.google.inject.Provides;
-import com.theplug.kotori.kotoripluginloader.json.Project;
+import com.theplug.kotori.kotoripluginloader.json.Plugin;
 import com.theplug.kotori.kotoripluginloader.json.Releases;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.EventBus;
+import net.runelite.client.eventbus.Subscribe;
+import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.events.ExternalPluginsChanged;
 import net.runelite.client.plugins.*;
 
@@ -20,7 +22,6 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 @PluginDescriptor(
@@ -30,7 +31,7 @@ import java.util.List;
         tags = {"kotori","ported","loader"}
 )
 @Slf4j
-public class KotoriPluginLoader extends Plugin
+public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
 {
     final private String pluginsJson = "https://github.com/OreoCupcakes/kotori-ported-plugins-hosting/blob/master/plugins.json?raw=true";
     final private String infoJson = "https://github.com/OreoCupcakes/kotori-ported-plugins-hosting/blob/master/info.json?raw=true";
@@ -49,11 +50,11 @@ public class KotoriPluginLoader extends Plugin
 
     private int gameRevisionFromHooks;
     private boolean gameRevisionCheck;
-    private Project[] jsonProjects;
+    private Plugin[] jsonPlugins;
     private ArrayList<URL> pluginUrlList = new ArrayList<>();
     private ArrayList<String> pluginPackageIdList = new ArrayList<>();
     private ArrayList<String> pluginMainClassList = new ArrayList<>();
-    private List<Plugin> scannedPlugins;
+    private List<net.runelite.client.plugins.Plugin> scannedPlugins;
 
     @Provides
     KotoriPluginLoaderConfig provideConfig(ConfigManager configManager)
@@ -64,17 +65,13 @@ public class KotoriPluginLoader extends Plugin
     @Override
     protected void startUp()
     {
-        // runs on plugin startup
-        log.info("Plugin started");
-        parsePluginsJson();
-        loadExternalPlugins();
+
     }
 
     @Override
     protected void shutDown()
     {
-        // runs on plugin shutdown
-        log.info("Plugin stopped");
+
     }
 
     private boolean checkGameRevision()
@@ -116,7 +113,7 @@ public class KotoriPluginLoader extends Plugin
             URL pluginsURLs = new URL(pluginsJson);
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(pluginsURLs.openStream()));
             Gson gson = new Gson();
-            jsonProjects = gson.fromJson(bufferedReader, Project[].class);
+            jsonPlugins = gson.fromJson(bufferedReader, Plugin[].class);
         }
         catch (Exception e)
         {
@@ -124,9 +121,9 @@ public class KotoriPluginLoader extends Plugin
             return false;
         }
 
-        if (jsonProjects != null)
+        if (jsonPlugins != null)
         {
-            for (Project json : jsonProjects)
+            for (Plugin json : jsonPlugins)
             {
                 pluginPackageIdList.add(json.getPackageId());
                 pluginMainClassList.add(json.getMainClassName());
@@ -156,7 +153,7 @@ public class KotoriPluginLoader extends Plugin
             scannedPlugins = manager.loadPlugins(loadedClasses,null);
 
             SwingUtilities.invokeLater(() -> {
-                for (Plugin p : scannedPlugins) {
+                for (net.runelite.client.plugins.Plugin p : scannedPlugins) {
                     if (p ==null)
                         continue;
                     try {
@@ -172,5 +169,11 @@ public class KotoriPluginLoader extends Plugin
         {
             e.printStackTrace();
         }
+    }
+
+    @Subscribe
+    private void onConfigChanged(ConfigChanged event)
+    {
+
     }
 }
