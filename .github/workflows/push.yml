@@ -28,22 +28,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Make gradlew executable (plugins)
-        run: chmod +x ./gradlew
-        working-directory: /home/runner/work/kotori-ported-plugins/plugins
-
-      - name: Assembling plugins
-        run: ./gradlew --console=plain
-        working-directory: /home/runner/work/kotori-ported-plugins/plugins
-
-      - name: Building plugins
-        run: ./gradlew
-        working-directory: /home/runner/work/kotori-ported-plugins/plugins
-
-      - name: Upload plugins artifacts to local maven
-        run: ./gradlew --console=plain
-        working-directory: /home/runner/work/kotori-ported-plugins/plugins
-
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
@@ -90,22 +74,6 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.kts') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-
-      - name: Make gradlew executable (plugins)
-        run: chmod +x ./gradlew
-        working-directory: /home/runner/work/kotori-ported-plugins/plugins
-
-      - name: Assembling plugins
-        run: ./gradlew --console=plain
-        working-directory: /home/runner/work/kotori-ported-plugins/plugins
-
-      - name: Building plugins
-        run: ./gradlew
-        working-directory: /home/runner/work/kotori-ported-plugins/plugins
-
-      - name: Upload plugins artifacts to local maven
-        run: ./gradlew --console=plain
-        working-directory: /home/runner/work/kotori-ported-plugins/plugins
 
       - name: Make gradlew executable
         run: chmod +x ./gradlew
