@@ -79,7 +79,7 @@ jobs:
         run: ./gradlew bootstrapPlugins
 
       - name: Copy bootstrap
-        run: cp -af /home/runner/work/kotori-ported-plugins/kotori-ported-plugins/build/bootstrap/. /home/runner/work/kotori-ported-plugins/kotori-ported-plugins-hosting/
+        run: cp -af /home/runner/work/kotori-ported-plugins/kotori-ported-plugins/bootstrap/. /home/runner/work/kotori-ported-plugins/kotori-ported-plugins-hosting/
 
       - name: Commit bootstrap
         run: |
