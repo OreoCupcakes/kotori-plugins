@@ -323,9 +323,12 @@ public class CerberusPlugin extends Plugin
 			}
 		}
 
-		if (config.whenToDrinkPPots().getDrinkArgument().equalsIgnoreCase("Always"))
+		if (config.drinkPrayerPotions())
 		{
-			handlePrayerPotionDrinking();
+			if (ghosts.isEmpty() || upcomingAttacks.get(0).getAttack().getPriority() != 2)
+			{
+				handlePrayerPotionDrinking();
+			}
 		}
 
 		/*
@@ -412,10 +415,6 @@ public class CerberusPlugin extends Plugin
 				if ((projectilesArray[2] == null) || (projectile.getStartCycle() > projectilesArray[2].getProjectile().getStartCycle()))
 				{
 					projectilesArray[2] = new Missile(projectile);
-					if (config.whenToDrinkPPots().getDrinkArgument().equalsIgnoreCase("Ghosts"))
-					{
-						handlePrayerPotionDrinking();
-					}
 				}
 				else
 				{
@@ -431,10 +430,6 @@ public class CerberusPlugin extends Plugin
 				if ((projectilesArray[3] == null) || (projectile.getStartCycle() > projectilesArray[3].getProjectile().getStartCycle()))
 				{
 					projectilesArray[3] = new Missile(projectile);
-					if (config.whenToDrinkPPots().getDrinkArgument().equalsIgnoreCase("Ghosts"))
-					{
-						handlePrayerPotionDrinking();
-					}
 				}
 				else
 				{
@@ -450,10 +445,6 @@ public class CerberusPlugin extends Plugin
 				if ((projectilesArray[4] == null) || (projectile.getStartCycle() > projectilesArray[4].getProjectile().getStartCycle()))
 				{
 					projectilesArray[4] = new Missile(projectile);
-					if (config.whenToDrinkPPots().getDrinkArgument().equalsIgnoreCase("Ghosts"))
-					{
-						handlePrayerPotionDrinking();
-					}
 				}
 				else
 				{
@@ -533,11 +524,6 @@ public class CerberusPlugin extends Plugin
 				cerberus.setLastGhostYellTick(gameTick);
 				cerberus.setLastGhostYellTime(System.currentTimeMillis());
 				cerberus.doProjectileOrAnimation(gameTick, Cerberus.Attack.GHOSTS);
-				//Auto action, drink prayer potions if necessary now
-				if (config.whenToDrinkPPots().getDrinkArgument().equalsIgnoreCase("Ghosts"))
-				{
-					handlePrayerPotionDrinking();
-				}
 				if (config.autoOffensivePrayers())
 				{
 					if (config.conservePrayerGhostSkip())

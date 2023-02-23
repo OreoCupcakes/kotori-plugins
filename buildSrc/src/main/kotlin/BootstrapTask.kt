@@ -50,9 +50,10 @@ open class BootstrapTask : DefaultTask() {
     @TaskAction
     fun boostrap() {
         if (project == project.rootProject) {
-            val bootstrapDir = File("${project.projectDir}")
-            val bootstrapReleaseDir = File("${project.projectDir}/release")
+            val bootstrapDir = File("${project.projectDir}/bootstrap")
+            val bootstrapReleaseDir = File("${project.projectDir}/bootstrap/release")
 
+            bootstrapDir.mkdirs()
             bootstrapReleaseDir.mkdirs()
 
             val plugins = ArrayList<JSONObject>()

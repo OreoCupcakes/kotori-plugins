@@ -266,26 +266,24 @@ public interface CerberusConfig extends Config
 	@ConfigItem(
 			keyName = "conservePrayerGhostSkip",
 			name = "Ghost Skip? No Offensive Prayer",
-			description = "Are you ghost skipping? Conserve prayer by not using an offensive prayer<br>" +
-					"until the 15th attack from Cerberus or when ghosts spawn.",
+			description = "Are you ghost skipping? Conserve prayer by not using an offensive<br>" +
+					"prayer until the 15th attack from Cerberus or when ghosts spawn.",
 			position = 3,
 			section = autoSection
 	)
 	default boolean conservePrayerGhostSkip() { return false; }
 
 	@ConfigItem(
-			keyName = "whenToDrinkPPots",
+			keyName = "drinkPrayerPotions",
 			name = "Drink Prayer Potions?",
-			description =
-					"<html><b><u>Off</u>:</b> I won't drink prayer potions at all during the fight." +
-					"<br><b><u>Ghosts</u>:</b> I will only drink prayer potions during the start of Ghost" +
-					"<br>phase and during Ghost attacks." +
-					"<br><b><u>Always</u>:</b> I'll drink prayer potions anytime your prayer points drop below" +
-					"<br>the threshold you selected, as long as Cerberus is alive.</html>",
+			description = "Do you want to automatically drink prayer potions" +
+					"<br>when below the threshold you set? This will only" +
+					"<br>drink prayer potions when the ghosts aren't spawned," +
+					"<br>before and after Ghost phase.",
 			position = 4,
 			section = autoSection
 	)
-	default DrinkArgument whenToDrinkPPots() { return DrinkArgument.NO; }
+	default boolean drinkPrayerPotions() { return false; }
 
 	@Range(
 			min = 1,
@@ -348,19 +346,5 @@ public interface CerberusConfig extends Config
 
 		@Override
 		public String toString() { return prayerName; }
-	}
-
-	@Getter
-	@RequiredArgsConstructor
-	enum DrinkArgument
-	{
-		NO("Off"),
-		GHOSTS("Ghosts"),
-		ALWAYS("Always");
-
-		private final String drinkArgument;
-
-		@Override
-		public String toString() { return drinkArgument; }
 	}
 }
