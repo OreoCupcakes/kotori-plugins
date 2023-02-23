@@ -81,9 +81,15 @@ jobs:
       - name: Copy bootstrap
         run: cp -af /home/runner/work/kotori-ported-plugins/kotori-ported-plugins/bootstrap/. /home/runner/work/kotori-ported-plugins/kotori-ported-plugins-hosting/
 
+      - name: Copy Info
+        run: cp -af /home/runner/work/kotori-ported-plugins/kotori-ported-plugins/info.json /home/runner/work/kotori-ported-plugins/kotori-ported-plugins-hosting/
+
+      - name: Copy Hooks
+        run: cp -af /home/runner/work/kotori-ported-plugins/kotori-ported-plugins/hooks.json /home/runner/work/kotori-ported-plugins/kotori-ported-plugins-hosting/
+
       - name: Commit bootstrap
         run: |
-          git add $(git ls-files -o --exclude-standard) plugins.json info.json hooks.json
+          git add $(git ls-files -o --exclude-standard) *.json
           git diff-index --quiet HEAD \
           || git -c user.name="GitHub" -c user.email="noreply@github.com" commit \
             --author="github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>" \
@@ -93,6 +99,6 @@ jobs:
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
-          github_token: ${{ secrets.OreoCupcakes }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           directory: /home/runner/work/kotori-ported-plugins/kotori-ported-plugins-hosting
           repository: OreoCupcakes/kotori-ported-plugins-hosting
