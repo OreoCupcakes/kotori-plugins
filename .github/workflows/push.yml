@@ -54,7 +54,6 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
           path: kotori-plugins-releases
-          token: ${{secrets.KOTORI}}
 
 
       - name: Set up JDK 11
