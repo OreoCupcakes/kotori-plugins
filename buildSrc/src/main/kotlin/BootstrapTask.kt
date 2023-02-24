@@ -38,7 +38,7 @@ open class BootstrapTask : DefaultTask() {
     private fun getBootstrap(): JSONArray? {
         val client = OkHttpClient()
 
-        val url = "https://raw.githubusercontent.com/OreoCupcakes/kotori-ported-plugins-hosting/master/plugins.json"
+        val url = "https://raw.githubusercontent.com/OreoCupcakes/kotori-plugins-releases/master/plugins.json"
         val request = Request.Builder()
             .url(url)
             .build()

@@ -46,12 +46,12 @@ jobs:
 
 
       - name: Checkout plugins
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Checkout plugins
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
-          repository: OreoCupcakes/kotori-ported-plugins-hosting
+          repository: OreoCupcakes/kotori-plugins-releases
           ref: master
           persist-credentials: false
           fetch-depth: 0
@@ -83,13 +83,13 @@ jobs:
         run: ./gradlew bootstrapPlugins
 
       - name: Copy bootstrap
-        run: cp -af /home/runner/work/kotori-ported-plugins/kotori-ported-plugins/bootstrap/. /home/runner/work/kotori-ported-plugins/kotori-ported-plugins-hosting/
+        run: cp -af /home/runner/work/kotori-plugins/kotori-plugins/bootstrap/. /home/runner/work/kotori-plugins/kotori-plugins-releases/
 
       - name: Copy Info
-        run: cp -af /home/runner/work/kotori-ported-plugins/kotori-ported-plugins/info.json /home/runner/work/kotori-ported-plugins/kotori-ported-plugins-hosting/
+        run: cp -af /home/runner/work/kotori-plugins/kotori-plugins/info.json /home/runner/work/kotori-plugins/kotori-plugins-releases/
 
       - name: Copy Hooks
-        run: cp -af /home/runner/work/kotori-ported-plugins/kotori-ported-plugins/hooks.json /home/runner/work/kotori-ported-plugins/kotori-ported-plugins-hosting/
+        run: cp -af /home/runner/work/kotori-plugins/kotori-plugins/hooks.json /home/runner/work/kotori-plugins/kotori-plugins-releases/
 
       - name: Commit bootstrap
         run: |
@@ -98,11 +98,11 @@ jobs:
           || git -c user.name="GitHub" -c user.email="noreply@github.com" commit \
             --author="github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>" \
             -m "Automatic plugin bootstrap"
-        working-directory: /home/runner/work/kotori-ported-plugins/kotori-ported-plugins-hosting
+        working-directory: /home/runner/work/kotori-plugins/kotori-plugins-releases
 
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.OREOCUPCAKES }}
-          directory: /home/runner/work/kotori-ported-plugins/kotori-ported-plugins-hosting
-          repository: OreoCupcakes/kotori-ported-plugins-hosting
+          directory: /home/runner/work/kotori-plugins/kotori-plugins-releases
+          repository: OreoCupcakes/kotori-plugins-releases
