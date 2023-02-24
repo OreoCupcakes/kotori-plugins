@@ -21,7 +21,7 @@ jobs:
           java-version: 11
           cache: 'gradle'
 
-      - uses: actions/cache@v1
+      - uses: actions/cache@v3.2.6
         with:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.kts') }}
@@ -105,3 +105,5 @@ jobs:
           directory: /home/runner/work/kotori-plugins/kotori-plugins/kotori-plugins-releases
           repository: OreoCupcakes/kotori-plugins-releases
           github_token: ${{ secrets.KOTORI }}
+        env:
+          github_actor: OreoCupcakes
