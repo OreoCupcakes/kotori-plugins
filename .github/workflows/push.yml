@@ -45,8 +45,6 @@ jobs:
     steps:
       - name: Checkout Source Repo
         uses: actions/checkout@v3
-        with:
-          path: kotori-plugins
 
       - name: Checkout Release Repo
         uses: actions/checkout@v3
@@ -56,6 +54,7 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
           path: kotori-plugins-releases
+          token: ${{ secrets.OREOCUPCAKES }}
 
       - name: Set up JDK 11
         uses: actions/setup-java@v3
@@ -73,32 +72,24 @@ jobs:
 
       - name: Make gradlew executable
         run: chmod +x ./gradlew
-        with:
-          path: kotori-plugins
 
       - name: Assembling plugins
         run: ./gradlew assemble --console=plain
-        with:
-          path: kotori-plugins
 
       - name: Building plugins
         run: ./gradlew build
-        with:
-          path: kotori-plugins
 
       - name: Bootstrapping plugins
         run: ./gradlew bootstrapPlugins
-        with:
-          path: kotori-plugins
 
       - name: Copy bootstrap
-        run: cp -af /home/runner/work/kotori-plugins/kotori-plugins/kotori-plugins/bootstrap/. /home/runner/work/kotori-plugins/kotori-plugins/kotori-plugins-releases
+        run: cp -af /home/runner/work/kotori-plugins/kotori-plugins/bootstrap/. /home/runner/work/kotori-plugins/kotori-plugins/kotori-plugins-releases
 
       - name: Copy Info
-        run: cp -af /home/runner/work/kotori-plugins/kotori-plugins/kotori-plugins/info.json /home/runner/work/kotori-plugins/kotori-plugins/kotori-plugins-releases
+        run: cp -af /home/runner/work/kotori-plugins/kotori-plugins/info.json /home/runner/work/kotori-plugins/kotori-plugins/kotori-plugins-releases
 
       - name: Copy Hooks
-        run: cp -af /home/runner/work/kotori-plugins/kotori-plugins/kotori-plugins/hooks.json /home/runner/work/kotori-plugins/kotori-plugins/kotori-plugins-releases
+        run: cp -af /home/runner/work/kotori-plugins/kotori-plugins/hooks.json /home/runner/work/kotori-plugins/kotori-plugins/kotori-plugins-releases
 
       - name: Commit bootstrap
         run: |
