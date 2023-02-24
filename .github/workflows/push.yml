@@ -48,7 +48,6 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: 11
-          cache: 'gradle'
 
       - name: Checkout plugins
         uses: actions/checkout@v3
@@ -103,6 +102,6 @@ jobs:
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
-          github_token: ${{ secrets.OreoCupcakes }}
+          github_token: ${{ secrets.OREOCUPCAKES }}
           directory: /home/runner/work/kotori-ported-plugins/kotori-ported-plugins-hosting
           repository: OreoCupcakes/kotori-ported-plugins-hosting
