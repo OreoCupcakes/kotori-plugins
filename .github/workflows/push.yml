@@ -43,11 +43,7 @@ jobs:
     name: Bootstrap
 
     steps:
-      - name: Set up JDK 11
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'adopt'
-          java-version: 11
+
 
       - name: Checkout plugins
         uses: actions/checkout@v3
@@ -60,7 +56,12 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
 
-
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: 11
+          cache: 'gradle'
 
       - uses: actions/cache@v1
         with:
