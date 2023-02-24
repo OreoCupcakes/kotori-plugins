@@ -43,12 +43,12 @@ jobs:
     name: Bootstrap
 
     steps:
-
-
-      - name: Checkout plugins
+      - name: Checkout Source Repo
         uses: actions/checkout@v3
+        with:
+          path: kotori-plugins
 
-      - name: Checkout plugins
+      - name: Checkout Release Repo
         uses: actions/checkout@v3
         with:
           repository: OreoCupcakes/kotori-plugins-releases
@@ -64,7 +64,7 @@ jobs:
           java-version: 11
           cache: 'gradle'
 
-      - uses: actions/cache@v1
+      - uses: actions/cache@v3.2.6
         with:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.kts') }}
@@ -99,7 +99,7 @@ jobs:
           || git -c user.name="GitHub" -c user.email="noreply@github.com" commit \
             --author="github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>" \
             -m "Automatic plugin bootstrap"
-        working-directory: /home/runner/work/kotori-plugins/kotori-plugins/kotori-plugins-releases
+        working-directory: /home/runner/work/kotori-plugins/kotori-plugins-releases
 
       - name: Push changes
         uses: ad-m/github-push-action@master
