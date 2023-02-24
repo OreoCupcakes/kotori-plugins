@@ -47,6 +47,8 @@ jobs:
 
       - name: Checkout plugins
         uses: actions/checkout@v3
+        with:
+          path: main
 
       - name: Checkout plugins
         uses: actions/checkout@v3
@@ -55,6 +57,7 @@ jobs:
           ref: master
           persist-credentials: false
           fetch-depth: 0
+          path: main/kotori-plugins-releases
 
       - name: Set up JDK 11
         uses: actions/setup-java@v3
