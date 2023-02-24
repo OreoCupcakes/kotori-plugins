@@ -84,17 +84,17 @@ jobs:
         run: ./gradlew bootstrapPlugins
 
       - name: Copy bootstrap
-        run: cp -af /home/runner/work/kotori-plugins/kotori-plugins/bootstrap/. /home/runner/work/kotori-plugins/kotori-plugins-releases/
+        run: cp -af /home/runner/work/kotori-plugins/kotori-plugins/bootstrap/. /home/runner/work/kotori-plugins/kotori-plugins-releases
 
       - name: Copy Info
-        run: cp -af /home/runner/work/kotori-plugins/kotori-plugins/info.json /home/runner/work/kotori-plugins/kotori-plugins-releases/
+        run: cp -af /home/runner/work/kotori-plugins/kotori-plugins/info.json /home/runner/work/kotori-plugins/kotori-plugins-releases
 
       - name: Copy Hooks
-        run: cp -af /home/runner/work/kotori-plugins/kotori-plugins/hooks.json /home/runner/work/kotori-plugins/kotori-plugins-releases/
+        run: cp -af /home/runner/work/kotori-plugins/kotori-plugins/hooks.json /home/runner/work/kotori-plugins/kotori-plugins-releases
 
       - name: Commit bootstrap
         run: |
-          git add $(git ls-files -o --exclude-standard) *.json
+          git add $(git ls-files -o --exclude-standard) plugins.json info.json hooks.json
           git diff-index --quiet HEAD \
           || git -c user.name="GitHub" -c user.email="noreply@github.com" commit \
             --author="github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>" \
