@@ -109,7 +109,7 @@ jobs:
         with:
           directory: /home/runner/work/kotori-plugins/kotori-plugins/kotori-plugins-releases
           repository: OreoCupcakes/kotori-plugins-releases
-          github_token: ${{secrets.github_token}}
+          github_token: ${{secrets.KOTORI}}
           force: true
         env:
           GITHUB_ACTOR: OreoCupcakes
