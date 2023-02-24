@@ -94,12 +94,12 @@ jobs:
 
       - name: Commit bootstrap
         run: |
-          git add $(git ls-files -o --exclude-standard) plugins.json
-          git diff-index HEAD \
+          git add $(git ls-files -o --exclude-standard) *.json
+          git diff-index --quiet HEAD \
           || git -c user.name="GitHub" -c user.email="noreply@github.com" commit \
             --author="github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>" \
             -m "Automatic plugin bootstrap"
-        working-directory: /home/runner/work/kotori-plugins/kotori-plugins-releases
+        working-directory: /home/runner/work/kotori-plugins/kotori-plugins/kotori-plugins-releases
 
       - name: Push changes
         uses: ad-m/github-push-action@master
