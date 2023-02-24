@@ -99,8 +99,8 @@ jobs:
         run: |
           git add $(git ls-files -o --exclude-standard) *.json
           git diff-index --quiet HEAD \
-          || git -c user.name="GitHub" -c user.email="noreply@github.com" commit \
-            --author="github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>" \
+          || git -c user.name="OreoCupcakes" -c user.email="noreply@github.com" commit \
+            --author="OreoCupcakes" \
             -m "Automatic plugin bootstrap"
         working-directory: /home/runner/work/kotori-plugins/kotori-plugins/kotori-plugins-releases
 
