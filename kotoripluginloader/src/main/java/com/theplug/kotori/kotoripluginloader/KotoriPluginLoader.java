@@ -6,8 +6,8 @@ import javax.inject.Inject;
 import javax.swing.*;
 
 import com.google.inject.Provides;
+import com.theplug.kotori.kotoripluginloader.json.Info;
 import com.theplug.kotori.kotoripluginloader.json.Plugin;
-import com.theplug.kotori.kotoripluginloader.json.Releases;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.client.config.ConfigManager;
@@ -15,6 +15,7 @@ import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.events.ExternalPluginsChanged;
+import net.runelite.client.events.ProfileChanged;
 import net.runelite.client.plugins.*;
 
 import java.io.BufferedReader;
@@ -33,28 +34,28 @@ import java.util.List;
 @Slf4j
 public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
 {
-    final private String pluginsJson = "https://github.com/OreoCupcakes/kotori-ported-plugins-hosting/blob/master/plugins.json?raw=true";
-    final private String infoJson = "https://github.com/OreoCupcakes/kotori-ported-plugins-hosting/blob/master/info.json?raw=true";
+    final private String pluginsJsonURL = "https://github.com/OreoCupcakes/kotori-plugins-releases/blob/master/plugins.json?raw=true";
+    final private String infoJsonURL = "https://github.com/OreoCupcakes/kotori-plugins-releases/blob/master/info.json?raw=true";
+    final private String currentLoaderVersion = "0.0.5";
 
     @Inject
     private Client client;
-
     @Inject
     private KotoriPluginLoaderConfig config;
-
     @Inject
     private PluginManager manager;
-
     @Inject
     private EventBus eventBus;
+    @Inject
+    private ConfigManager configManager;
 
-    private int gameRevisionFromHooks;
-    private boolean gameRevisionCheck;
-    private Plugin[] jsonPlugins;
-    private ArrayList<URL> pluginUrlList = new ArrayList<>();
-    private ArrayList<String> pluginPackageIdList = new ArrayList<>();
-    private ArrayList<String> pluginMainClassList = new ArrayList<>();
-    private List<net.runelite.client.plugins.Plugin> scannedPlugins;
+    private Gson gson = new Gson();
+    private Info infoJsonObject;
+    private Plugin[] pluginsJsonObjects;
+    private ArrayList<String> pluginsJsonList = new ArrayList<>();
+    private ArrayList<URL> pluginUrlLoadList = new ArrayList<>();
+    private ArrayList<String> pluginClassLoadList = new ArrayList<>();
+    private ArrayList<String> loadedPlugins = new ArrayList<>();
 
     @Provides
     KotoriPluginLoaderConfig provideConfig(ConfigManager configManager)
@@ -65,7 +66,14 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
     @Override
     protected void startUp()
     {
-
+        parseInfoJsonFile();
+        parsePluginsJsonFile();
+        parsePluginsInfo();
+        buildPluginsLoadList();
+        if (config.whenToLoad().getLoadChoice().equals("STARTING") && checkLoaderVersion())
+        {
+            loadPlugins(pluginUrlLoadList, pluginClassLoadList);
+        }
     }
 
     @Override
@@ -76,104 +84,463 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
 
     private boolean checkGameRevision()
     {
+        if (infoJsonObject == null)
+        {
+            return false;
+        }
+        if (client.getRevision() == infoJsonObject.getGameRevision())
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean checkLoaderVersion()
+    {
+        if (infoJsonObject == null || pluginsJsonList.isEmpty())
+        {
+            return false;
+        }
+        String loaderVersionOnGithub = pluginsJsonList.get(pluginsJsonList.indexOf("Kotori Plugin Loader")+3);
+        String loaderVersionOnInfoJson = infoJsonObject.getKotoriLoaderVersion();
+        if (loaderVersionOnInfoJson.equals(currentLoaderVersion) && loaderVersionOnGithub.equals(currentLoaderVersion))
+        {
+            return true;
+        }
+
+        String loaderOutdatedMsg = "Kotori Plugin Loader is outdated. Please download the new release, version "
+                + loaderVersionOnGithub + ", from Discord.";
+        String messageTitle = "Kotori Plugin Loader - Outdated Version";
+        JOptionPane.showMessageDialog(client.getCanvas(),loaderOutdatedMsg,messageTitle,JOptionPane.WARNING_MESSAGE);
+        return false;
+    }
+
+    private void parseInfoJsonFile()
+    {
         try
         {
-            URL hooksURL = new URL(infoJson);
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(hooksURL.openStream()));
-            String lineToParse;
-            while ((lineToParse = bufferedReader.readLine()) != null)
+            if (infoJsonObject == null)
             {
-                String[] splitLineArray = lineToParse.replaceAll("[^[a-zA-Z0-9|\\-|\\:|\\.]]","").split(":|\\.");
+                URL infoJsonFile = new URL(infoJsonURL);
+                BufferedReader infoReader = new BufferedReader(new InputStreamReader(infoJsonFile.openStream()));
+                infoJsonObject = gson.fromJson(infoReader, Info.class);
+            }
+        }
+        catch (Exception e)
+        {
+            log.error("Unable to get Info.json from URL and parse it.", e);
+        }
+    }
 
-                if (splitLineArray[0].contains("rsversion"))
+    private void parsePluginsJsonFile()
+    {
+        try
+        {
+            if (pluginsJsonObjects == null)
+            {
+                URL pluginsJsonFile = new URL(pluginsJsonURL);
+                BufferedReader pluginsReader = new BufferedReader(new InputStreamReader(pluginsJsonFile.openStream()));
+                pluginsJsonObjects = gson.fromJson(pluginsReader, Plugin[].class);
+            }
+        }
+        catch (Exception e)
+        {
+            log.error("Unable to get Plugins.json from URL and parse it.", e);
+        }
+    }
+
+    private void parsePluginsInfo()
+    {
+        if (pluginsJsonList.isEmpty())
+        {
+            if (pluginsJsonObjects != null)
+            {
+                for (Plugin plugin : pluginsJsonObjects)
                 {
-                    gameRevisionFromHooks = Integer.parseInt(splitLineArray[1]);
-                    break;
+                    //0 = name, 1 = package, 2 = class, 3 = version, 4 = url
+                    pluginsJsonList.add(plugin.getName());
+                    pluginsJsonList.add(plugin.getPackageId());
+                    pluginsJsonList.add(plugin.getMainClassName());
+                    pluginsJsonList.add(plugin.getReleases().get(plugin.getReleases().size() - 1).getVersion());
+                    pluginsJsonList.add(plugin.getReleases().get(plugin.getReleases().size() - 1).getUrl().toString());
                 }
             }
         }
-        catch (Exception e)
-        {
-            log.error("Failed at getting RS revision from hooks file.", e);
-            return false;
-        }
-
-        if (client.getRevision() == gameRevisionFromHooks)
-        {
-            return true;
-        }
-
-        return false;
     }
 
-    private boolean parsePluginsJson()
+    private void buildPluginsLoadList()
     {
-        try
+        //Plugin Choices That Require KotoriUtils and will break on a game revision update.
+        if (checkGameRevision())
         {
-            URL pluginsURLs = new URL(pluginsJson);
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(pluginsURLs.openStream()));
-            Gson gson = new Gson();
-            jsonPlugins = gson.fromJson(bufferedReader, Plugin[].class);
-        }
-        catch (Exception e)
-        {
-            log.error("Unable to parse plugins.json", e);
-            return false;
-        }
-
-        if (jsonPlugins != null)
-        {
-            for (Plugin json : jsonPlugins)
+            //load Plugin Utils if one of the following is selected.
+            if (config.kotoriUtilsChoice() || (config.alchemicalHydraChoice() && !config.rlplUser()) ||
+                    config.cerberusHelperChoice() || config.demonicGorillasChoice() ||
+                    config.gauntletExtendedChoice() || (config.vorkathOverlayChoice() && !config.rlplUser()))
             {
-                pluginPackageIdList.add(json.getPackageId());
-                pluginMainClassList.add(json.getMainClassName());
-
-                List<Releases> releasesList = json.getReleases();
-                int latestReleaseIndex = releasesList.size() - 1;
-                pluginUrlList.add(releasesList.get(latestReleaseIndex).getUrl());
+                addPluginToLoadLists("Kotori Plugin Utils");
             }
-            return true;
+
+            //Load Alch Hydra depending on client choice by user
+            if (config.alchemicalHydraChoice())
+            {
+                if (config.rlplUser())
+                {
+                    addPluginToLoadLists("Alchemical Hydra (RLPL)");
+                }
+                else
+                {
+                    addPluginToLoadLists("Alchemical Hydra");
+                }
+            }
+
+            //Load Cerberus
+            if (config.cerberusHelperChoice())
+            {
+                addPluginToLoadLists("Cerberus Helper");
+            }
+
+            //Load Demonics
+            if (config.demonicGorillasChoice())
+            {
+                addPluginToLoadLists("Demonic Gorillas");
+            }
+
+            //Load Gauntlet
+            if (config.gauntletExtendedChoice())
+            {
+                addPluginToLoadLists("Gauntlet Extended");
+            }
+
+            //Load Vorkath depending on client choice by user
+            if (config.vorkathOverlayChoice())
+            {
+                if (config.rlplUser())
+                {
+                    addPluginToLoadLists("Vorkath (RLPL)");
+                }
+                else
+                {
+                    addPluginToLoadLists("Vorkath");
+                }
+            }
+        }
+        else
+        {
+            String revisionOutdatedMsg = "<html>Oldschool Runescape has updated its game files." +
+                    "<br>The detected game revision is: " + client.getRevision() + "." +
+                    "<br>Some plugins were built for game revision: " + infoJsonObject.getGameRevision() + "." +
+                    "<br><b><u>AS SUCH THOSE PLUGINS WILL NOT LOAD UNTIL THEY GET UPDATED!</b></u>" + "</html>";
+            String messageDialogTitle = "Kotori Plugin Loader";
+            JOptionPane.showMessageDialog(client.getCanvas(), revisionOutdatedMsg,messageDialogTitle,JOptionPane.WARNING_MESSAGE);
         }
 
-        return false;
+        if (config.dagannothKingsChoice())
+        {
+            addPluginToLoadLists("Dagannoth Kings");
+        }
+
+        if (config.hallowedHelperChoice())
+        {
+            addPluginToLoadLists("Hallowed Sepulchre (Deluxe)");
+        }
+
+        if (config.hallowedSepulchreChoice())
+        {
+            addPluginToLoadLists("Hallowed Sepulchre (Lightweight)");
+        }
+
+        if (config.houseOverlayChoice())
+        {
+            addPluginToLoadLists("House Overlay");
+        }
+
+        if (config.multiIndicatorsChoice())
+        {
+            addPluginToLoadLists("Multi-Lines Indicators");
+        }
+
+        if (config.effectTimersChoice())
+        {
+            if (config.multiIndicatorsChoice())
+            {
+                addPluginToLoadLists("Effect Timers");
+            }
+            else
+            {
+                addPluginToLoadLists("Multi-Lines Indicators");
+                addPluginToLoadLists("Effect Timers");
+            }
+        }
+
+        if (config.zulrahOverlayChoice())
+        {
+            addPluginToLoadLists("Zulrah");
+        }
     }
 
-    private void loadExternalPlugins()
+    private URL getPluginUrl(String pluginName)
     {
         try
         {
-            URL[] urlArray = pluginUrlList.toArray(URL[]::new);
-            URLClassLoader urlClassLoader = new URLClassLoader(urlArray);
-            ArrayList<Class<?>> loadedClasses = new ArrayList<>();
-            loadedClasses.add(urlClassLoader.loadClass("com.theplug.kotori.gauntletextended.GauntletExtendedPlugin"));
-            loadedClasses.add(urlClassLoader.loadClass("com.theplug.kotori.alchemicalhydra.AlchemicalHydraPlugin"));
-            loadedClasses.add(urlClassLoader.loadClass("com.theplug.kotori.cerberushelper.CerberusPlugin"));
-            loadedClasses.add(urlClassLoader.loadClass("com.theplug.kotori.vorkathoverlay.VorkathPlugin"));
-            loadedClasses.add(urlClassLoader.loadClass("com.theplug.kotori.demonicgorillas.DemonicGorillaPlugin"));
-            scannedPlugins = manager.loadPlugins(loadedClasses,null);
+            int pluginNameIndex = pluginsJsonList.indexOf(pluginName);
+            int pluginUrlIndex = pluginNameIndex + 4;
+            return new URL(pluginsJsonList.get(pluginUrlIndex));
+        }
+        catch (Exception e)
+        {
+            log.error("Unable to find plugin URL.", e);
+            return null;
+        }
+    }
 
-            SwingUtilities.invokeLater(() -> {
-                for (net.runelite.client.plugins.Plugin p : scannedPlugins) {
-                    if (p ==null)
+    private void addPluginToLoadLists(String pluginName)
+    {
+        if (loadedPlugins.contains(pluginName))
+        {
+            return;
+        }
+
+        URL pluginUrl = getPluginUrl(pluginName);
+        if (!pluginUrlLoadList.contains(pluginUrl))
+        {
+            pluginUrlLoadList.add(pluginUrl);
+        }
+
+        int pluginNameIndex = pluginsJsonList.indexOf(pluginName);
+        int pluginArtifactIndex = pluginNameIndex + 1;
+        int pluginMainClassIndex = pluginNameIndex + 2;
+        String fullMainClassPath = "com.theplug.kotori." + pluginsJsonList.get(pluginArtifactIndex) + "." +
+                pluginsJsonList.get(pluginMainClassIndex);
+
+        if (!pluginClassLoadList.contains(fullMainClassPath))
+        {
+            pluginClassLoadList.add(fullMainClassPath);
+        }
+    }
+
+    private void clearPluginLoadLists()
+    {
+        pluginUrlLoadList.clear();
+        pluginClassLoadList.clear();
+    }
+
+    private void loadPlugins(ArrayList<URL> pluginUrls, ArrayList<String> pluginClassPaths)
+    {
+        if (pluginUrls.isEmpty() || pluginClassPaths.isEmpty())
+        {
+            return;
+        }
+
+        try
+        {
+            URLClassLoader urlClassLoader = new URLClassLoader(pluginUrls.toArray(URL[]::new));
+
+            ArrayList<Class<?>> loadedClasses = new ArrayList<>();
+            for (String classPath : pluginClassPaths)
+            {
+                loadedClasses.add(urlClassLoader.loadClass(classPath));
+            }
+
+            List<net.runelite.client.plugins.Plugin> scannedPlugins = manager.loadPlugins(loadedClasses,null);
+
+            SwingUtilities.invokeLater(() ->
+            {
+                for (net.runelite.client.plugins.Plugin p : scannedPlugins)
+                {
+                    if (p == null)
+                    {
                         continue;
-                    try {
+                    }
+                    try
+                    {
+                        // Check to see if external plugin is already loaded into client, if not then load it and store its name
                         manager.startPlugin(p);
-                    } catch (PluginInstantiationException e) {
+                        loadedPlugins.add(p.getName());
+                    }
+                    catch (PluginInstantiationException e)
+                    {
                         e.printStackTrace();
                     }
                 }
             });
             eventBus.post(new ExternalPluginsChanged(new ArrayList<>()));
+
+            JOptionPane.showMessageDialog(client.getCanvas(),"Your selected plugins have loaded.", "Kotori Plugin Loader",JOptionPane.INFORMATION_MESSAGE);
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            log.error("Unable to load the plugins.", e);
         }
+    }
+
+    private boolean checkPluginAlreadyLoaded(String pluginName)
+    {
+        return loadedPlugins.contains(pluginName);
+    }
+
+    private void setConfigItem(String key, String value)
+    {
+        configManager.setConfiguration("kotoripluginloader",key,value);
+        eventBus.post(new ProfileChanged());
     }
 
     @Subscribe
     private void onConfigChanged(ConfigChanged event)
     {
+        //Force turn on plugin dependencies
+        if (event.getKey().equals("effectTimersChoice"))
+        {
+            if (loadedPlugins.isEmpty())
+            {
+                if (config.effectTimersChoice())
+                {
+                    if (!config.multiIndicatorsChoice())
+                    {
+                        setConfigItem("multiIndicatorsChoice", "true");
+                    }
+                }
+            }
+            else
+            {
+                setConfigItem(event.getKey(),"false");
+            }
+        }
 
+        if (event.getKey().equals("alchemicalHydraChoice"))
+        {
+            if (!config.rlplUser())
+            {
+                if (loadedPlugins.isEmpty())
+                {
+                    if (config.alchemicalHydraChoice())
+                    {
+                        if (!config.kotoriUtilsChoice())
+                        {
+                            setConfigItem("kotoriUtilsChoice", "true");
+                        }
+                    }
+                }
+                else
+                {
+                    setConfigItem(event.getKey(),"false");
+                }
+            }
+        }
+
+        if (event.getKey().equals("cerberusHelperChoice"))
+        {
+            if (loadedPlugins.isEmpty())
+            {
+                if (config.cerberusHelperChoice())
+                {
+                    if (!config.kotoriUtilsChoice())
+                    {
+                        setConfigItem("kotoriUtilsChoice", "true");
+                    }
+                }
+            }
+            else
+            {
+                setConfigItem(event.getKey(),"false");
+            }
+        }
+
+        if (event.getKey().equals("demonicGorillasChoice"))
+        {
+            if (loadedPlugins.isEmpty())
+            {
+                if (config.demonicGorillasChoice())
+                {
+                    if (!config.kotoriUtilsChoice())
+                    {
+                        setConfigItem("kotoriUtilsChoice","true");
+                    }
+                }
+            }
+            else
+            {
+                setConfigItem(event.getKey(),"false");
+            }
+        }
+
+        if (event.getKey().equals("gauntletExtendedChoice"))
+        {
+            if (loadedPlugins.isEmpty())
+            {
+                if (config.gauntletExtendedChoice())
+                {
+                    if (!config.kotoriUtilsChoice())
+                    {
+                        setConfigItem("kotoriUtilsChoice","true");
+                    }
+                }
+            }
+            else
+            {
+                setConfigItem(event.getKey(),"false");
+            }
+        }
+
+        if (event.getKey().equals("vorkathOverlayChoice"))
+        {
+            if (!config.rlplUser())
+            {
+                if (loadedPlugins.isEmpty())
+                {
+                    if (config.vorkathOverlayChoice())
+                    {
+                        if (!config.kotoriUtilsChoice())
+                        {
+                            setConfigItem("kotoriUtilsChoice","true");
+                        }
+                    }
+                }
+                else
+                {
+                    setConfigItem(event.getKey(),"false");
+                }
+            }
+        }
+
+        if (event.getKey().equals("kotoriUtilsChoice"))
+        {
+            if ((config.alchemicalHydraChoice() && !config.rlplUser()) || config.demonicGorillasChoice()
+                    || config.gauntletExtendedChoice() || config.cerberusHelperChoice()
+                    || (config.vorkathOverlayChoice() && !config.rlplUser()))
+            {
+                setConfigItem(event.getKey(),"true");
+            }
+        }
+
+        if (event.getKey().equals("multiIndicatorsChoice"))
+        {
+            if (config.effectTimersChoice())
+            {
+                setConfigItem(event.getKey(),"true");
+            }
+        }
+
+        if (event.getKey().equals("rlplUser"))
+        {
+            if (!loadedPlugins.isEmpty())
+            {
+                setConfigItem(event.getKey(),event.getOldValue());
+            }
+        }
+
+        //Rebuild Load List
+        clearPluginLoadLists();
+        buildPluginsLoadList();
+
+        //Keep at the bottom
+        if (config.whenToLoad().getLoadChoice().equals("MANUALLY") && checkLoaderVersion())
+        {
+            if (config.manualLoad())
+            {
+                loadPlugins(pluginUrlLoadList,pluginClassLoadList);
+                setConfigItem("manualLoad","false");
+            }
+        }
     }
 }

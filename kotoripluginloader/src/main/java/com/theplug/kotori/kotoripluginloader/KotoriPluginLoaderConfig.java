@@ -7,7 +7,6 @@ import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
 import net.runelite.client.config.ConfigSection;
-import org.checkerframework.checker.units.qual.C;
 
 @ConfigGroup("kotoripluginloader")
 public interface KotoriPluginLoaderConfig extends Config
@@ -29,18 +28,27 @@ public interface KotoriPluginLoaderConfig extends Config
     String settings = "Settings";
 
     @ConfigSection(
-            name = "Plugins to Load",
+            name = "Plugins To Load",
             description = "List of plugins",
             position = 2
     )
     String pluginsToLoad = "Plugins to Load";
 
     @ConfigItem(
+            keyName = "firstLoadInfoMsg",
+            name = "Disable Tutorial Message",
+            description = "Disable this tutorial message from showing up on subsequent startups.",
+            position = 0,
+            section = settings
+    )
+    default boolean firstLoadInfoMsg() { return false; }
+
+    @ConfigItem(
             keyName = "rlplUser",
             name = "Are You Using RLPL?",
             description = "Are you using RLPL? If yes, then I'll" +
                     "<br>load the RLPL versions of some plugins.",
-            position = 0,
+            position = 1,
             section = settings
     )
     default boolean rlplUser()
@@ -55,7 +63,7 @@ public interface KotoriPluginLoaderConfig extends Config
                     "<br><b><u>Client Startup</u></b>, the <b><u>Login Screen</u></b>," +
                     "<br>, the first time you are <b><u>Logged In Game</u></b>, or" +
                     "<br> <b><u>Manually</u></b> by clicking the checkbox below?",
-            position = 1,
+            position = 2,
             section = settings
     )
     default loadChoice whenToLoad() { return loadChoice.CLIENT_STARTUP; }
@@ -65,7 +73,7 @@ public interface KotoriPluginLoaderConfig extends Config
             name = "Click to Load Plugins",
             description = "Check the box to load your selected plugins." +
                     "<br>Only works if <b><u>Manually</b></u> loading is selected.",
-            position = 2,
+            position = 3,
             section = settings
     )
     default boolean manualLoad() { return false; }
@@ -152,10 +160,19 @@ public interface KotoriPluginLoaderConfig extends Config
     default boolean houseOverlayChoice() { return true; }
 
     @ConfigItem(
+            keyName = "kotoriUtilsChoice",
+            name = "Kotori Plugin Utils",
+            description = "Load Kotori Plugin Utils plugin.",
+            position = 9,
+            section = pluginsToLoad
+    )
+    default boolean kotoriUtilsChoice() { return true; }
+
+    @ConfigItem(
             keyName = "multiIndicatorsChoice",
             name = "Multi-Lines Indicators",
             description = "Load the Multi-Lines Indicators plugin.",
-            position = 9,
+            position = 10,
             section = pluginsToLoad
     )
     default boolean multiIndicatorsChoice() { return true; }
@@ -164,7 +181,7 @@ public interface KotoriPluginLoaderConfig extends Config
             keyName = "vorkathOverlayChoice",
             name = "Vorkath",
             description = "Load the Vorkath plugin.",
-            position = 10,
+            position = 11,
             section = pluginsToLoad
     )
     default boolean vorkathOverlayChoice() { return true; }
@@ -173,7 +190,7 @@ public interface KotoriPluginLoaderConfig extends Config
             keyName = "zulrahOverlayChoice",
             name = "Zulrah",
             description = "Load the Zulrah plugin.",
-            position = 11,
+            position = 12,
             section = pluginsToLoad
     )
     default boolean zulrahOverlayChoice() { return true; }
@@ -183,8 +200,6 @@ public interface KotoriPluginLoaderConfig extends Config
     enum loadChoice
     {
         CLIENT_STARTUP("STARTING"),
-        LOGIN_SCREEN("LOGIN_SCREEN"),
-        LOGGED_IN_GAME("LOGGED_IN"),
         MANUALLY("MANUALLY");
 
         private final String loadChoice;

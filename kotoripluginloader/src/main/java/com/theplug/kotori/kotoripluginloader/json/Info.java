@@ -5,7 +5,7 @@ import lombok.Getter;
 public class Info
 {
     @Getter
-    private int rsRevision;
+    private int gameRevision;
     @Getter
     private String kotoriLoaderVersion;
 }
