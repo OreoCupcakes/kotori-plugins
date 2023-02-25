@@ -70,9 +70,17 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
         parsePluginsJsonFile();
         parsePluginsInfo();
         buildPluginsLoadList();
-        if (config.whenToLoad().getLoadChoice().equals("STARTING") && checkLoaderVersion())
+        if (config.whenToLoad().getLoadChoice().equals("STARTING"))
         {
-            loadPlugins(pluginUrlLoadList, pluginClassLoadList);
+            if (!checkLoaderVersion())
+            {
+                loaderOutdatedPopUp();
+                return;
+            }
+            else
+            {
+                loadPlugins(pluginUrlLoadList, pluginClassLoadList);
+            }
         }
     }
 
@@ -107,12 +115,15 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
         {
             return true;
         }
+        return false;
+    }
 
+    private void loaderOutdatedPopUp()
+    {
         String loaderOutdatedMsg = "Kotori Plugin Loader is outdated. Please download the new release, version "
-                + loaderVersionOnGithub + ", from Discord.";
+                + pluginsJsonList.get(pluginsJsonList.indexOf("Kotori Plugin Loader")+3) + ", from Discord.";
         String messageTitle = "Kotori Plugin Loader - Outdated Version";
         JOptionPane.showMessageDialog(client.getCanvas(),loaderOutdatedMsg,messageTitle,JOptionPane.WARNING_MESSAGE);
-        return false;
     }
 
     private void parseInfoJsonFile()
@@ -534,12 +545,20 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
         buildPluginsLoadList();
 
         //Keep at the bottom
-        if (config.whenToLoad().getLoadChoice().equals("MANUALLY") && checkLoaderVersion())
+        if (config.whenToLoad().getLoadChoice().equals("MANUALLY"))
         {
             if (config.manualLoad())
             {
-                loadPlugins(pluginUrlLoadList,pluginClassLoadList);
-                setConfigItem("manualLoad","false");
+                if (!checkLoaderVersion())
+                {
+                    loaderOutdatedPopUp();
+                    return;
+                }
+                else
+                {
+                    loadPlugins(pluginUrlLoadList, pluginClassLoadList);
+                    setConfigItem("manualLoad", "false");
+                }
             }
         }
     }
