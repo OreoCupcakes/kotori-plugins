@@ -10,6 +10,8 @@ import com.theplug.kotori.kotoripluginloader.json.Info;
 import com.theplug.kotori.kotoripluginloader.json.Plugin;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
+import net.runelite.api.events.ClientTick;
+import net.runelite.api.events.GameStateChanged;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
@@ -36,7 +38,7 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
 {
     final private String pluginsJsonURL = "https://github.com/OreoCupcakes/kotori-plugins-releases/blob/master/plugins.json?raw=true";
     final private String infoJsonURL = "https://github.com/OreoCupcakes/kotori-plugins-releases/blob/master/info.json?raw=true";
-    final private String currentLoaderVersion = "0.5.0";
+    final private String currentLoaderVersion = "0.6.0";
 
     @Inject
     private Client client;
@@ -70,6 +72,12 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
         parsePluginsJsonFile();
         parsePluginsInfo();
         buildPluginsLoadList();
+
+        if (config.firstLoadInfoMsg())
+        {
+            JOptionPane.showMessageDialog(client.getCanvas(),infoJsonObject.getLoaderTutorialMessage(),infoJsonObject.getLoaderPopUpTitle(),
+                    JOptionPane.INFORMATION_MESSAGE);
+        }
         if (config.whenToLoad().getLoadChoice().equals("STARTING"))
         {
             if (!checkLoaderVersion())
@@ -119,10 +127,10 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
 
     private void loaderOutdatedPopUp()
     {
-        String loaderOutdatedMsg = "Kotori Plugin Loader is outdated. Please download the new release, version "
-                + pluginsJsonList.get(pluginsJsonList.indexOf("Kotori Plugin Loader")+3) + ", from Discord.";
-        String messageTitle = "Kotori Plugin Loader - Outdated Version";
-        JOptionPane.showMessageDialog(client.getCanvas(),loaderOutdatedMsg,messageTitle,JOptionPane.WARNING_MESSAGE);
+        String loaderOutdatedMsg = "Kotori Plugin Loader is outdated. You are using version " + currentLoaderVersion + "."
+                + "<br>Please download version " + pluginsJsonList.get(pluginsJsonList.indexOf("Kotori Plugin Loader")+3)
+                + " from discord.gg/cuell";
+        JOptionPane.showMessageDialog(client.getCanvas(),loaderOutdatedMsg,infoJsonObject.getLoaderPopUpTitle(),JOptionPane.WARNING_MESSAGE);
     }
 
     private void parseInfoJsonFile()
@@ -241,8 +249,7 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
                     "<br>The detected game revision is: " + client.getRevision() + "." +
                     "<br>Some plugins were built for game revision: " + infoJsonObject.getGameRevision() + "." +
                     "<br><b><u>AS SUCH THOSE PLUGINS WILL NOT LOAD UNTIL THEY GET UPDATED!</b></u>" + "</html>";
-            String messageDialogTitle = "Kotori Plugin Loader";
-            JOptionPane.showMessageDialog(client.getCanvas(), revisionOutdatedMsg,messageDialogTitle,JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(client.getCanvas(), revisionOutdatedMsg,infoJsonObject.getLoaderPopUpTitle(),JOptionPane.WARNING_MESSAGE);
         }
 
         if (config.dagannothKingsChoice())
@@ -376,7 +383,8 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
             });
             eventBus.post(new ExternalPluginsChanged(new ArrayList<>()));
 
-            JOptionPane.showMessageDialog(client.getCanvas(),"Your selected plugins have loaded.", "Kotori Plugin Loader",JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(client.getCanvas(),"Your selected plugins have loaded.",
+                    infoJsonObject.getLoaderPopUpTitle(),JOptionPane.INFORMATION_MESSAGE);
         }
         catch (Exception e)
         {
@@ -384,15 +392,52 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
         }
     }
 
-    private boolean checkPluginAlreadyLoaded(String pluginName)
-    {
-        return loadedPlugins.contains(pluginName);
-    }
-
     private void setConfigItem(String key, String value)
     {
         configManager.setConfiguration("kotoripluginloader",key,value);
         eventBus.post(new ProfileChanged());
+    }
+
+    @Subscribe
+    private void onGameStateChanged(GameStateChanged event)
+    {
+        if (config.whenToLoad().getLoadChoice().equals("LOGGED_IN"))
+        {
+            if (!checkLoaderVersion())
+            {
+                loaderOutdatedPopUp();
+            }
+            else
+            {
+                loadPlugins(pluginUrlLoadList,pluginClassLoadList);
+            }
+        }
+    }
+
+    @Subscribe
+    private void onClientTick(ClientTick event)
+    {
+        if (!loadedPlugins.isEmpty())
+        {
+            return;
+        }
+
+        GameState gameState = client.getGameState();
+
+        if (config.whenToLoad().getLoadChoice().equals("LOGIN_SCREEN"))
+        {
+            if (gameState.name().equals("LOGIN_SCREEN"))
+            {
+                if (!checkLoaderVersion())
+                {
+                    loaderOutdatedPopUp();
+                }
+                else
+                {
+                    loadPlugins(pluginUrlLoadList,pluginClassLoadList);
+                }
+            }
+        }
     }
 
     @Subscribe

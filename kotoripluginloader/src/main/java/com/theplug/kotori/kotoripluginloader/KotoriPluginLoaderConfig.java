@@ -13,7 +13,7 @@ public interface KotoriPluginLoaderConfig extends Config
 {
     @ConfigSection(
             name = "<html><div style='text-align:center;padding-left:25px;padding-right:25px;'>Kotori Plugin Loader<br>" +
-                    "Version 0.5.0</div></html>",
+                    "Version 0.6.0</div></html>",
             description = "",
             position = 0,
             closedByDefault = true
@@ -66,7 +66,7 @@ public interface KotoriPluginLoaderConfig extends Config
             position = 2,
             section = settings
     )
-    default loadChoice whenToLoad() { return loadChoice.CLIENT_STARTUP; }
+    default loadChoice whenToLoad() { return loadChoice.MANUALLY; }
 
     @ConfigItem(
             keyName = "manualLoad",
@@ -200,6 +200,8 @@ public interface KotoriPluginLoaderConfig extends Config
     enum loadChoice
     {
         CLIENT_STARTUP("STARTING"),
+        LOGIN_SCREEN("LOGIN_SCREEN"),
+        LOGGED_IN("LOGGED_IN"),
         MANUALLY("MANUALLY");
 
         private final String loadChoice;
