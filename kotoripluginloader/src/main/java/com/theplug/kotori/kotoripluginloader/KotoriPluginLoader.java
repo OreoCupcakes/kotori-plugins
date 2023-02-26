@@ -38,7 +38,7 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
 {
     final private String pluginsJsonURL = "https://github.com/OreoCupcakes/kotori-plugins-releases/blob/master/plugins.json?raw=true";
     final private String infoJsonURL = "https://github.com/OreoCupcakes/kotori-plugins-releases/blob/master/info.json?raw=true";
-    final private String currentLoaderVersion = "0.6.0";
+    final private String currentLoaderVersion = "0.6.1";
 
     @Inject
     private Client client;
@@ -73,7 +73,7 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
         parsePluginsInfo();
         buildPluginsLoadList();
 
-        if (config.firstLoadInfoMsg())
+        if (!config.firstLoadInfoMsg())
         {
             JOptionPane.showMessageDialog(client.getCanvas(),infoJsonObject.getLoaderTutorialMessage(),infoJsonObject.getLoaderPopUpTitle(),
                     JOptionPane.INFORMATION_MESSAGE);
@@ -127,9 +127,9 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
 
     private void loaderOutdatedPopUp()
     {
-        String loaderOutdatedMsg = "Kotori Plugin Loader is outdated. You are using version " + currentLoaderVersion + "."
+        String loaderOutdatedMsg = "<html>Kotori Plugin Loader is outdated. You are using version " + currentLoaderVersion + "."
                 + "<br>Please download version " + pluginsJsonList.get(pluginsJsonList.indexOf("Kotori Plugin Loader")+3)
-                + " from discord.gg/cuell";
+                + " from https://discord.gg/cuell</html>";
         JOptionPane.showMessageDialog(client.getCanvas(),loaderOutdatedMsg,infoJsonObject.getLoaderPopUpTitle(),JOptionPane.WARNING_MESSAGE);
     }
 

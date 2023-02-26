@@ -13,7 +13,7 @@ public interface KotoriPluginLoaderConfig extends Config
 {
     @ConfigSection(
             name = "<html><div style='text-align:center;padding-left:25px;padding-right:25px;'>Kotori Plugin Loader<br>" +
-                    "Version 0.6.0</div></html>",
+                    "Version 0.6.1</div></html>",
             description = "",
             position = 0,
             closedByDefault = true
