@@ -10,7 +10,6 @@ import com.theplug.kotori.kotoripluginloader.json.Info;
 import com.theplug.kotori.kotoripluginloader.json.Plugin;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
-import net.runelite.api.events.ClientTick;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.EventBus;
@@ -59,6 +58,8 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
     private ArrayList<String> pluginClassLoadList = new ArrayList<>();
     private ArrayList<String> loadedPlugins = new ArrayList<>();
 
+    private String rlplChoiceAtLoad;
+
     @Provides
     KotoriPluginLoaderConfig provideConfig(ConfigManager configManager)
     {
@@ -71,23 +72,22 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
         parseInfoJsonFile();
         parsePluginsJsonFile();
         parsePluginsInfo();
-        buildPluginsLoadList();
 
-        if (!config.firstLoadInfoMsg())
+        if (config.whenToLoad().getLoadChoice().equals("GAME_STARTUP"))
         {
-            JOptionPane.showMessageDialog(client.getCanvas(),infoJsonObject.getLoaderTutorialMessage(),infoJsonObject.getLoaderPopUpTitle(),
-                    JOptionPane.INFORMATION_MESSAGE);
+            new Thread(() ->
+            {
+                loadPluginsSequence();
+                tutorialMessagePopUp();
+            }).start();
         }
-        if (config.whenToLoad().getLoadChoice().equals("STARTING"))
+        else if (config.whenToLoad().getLoadChoice().equals("CLIENT_STARTUP"))
         {
-            if (!checkLoaderVersion())
-            {
-                loaderOutdatedPopUp();
-            }
-            else
-            {
-                loadPlugins(pluginUrlLoadList, pluginClassLoadList);
-            }
+            loadPluginsSequence();
+            tutorialMessagePopUp();
+        } else
+        {
+            new Thread(() -> tutorialMessagePopUp()).start();
         }
     }
 
@@ -130,7 +130,149 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
         String loaderOutdatedMsg = "<html>Kotori Plugin Loader is outdated. You are using version " + currentLoaderVersion + "."
                 + "<br>Please download version " + pluginsJsonList.get(pluginsJsonList.indexOf("Kotori Plugin Loader")+3)
                 + " from https://discord.gg/cuell</html>";
-        JOptionPane.showMessageDialog(client.getCanvas(),loaderOutdatedMsg,infoJsonObject.getLoaderPopUpTitle(),JOptionPane.WARNING_MESSAGE);
+        try
+        {
+            if (config.whenToLoad().getLoadChoice().equals("GAME_STARTUP"))
+            {
+                if (config.manualLoad())
+                {
+                    SwingUtilities.invokeLater(() ->
+                            JOptionPane.showMessageDialog(client.getCanvas(), loaderOutdatedMsg, infoJsonObject.getLoaderPopUpTitle(), JOptionPane.WARNING_MESSAGE));
+                }
+                else
+                {
+                    SwingUtilities.invokeAndWait(() ->
+                            JOptionPane.showMessageDialog(client.getCanvas(), loaderOutdatedMsg, infoJsonObject.getLoaderPopUpTitle(), JOptionPane.WARNING_MESSAGE));
+                }
+            }
+            else
+            {
+                SwingUtilities.invokeLater(() ->
+                        JOptionPane.showMessageDialog(client.getCanvas(), loaderOutdatedMsg, infoJsonObject.getLoaderPopUpTitle(), JOptionPane.WARNING_MESSAGE));
+            }
+        }
+        catch (Exception e)
+        {
+            log.error("Unable to display loader outdated popup.", e);
+        }
+    }
+
+    private void revisionOutdatedPopUp()
+    {
+        String revisionOutdatedMsg = "<html>Oldschool Runescape has updated its game files." +
+                "<br>The detected game revision is: " + client.getRevision() + "." +
+                "<br>Some plugins were built for game revision: " + infoJsonObject.getGameRevision() + "." +
+                "<br><b><u>AS SUCH THOSE PLUGINS WILL NOT LOAD UNTIL THEY GET UPDATED!</b></u>" + "</html>";
+
+        try
+        {
+            if (config.whenToLoad().getLoadChoice().equals("GAME_STARTUP"))
+            {
+                if (config.manualLoad())
+                {
+                    SwingUtilities.invokeLater(() ->
+                            JOptionPane.showMessageDialog(client.getCanvas(), revisionOutdatedMsg,infoJsonObject.getLoaderPopUpTitle(),JOptionPane.WARNING_MESSAGE));
+                }
+                else
+                {
+                    SwingUtilities.invokeAndWait(() ->
+                            JOptionPane.showMessageDialog(client.getCanvas(), revisionOutdatedMsg, infoJsonObject.getLoaderPopUpTitle(), JOptionPane.WARNING_MESSAGE));
+                }
+            }
+            else
+            {
+                SwingUtilities.invokeLater(() ->
+                        JOptionPane.showMessageDialog(client.getCanvas(), revisionOutdatedMsg,infoJsonObject.getLoaderPopUpTitle(),JOptionPane.WARNING_MESSAGE));
+            }
+        }
+        catch (Exception e)
+        {
+            log.error("Unable to display revision outdated popup.", e);
+        }
+    }
+
+    private void tutorialMessagePopUp()
+    {
+        try
+        {
+            if (!config.disableTutorialMsg())
+            {
+                if (config.whenToLoad().getLoadChoice().equals("GAME_STARTUP"))
+                {
+                    SwingUtilities.invokeAndWait(() ->
+                            JOptionPane.showMessageDialog(client.getCanvas(), infoJsonObject.getLoaderTutorialMessage(), infoJsonObject.getLoaderPopUpTitle(),
+                                    JOptionPane.INFORMATION_MESSAGE));
+                }
+                else
+                {
+                    SwingUtilities.invokeLater(() ->
+                            JOptionPane.showMessageDialog(client.getCanvas(), infoJsonObject.getLoaderTutorialMessage(), infoJsonObject.getLoaderPopUpTitle(),
+                                    JOptionPane.INFORMATION_MESSAGE));
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            log.error("Failed to show tutorial message",e);
+        }
+    }
+
+    private void pluginsLoadedPopUp()
+    {
+        try
+        {
+            if (!config.disablePluginsLoadMsg())
+            {
+                if (config.whenToLoad().getLoadChoice().equals("GAME_STARTUP"))
+                {
+                    if (config.manualLoad())
+                    {
+                        SwingUtilities.invokeLater(() ->
+                                JOptionPane.showMessageDialog(client.getCanvas(), "Your selected plugins have loaded.",
+                                        infoJsonObject.getLoaderPopUpTitle(), JOptionPane.INFORMATION_MESSAGE));
+                    }
+                    else
+                    {
+                        SwingUtilities.invokeAndWait(() ->
+                                JOptionPane.showMessageDialog(client.getCanvas(), "Your selected plugins have loaded.",
+                                        infoJsonObject.getLoaderPopUpTitle(), JOptionPane.INFORMATION_MESSAGE));
+                    }
+                }
+                else
+                {
+                    SwingUtilities.invokeLater(() ->
+                            JOptionPane.showMessageDialog(client.getCanvas(), "Your selected plugins have loaded.",
+                                    infoJsonObject.getLoaderPopUpTitle(), JOptionPane.INFORMATION_MESSAGE));
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            log.error("Unable to show plugins loaded popup message.", e);
+        }
+    }
+
+    private void loadPluginsSequence()
+    {
+        buildPluginsLoadList();
+
+        if (!checkLoaderVersion())
+        {
+            loaderOutdatedPopUp();
+        }
+        else
+        {
+            loadPlugins(pluginUrlLoadList, pluginClassLoadList);
+            storeRLPLChoice();
+        }
+    }
+
+    private void storeRLPLChoice()
+    {
+        if (rlplChoiceAtLoad == null)
+        {
+            rlplChoiceAtLoad = "" + config.rlplUser();
+        }
     }
 
     private void parseInfoJsonFile()
@@ -245,11 +387,7 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
         }
         else
         {
-            String revisionOutdatedMsg = "<html>Oldschool Runescape has updated its game files." +
-                    "<br>The detected game revision is: " + client.getRevision() + "." +
-                    "<br>Some plugins were built for game revision: " + infoJsonObject.getGameRevision() + "." +
-                    "<br><b><u>AS SUCH THOSE PLUGINS WILL NOT LOAD UNTIL THEY GET UPDATED!</b></u>" + "</html>";
-            JOptionPane.showMessageDialog(client.getCanvas(), revisionOutdatedMsg,infoJsonObject.getLoaderPopUpTitle(),JOptionPane.WARNING_MESSAGE);
+            revisionOutdatedPopUp();
         }
 
         if (config.dagannothKingsChoice())
@@ -336,7 +474,7 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
         }
     }
 
-    private void clearPluginLoadLists()
+    private void clearBuiltPluginLoadLists()
     {
         pluginUrlLoadList.clear();
         pluginClassLoadList.clear();
@@ -383,8 +521,7 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
             });
             eventBus.post(new ExternalPluginsChanged(new ArrayList<>()));
 
-            JOptionPane.showMessageDialog(client.getCanvas(),"Your selected plugins have loaded.",
-                    infoJsonObject.getLoaderPopUpTitle(),JOptionPane.INFORMATION_MESSAGE);
+            pluginsLoadedPopUp();
         }
         catch (Exception e)
         {
@@ -401,44 +538,18 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
     @Subscribe
     private void onGameStateChanged(GameStateChanged event)
     {
-        if (config.whenToLoad().getLoadChoice().equals("LOGGED_IN"))
-        {
-            if (!checkLoaderVersion())
-            {
-                loaderOutdatedPopUp();
-            }
-            else
-            {
-                loadPlugins(pluginUrlLoadList,pluginClassLoadList);
-            }
-        }
-    }
-
-    @Subscribe
-    private void onClientTick(ClientTick event)
-    {
         if (!loadedPlugins.isEmpty())
         {
             return;
         }
 
-        GameState gameState = client.getGameState();
-
-        if (config.whenToLoad().getLoadChoice().equals("LOGIN_SCREEN"))
+        if (config.whenToLoad().getLoadChoice().equals("LOGGED_IN"))
         {
-            if (gameState.name().equals("LOGIN_SCREEN"))
-            {
-                if (!checkLoaderVersion())
-                {
-                    loaderOutdatedPopUp();
-                }
-                else
-                {
-                    loadPlugins(pluginUrlLoadList,pluginClassLoadList);
-                }
-            }
+            loadPluginsSequence();
         }
     }
+
+
 
     @Subscribe
     private void onConfigChanged(ConfigChanged event)
@@ -584,28 +695,85 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
         {
             if (!loadedPlugins.isEmpty())
             {
-                setConfigItem(event.getKey(),event.getOldValue());
+                setConfigItem(event.getKey(),""+rlplChoiceAtLoad);
             }
         }
 
+        //Select All Plugins button
+        if (event.getKey().equals("selectAllPluginsChoice"))
+        {
+            if (config.selectAllPluginsChoice())
+            {
+                //Check all independent plugins
+                setConfigItem("dagannothKingsChoice", "true");
+                setConfigItem("hallowedHelperChoice", "true");
+                setConfigItem("hallowedSepulchreChoice", "true");
+                setConfigItem("houseOverlayChoice", "true");
+                setConfigItem("multiIndicatorsChoice", "true");
+                setConfigItem("zulrahOverlayChoice", "true");
+
+                if (config.rlplUser())
+                {
+                    setConfigItem("alchemicalHydraChoice","true");
+                    setConfigItem("vorkathOverlayChoice","true");
+                }
+
+                //Check KotoriUtils and its dependents if it's not loaded already
+                if (!kotoriUtilsLoaded)
+                {
+                    setConfigItem("kotoriUtilsChoice","true");
+                    setConfigItem("demonicGorillasChoice","true");
+                    setConfigItem("gauntletExtendedChoice","true");
+                    setConfigItem("cerberusHelperChoice","true");
+                    if (!config.rlplUser())
+                    {
+                        setConfigItem("alchemicalHydraChoice","true");
+                        setConfigItem("vorkathOverlayChoice","true");
+                    }
+                }
+
+                //Check Effect Timers if its not loaded already
+                if (!multiIndicatorsLoaded)
+                {
+                    setConfigItem("effectTimersChoice","true");
+                }
+
+                eventBus.post(new ProfileChanged());
+            }
+            else
+            {
+                //Unselect all plugins
+                setConfigItem("effectTimersChoice","false");
+                setConfigItem("alchemicalHydraChoice","false");
+                setConfigItem("vorkathOverlayChoice","false");
+                setConfigItem("demonicGorillasChoice","false");
+                setConfigItem("gauntletExtendedChoice","false");
+                setConfigItem("cerberusHelperChoice","false");
+                setConfigItem("dagannothKingsChoice", "false");
+                setConfigItem("hallowedHelperChoice", "false");
+                setConfigItem("hallowedSepulchreChoice", "false");
+                setConfigItem("houseOverlayChoice", "false");
+                setConfigItem("zulrahOverlayChoice", "false");
+                setConfigItem("multiIndicatorsChoice", "false");
+                setConfigItem("kotoriUtilsChoice","false");
+
+                eventBus.post(new ProfileChanged());
+            }
+        }
+
+
+
         //Rebuild Load List
-        clearPluginLoadLists();
-        buildPluginsLoadList();
+        clearBuiltPluginLoadLists();
 
         //Keep at the bottom
-        if (config.whenToLoad().getLoadChoice().equals("MANUALLY"))
+        if (event.getKey().equals("manualLoad"))
         {
             if (config.manualLoad())
             {
-                if (!checkLoaderVersion())
-                {
-                    loaderOutdatedPopUp();
-                }
-                else
-                {
-                    loadPlugins(pluginUrlLoadList, pluginClassLoadList);
-                }
+                loadPluginsSequence();
                 setConfigItem("manualLoad", "false");
+                eventBus.post(new ProfileChanged());
             }
         }
     }

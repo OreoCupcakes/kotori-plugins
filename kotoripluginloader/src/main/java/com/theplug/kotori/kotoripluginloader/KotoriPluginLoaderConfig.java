@@ -11,6 +11,7 @@ import net.runelite.client.config.ConfigSection;
 @ConfigGroup("kotoripluginloader")
 public interface KotoriPluginLoaderConfig extends Config
 {
+    //Sections
     @ConfigSection(
             name = "<html><div style='text-align:center;padding-left:25px;padding-right:25px;'>Kotori Plugin Loader<br>" +
                     "Version 0.6.1</div></html>",
@@ -34,21 +35,32 @@ public interface KotoriPluginLoaderConfig extends Config
     )
     String pluginsToLoad = "Plugins to Load";
 
+
+    //Loader Settings
     @ConfigItem(
-            keyName = "firstLoadInfoMsg",
+            keyName = "disableTutorialMsg",
             name = "Disable Tutorial Message",
             description = "Disable this tutorial message from showing up on subsequent startups.",
             position = 0,
             section = settings
     )
-    default boolean firstLoadInfoMsg() { return false; }
+    default boolean disableTutorialMsg() { return false; }
+
+    @ConfigItem(
+            keyName = "disablePluginLoadMsg",
+            name = "Disable Plugins Loaded Message",
+            description = "<html>Remove the popup message you get after plugins have loaded?</html>",
+            position = 1,
+            section = settings
+    )
+    default boolean disablePluginsLoadMsg() { return false; }
 
     @ConfigItem(
             keyName = "rlplUser",
             name = "Are You Using RLPL?",
-            description = "Are you using RLPL? If yes, then I'll" +
-                    "<br>load the RLPL versions of some plugins.",
-            position = 1,
+            description = "Are you using RLPL? [ThePlug(Sox), Illumine, Cuell, Sandy]" +
+                    "<br>If yes, then I'll load the RLPL versions of some plugins.",
+            position = 2,
             section = settings
     )
     default boolean rlplUser()
@@ -63,146 +75,143 @@ public interface KotoriPluginLoaderConfig extends Config
                     "<br><b><u>Client Startup</u></b>, the <b><u>Login Screen</u></b>," +
                     "<br>, the first time you are <b><u>Logged In Game</u></b>, or" +
                     "<br> <b><u>Manually</u></b> by clicking the checkbox below?",
-            position = 2,
+            position = 3,
             section = settings
     )
-    default loadChoice whenToLoad() { return loadChoice.MANUALLY; }
+    default loadChoice whenToLoad() { return loadChoice.GAME_STARTUP; }
 
     @ConfigItem(
             keyName = "manualLoad",
             name = "Click to Load Plugins",
             description = "Check the box to load your selected plugins." +
                     "<br>Only works if <b><u>Manually</b></u> loading is selected.",
-            position = 3,
+            position = 4,
             section = settings
     )
     default boolean manualLoad() { return false; }
 
+
+
+    //Plugin Choices
+    @ConfigItem(
+            keyName = "selectAllPluginsChoice",
+            name = "Select/Unselect All Plugins",
+            description = "Load all plugins listed below.",
+            position = -2,
+            section = pluginsToLoad
+    )
+    default boolean selectAllPluginsChoice() { return false; }
     @ConfigItem(
             keyName = "alchemicalHydraChoice",
             name = "Alchemical Hydra",
             description = "Load the Alchemical Hydra plugin.",
-            position = 0,
             section = pluginsToLoad
     )
-    default boolean alchemicalHydraChoice() { return true; }
+    default boolean alchemicalHydraChoice() { return false; }
 
     @ConfigItem(
             keyName = "cerberusHelperChoice",
             name = "Cerberus Helper",
             description = "Load the Cerberus Helper plugin.",
-            position = 1,
             section = pluginsToLoad
     )
-    default boolean cerberusHelperChoice() { return true; }
+    default boolean cerberusHelperChoice() { return false; }
 
     @ConfigItem(
             keyName = "dagannothKingsChoice",
             name = "Dagannoth Kings",
             description = "Load the Dagannoth Kings plugin.",
-            position = 2,
             section = pluginsToLoad
     )
-    default boolean dagannothKingsChoice() { return true; }
+    default boolean dagannothKingsChoice() { return false; }
 
     @ConfigItem(
             keyName = "demonicGorillasChoice",
             name = "Demonic Gorillas",
             description = "Load the Demonic Gorillas plugin.",
-            position = 3,
             section = pluginsToLoad
     )
-    default boolean demonicGorillasChoice() { return true; }
+    default boolean demonicGorillasChoice() { return false; }
 
     @ConfigItem(
             keyName = "effectTimersChoice",
             name = "Effect Timers",
             description = "Load the Effect Timers plugin.",
-            position = 4,
             section = pluginsToLoad
     )
-    default boolean effectTimersChoice() { return true; }
+    default boolean effectTimersChoice() { return false; }
 
     @ConfigItem(
             keyName = "gauntletExtendedChoice",
             name = "Gauntlet Extended",
             description = "Load the Gauntlet Extended plugin.",
-            position = 5,
             section = pluginsToLoad
     )
-    default boolean gauntletExtendedChoice() { return true; }
+    default boolean gauntletExtendedChoice() { return false; }
 
     @ConfigItem(
             keyName = "hallowedHelperChoice",
             name = "Hallowed Sepulchre (Deluxe)",
             description = "Load the Hallowed Sepulchre (Deluxe) plugin.",
-            position = 6,
             section = pluginsToLoad
     )
-    default boolean hallowedHelperChoice() { return true; }
+    default boolean hallowedHelperChoice() { return false; }
 
     @ConfigItem(
             keyName = "hallowedSepulchreChoice",
             name = "Hallowed Sepulchre (Lightweight)",
             description = "Load the Hallowed Sepulchre (Lightweight) plugin.",
-            position = 7,
             section = pluginsToLoad
     )
-    default boolean hallowedSepulchreChoice() { return true; }
+    default boolean hallowedSepulchreChoice() { return false; }
 
     @ConfigItem(
             keyName = "houseOverlayChoice",
             name = "House Overlay",
             description = "Load the House Overlay plugin.",
-            position = 8,
             section = pluginsToLoad
     )
-    default boolean houseOverlayChoice() { return true; }
+    default boolean houseOverlayChoice() { return false; }
 
     @ConfigItem(
             keyName = "kotoriUtilsChoice",
             name = "Kotori Plugin Utils",
             description = "Load Kotori Plugin Utils plugin.",
-            position = 9,
             section = pluginsToLoad
     )
-    default boolean kotoriUtilsChoice() { return true; }
+    default boolean kotoriUtilsChoice() { return false; }
 
     @ConfigItem(
             keyName = "multiIndicatorsChoice",
             name = "Multi-Lines Indicators",
             description = "Load the Multi-Lines Indicators plugin.",
-            position = 10,
             section = pluginsToLoad
     )
-    default boolean multiIndicatorsChoice() { return true; }
+    default boolean multiIndicatorsChoice() { return false; }
 
     @ConfigItem(
             keyName = "vorkathOverlayChoice",
             name = "Vorkath",
             description = "Load the Vorkath plugin.",
-            position = 11,
             section = pluginsToLoad
     )
-    default boolean vorkathOverlayChoice() { return true; }
+    default boolean vorkathOverlayChoice() { return false; }
 
     @ConfigItem(
             keyName = "zulrahOverlayChoice",
             name = "Zulrah",
             description = "Load the Zulrah plugin.",
-            position = 12,
             section = pluginsToLoad
     )
-    default boolean zulrahOverlayChoice() { return true; }
+    default boolean zulrahOverlayChoice() { return false; }
 
     @Getter
     @AllArgsConstructor
     enum loadChoice
     {
-        CLIENT_STARTUP("STARTING"),
-        LOGIN_SCREEN("LOGIN_SCREEN"),
-        LOGGED_IN("LOGGED_IN"),
-        MANUALLY("MANUALLY");
+        CLIENT_STARTUP("CLIENT_STARTUP"),
+        GAME_STARTUP("GAME_STARTUP"),
+        LOGGED_IN("LOGGED_IN");
 
         private final String loadChoice;
     }
