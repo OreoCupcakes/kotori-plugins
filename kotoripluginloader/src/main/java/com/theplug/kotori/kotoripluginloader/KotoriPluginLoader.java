@@ -398,10 +398,14 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
     @Subscribe
     private void onConfigChanged(ConfigChanged event)
     {
+        //Check if independents have loaded
+        boolean kotoriUtilsLoaded = loadedPlugins.contains("Kotori Plugin Utils");
+        boolean multiIndicatorsLoaded = loadedPlugins.contains("Multi-Lines Indicators");
+
         //Force turn on plugin dependencies
         if (event.getKey().equals("effectTimersChoice"))
         {
-            if (loadedPlugins.isEmpty())
+            if (!multiIndicatorsLoaded)
             {
                 if (config.effectTimersChoice())
                 {
@@ -421,7 +425,7 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
         {
             if (!config.rlplUser())
             {
-                if (loadedPlugins.isEmpty())
+                if (!kotoriUtilsLoaded)
                 {
                     if (config.alchemicalHydraChoice())
                     {
@@ -440,7 +444,7 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
 
         if (event.getKey().equals("cerberusHelperChoice"))
         {
-            if (loadedPlugins.isEmpty())
+            if (!kotoriUtilsLoaded)
             {
                 if (config.cerberusHelperChoice())
                 {
@@ -458,7 +462,7 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
 
         if (event.getKey().equals("demonicGorillasChoice"))
         {
-            if (loadedPlugins.isEmpty())
+            if (!kotoriUtilsLoaded)
             {
                 if (config.demonicGorillasChoice())
                 {
@@ -476,7 +480,7 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
 
         if (event.getKey().equals("gauntletExtendedChoice"))
         {
-            if (loadedPlugins.isEmpty())
+            if (!kotoriUtilsLoaded)
             {
                 if (config.gauntletExtendedChoice())
                 {
@@ -496,7 +500,7 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
         {
             if (!config.rlplUser())
             {
-                if (loadedPlugins.isEmpty())
+                if (!kotoriUtilsLoaded)
                 {
                     if (config.vorkathOverlayChoice())
                     {
