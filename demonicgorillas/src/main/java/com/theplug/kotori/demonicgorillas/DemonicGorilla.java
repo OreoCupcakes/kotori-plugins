@@ -64,6 +64,7 @@ class DemonicGorilla
 	}
 
 	private Client client;
+	private KotoriUtils kotoriUtils;
 	@Getter(AccessLevel.PACKAGE)
 	private NPC npc;
 
@@ -123,12 +124,10 @@ class DemonicGorilla
 	@Setter(AccessLevel.PACKAGE)
 	private int disabledMeleeMovementForTicks;
 
-	@Inject
-	private KotoriUtils kotoriUtils;
-
-	DemonicGorilla(NPC npc, Client client)
+	DemonicGorilla(NPC npc, Client client, KotoriUtils kotoriUtils)
 	{
 		this.client = client;
+		this.kotoriUtils = kotoriUtils;
 		this.npc = npc;
 		this.nextPosibleAttackStyles = Arrays.asList(ALL_REGULAR_ATTACK_STYLES);
 		this.nextAttackTick = -100;

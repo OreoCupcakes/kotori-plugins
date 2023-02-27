@@ -505,15 +505,7 @@ public class GauntletExtendedPlugin extends Plugin
 		}
 		else if (TORNADO_IDS.contains(id))
 		{
-			if (tornadoes.isEmpty())
-				return;
-			else {
-				for (Tornado tornado : tornadoes) {
-					if (tornado.getTimeLeft() <= 0) {
-						tornadoes.remove(tornado);
-					}
-				}
-			}
+			tornadoes.removeIf(t -> (t.getNpc() == npc && t.getTimeLeft() <= 0));
 		}
 		else if (DEMIBOSS_IDS.contains(id))
 		{

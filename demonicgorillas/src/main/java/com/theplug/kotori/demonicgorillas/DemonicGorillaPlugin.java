@@ -73,6 +73,9 @@ public class DemonicGorillaPlugin extends Plugin
 	private Client client;
 
 	@Inject
+	private KotoriUtils kotoriUtils;
+
+	@Inject
 	private OverlayManager overlayManager;
 
 	@Inject
@@ -136,7 +139,7 @@ public class DemonicGorillaPlugin extends Plugin
 		{
 			if (isNpcGorilla(npc.getId()))
 			{
-				gorillas.put(npc, new DemonicGorilla(npc, client));
+				gorillas.put(npc, new DemonicGorilla(npc, client, kotoriUtils));
 			}
 		}
 	}
@@ -697,7 +700,7 @@ public class DemonicGorillaPlugin extends Plugin
 				resetPlayers();
 			}
 
-			gorillas.put(npc, new DemonicGorilla(npc, client));
+			gorillas.put(npc, new DemonicGorilla(npc, client, kotoriUtils));
 		}
 	}
 

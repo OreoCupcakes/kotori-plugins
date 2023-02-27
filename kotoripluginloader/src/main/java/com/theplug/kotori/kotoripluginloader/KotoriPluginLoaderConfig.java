@@ -60,7 +60,7 @@ public interface KotoriPluginLoaderConfig extends Config
             name = "Are You Using RLPL?",
             description = "Are you using RLPL? (ThePlug, Illumine, Cuell, or Sandy subscribers)" +
                     "<br>If yes, then I'll load the RLPL versions of some plugins." +
-                    "<br><b><u>If you are a Ganom or Shiismo user, DO NOT CHECK THIS BOX!</b></u>",
+                    "<br><b><u>If you are a Ganom or Shismo user, DO NOT CHECK THIS BOX!</b></u>",
             position = 2,
             section = settings
     )
