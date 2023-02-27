@@ -31,6 +31,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
 
+import com.google.inject.Provides;
 import com.theplug.kotori.demonicgorillas.utils.GraphicIDPlus;
 import com.theplug.kotori.kotoriutils.KotoriUtils;
 import lombok.AccessLevel;
@@ -47,6 +48,7 @@ import net.runelite.api.events.PlayerDespawned;
 import net.runelite.api.events.PlayerSpawned;
 import net.runelite.api.events.ProjectileMoved;
 import net.runelite.client.callback.ClientThread;
+import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDependency;
@@ -71,6 +73,9 @@ public class DemonicGorillaPlugin extends Plugin
 	private KotoriUtils kotoriUtils;
 
 	@Inject
+	private DemonicGorillaConfig demonicGorillaConfig;
+
+	@Inject
 	private OverlayManager overlayManager;
 
 	@Inject
@@ -88,6 +93,12 @@ public class DemonicGorillaPlugin extends Plugin
 
 	private Map<Player, MemorizedPlayer> memorizedPlayers;
 	private ArrayList<Projectile> gorillaProjectiles;
+
+	@Provides
+	DemonicGorillaConfig provideConfig(ConfigManager configManager)
+	{
+		return configManager.getConfig(DemonicGorillaConfig.class);
+	}
 
 	@Override
 	protected void startUp()
