@@ -238,9 +238,7 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
                     pluginsJsonList.add(plugin.getPackageId());
                     pluginsJsonList.add(plugin.getMainClassName());
                     pluginsJsonList.add(plugin.getReleases().get(plugin.getReleases().size() - 1).getVersion());
-                    System.out.println("Plugin " + plugin.getName() + ", Version: " + plugin.getReleases().get(plugin.getReleases().size() - 1).getVersion());
                     pluginsJsonList.add(plugin.getReleases().get(plugin.getReleases().size() - 1).getUrl().toString());
-                    System.out.println("Plugin " + plugin.getName() + ", URL: " + plugin.getReleases().get(plugin.getReleases().size() - 1).getUrl().toString());
                 }
             }
         }
