@@ -14,7 +14,7 @@ public interface KotoriPluginLoaderConfig extends Config
     //Sections
     @ConfigSection(
             name = "<html><div style='text-align:center;padding-left:25px;padding-right:25px;'>Kotori Plugin Loader<br>" +
-                    "Version 0.6.1</div></html>",
+                    "Version 0.7.0</div></html>",
             description = "",
             position = 0,
             closedByDefault = true
@@ -40,7 +40,7 @@ public interface KotoriPluginLoaderConfig extends Config
     @ConfigItem(
             keyName = "disableTutorialMsg",
             name = "Disable Tutorial Message",
-            description = "Disable this tutorial message from showing up on subsequent startups.",
+            description = "Disable the tutorial popup message from showing up on subsequent startups.",
             position = 0,
             section = settings
     )
@@ -49,7 +49,7 @@ public interface KotoriPluginLoaderConfig extends Config
     @ConfigItem(
             keyName = "disablePluginLoadMsg",
             name = "Disable Plugins Loaded Message",
-            description = "<html>Remove the popup message you get after plugins have loaded?</html>",
+            description = "Disable the plugins loaded popup message?",
             position = 1,
             section = settings
     )
@@ -58,8 +58,9 @@ public interface KotoriPluginLoaderConfig extends Config
     @ConfigItem(
             keyName = "rlplUser",
             name = "Are You Using RLPL?",
-            description = "Are you using RLPL? [ThePlug(Sox), Illumine, Cuell, Sandy]" +
-                    "<br>If yes, then I'll load the RLPL versions of some plugins.",
+            description = "Are you using RLPL? (ThePlug, Illumine, Cuell, or Sandy subscribers)" +
+                    "<br>If yes, then I'll load the RLPL versions of some plugins." +
+                    "<br><b><u>If you are a Ganom or Shiismo user, DO NOT CHECK THIS BOX!</b></u>",
             position = 2,
             section = settings
     )
@@ -70,22 +71,33 @@ public interface KotoriPluginLoaderConfig extends Config
 
     @ConfigItem(
             keyName = "whenToLoad",
-            name = "Load Plugins At",
-            description = "<html>Do you want to load your selected plugins on" +
-                    "<br><b><u>Client Startup</u></b>, the <b><u>Login Screen</u></b>," +
-                    "<br>, the first time you are <b><u>Logged In Game</u></b>, or" +
-                    "<br> <b><u>Manually</u></b> by clicking the checkbox below?",
+            name = "Auto Load Plugins At",
+            description = "<html>Do you want to auto load your selected plugins on" +
+                    "<br><b><u>Client Startup</u></b>, <b><u>Game Startup</u></b>," +
+                    "<br>when you are <b><u>Logged In</u></b> game, or <b><u>Never</u></b>?",
             position = 3,
             section = settings
     )
     default loadChoice whenToLoad() { return loadChoice.GAME_STARTUP; }
 
     @ConfigItem(
+            keyName = "manualLoadInfoBox",
+            name = "Manually Loading Plugins Info",
+            description = "",
+            position = 4,
+            section = settings
+    )
+    default String pluginInfoStringBox() {
+        return  "You can manually hot load certain plugins that haven't already been loaded anytime. " +
+                "Not all plugins can hot load in! " +
+                "As such the selection menu will prevent you from selecting those plugins.";
+    }
+
+    @ConfigItem(
             keyName = "manualLoad",
             name = "Click to Load Plugins",
-            description = "Check the box to load your selected plugins." +
-                    "<br>Only works if <b><u>Manually</b></u> loading is selected.",
-            position = 4,
+            description = "Check the box to manually load your selected plugins.",
+            position = 5,
             section = settings
     )
     default boolean manualLoad() { return false; }
@@ -93,6 +105,7 @@ public interface KotoriPluginLoaderConfig extends Config
 
 
     //Plugin Choices
+
     @ConfigItem(
             keyName = "selectAllPluginsChoice",
             name = "Select/Unselect All Plugins",
@@ -211,7 +224,8 @@ public interface KotoriPluginLoaderConfig extends Config
     {
         CLIENT_STARTUP("CLIENT_STARTUP"),
         GAME_STARTUP("GAME_STARTUP"),
-        LOGGED_IN("LOGGED_IN");
+        LOGGED_IN("LOGGED_IN"),
+        NEVER("NEVER");
 
         private final String loadChoice;
     }

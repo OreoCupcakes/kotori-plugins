@@ -37,7 +37,7 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
 {
     final private String pluginsJsonURL = "https://github.com/OreoCupcakes/kotori-plugins-releases/blob/master/plugins.json?raw=true";
     final private String infoJsonURL = "https://github.com/OreoCupcakes/kotori-plugins-releases/blob/master/info.json?raw=true";
-    final private String currentLoaderVersion = "0.6.1";
+    final private String currentLoaderVersion = "0.7.0";
 
     @Inject
     private Client client;
@@ -85,7 +85,8 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
         {
             loadPluginsSequence();
             tutorialMessagePopUp();
-        } else
+        }
+        else
         {
             new Thread(() -> tutorialMessagePopUp()).start();
         }
@@ -130,31 +131,9 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
         String loaderOutdatedMsg = "<html>Kotori Plugin Loader is outdated. You are using version " + currentLoaderVersion + "."
                 + "<br>Please download version " + pluginsJsonList.get(pluginsJsonList.indexOf("Kotori Plugin Loader")+3)
                 + " from https://discord.gg/cuell</html>";
-        try
-        {
-            if (config.whenToLoad().getLoadChoice().equals("GAME_STARTUP"))
-            {
-                if (config.manualLoad())
-                {
-                    SwingUtilities.invokeLater(() ->
-                            JOptionPane.showMessageDialog(client.getCanvas(), loaderOutdatedMsg, infoJsonObject.getLoaderPopUpTitle(), JOptionPane.WARNING_MESSAGE));
-                }
-                else
-                {
-                    SwingUtilities.invokeAndWait(() ->
-                            JOptionPane.showMessageDialog(client.getCanvas(), loaderOutdatedMsg, infoJsonObject.getLoaderPopUpTitle(), JOptionPane.WARNING_MESSAGE));
-                }
-            }
-            else
-            {
-                SwingUtilities.invokeLater(() ->
-                        JOptionPane.showMessageDialog(client.getCanvas(), loaderOutdatedMsg, infoJsonObject.getLoaderPopUpTitle(), JOptionPane.WARNING_MESSAGE));
-            }
-        }
-        catch (Exception e)
-        {
-            log.error("Unable to display loader outdated popup.", e);
-        }
+
+        SwingUtilities.invokeLater(() ->
+                JOptionPane.showMessageDialog(client.getCanvas(), loaderOutdatedMsg, infoJsonObject.getLoaderPopUpTitle(), JOptionPane.WARNING_MESSAGE));
     }
 
     private void revisionOutdatedPopUp()
@@ -164,91 +143,28 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
                 "<br>Some plugins were built for game revision: " + infoJsonObject.getGameRevision() + "." +
                 "<br><b><u>AS SUCH THOSE PLUGINS WILL NOT LOAD UNTIL THEY GET UPDATED!</b></u>" + "</html>";
 
-        try
-        {
-            if (config.whenToLoad().getLoadChoice().equals("GAME_STARTUP"))
-            {
-                if (config.manualLoad())
-                {
-                    SwingUtilities.invokeLater(() ->
-                            JOptionPane.showMessageDialog(client.getCanvas(), revisionOutdatedMsg,infoJsonObject.getLoaderPopUpTitle(),JOptionPane.WARNING_MESSAGE));
-                }
-                else
-                {
-                    SwingUtilities.invokeAndWait(() ->
-                            JOptionPane.showMessageDialog(client.getCanvas(), revisionOutdatedMsg, infoJsonObject.getLoaderPopUpTitle(), JOptionPane.WARNING_MESSAGE));
-                }
-            }
-            else
-            {
-                SwingUtilities.invokeLater(() ->
-                        JOptionPane.showMessageDialog(client.getCanvas(), revisionOutdatedMsg,infoJsonObject.getLoaderPopUpTitle(),JOptionPane.WARNING_MESSAGE));
-            }
-        }
-        catch (Exception e)
-        {
-            log.error("Unable to display revision outdated popup.", e);
-        }
+        SwingUtilities.invokeLater(() ->
+                JOptionPane.showMessageDialog(client.getCanvas(), revisionOutdatedMsg,infoJsonObject.getLoaderPopUpTitle(),JOptionPane.WARNING_MESSAGE));
     }
 
     private void tutorialMessagePopUp()
     {
-        try
+        if (!config.disableTutorialMsg())
         {
-            if (!config.disableTutorialMsg())
-            {
-                if (config.whenToLoad().getLoadChoice().equals("GAME_STARTUP"))
-                {
-                    SwingUtilities.invokeAndWait(() ->
-                            JOptionPane.showMessageDialog(client.getCanvas(), infoJsonObject.getLoaderTutorialMessage(), infoJsonObject.getLoaderPopUpTitle(),
-                                    JOptionPane.INFORMATION_MESSAGE));
-                }
-                else
-                {
-                    SwingUtilities.invokeLater(() ->
-                            JOptionPane.showMessageDialog(client.getCanvas(), infoJsonObject.getLoaderTutorialMessage(), infoJsonObject.getLoaderPopUpTitle(),
-                                    JOptionPane.INFORMATION_MESSAGE));
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            log.error("Failed to show tutorial message",e);
+            SwingUtilities.invokeLater(() ->
+                    JOptionPane.showMessageDialog(client.getCanvas(), infoJsonObject.getLoaderTutorialMessage(), infoJsonObject.getLoaderPopUpTitle(),
+                            JOptionPane.INFORMATION_MESSAGE));
         }
     }
 
     private void pluginsLoadedPopUp()
     {
-        try
+
+        if (!config.disablePluginsLoadMsg())
         {
-            if (!config.disablePluginsLoadMsg())
-            {
-                if (config.whenToLoad().getLoadChoice().equals("GAME_STARTUP"))
-                {
-                    if (config.manualLoad())
-                    {
-                        SwingUtilities.invokeLater(() ->
-                                JOptionPane.showMessageDialog(client.getCanvas(), "Your selected plugins have loaded.",
-                                        infoJsonObject.getLoaderPopUpTitle(), JOptionPane.INFORMATION_MESSAGE));
-                    }
-                    else
-                    {
-                        SwingUtilities.invokeAndWait(() ->
-                                JOptionPane.showMessageDialog(client.getCanvas(), "Your selected plugins have loaded.",
-                                        infoJsonObject.getLoaderPopUpTitle(), JOptionPane.INFORMATION_MESSAGE));
-                    }
-                }
-                else
-                {
-                    SwingUtilities.invokeLater(() ->
-                            JOptionPane.showMessageDialog(client.getCanvas(), "Your selected plugins have loaded.",
-                                    infoJsonObject.getLoaderPopUpTitle(), JOptionPane.INFORMATION_MESSAGE));
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            log.error("Unable to show plugins loaded popup message.", e);
+            SwingUtilities.invokeLater(() ->
+                    JOptionPane.showMessageDialog(client.getCanvas(), "Your selected plugins have loaded.",
+                            infoJsonObject.getLoaderPopUpTitle(), JOptionPane.INFORMATION_MESSAGE));
         }
     }
 
