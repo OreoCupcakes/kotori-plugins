@@ -26,16 +26,11 @@
 package com.theplug.kotori.demonicgorillas;
 
 import com.google.common.collect.ImmutableSet;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+
+import java.util.*;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
-import com.theplug.kotori.demonicgorillas.utils.Missile;
+
 import com.theplug.kotori.demonicgorillas.utils.GraphicIDPlus;
 import com.theplug.kotori.kotoriutils.KotoriUtils;
 import lombok.AccessLevel;
@@ -92,8 +87,7 @@ public class DemonicGorillaPlugin extends Plugin
 	private List<PendingGorillaAttack> pendingAttacks;
 
 	private Map<Player, MemorizedPlayer> memorizedPlayers;
-
-	private Missile[] missile = new Missile[3];
+	private ArrayList<Projectile> gorillaProjectiles;
 
 	@Override
 	protected void startUp()
@@ -102,6 +96,7 @@ public class DemonicGorillaPlugin extends Plugin
 		gorillas = new HashMap<>();
 		recentBoulders = new ArrayList<>();
 		pendingAttacks = new ArrayList<>();
+		gorillaProjectiles = new ArrayList<>();
 		memorizedPlayers = new HashMap<>();
 		clientThread.invoke(this::reset); // Updates the list of gorillas and players
 	}
@@ -538,36 +533,31 @@ public class DemonicGorillaPlugin extends Plugin
 		final Projectile projectile = event.getProjectile();
 		final int projectileId = projectile.getId();
 
-		if (!DEMONIC_PROJECTILES.contains(projectileId)) {
+		if (!DEMONIC_PROJECTILES.contains(projectileId))
+		{
 			return;
 		}
 
+		if (gorillaProjectiles.contains(projectile))
+		{
+			return;
+		}
+		gorillaProjectiles.add(projectile);
+
 		final WorldPoint loc = WorldPoint.fromLocal(client, projectile.getX1(), projectile.getY1(), client.getPlane());
 
-		if (projectileId == GraphicIDPlus.DEMONIC_GORILLA_BOULDER) {
-			if (missile[2] == null || projectile.getStartCycle() > missile[2].getProjectile().getStartCycle()) {
-				missile[2] = new Missile(projectile);
-				recentBoulders.add(loc);
-			} else {
-				return;
-			}
-		} else {
-			if (missile[0] == null) {
-				missile[0] = new Missile(projectile);
-				for (DemonicGorilla gorilla : gorillas.values()) {
-					if (gorilla.getNpc().getWorldLocation().distanceTo(loc) == 0) {
-						gorilla.setRecentProjectileId(projectile.getId());
-					}
+		if (projectileId == GraphicIDPlus.DEMONIC_GORILLA_BOULDER)
+		{
+			recentBoulders.add(loc);
+		}
+		else
+		{
+			for (DemonicGorilla gorilla : gorillas.values())
+			{
+				if (gorilla.getNpc().getWorldLocation().distanceTo(loc) == 0)
+				{
+					gorilla.setRecentProjectileId(projectile.getId());
 				}
-			} else if (missile[0] != null && (missile[1] == null || projectile.getStartCycle() > missile[1].getProjectile().getStartCycle())) {
-				missile[1] = new Missile(projectile);
-				for (DemonicGorilla gorilla : gorillas.values()) {
-					if (gorilla.getNpc().getWorldLocation().distanceTo(loc) == 0) {
-						gorilla.setRecentProjectileId(projectile.getId());
-					}
-				}
-			} else {
-				return;
 			}
 		}
 	}
@@ -724,13 +714,7 @@ public class DemonicGorillaPlugin extends Plugin
 	}
 
 	private void clearProjectileArray()
-{
-	for (int i = 0; i < missile.length; i++)
 	{
-		if (missile[i] != null && missile[i].getProjectile().getRemainingCycles() <= 0)
-		{
-			missile[i] = null;
-		}
+		gorillaProjectiles.removeIf(p -> p.getRemainingCycles() <= 0);
 	}
-}
 }
