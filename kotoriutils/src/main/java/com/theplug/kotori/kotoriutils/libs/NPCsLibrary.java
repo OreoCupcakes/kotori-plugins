@@ -96,6 +96,8 @@ public class NPCsLibrary {
                 case 14:
                     headIcon = HeadIcon.DEFLECT_MAGE;
                     break;
+                default:
+                    headIcon = null;
             }
         } catch (Exception e) {
             log.error("Failed to get NPC overhead icon.", e);
