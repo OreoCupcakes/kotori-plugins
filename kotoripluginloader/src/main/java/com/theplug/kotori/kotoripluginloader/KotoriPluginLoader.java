@@ -116,9 +116,8 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
         {
             return false;
         }
-        String loaderVersionOnGithub = pluginsJsonList.get(pluginsJsonList.indexOf("Kotori Plugin Loader")+3);
         String loaderVersionOnInfoJson = infoJsonObject.getKotoriLoaderVersion();
-        if (loaderVersionOnInfoJson.equals(currentLoaderVersion) && loaderVersionOnGithub.equals(currentLoaderVersion))
+        if (loaderVersionOnInfoJson.equals(currentLoaderVersion))
         {
             return true;
         }
