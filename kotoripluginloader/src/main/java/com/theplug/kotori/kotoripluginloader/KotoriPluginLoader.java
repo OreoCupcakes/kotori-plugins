@@ -35,7 +35,7 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
 {
     final private String pluginsJsonURL = "https://github.com/OreoCupcakes/kotori-plugins-releases/blob/master/plugins.json?raw=true";
     final private String infoJsonURL = "https://github.com/OreoCupcakes/kotori-plugins-releases/blob/master/info.json?raw=true";
-    final private String currentLoaderVersion = "1.0.0";
+    final private String currentLoaderVersion = "1.0.1";
 
     @Inject
     private Client client;
