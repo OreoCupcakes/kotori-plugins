@@ -57,7 +57,7 @@ import java.util.Set;
 	name = "Dagannoth Kings",
 	enabledByDefault = false,
 	description = "A plugin for the Dagannoth Kings.",
-	tags = {"dagannoth", "kings", "dks", "daggs", "ported"}
+	tags = {"dagannoth", "kings", "dks", "daggs", "ported","kotori"}
 )
 public class DagannothKingsPlugin extends Plugin
 {

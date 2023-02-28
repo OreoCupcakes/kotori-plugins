@@ -33,7 +33,7 @@ import java.awt.*;
 public interface HouseOverlayConfig extends Config {
 
     @ConfigSection(
-            name = "<html>House Overlay<br>Version 1.1.1</html>",
+            name = "<html>House Overlay<br>Version 1.1.2</html>",
             description = "",
             position = -1,
             closedByDefault = true

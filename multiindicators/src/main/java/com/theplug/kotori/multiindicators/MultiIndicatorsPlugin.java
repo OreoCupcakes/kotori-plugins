@@ -51,7 +51,7 @@ import java.util.Arrays;
 	name = "Multi-Lines Indicators",
 	enabledByDefault = false,
 	description = "Show borders of multicombat and PvP safezones",
-	tags = {"multicombat", "lines", "pvp", "deadman", "safezones", "ported"}
+	tags = {"multicombat", "lines", "pvp", "deadman", "safezones", "ported", "kotori"}
 )
 public class MultiIndicatorsPlugin extends Plugin
 {

@@ -37,7 +37,7 @@ public interface HallowedSepulchreConfig extends Config
 	Color RED_TRANSPARENT = new Color(255, 0, 0, 20);
 
 	@ConfigSection(
-			name = "<html>Hallowed Sepulchre (Lightweight)<br>Version 1.1.1</html>",
+			name = "<html>Hallowed Sepulchre (Lightweight)<br>Version 1.1.2</html>",
 			description = "",
 			position = -1,
 			closedByDefault = true

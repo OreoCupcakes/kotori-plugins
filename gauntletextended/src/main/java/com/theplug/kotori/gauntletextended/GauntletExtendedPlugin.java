@@ -85,7 +85,7 @@ import net.runelite.client.ui.overlay.OverlayManager;
 	name = "Gauntlet Extended",
 	enabledByDefault = false,
 	description = "All-in-one plugin for the Gauntlet.",
-	tags = {"gauntlet", "corrupted", "ported", "cg", "prison"}
+	tags = {"gauntlet", "corrupted", "ported", "cg", "prison", "kotori"}
 )
 @Singleton
 public class GauntletExtendedPlugin extends Plugin

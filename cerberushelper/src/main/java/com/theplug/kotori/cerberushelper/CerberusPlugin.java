@@ -70,7 +70,7 @@ import net.runelite.http.api.item.ItemStats;
 	name = "Cerberus Helper",
 	enabledByDefault = false,
 	description = "A helper plugin for the Cerberus boss. Comes with overlays and auto prayers.",
-	tags = {"cerberus", "hellhound", "doggie", "ported"}
+	tags = {"cerberus", "hellhound", "doggie", "ported","kotori"}
 )
 public class CerberusPlugin extends Plugin
 {

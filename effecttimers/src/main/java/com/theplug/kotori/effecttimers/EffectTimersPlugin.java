@@ -50,7 +50,7 @@ import java.util.EnumSet;
 @PluginDescriptor(
 	name = "Effect Timers",
 	description = "Effect timer overlay on players",
-	tags = {"freeze", "timers", "barrage", "teleblock", "pklite", "ported"}
+	tags = {"freeze", "timers", "barrage", "teleblock", "pklite", "ported", "kotori"}
 )
 public class EffectTimersPlugin extends Plugin
 {

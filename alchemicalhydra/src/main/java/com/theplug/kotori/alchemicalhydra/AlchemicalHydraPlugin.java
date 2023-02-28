@@ -73,7 +73,7 @@ import lombok.extern.slf4j.Slf4j;
 	name = "Alchemical Hydra",
 	enabledByDefault = false,
 	description = "A plugin for the Alchemical Hydra boss.",
-	tags = {"alchemical", "hydra", "ported"}
+	tags = {"alchemical", "hydra", "ported","kotori"}
 )
 public class AlchemicalHydraPlugin extends Plugin
 {

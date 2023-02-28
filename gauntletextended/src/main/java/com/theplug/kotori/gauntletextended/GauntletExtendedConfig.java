@@ -44,7 +44,7 @@ public interface GauntletExtendedConfig extends Config
 {
 	// Sections
 	@ConfigSection(
-			name = "<html>Gauntlet Extended<br>Version 1.1.2</html>",
+			name = "<html>Gauntlet Extended<br>Version 1.1.3</html>",
 			description = "",
 			position = -1,
 			closedByDefault = true

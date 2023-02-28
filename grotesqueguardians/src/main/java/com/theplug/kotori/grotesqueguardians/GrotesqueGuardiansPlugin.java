@@ -62,7 +62,7 @@ import net.runelite.client.ui.overlay.OverlayManager;
 	name = "Grotesque Guardians",
 	enabledByDefault = false,
 	description = "A plugin for Grotesque Guardians boss.",
-	tags = {"grotesque", "guardians", "gargoyles"}
+	tags = {"grotesque", "guardians", "gargoyles", "kotori"}
 )
 public class GrotesqueGuardiansPlugin extends Plugin
 {

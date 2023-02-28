@@ -23,7 +23,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "1.1.1"
+version = "1.1.2"
 
 project.extra["PluginName"] = "Effect Timers" // This is the name that is used in the external plugin manager panel
 project.extra["PluginDescription"] = "Effect timers overlay on players." // This is the description that is used in the external plugin manager panel

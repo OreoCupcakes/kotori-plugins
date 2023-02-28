@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 @PluginDescriptor(
 		name = "Zulrah",
 		description = "All-in-One tool to help during the Zulrah fight",
-		tags = {"zulrah", "zul", "andra", "snakeling", "ported", "snake", "solomission"},
+		tags = {"zulrah", "zul", "andra", "snakeling", "ported", "snake", "solomission", "kotori"},
 		enabledByDefault = false
 )
 

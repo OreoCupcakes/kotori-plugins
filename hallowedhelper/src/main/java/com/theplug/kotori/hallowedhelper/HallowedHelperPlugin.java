@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 @PluginDescriptor(
         name = "Hallowed Sepulchre (Deluxe)",
         description = "Hallowed Sepulchre helper with tons of overlays.",
-        tags = {"grace", "marks", "overlay", "skilling", "traps", "sepulchre", "hallowed", "imno", "ported", "darkmeyer", "agility", "course", "minigame"}
+        tags = {"grace", "marks", "overlay", "skilling", "traps", "sepulchre", "hallowed", "imno", "ported", "darkmeyer", "agility", "course", "minigame", "kotori"}
 )
 @Slf4j
 public class HallowedHelperPlugin extends Plugin {

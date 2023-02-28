@@ -26,7 +26,7 @@ import java.util.Map;
 @PluginDescriptor(
         name = "House Overlay",
         description = "Overlays for your house.",
-        tags = {"imno","ported","house", "overlay", "poh"}
+        tags = {"imno","ported","house", "overlay", "poh","kotori"}
 )
 @Slf4j
 public class HouseOverlayPlugin extends Plugin {

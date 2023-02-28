@@ -23,7 +23,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "1.1.1"
+version = "1.1.2"
 
 project.extra["PluginName"] = "House Overlay" // This is the name that is used in the external plugin manager panel
 project.extra["PluginDescription"] = "Overlays useful objects in your POH." // This is the description that is used in the external plugin manager panel

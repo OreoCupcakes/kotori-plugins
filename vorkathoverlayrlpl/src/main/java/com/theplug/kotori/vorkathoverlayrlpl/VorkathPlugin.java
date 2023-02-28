@@ -65,7 +65,7 @@ import org.apache.commons.lang3.ArrayUtils;
 	name = "Vorkath (RLPL)",
 	enabledByDefault = false,
 	description = "Count vorkath attacks, indicate next phase, wooxwalk timer, indicate path through acid",
-	tags = {"combat", "overlay", "pve", "pvm", "ported", "vorkath", "blue", "dragon", "zombie"}
+	tags = {"combat", "overlay", "pve", "pvm", "ported", "vorkath", "blue", "dragon", "zombie", "kotori"}
 )
 @Slf4j
 public class VorkathPlugin extends Plugin

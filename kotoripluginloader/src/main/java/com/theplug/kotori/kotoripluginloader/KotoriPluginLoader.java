@@ -14,9 +14,7 @@ import net.runelite.api.events.GameStateChanged;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
-import net.runelite.client.events.ConfigChanged;
-import net.runelite.client.events.ExternalPluginsChanged;
-import net.runelite.client.events.ProfileChanged;
+import net.runelite.client.events.*;
 import net.runelite.client.plugins.*;
 
 import java.io.BufferedReader;
@@ -37,7 +35,7 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
 {
     final private String pluginsJsonURL = "https://github.com/OreoCupcakes/kotori-plugins-releases/blob/master/plugins.json?raw=true";
     final private String infoJsonURL = "https://github.com/OreoCupcakes/kotori-plugins-releases/blob/master/info.json?raw=true";
-    final private String currentLoaderVersion = "0.8.0";
+    final private String currentLoaderVersion = "0.9.0";
 
     @Inject
     private Client client;
@@ -452,7 +450,6 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
     private void setConfigItem(String key, String value)
     {
         configManager.setConfiguration("kotoripluginloader",key,value);
-        eventBus.post(new ProfileChanged());
     }
 
     @Subscribe
@@ -482,7 +479,7 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
         boolean kotoriUtilsLoaded = loadedPlugins.contains("Kotori Plugin Utils");
         boolean multiIndicatorsLoaded = loadedPlugins.contains("Multi-Lines Indicators");
 
-        //Force turn on plugin dependencies
+        //Force turn on plugin dependencies for Effect Timers, else keep it turned off
         if (event.getKey().equals("effectTimersChoice"))
         {
             if (!multiIndicatorsLoaded)
@@ -492,15 +489,18 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
                     if (!config.multiIndicatorsChoice())
                     {
                         setConfigItem("multiIndicatorsChoice", "true");
+                        eventBus.post(new ProfileChanged());
                     }
                 }
             }
             else
             {
                 setConfigItem(event.getKey(),"false");
+                eventBus.post(new ProfileChanged());
             }
         }
 
+        //If selecting Hydra and not RLPL, turn on Kotori Utils if not already on, else if Kotori Utils is already loaded then keep it turned off
         if (event.getKey().equals("alchemicalHydraChoice"))
         {
             if (!config.rlplUser())
@@ -512,16 +512,19 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
                         if (!config.kotoriUtilsChoice())
                         {
                             setConfigItem("kotoriUtilsChoice", "true");
+                            eventBus.post(new ProfileChanged());
                         }
                     }
                 }
                 else
                 {
                     setConfigItem(event.getKey(),"false");
+                    eventBus.post(new ProfileChanged());
                 }
             }
         }
 
+        //If selecting Cerb, turn on Kotori Utils if not already on, else if Kotori Utils is already loaded then keep it turned off
         if (event.getKey().equals("cerberusHelperChoice"))
         {
             if (!kotoriUtilsLoaded)
@@ -531,15 +534,18 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
                     if (!config.kotoriUtilsChoice())
                     {
                         setConfigItem("kotoriUtilsChoice", "true");
+                        eventBus.post(new ProfileChanged());
                     }
                 }
             }
             else
             {
                 setConfigItem(event.getKey(),"false");
+                eventBus.post(new ProfileChanged());
             }
         }
 
+        //If selecting Demonics, turn on Kotori Utils if not already on, else if Kotori Utils is already loaded then keep it turned off
         if (event.getKey().equals("demonicGorillasChoice"))
         {
             if (!kotoriUtilsLoaded)
@@ -549,15 +555,18 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
                     if (!config.kotoriUtilsChoice())
                     {
                         setConfigItem("kotoriUtilsChoice","true");
+                        eventBus.post(new ProfileChanged());
                     }
                 }
             }
             else
             {
                 setConfigItem(event.getKey(),"false");
+                eventBus.post(new ProfileChanged());
             }
         }
 
+        //If selecting Gauntlet, turn on Kotori Utils if not already on, else if Kotori Utils is already loaded then keep it turned off
         if (event.getKey().equals("gauntletExtendedChoice"))
         {
             if (!kotoriUtilsLoaded)
@@ -567,15 +576,18 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
                     if (!config.kotoriUtilsChoice())
                     {
                         setConfigItem("kotoriUtilsChoice","true");
+                        eventBus.post(new ProfileChanged());
                     }
                 }
             }
             else
             {
                 setConfigItem(event.getKey(),"false");
+                eventBus.post(new ProfileChanged());
             }
         }
 
+        //If selecting Vorkath, turn on Kotori Utils if not already on, else if Kotori Utils is already loaded then keep it turned off
         if (event.getKey().equals("vorkathOverlayChoice"))
         {
             if (!config.rlplUser())
@@ -587,16 +599,19 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
                         if (!config.kotoriUtilsChoice())
                         {
                             setConfigItem("kotoriUtilsChoice","true");
+                            eventBus.post(new ProfileChanged());
                         }
                     }
                 }
                 else
                 {
                     setConfigItem(event.getKey(),"false");
+                    eventBus.post(new ProfileChanged());
                 }
             }
         }
 
+        //Keep Kotori Utils on until its dependents get turned off
         if (event.getKey().equals("kotoriUtilsChoice"))
         {
             if ((config.alchemicalHydraChoice() && !config.rlplUser()) || config.demonicGorillasChoice()
@@ -604,22 +619,27 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
                     || (config.vorkathOverlayChoice() && !config.rlplUser()))
             {
                 setConfigItem(event.getKey(),"true");
+                eventBus.post(new ProfileChanged());
             }
         }
 
+        //Keep the Multi-Lines Indicators button turned on as long as Effect Timers is also on
         if (event.getKey().equals("multiIndicatorsChoice"))
         {
             if (config.effectTimersChoice())
             {
                 setConfigItem(event.getKey(),"true");
+                eventBus.post(new ProfileChanged());
             }
         }
 
+        //Keep the RLPL User button "frozen" and prevent it from changing after the first load of plugins
         if (event.getKey().equals("rlplUser"))
         {
             if (!loadedPlugins.isEmpty())
             {
                 setConfigItem(event.getKey(),""+rlplChoiceAtLoad);
+                eventBus.post(new ProfileChanged());
             }
         }
 
@@ -662,8 +682,6 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
                 {
                     setConfigItem("effectTimersChoice","true");
                 }
-
-                eventBus.post(new ProfileChanged());
             }
             else
             {
@@ -682,9 +700,8 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
                 setConfigItem("grotesqueGuardiansChoice", "false");
                 setConfigItem("multiIndicatorsChoice", "false");
                 setConfigItem("kotoriUtilsChoice","false");
-
-                eventBus.post(new ProfileChanged());
             }
+            eventBus.post(new ProfileChanged());
         }
 
 
