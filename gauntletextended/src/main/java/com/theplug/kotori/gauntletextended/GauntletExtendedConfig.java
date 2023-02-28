@@ -44,6 +44,14 @@ public interface GauntletExtendedConfig extends Config
 {
 	// Sections
 	@ConfigSection(
+			name = "<html>Gauntlet Extended<br>Version 1.1.2</html>",
+			description = "",
+			position = -1,
+			closedByDefault = true
+	)
+	String versionInfo = "Version";
+
+	@ConfigSection(
 		name = "Resources",
 		description = "Resources section.",
 		position = 0

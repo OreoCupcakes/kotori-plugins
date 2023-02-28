@@ -38,6 +38,13 @@ import net.runelite.client.ui.overlay.components.ComponentOrientation;
 public interface CerberusConfig extends Config
 {
 	// Sections
+	@ConfigSection(
+			name = "<html>Cerberus Helper<br>Version 1.1.1</html>",
+			description = "",
+			position = -1,
+			closedByDefault = true
+	)
+	String versionInfo = "Version";
 
 	@ConfigSection(
 		name = "General",

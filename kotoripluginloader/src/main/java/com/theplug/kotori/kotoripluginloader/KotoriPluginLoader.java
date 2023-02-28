@@ -37,7 +37,7 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
 {
     final private String pluginsJsonURL = "https://github.com/OreoCupcakes/kotori-plugins-releases/blob/master/plugins.json?raw=true";
     final private String infoJsonURL = "https://github.com/OreoCupcakes/kotori-plugins-releases/blob/master/info.json?raw=true";
-    final private String currentLoaderVersion = "0.7.0";
+    final private String currentLoaderVersion = "0.8.0";
 
     @Inject
     private Client client;
@@ -69,26 +69,26 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
     @Override
     protected void startUp()
     {
-        parseInfoJsonFile();
-        parsePluginsJsonFile();
-        parsePluginsInfo();
-
         if (config.whenToLoad().getLoadChoice().equals("GAME_STARTUP"))
         {
-            new Thread(() ->
-            {
+            new Thread(() -> {
+                parseInfoJsonFile();
+                parsePluginsJsonFile();
+                parsePluginsInfo();
                 loadPluginsSequence();
                 tutorialMessagePopUp();
             }).start();
         }
-        else if (config.whenToLoad().getLoadChoice().equals("CLIENT_STARTUP"))
-        {
-            loadPluginsSequence();
-            tutorialMessagePopUp();
-        }
         else
         {
-            new Thread(() -> tutorialMessagePopUp()).start();
+            parseInfoJsonFile();
+            parsePluginsJsonFile();
+            parsePluginsInfo();
+            if (config.whenToLoad().getLoadChoice().equals("CLIENT_STARTUP"))
+            {
+                loadPluginsSequence();
+            }
+            tutorialMessagePopUp();
         }
     }
 
@@ -159,7 +159,6 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
 
     private void pluginsLoadedPopUp()
     {
-
         if (!config.disablePluginsLoadMsg())
         {
             SwingUtilities.invokeLater(() ->
@@ -348,6 +347,11 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
         {
             addPluginToLoadLists("Zulrah");
         }
+
+        if (config.grotesqueGuardiansChoice())
+        {
+            addPluginToLoadLists("Grotesque Guardians");
+        }
     }
 
     private URL getPluginUrl(String pluginName)
@@ -461,7 +465,11 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
 
         if (config.whenToLoad().getLoadChoice().equals("LOGGED_IN"))
         {
-            loadPluginsSequence();
+            //GameState LOGGED_IN
+            if (event.getGameState().getState() == 30)
+            {
+                loadPluginsSequence();
+            }
         }
     }
 
@@ -627,6 +635,7 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
                 setConfigItem("houseOverlayChoice", "true");
                 setConfigItem("multiIndicatorsChoice", "true");
                 setConfigItem("zulrahOverlayChoice", "true");
+                setConfigItem("grotesqueGuardiansChoice", "true");
 
                 if (config.rlplUser())
                 {
@@ -670,6 +679,7 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
                 setConfigItem("hallowedSepulchreChoice", "false");
                 setConfigItem("houseOverlayChoice", "false");
                 setConfigItem("zulrahOverlayChoice", "false");
+                setConfigItem("grotesqueGuardiansChoice", "false");
                 setConfigItem("multiIndicatorsChoice", "false");
                 setConfigItem("kotoriUtilsChoice","false");
 

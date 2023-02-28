@@ -38,6 +38,14 @@ public interface DagannothKingsConfig extends Config
 	// Sections
 
 	@ConfigSection(
+			name = "<html>Dagannoth Kings<br>Version 1.1.1</html>",
+			description = "",
+			position = -1,
+			closedByDefault = true
+	)
+	String versionInfo = "Version";
+
+	@ConfigSection(
 		position = 0,
 		name = "Settings",
 		description = ""

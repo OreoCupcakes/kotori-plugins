@@ -1,12 +1,14 @@
 package com.theplug.kotori.kotoriutils;
 
 import com.google.gson.*;
+import com.google.inject.Provides;
 import com.theplug.kotori.kotoriutils.gson.Hooks;
 import com.theplug.kotori.kotoriutils.libs.*;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.client.callback.ClientThread;
+import net.runelite.client.config.ConfigManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 
@@ -26,10 +28,12 @@ import java.net.URL;
 )
 public class KotoriUtils extends Plugin {
 
+    final private String hooksFileURL = "https://github.com/OreoCupcakes/kotori-ported-plugins-hosting/blob/master/hooks.json?raw=true";
     @Inject
     private Client client;
 
-    final private String hooksFileURL = "https://github.com/OreoCupcakes/kotori-ported-plugins-hosting/blob/master/hooks.json?raw=true";
+    @Inject
+    KotoriUtilsConfig kotoriUtilsConfig;
 
     @Inject
     @Getter
@@ -48,6 +52,12 @@ public class KotoriUtils extends Plugin {
     private WalkingLibrary walkingLibrary;
 
     private Hooks rsHooks;
+
+    @Provides
+    KotoriUtilsConfig provideConfig(ConfigManager configManager)
+    {
+        return configManager.getConfig(KotoriUtilsConfig.class);
+    }
 
     @Override
     protected void startUp()

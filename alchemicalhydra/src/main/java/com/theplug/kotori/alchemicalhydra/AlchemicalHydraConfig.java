@@ -42,6 +42,14 @@ public interface AlchemicalHydraConfig extends Config
 	// Sections
 
 	@ConfigSection(
+			name = "<html>Alchemical Hydra<br>Version 1.1.1</html>",
+			description = "",
+			position = -1,
+			closedByDefault = true
+	)
+	String versionInfo = "Version";
+
+	@ConfigSection(
 		name = "General",
 		description = "",
 		position = 0

@@ -23,16 +23,12 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "1.1.5"
+version = "1.0.0"
 
-project.extra["PluginName"] = "Demonic Gorillas" // This is the name that is used in the external plugin manager panel
-project.extra["PluginDescription"] = "An overlay plugin for the Demonic Gorillas." // This is the description that is used in the external plugin manager panel
-project.extra["PluginPackageId"] = "demonicgorillas" // This is the plugin package folder after the default group package.
-project.extra["PluginMainClassName"] = "DemonicGorillaPlugin" // This is the plugin's main class which extends Plugin
-
-dependencies {
-    compileOnly(project(":kotoriutils"))
-}
+project.extra["PluginName"] = "Grotesque Guardians" // This is the name that is used in the external plugin manager panel
+project.extra["PluginDescription"] = "A plugin for Grotesque Guardians boss." // This is the description that is used in the external plugin manager panel
+project.extra["PluginPackageId"] = "grotesqueguardians" // This is the plugin package folder after the default group package.
+project.extra["PluginMainClassName"] = "GrotesqueGuardiansPlugin" // This is the plugin's main class which extends Plugin
 
 tasks {
     jar {

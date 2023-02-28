@@ -1,26 +1,26 @@
-package com.theplug.kotori.demonicgorillas;
+package com.theplug.kotori.kotoriutils;
 
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
 import net.runelite.client.config.ConfigSection;
 
-@ConfigGroup("demonicgorilla")
-public interface DemonicGorillaConfig extends Config
+@ConfigGroup("kotoriutils")
+public interface KotoriUtilsConfig extends Config
 {
     @ConfigSection(
-            name = "<html>Demonic Gorillas<br>Version 1.1.5</html>",
+            name = "<html>Kotori Plugin Utils<br>Version 1.0.1</html>",
             description = "",
-            position = 0,
+            position = -1,
             closedByDefault = true
     )
     String versionInfo = "Version";
 
     @ConfigItem(
-            keyName = "version",
+            keyName = "randomTextToShowVersion",
             name = "",
             description = "",
             section = versionInfo
     )
-    default String versionString() { return ""; }
+    default String randomTextToShowVersion() { return ""; }
 }

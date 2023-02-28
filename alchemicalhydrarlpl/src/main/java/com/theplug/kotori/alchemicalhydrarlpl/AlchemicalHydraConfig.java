@@ -40,6 +40,13 @@ import com.theplug.kotori.alchemicalhydrarlpl.utils.Units;
 public interface AlchemicalHydraConfig extends Config
 {
 	// Sections
+	@ConfigSection(
+			name = "<html>Alchemical Hydra (RLPL)<br>Version 1.1.1</html>",
+			description = "",
+			position = -1,
+			closedByDefault = true
+	)
+	String versionInfo = "Version";
 
 	@ConfigSection(
 		name = "General",

@@ -25,15 +25,20 @@
 package com.theplug.kotori.effecttimers;
 
 import java.awt.Color;
-import net.runelite.client.config.Config;
-import net.runelite.client.config.ConfigGroup;
-import net.runelite.client.config.ConfigItem;
-import net.runelite.client.config.Keybind;
-import net.runelite.client.config.Range;
+
+import net.runelite.client.config.*;
 
 @ConfigGroup("effecttimers")
 public interface EffectTimersConfig extends Config
 {
+	@ConfigSection(
+			name = "<html>Effect Timers<br>Version 1.1.1</html>",
+			description = "",
+			position = -1,
+			closedByDefault = true
+	)
+	String versionInfo = "Version";
+
 	@ConfigItem(
 		name = "Show NPCs",
 		keyName = "showNpcs",

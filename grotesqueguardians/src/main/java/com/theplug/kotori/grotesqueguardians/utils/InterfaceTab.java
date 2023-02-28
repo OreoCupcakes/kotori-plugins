@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Owain van Brakel <https://github.com/Owain94>
+ * Copyright (c) 2019, Lucas <https://github.com/Lucwousin>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -23,27 +23,29 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "1.1.5"
+package com.theplug.kotori.grotesqueguardians.utils;
 
-project.extra["PluginName"] = "Demonic Gorillas" // This is the name that is used in the external plugin manager panel
-project.extra["PluginDescription"] = "An overlay plugin for the Demonic Gorillas." // This is the description that is used in the external plugin manager panel
-project.extra["PluginPackageId"] = "demonicgorillas" // This is the plugin package folder after the default group package.
-project.extra["PluginMainClassName"] = "DemonicGorillaPlugin" // This is the plugin's main class which extends Plugin
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-dependencies {
-    compileOnly(project(":kotoriutils"))
-}
+@AllArgsConstructor
+@Getter
+public enum InterfaceTab
+{
+    COMBAT(0),
+    STATS(1),
+    QUEST(2),
+    INVENTORY(3),
+    EQUIPMENT(4),
+    PRAYER(5),
+    SPELLBOOK(6),
+    CLAN(7),
+    ACCOUNT_MANAGMENT(8),
+    FRIENDS(9),
+    LOGOUT(10),
+    OPTIONS(11),
+    EMOTES(12),
+    MUSIC(13);
 
-tasks {
-    jar {
-        manifest {
-            attributes(mapOf(
-                "Plugin-Version" to project.version,
-                "Plugin-Id" to nameToId(project.extra["PluginName"] as String),
-                "Plugin-Provider" to project.extra["PluginProvider"],
-                "Plugin-Description" to project.extra["PluginDescription"],
-                "Plugin-License" to project.extra["PluginLicense"]
-            ))
-        }
-    }
+    private final int id;
 }

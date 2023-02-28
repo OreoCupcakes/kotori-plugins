@@ -24,21 +24,36 @@
  */
 package com.theplug.kotori.houseoverlay;
 
-import net.runelite.client.config.Alpha;
-import net.runelite.client.config.Config;
-import net.runelite.client.config.ConfigGroup;
-import net.runelite.client.config.ConfigItem;
+import net.runelite.client.config.*;
 
 import java.awt.*;
 
 @ConfigGroup("HouseOverlay")
 
 public interface HouseOverlayConfig extends Config {
+
+    @ConfigSection(
+            name = "<html>House Overlay<br>Version 1.1.1</html>",
+            description = "",
+            position = -1,
+            closedByDefault = true
+    )
+    String versionInfo = "Version";
+
+    @ConfigSection(
+            name = "Settings",
+            description = "",
+            position = 0
+    )
+    String settings = "Settings";
+
+
     @ConfigItem(
             name = "Need Fairy Ring Staff",
             description = "Turn off if you completed Lumbridge Elite Diary",
             position = 1,
-            keyName = "fairyStaff"
+            keyName = "fairyStaff",
+            section = settings
     )
     default boolean fairyStaff()
     {
@@ -50,7 +65,8 @@ public interface HouseOverlayConfig extends Config {
             name = "Default Color",
             description = "Choose the color of teleport objects",
             position = 2,
-            keyName = "HouseObjectsDefaultColor"
+            keyName = "HouseObjectsDefaultColor",
+            section = settings
     )
     default Color HouseObjectsDefaultColor()
     {
@@ -62,7 +78,8 @@ public interface HouseOverlayConfig extends Config {
             name = "Decorative Color",
             description = "Choose the color of decorative objects",
             position = 3,
-            keyName = "HouseDecorativeColors"
+            keyName = "HouseDecorativeColors",
+            section = settings
     )
     default Color DecorativeColors()
     {
@@ -74,7 +91,8 @@ public interface HouseOverlayConfig extends Config {
             name = "Text Color",
             description = "Choose the color of text on objects",
             position = 3,
-            keyName = "TelportObjectsTextColor"
+            keyName = "TelportObjectsTextColor",
+            section = settings
     )
     default Color TelportObjectsTextColor()
     {

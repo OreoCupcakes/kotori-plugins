@@ -1,5 +1,7 @@
 /*
- * Copyright (c) 2019 Owain van Brakel <https://github.com/Owain94>
+ * BSD 2-Clause License
+ *
+ * Copyright (c) 2020, dutta64 <https://github.com/dutta64>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -23,27 +25,23 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "1.1.5"
+package com.theplug.kotori.grotesqueguardians.entity;
 
-project.extra["PluginName"] = "Demonic Gorillas" // This is the name that is used in the external plugin manager panel
-project.extra["PluginDescription"] = "An overlay plugin for the Demonic Gorillas." // This is the description that is used in the external plugin manager panel
-project.extra["PluginPackageId"] = "demonicgorillas" // This is the plugin package folder after the default group package.
-project.extra["PluginMainClassName"] = "DemonicGorillaPlugin" // This is the plugin's main class which extends Plugin
+import lombok.Getter;
+import net.runelite.api.NPC;
 
-dependencies {
-    compileOnly(project(":kotoriutils"))
-}
+public abstract class Gargoyle
+{
+	@Getter
+	protected final NPC npc;
 
-tasks {
-    jar {
-        manifest {
-            attributes(mapOf(
-                "Plugin-Version" to project.version,
-                "Plugin-Id" to nameToId(project.extra["PluginName"] as String),
-                "Plugin-Provider" to project.extra["PluginProvider"],
-                "Plugin-Description" to project.extra["PluginDescription"],
-                "Plugin-License" to project.extra["PluginLicense"]
-            ))
-        }
-    }
+	@Getter
+	protected int ticksUntilNextAttack;
+
+	Gargoyle(final NPC npc)
+	{
+		this.npc = npc;
+	}
+
+	protected abstract void updateTicksUntilNextAttack();
 }

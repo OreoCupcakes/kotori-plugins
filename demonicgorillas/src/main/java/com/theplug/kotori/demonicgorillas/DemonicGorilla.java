@@ -137,7 +137,7 @@ class DemonicGorilla
 
 	HeadIcon getOverheadIcon()
 	{
-		NPCComposition composition = this.npc.getComposition();
+		NPCComposition composition = npc.getComposition();
 		if (composition != null)
 		{
 			return kotoriUtils.getNpcsLibrary().getNPCHeadIcon(composition);

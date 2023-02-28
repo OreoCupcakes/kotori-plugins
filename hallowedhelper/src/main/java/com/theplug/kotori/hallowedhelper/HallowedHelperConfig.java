@@ -29,6 +29,12 @@ public interface HallowedHelperConfig extends Config {
         }
     }
 
+    @ConfigSection(
+            name = "Hallowed Helper by ImNo<br>Version 1.1.1",
+            description = "",
+            position = 0
+    )
+    String copy = "copy";
 
     @ConfigSection(
             name = "Main",
@@ -37,15 +43,6 @@ public interface HallowedHelperConfig extends Config {
     )
 	String MainSection = "MainSection";
 
-    @ConfigSection(
-            name = "<html><center>Hallowed Helper [BETA]." +
-                    "<br>Created by ImNo" +
-                    "<br>ImNoPlugins.com" +
-                    "<br></center></html>",
-            description = "",
-            position = 1
-    )
-	String copy = "copy";
 
     @ConfigItem(
             position = 2,

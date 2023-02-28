@@ -13,8 +13,7 @@ public interface KotoriPluginLoaderConfig extends Config
 {
     //Sections
     @ConfigSection(
-            name = "<html><div style='text-align:center;padding-left:25px;padding-right:25px;'>Kotori Plugin Loader<br>" +
-                    "Version 0.7.0</div></html>",
+            name = "<html>Kotori Plugin Loader<br>Version 0.8.0</html>",
             description = "",
             position = 0,
             closedByDefault = true
@@ -217,6 +216,14 @@ public interface KotoriPluginLoaderConfig extends Config
             section = pluginsToLoad
     )
     default boolean zulrahOverlayChoice() { return false; }
+
+    @ConfigItem(
+            keyName = "grotesqueGuardiansChoice",
+            name = "Grotesque Guardians",
+            description = "Load the Grotesque Guardians plugin.",
+            section = pluginsToLoad
+    )
+    default boolean grotesqueGuardiansChoice() { return false; }
 
     @Getter
     @AllArgsConstructor

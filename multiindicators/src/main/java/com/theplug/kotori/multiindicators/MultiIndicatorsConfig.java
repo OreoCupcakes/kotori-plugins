@@ -28,12 +28,21 @@ package com.theplug.kotori.multiindicators;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
+import net.runelite.client.config.ConfigSection;
 
 import java.awt.*;
 
 @ConfigGroup("multiindicators")
 public interface MultiIndicatorsConfig extends Config
 {
+	@ConfigSection(
+			name = "<html>Multi-Lines Indicators<br>Version 1.1.1</html>",
+			description = "",
+			position = -1,
+			closedByDefault = true
+	)
+	String versionInfo = "Version";
+
 	@ConfigItem(
 		keyName = "multicombatZoneVisibility",
 		name = "Multicombat zones",
