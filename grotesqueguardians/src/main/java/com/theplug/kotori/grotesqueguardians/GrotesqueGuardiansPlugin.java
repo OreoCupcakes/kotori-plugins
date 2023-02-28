@@ -56,10 +56,8 @@ import com.theplug.kotori.grotesqueguardians.entity.Dusk;
 import com.theplug.kotori.grotesqueguardians.overlay.PrayerOverlay;
 import com.theplug.kotori.grotesqueguardians.overlay.SceneOverlay;
 import net.runelite.client.ui.overlay.OverlayManager;
-import org.pf4j.Extension;
 
 @Slf4j
-@Extension
 @PluginDescriptor(
 	name = "Grotesque Guardians",
 	enabledByDefault = false,
