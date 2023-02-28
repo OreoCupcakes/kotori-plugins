@@ -69,7 +69,8 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
     {
         if (config.whenToLoad().getLoadChoice().equals("GAME_STARTUP"))
         {
-            new Thread(() -> {
+            new Thread(() ->
+            {
                 parseInfoJsonFile();
                 parsePluginsJsonFile();
                 parsePluginsInfo();
@@ -704,16 +705,13 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
             eventBus.post(new ProfileChanged());
         }
 
-
-
-        //Rebuild Load List
-        clearBuiltPluginLoadLists();
-
         //Keep at the bottom
         if (event.getKey().equals("manualLoad"))
         {
             if (config.manualLoad())
             {
+                //Rebuild Load List
+                clearBuiltPluginLoadLists();
                 loadPluginsSequence();
                 setConfigItem("manualLoad", "false");
                 eventBus.post(new ProfileChanged());
