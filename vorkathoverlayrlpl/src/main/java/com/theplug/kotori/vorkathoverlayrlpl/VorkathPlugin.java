@@ -33,7 +33,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.theplug.kotori.vorkathoverlayrlpl.utils.Missile;
 import com.theplug.kotori.vorkathoverlayrlpl.utils.GraphicIDPlus;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -90,15 +89,10 @@ public class VorkathPlugin extends Plugin
 	@Getter(AccessLevel.PACKAGE)
 	private Vorkath vorkath;
 
-	@Getter
-	private Missile missile;
-
-	private Missile[] acidFireBalls = new Missile[25];
-	private int acidFireBallsIndex = 0;
-
 	@Getter(AccessLevel.PACKAGE)
 	private NPC zombifiedSpawn;
 
+	private ArrayList<Projectile> vorkathProjectiles = new ArrayList<>();
 	@Getter(AccessLevel.PACKAGE)
 	private List<WorldPoint> acidSpots = new ArrayList<>();
 
@@ -211,39 +205,21 @@ public class VorkathPlugin extends Plugin
 			OpenOSRS code for onProjectileSpawned starts here.
 		 */
 
+		if (vorkath == null)
+		{
+			return;
+		}
 		/*
 		 If projectile is not yet stored or if the event projectile is different from the stored projectile, then store the event projectile
 		 Break out of the function otherwise if it's the same projectile, so not as to mess up with the counter
 		 */
-		switch (proj.getId())
+		if (vorkathProjectiles.contains(proj))
 		{
-			case (GraphicIDPlus.VORKATH_TICK_FIRE_AOE):
-				//Reset old acidFireBallsIndex and create a new array
-				if (acidFireBallsIndex >= 25)
-				{
-					acidFireBalls = new Missile[25];
-					acidFireBallsIndex = 0;
-				}
-				if ((acidFireBalls[acidFireBallsIndex] == null) || (proj != acidFireBalls[acidFireBallsIndex]))
-				{
-					acidFireBalls[acidFireBallsIndex] = new Missile(proj);
-					acidFireBallsIndex++;
-				}
-				else
-				{
-					return;
-				}
-				break;
-			default:
-				if ((missile == null) || (proj != missile.getProjectile()))
-				{
-					missile = new Missile(proj);
-				}
-				else
-				{
-					return;
-				}
-				break;
+			return;
+		}
+		else
+		{
+			vorkathProjectiles.add(proj);
 		}
 
 		final VorkathAttack vorkathAttack = VorkathAttack.getVorkathAttack(proj.getId());
@@ -354,10 +330,7 @@ public class VorkathPlugin extends Plugin
 		/*
 			Check if the stored projectile has expired. If expired, then reset it to null.
 		 */
-		if (missile != null && missile.getProjectile().getRemainingCycles() <= 0)
-		{
-			missile = null;
-		}
+		vorkathProjectiles.removeIf(p -> p.getRemainingCycles() <= 0);
 
 		/*
 			Get Vorkath's Animation IDs like this because Adam blocked RuneLite from sending it the proper way.

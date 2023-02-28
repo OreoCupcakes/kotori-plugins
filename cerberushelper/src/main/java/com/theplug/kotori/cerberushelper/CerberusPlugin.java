@@ -139,7 +139,7 @@ public class CerberusPlugin extends Plugin
 	@Nullable
 	private Cerberus cerberus;
 
-	private Missile[] projectilesArray = new Missile[7];
+	private ArrayList<Projectile> cerberusProjectiles = new ArrayList<>();
 
 	@Getter
 	private int gameTick;
@@ -339,13 +339,7 @@ public class CerberusPlugin extends Plugin
 
 	private void clearProjectileArray()
 	{
-		for (int i = 0; i < projectilesArray.length; i++)
-		{
-			if (projectilesArray[i] != null && projectilesArray[i].getProjectile().getRemainingCycles() <= 0)
-			{
-				projectilesArray[i] = null;
-			}
-		}
+		cerberusProjectiles.removeIf(p -> p.getRemainingCycles() <= 0);
 	}
 
 	@Subscribe
@@ -363,20 +357,20 @@ public class CerberusPlugin extends Plugin
 		final Phase expectedAttack = cerberus.getNextAttackPhase(1, hp);
 
 		/*
-			Store the projectile in the array with its slot depending on projectile ID.
+			Store the projectile in the array
 		 */
+		if (cerberusProjectiles.contains(projectile))
+		{
+			return;
+		}
+		else
+		{
+			cerberusProjectiles.add(projectile);
+		}
+
 		switch (projectile.getId())
 		{
 			case PROJECTILE_ID_MAGIC:
-				if ((projectilesArray[0] == null) || (projectile.getStartCycle() > projectilesArray[0].getProjectile().getStartCycle()))
-				{
-					projectilesArray[0] = new Missile(projectile);
-				}
-				else
-				{
-					return;
-				}
-
 				log.debug("gameTick={}, attack={}, cerbHp={}, expectedAttack={}, cerbProjectile={}", gameTick, cerberus.getPhaseCount() + 1, hp, expectedAttack, "MAGIC");
 				if (expectedAttack != Phase.TRIPLE)
 				{
@@ -390,15 +384,6 @@ public class CerberusPlugin extends Plugin
 				cerberus.doProjectileOrAnimation(gameTick, Cerberus.Attack.MAGIC);
 				break;
 			case PROJECTILE_ID_RANGE:
-				if ((projectilesArray[1] == null) || (projectile.getStartCycle() > projectilesArray[1].getProjectile().getStartCycle()))
-				{
-					projectilesArray[1] = new Missile(projectile);
-				}
-				else
-				{
-					return;
-				}
-
 				log.debug("gameTick={}, attack={}, cerbHp={}, expectedAttack={}, cerbProjectile={}", gameTick, cerberus.getPhaseCount() + 1, hp, expectedAttack, "RANGED");
 				if (expectedAttack != Phase.TRIPLE)
 				{
@@ -412,68 +397,25 @@ public class CerberusPlugin extends Plugin
 				cerberus.doProjectileOrAnimation(gameTick, Cerberus.Attack.RANGED);
 				break;
 			case GHOST_PROJECTILE_ID_RANGE:
-				if ((projectilesArray[2] == null) || (projectile.getStartCycle() > projectilesArray[2].getProjectile().getStartCycle()))
-				{
-					projectilesArray[2] = new Missile(projectile);
-				}
-				else
-				{
-					return;
-				}
-
 				if (!ghosts.isEmpty())
 				{
 					log.debug("gameTick={}, attack={}, cerbHp={}, expectedAttack={}, ghostProjectile={}", gameTick, cerberus.getPhaseCount() + 1, hp, expectedAttack, "RANGED");
 				}
 				break;
 			case GHOST_PROJECTILE_ID_MAGIC:
-				if ((projectilesArray[3] == null) || (projectile.getStartCycle() > projectilesArray[3].getProjectile().getStartCycle()))
-				{
-					projectilesArray[3] = new Missile(projectile);
-				}
-				else
-				{
-					return;
-				}
-
 				if (!ghosts.isEmpty())
 				{
 					log.debug("gameTick={}, attack={}, cerbHp={}, expectedAttack={}, ghostProjectile={}", gameTick, cerberus.getPhaseCount() + 1, hp, expectedAttack, "MAGIC");
 				}
 				break;
 			case GHOST_PROJECTILE_ID_MELEE:
-				if ((projectilesArray[4] == null) || (projectile.getStartCycle() > projectilesArray[4].getProjectile().getStartCycle()))
-				{
-					projectilesArray[4] = new Missile(projectile);
-				}
-				else
-				{
-					return;
-				}
-
 				if (!ghosts.isEmpty())
 				{
 					log.debug("gameTick={}, attack={}, cerbHp={}, expectedAttack={}, ghostProjectile={}", gameTick, cerberus.getPhaseCount() + 1, hp, expectedAttack, "MELEE");
 				}
 				break;
 			case PROJECTILE_ID_NO_FUCKING_IDEA:
-				if ((projectilesArray[5] == null) || (projectile.getStartCycle() > projectilesArray[5].getProjectile().getStartCycle()))
-				{
-					projectilesArray[5] = new Missile(projectile);
-				}
-				else
-				{
-					return;
-				}
 			case PROJECTILE_ID_LAVA: //Lava
-				if ((projectilesArray[6] == null) || (projectile.getStartCycle() > projectilesArray[6].getProjectile().getStartCycle()))
-				{
-					projectilesArray[6] = new Missile(projectile);
-				}
-				else
-				{
-					return;
-				}
 			default:
 				break;
 		}
