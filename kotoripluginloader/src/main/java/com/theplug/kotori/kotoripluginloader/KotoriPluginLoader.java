@@ -26,7 +26,7 @@ import java.util.List;
 
 @PluginDescriptor(
         name = "Kotori Plugin Loader",
-        enabledByDefault = false,
+        enabledByDefault = true,
         description = "Plugin loader for Kotori's ported plugins.",
         tags = {"kotori","ported","loader"}
 )
@@ -117,11 +117,33 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
             return false;
         }
         String loaderVersionOnInfoJson = infoJsonObject.getKotoriLoaderVersion();
-        if (loaderVersionOnInfoJson.equals(currentLoaderVersion))
+        String loaderVersionOnGitHub = pluginsJsonList.get(pluginsJsonList.indexOf("Kotori Plugin Loader")+3);
+        String[] pluginVersionSplit = currentLoaderVersion.split("\\.");
+        String[] infoJsonVersionSplit = loaderVersionOnInfoJson.split("\\.");
+        String[] githubVersionSplit = loaderVersionOnGitHub.split("\\.");
+
+        //Check local major version number, logic is if local major is equal or greater, then continue on, else its an older version
+        if ((Integer.parseInt(pluginVersionSplit[0]) < Integer.parseInt(infoJsonVersionSplit[0]))
+            || (Integer.parseInt(pluginVersionSplit[0]) < Integer.parseInt(githubVersionSplit[0])))
+        {
+            return false;
+        }
+        //Check local minor version number, logic is if local minor is equal or greater, then continue on, else its an older version
+        else if ((Integer.parseInt(pluginVersionSplit[1]) < Integer.parseInt(infoJsonVersionSplit[1]))
+                    || (Integer.parseInt(pluginVersionSplit[1]) < Integer.parseInt(githubVersionSplit[1])))
+        {
+            return false;
+        }
+        //Check local patch version number, logic is if local patch is equal or greater, then continue on, else its an older version
+        else if ((Integer.parseInt(pluginVersionSplit[2]) < Integer.parseInt(infoJsonVersionSplit[2]))
+                || (Integer.parseInt(pluginVersionSplit[2]) < Integer.parseInt(githubVersionSplit[2])))
+        {
+            return false;
+        }
+        else
         {
             return true;
         }
-        return false;
     }
 
     private void loaderOutdatedPopUp()
@@ -709,6 +731,9 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
         {
             if (config.manualLoad())
             {
+                parseInfoJsonFile();
+                parsePluginsJsonFile();
+                parsePluginsInfo();
                 //Rebuild Load List
                 clearBuiltPluginLoadLists();
                 loadPluginsSequence();
