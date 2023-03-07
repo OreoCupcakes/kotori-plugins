@@ -113,8 +113,12 @@ class HouseOverlayOverlay extends Overlay {
             }
 
             //GameObjectQuery.results() function; DecorativeObjectQuery.results() function
-            Collection<GameObject> gameObjectCollectionFiltered = gameObjectCollection.stream().filter(Objects::nonNull).distinct().collect(Collectors.toList());
-            Collection<DecorativeObject> decorativeObjectCollectionFiltered = decorativeObjectCollection.stream().filter(Objects::nonNull).distinct().collect(Collectors.toList());
+            Collection<GameObject> gameObjectCollectionFiltered = gameObjectCollection.stream().filter(Objects::nonNull)
+                    .filter(p -> p.getWorldLocation().getRegionID() == 7769 || p.getWorldLocation().getRegionID() == 7513 || p.getWorldLocation().getRegionID() == 8025 )
+                    .distinct().collect(Collectors.toList());
+            Collection<DecorativeObject> decorativeObjectCollectionFiltered = decorativeObjectCollection.stream().filter(Objects::nonNull)
+                    .filter(p -> p.getWorldLocation().getRegionID() == 7769 || p.getWorldLocation().getRegionID() == 7513 || p.getWorldLocation().getRegionID() == 8025)
+                    .distinct().collect(Collectors.toList());
 
             for (final GameObject gameObject : gameObjectCollectionFiltered)
             {
