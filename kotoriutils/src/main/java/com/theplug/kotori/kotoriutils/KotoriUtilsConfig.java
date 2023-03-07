@@ -9,7 +9,7 @@ import net.runelite.client.config.ConfigSection;
 public interface KotoriUtilsConfig extends Config
 {
     @ConfigSection(
-            name = "<html>Kotori Plugin Utils<br>Version 1.0.1</html>",
+            name = "<html>Kotori Plugin Utils<br>Version 1.0.2</html>",
             description = "",
             position = -1,
             closedByDefault = true
@@ -17,10 +17,10 @@ public interface KotoriUtilsConfig extends Config
     String versionInfo = "Version";
 
     @ConfigItem(
-            keyName = "randomTextToShowVersion",
-            name = "",
-            description = "",
-            section = versionInfo
+            keyName = "clickToLoadHooks",
+            name = "Click to Load Hooks",
+            description = "<html>If you failed to download the necessary game hooks on startup," +
+                    "<br>click the checkbox to try again.</html>"
     )
-    default String randomTextToShowVersion() { return ""; }
+    default boolean clickToLoadHooks() { return false; }
 }
