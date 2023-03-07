@@ -35,7 +35,7 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
 {
     final private String pluginsJsonURL = "https://github.com/OreoCupcakes/kotori-plugins-releases/blob/master/plugins.json?raw=true";
     final private String infoJsonURL = "https://github.com/OreoCupcakes/kotori-plugins-releases/blob/master/info.json?raw=true";
-    final private String currentLoaderVersion = "1.0.1";
+    final private String currentLoaderVersion = "1.0.2";
 
     @Inject
     private Client client;
@@ -116,25 +116,23 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
         {
             return false;
         }
-        String loaderVersionOnInfoJson = infoJsonObject.getKotoriLoaderVersion();
-        String loaderVersionOnGitHub = pluginsJsonList.get(pluginsJsonList.indexOf("Kotori Plugin Loader")+3);
         String[] pluginVersionSplit = currentLoaderVersion.split("\\.");
-        String[] infoJsonVersionSplit = loaderVersionOnInfoJson.split("\\.");
-        String[] githubVersionSplit = loaderVersionOnGitHub.split("\\.");
+        String[] infoJsonVersionSplit = infoJsonObject.getKotoriLoaderVersion().split("\\.");
+        String[] githubVersionSplit = pluginsJsonList.get(pluginsJsonList.indexOf("Kotori Plugin Loader")+3).split("\\.");
 
-        //Check local major version number, logic is if local major is equal or greater, then continue on, else its an older version
+        //Check local major version number, logic is if local major is equal or greater, then continue on, else it's an older version
         if ((Integer.parseInt(pluginVersionSplit[0]) < Integer.parseInt(infoJsonVersionSplit[0]))
             || (Integer.parseInt(pluginVersionSplit[0]) < Integer.parseInt(githubVersionSplit[0])))
         {
             return false;
         }
-        //Check local minor version number, logic is if local minor is equal or greater, then continue on, else its an older version
+        //Check local minor version number, logic is if local minor is equal or greater, then continue on, else it's an older version
         else if ((Integer.parseInt(pluginVersionSplit[1]) < Integer.parseInt(infoJsonVersionSplit[1]))
                     || (Integer.parseInt(pluginVersionSplit[1]) < Integer.parseInt(githubVersionSplit[1])))
         {
             return false;
         }
-        //Check local patch version number, logic is if local patch is equal or greater, then continue on, else its an older version
+        //Check local patch version number, logic is if local patch is equal or greater, then continue on, else it's an older version
         else if ((Integer.parseInt(pluginVersionSplit[2]) < Integer.parseInt(infoJsonVersionSplit[2]))
                 || (Integer.parseInt(pluginVersionSplit[2]) < Integer.parseInt(githubVersionSplit[2])))
         {
@@ -150,10 +148,10 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
     {
         String loaderOutdatedMsg = "<html>Kotori Plugin Loader is outdated. You are using version " + currentLoaderVersion + "."
                 + "<br>Please download version " + pluginsJsonList.get(pluginsJsonList.indexOf("Kotori Plugin Loader")+3)
-                + " from https://discord.gg/cuell</html>";
+                + " from https://discord.gg/cuell or https://discord.gg/shismo</html>";
 
         SwingUtilities.invokeLater(() ->
-                JOptionPane.showMessageDialog(client.getCanvas(), loaderOutdatedMsg, infoJsonObject.getLoaderPopUpTitle(), JOptionPane.WARNING_MESSAGE));
+                JOptionPane.showMessageDialog(client.getCanvas(),loaderOutdatedMsg,"Kotori Plugin Loader", JOptionPane.WARNING_MESSAGE));
     }
 
     private void revisionOutdatedPopUp()
@@ -161,10 +159,10 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
         String revisionOutdatedMsg = "<html>Oldschool Runescape has updated its game files." +
                 "<br>The detected game revision is: " + client.getRevision() + "." +
                 "<br>Some plugins were built for game revision: " + infoJsonObject.getGameRevision() + "." +
-                "<br><b><u>AS SUCH THOSE PLUGINS WILL NOT LOAD UNTIL THEY GET UPDATED!</b></u>" + "</html>";
+                "<br><b><u><div style='color:yellow'>AS SUCH THOSE PLUGINS WILL NOT LOAD UNTIL THEY GET UPDATED!</div></b></u>" + "</html>";
 
         SwingUtilities.invokeLater(() ->
-                JOptionPane.showMessageDialog(client.getCanvas(), revisionOutdatedMsg,infoJsonObject.getLoaderPopUpTitle(),JOptionPane.WARNING_MESSAGE));
+                JOptionPane.showMessageDialog(client.getCanvas(),revisionOutdatedMsg,"Kotori Plugin Loader",JOptionPane.WARNING_MESSAGE));
     }
 
     private void tutorialMessagePopUp()
@@ -172,7 +170,11 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
         if (!config.disableTutorialMsg())
         {
             SwingUtilities.invokeLater(() ->
-                    JOptionPane.showMessageDialog(client.getCanvas(), infoJsonObject.getLoaderTutorialMessage(), infoJsonObject.getLoaderPopUpTitle(),
+                    JOptionPane.showMessageDialog(client.getCanvas()
+                            ,"<html>You can choose which plugins to load and when to load them." +
+                                    "<br>Please go to Kotori Plugin Loader plugin configuration menu to do so." +
+                                    "<br>Disable this message from showing on each startup by clicking \"Disable Tutorial Message\" in the settings.</html>"
+                            ,"Kotori Plugin Loader",
                             JOptionPane.INFORMATION_MESSAGE));
         }
     }
@@ -183,7 +185,7 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
         {
             SwingUtilities.invokeLater(() ->
                     JOptionPane.showMessageDialog(client.getCanvas(), "Your selected plugins have loaded.",
-                            infoJsonObject.getLoaderPopUpTitle(), JOptionPane.INFORMATION_MESSAGE));
+                            "Kotori Plugin Loader", JOptionPane.INFORMATION_MESSAGE));
         }
     }
 
@@ -212,35 +214,69 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
 
     private void parseInfoJsonFile()
     {
-        try
+        if (infoJsonObject != null)
         {
-            if (infoJsonObject == null)
+            return;
+        }
+
+        for (int i = 1; i < 16; i++)
+        {
+            try
             {
                 URL infoJsonFile = new URL(infoJsonURL);
                 BufferedReader infoReader = new BufferedReader(new InputStreamReader(infoJsonFile.openStream()));
                 infoJsonObject = gson.fromJson(infoReader, Info.class);
+                break;
             }
-        }
-        catch (Exception e)
-        {
-            log.error("Unable to get Info.json from URL and parse it.", e);
+            catch (Exception e)
+            {
+                log.error("Attempt #" + i + ". Unable to get Info.json from URL and parse it. Retrying...", e);
+
+                if (i == 15)
+                {
+                    SwingUtilities.invokeLater(() ->
+                            JOptionPane.showMessageDialog(client.getCanvas(),
+                                    "<html>Connection error. Unable to download necessary loader information from the Internet." +
+                                            "<br>Make sure you are connected to the Internet. Go to Kotori Plugin Loader's configuration and retry" +
+                                            "<br>establishing a connection by clicking the \"Click to Load Plugins\" button until plugins loads.</html>"
+                                    , "Kotori Plugin Loader",JOptionPane.WARNING_MESSAGE));
+                    return;
+                }
+            }
         }
     }
 
     private void parsePluginsJsonFile()
     {
-        try
+        if (pluginsJsonObjects != null)
         {
-            if (pluginsJsonObjects == null)
+            return;
+        }
+
+        for (int i = 1; i < 16; i++)
+        {
+            try
             {
                 URL pluginsJsonFile = new URL(pluginsJsonURL);
                 BufferedReader pluginsReader = new BufferedReader(new InputStreamReader(pluginsJsonFile.openStream()));
                 pluginsJsonObjects = gson.fromJson(pluginsReader, Plugin[].class);
+                break;
             }
-        }
-        catch (Exception e)
-        {
-            log.error("Unable to get Plugins.json from URL and parse it.", e);
+            catch (Exception e)
+            {
+                log.error("Attempt #" + i + ". Unable to get Plugins.json from URL and parse it. Retrying...", e);
+
+                if (i == 15)
+                {
+                    SwingUtilities.invokeLater(() ->
+                            JOptionPane.showMessageDialog(client.getCanvas(),
+                                    "<html>Connection error. Unable to download necessary plugin information from the Internet." +
+                                            "<br>Make sure you are connected to the Internet. Go to Kotori Plugin Loader's configuration and retry" +
+                                            "<br>establishing a connection by clicking the \"Click to Load Plugins\" button until plugins loads.</html>"
+                                    , "Kotori Plugin Loader",JOptionPane.WARNING_MESSAGE));
+                    return;
+                }
+            }
         }
     }
 
@@ -731,11 +767,12 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
         {
             if (config.manualLoad())
             {
+                clearBuiltPluginLoadLists();
+                //Get necessary json files manually if people have connection errors when auto-loading
                 parseInfoJsonFile();
                 parsePluginsJsonFile();
                 parsePluginsInfo();
                 //Rebuild Load List
-                clearBuiltPluginLoadLists();
                 loadPluginsSequence();
                 setConfigItem("manualLoad", "false");
                 eventBus.post(new ProfileChanged());

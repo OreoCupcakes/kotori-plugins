@@ -1,6 +1,4 @@
 {
   "gameRevision": "211",
-  "kotoriLoaderVersion": "1.0.1",
-  "loaderPopUpTitle": "Kotori Plugin Loader",
-  "loaderTutorialMessage": "<html>You can choose which plugins to load and when to load them.<br>Please go to Kotori Plugin Loader plugin configuration menu to do so.<br>Disable this message from showing on each startup by clicking \"Disable Tutorial Message\" in the settings.</html>"
+  "kotoriLoaderVersion": "1.0.2"
 }

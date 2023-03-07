@@ -8,8 +8,4 @@ public class Info
     private int gameRevision;
     @Getter
     private String kotoriLoaderVersion;
-    @Getter
-    private String loaderPopUpTitle;
-    @Getter
-    private String loaderTutorialMessage;
 }
