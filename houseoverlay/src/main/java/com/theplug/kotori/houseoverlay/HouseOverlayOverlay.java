@@ -114,10 +114,8 @@ class HouseOverlayOverlay extends Overlay {
 
             //GameObjectQuery.results() function; DecorativeObjectQuery.results() function
             Collection<GameObject> gameObjectCollectionFiltered = gameObjectCollection.stream().filter(Objects::nonNull)
-                    .filter(p -> p.getWorldLocation().getRegionID() == 7769 || p.getWorldLocation().getRegionID() == 7513 || p.getWorldLocation().getRegionID() == 8025 )
                     .distinct().collect(Collectors.toList());
             Collection<DecorativeObject> decorativeObjectCollectionFiltered = decorativeObjectCollection.stream().filter(Objects::nonNull)
-                    .filter(p -> p.getWorldLocation().getRegionID() == 7769 || p.getWorldLocation().getRegionID() == 7513 || p.getWorldLocation().getRegionID() == 8025)
                     .distinct().collect(Collectors.toList());
 
             for (final GameObject gameObject : gameObjectCollectionFiltered)
@@ -125,7 +123,7 @@ class HouseOverlayOverlay extends Overlay {
                 lastaction = "";
                 extrainfo = "";
                 int id = gameObject.getId();
-                String name = hotfixednames(id);
+                 String name = hotfixednames(id);
                 if(name.isEmpty()) {
                     name = getname(id);
                     if(name.equals("skip"))
@@ -140,7 +138,109 @@ class HouseOverlayOverlay extends Overlay {
                 {
                     case 29241://Rejuvenate Pool
                     case 40848://Frozen reju Pool
-                    case 33375://Portal Nexus
+                        //Portal Nexus Models
+                    case 27097:
+                    case 33354:
+                    case 33355:
+                    case 33356:
+                    case 33357:
+                    case 33358:
+                    case 33359:
+                    case 33360:
+                    case 33361:
+                    case 33362:
+                    case 33363:
+                    case 33364:
+                    case 33365:
+                    case 33366:
+                    case 33367:
+                    case 33368:
+                    case 33369:
+                    case 33370:
+                    case 33371:
+                    case 33372:
+                    case 33373:
+                    case 33374:
+                    case 33375:
+                    case 33376:
+                    case 33377:
+                    case 33378:
+                    case 33379:
+                    case 33380:
+                    case 33381:
+                    case 33382:
+                    case 33383:
+                    case 33384:
+                    case 33385:
+                    case 33386:
+                    case 33387:
+                    case 33388:
+                    case 33389:
+                    case 33390:
+                    case 33391:
+                    case 33392:
+                    case 33393:
+                    case 33394:
+                    case 33395:
+                    case 33396:
+                    case 33397:
+                    case 33398:
+                    case 33399:
+                    case 33400:
+                    case 33401:
+                    case 33402:
+                    case 33403:
+                    case 33404:
+                    case 33405:
+                    case 33406:
+                    case 33407:
+                    case 33408:
+                    case 33409:
+                    case 33410:
+                    case 33423:
+                    case 33424:
+                    case 33425:
+                    case 33426:
+                    case 33427:
+                    case 33428:
+                    case 33429:
+                    case 33430:
+                    case 33431:
+                    case 37547:
+                    case 37548:
+                    case 37549:
+                    case 37550:
+                    case 37551:
+                    case 37552:
+                    case 37553:
+                    case 37554:
+                    case 37555:
+                    case 37556:
+                    case 37557:
+                    case 37559:
+                    case 37560:
+                    case 37561:
+                    case 37562:
+                    case 37563:
+                    case 37564:
+                    case 37565:
+                    case 37566:
+                    case 37567:
+                    case 37568:
+                    case 37569:
+                    case 37571:
+                    case 37572:
+                    case 37573:
+                    case 37574:
+                    case 37575:
+                    case 37576:
+                    case 37577:
+                    case 37578:
+                    case 37579:
+                    case 37580:
+                    case 41413:
+                    case 41414:
+                    case 41415:
                     case 4525://Exit Portal
                         modelHeight = 65;
                         break;
@@ -183,15 +283,131 @@ class HouseOverlayOverlay extends Overlay {
                 case 29156://Jewelery Box
                     lastaction = def.getActions()[2];
                     break;
-                case 33412://Xerics
+                    //Mounted Xeric's Talisman Options
+                case 33411:
+                case 33412:
+                case 33413:
+                case 33414:
+                case 33415:
+                case 33419:
+                    //Mounted Digsite Pendant Options
                 case 33416://DigSite
+                case 33417://Fossil Island
+                case 33418://Lithkren
+                case 33420://Default
                 case 13523://Glory
-                case 33375://PortalNexus
-                    lastaction = def.getActions()[0];
+                    //Portal Nexus Options
+                case 27097:
+                case 33354:
+                case 33355:
+                case 33356:
+                case 33357:
+                case 33358:
+                case 33359:
+                case 33360:
+                case 33361:
+                case 33362:
+                case 33363:
+                case 33364:
+                case 33365:
+                case 33366:
+                case 33367:
+                case 33368:
+                case 33369:
+                case 33370:
+                case 33371:
+                case 33372:
+                case 33373:
+                case 33374:
+                case 33375:
+                case 33376:
+                case 33377:
+                case 33378:
+                case 33379:
+                case 33380:
+                case 33381:
+                case 33382:
+                case 33383:
+                case 33384:
+                case 33385:
+                case 33386:
+                case 33387:
+                case 33388:
+                case 33389:
+                case 33390:
+                case 33391:
+                case 33392:
+                case 33393:
+                case 33394:
+                case 33395:
+                case 33396:
+                case 33397:
+                case 33398:
+                case 33399:
+                case 33400:
+                case 33401:
+                case 33402:
+                case 33403:
+                case 33404:
+                case 33405:
+                case 33406:
+                case 33407:
+                case 33408:
+                case 33409:
+                case 33410:
+                case 33423:
+                case 33424:
+                case 33425:
+                case 33426:
+                case 33427:
+                case 33428:
+                case 33429:
+                case 33430:
+                case 33431:
+                case 37547:
+                case 37548:
+                case 37549:
+                case 37550:
+                case 37551:
+                case 37552:
+                case 37553:
+                case 37554:
+                case 37555:
+                case 37556:
+                case 37557:
+                case 37559:
+                case 37560:
+                case 37561:
+                case 37562:
+                case 37563:
+                case 37564:
+                case 37565:
+                case 37566:
+                case 37567:
+                case 37568:
+                case 37569:
+                case 37571:
+                case 37572:
+                case 37573:
+                case 37574:
+                case 37575:
+                case 37576:
+                case 37577:
+                case 37578:
+                case 37579:
+                case 37580:
+                case 41413:
+                case 41414:
+                case 41415:
+                    String action = def.getActions()[0];
+                    if (action != null)
+                    {
+                        lastaction = action;
+                    }
                     break;
                 case 29228://Fairy Ring
                 case 29229://Fairy Ring Tree
-                case 40779://Frozen Fariy Ring Tree
+                case 40779://Frozen Fairy Ring Tree
                     for(String getter : def.getActions())
                     {
                         if(getter.toLowerCase().contains("last"))
