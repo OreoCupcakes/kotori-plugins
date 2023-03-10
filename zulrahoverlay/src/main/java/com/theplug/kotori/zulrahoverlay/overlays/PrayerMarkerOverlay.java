@@ -3,6 +3,7 @@ package com.theplug.kotori.zulrahoverlay.overlays;
 import com.theplug.kotori.zulrahoverlay.ZulrahConfig;
 import com.theplug.kotori.zulrahoverlay.ZulrahPlugin;
 import com.theplug.kotori.zulrahoverlay.util.OverlayUtils;
+import com.theplug.kotori.zulrahoverlay.util.PrayerExtended;
 import net.runelite.api.Client;
 import net.runelite.api.Prayer;
 import net.runelite.api.VarClientInt;
@@ -39,7 +40,7 @@ public class PrayerMarkerOverlay extends Overlay
 		{
 			plugin.getZulrahData().forEach((data) -> {
 				data.getCurrentPhasePrayer().ifPresent((prayer) -> {
-					if (client.getVar(VarClientInt.INVENTORY_TAB) == 5)
+					if (client.getVarcIntValue(VarClientInt.INVENTORY_TAB) == 5)
 					{
 						Widget widget = client.getWidget(541, prayerToChildId(prayer));
 						Color color = !client.isPrayerActive(prayer) ? Color.RED : Color.GREEN;
@@ -61,11 +62,9 @@ public class PrayerMarkerOverlay extends Overlay
 		switch (prayer)
 		{
 			case PROTECT_FROM_MELEE:
-				return 23;
 			case PROTECT_FROM_MISSILES:
-				return 22;
 			case PROTECT_FROM_MAGIC:
-				return 21;
+				return PrayerExtended.valueOf(prayer.name()).getPrayerWidgetInfo().getChildId();
 			default:
 				return -1;
 		}

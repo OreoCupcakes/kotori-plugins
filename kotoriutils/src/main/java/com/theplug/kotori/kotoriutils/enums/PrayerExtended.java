@@ -190,7 +190,8 @@ public enum PrayerExtended {
         return Prayer.valueOf(prayerName);
     }
 
-    public static PrayerExtended getPrayerExtended(Prayer prayer) {
-        return PrayerExtended.valueOf(prayer.name());
+    public static int getPrayerWidgetId(Prayer prayer)
+    {
+        return PrayerExtended.valueOf(prayer.name()).getPrayerWidgetInfo().getId();
     }
 }

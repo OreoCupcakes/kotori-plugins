@@ -35,7 +35,7 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
 {
     final private String pluginsJsonURL = "https://github.com/OreoCupcakes/kotori-plugins-releases/blob/master/plugins.json?raw=true";
     final private String infoJsonURL = "https://github.com/OreoCupcakes/kotori-plugins-releases/blob/master/info.json?raw=true";
-    final private String currentLoaderVersion = "1.0.4";
+    final private String currentLoaderVersion = "1.1.0";
 
     @Inject
     private Client client;
@@ -412,6 +412,31 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
         {
             addPluginToLoadLists("Grotesque Guardians");
         }
+
+        if (config.nexExtendedChoice())
+        {
+            addPluginToLoadLists("Nex Extended");
+        }
+
+        if (config.godWarsTickTimersChoice())
+        {
+            addPluginToLoadLists("God Wars Tick Timers");
+        }
+
+        if (config.specBarChoice())
+        {
+            addPluginToLoadLists("Spec Bar");
+        }
+
+        if (config.templeTrekkingChoice())
+        {
+            addPluginToLoadLists("Temple Trekking");
+        }
+
+        if (config.tarnsLairChoice())
+        {
+            addPluginToLoadLists("Tarn's Lair");
+        }
     }
 
     private URL getPluginUrl(String pluginName)
@@ -718,6 +743,11 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
                 setConfigItem("multiIndicatorsChoice", "true");
                 setConfigItem("zulrahOverlayChoice", "true");
                 setConfigItem("grotesqueGuardiansChoice", "true");
+                setConfigItem("nexExtendedChoice", "true");
+                setConfigItem("godWarsTickTimersChoice", "true");
+                setConfigItem("specBarChoice","true");
+                setConfigItem("templeTrekkingChoice","true");
+                setConfigItem("tarnsLairChoice", "true");
 
                 if (config.rlplUser())
                 {
@@ -760,6 +790,11 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
                 setConfigItem("houseOverlayChoice", "false");
                 setConfigItem("zulrahOverlayChoice", "false");
                 setConfigItem("grotesqueGuardiansChoice", "false");
+                setConfigItem("nexExtendedChoice", "false");
+                setConfigItem("godWarsTickTimersChoice", "false");
+                setConfigItem("specBarChoice","false");
+                setConfigItem("templeTrekkingChoice","false");
+                setConfigItem("tarnsLairChoice", "false");
                 setConfigItem("multiIndicatorsChoice", "false");
                 setConfigItem("kotoriUtilsChoice","false");
             }

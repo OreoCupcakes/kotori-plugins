@@ -44,7 +44,7 @@ public interface GrotesqueGuardiansConfig extends Config
 {
 	// Sections
 	@ConfigSection(
-			name = "<html>Grotesque Guardians<br>Version 1.0.2</html>",
+			name = "<html>Grotesque Guardians<br>Version 1.0.3</html>",
 			description = "",
 			position = -1,
 			closedByDefault = true

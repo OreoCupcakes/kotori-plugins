@@ -13,7 +13,7 @@ public interface KotoriPluginLoaderConfig extends Config
 {
     //Sections
     @ConfigSection(
-            name = "<html>Kotori Plugin Loader<br>Version 1.0.4</html>",
+            name = "<html>Kotori Plugin Loader<br>Version 1.1.0</html>",
             description = "",
             position = 0,
             closedByDefault = true
@@ -224,6 +224,46 @@ public interface KotoriPluginLoaderConfig extends Config
             section = pluginsToLoad
     )
     default boolean grotesqueGuardiansChoice() { return false; }
+
+    @ConfigItem(
+            keyName = "nexExtendedChoice",
+            name = "Nex Extended",
+            description = "Load the Nex Extended plugin.",
+            section = pluginsToLoad
+    )
+    default boolean nexExtendedChoice() { return false; }
+
+    @ConfigItem(
+            keyName = "godWarsTickTimersChoice",
+            name = "God Wars Tick Timers",
+            description = "Load the God Wars Tick Timers plugin.",
+            section = pluginsToLoad
+    )
+    default boolean godWarsTickTimersChoice() { return false; }
+
+    @ConfigItem(
+            keyName = "specBarChoice",
+            name = "Spec Bar",
+            description = "Load the Spec Bar plugin.",
+            section = pluginsToLoad
+    )
+    default boolean specBarChoice() { return false; }
+
+    @ConfigItem(
+            keyName = "templeTrekkingChoice",
+            name = "Temple Trekking",
+            description = "Load the Temple Trekking plugin.",
+            section = pluginsToLoad
+    )
+    default boolean templeTrekkingChoice() { return false; }
+
+    @ConfigItem(
+            keyName = "tarnsLairChoice",
+            name = "Tarn's Lair",
+            description = "Load the Tarn's Lair plugin.",
+            section = pluginsToLoad
+    )
+    default boolean tarnsLairChoice() { return false; }
 
     @Getter
     @AllArgsConstructor

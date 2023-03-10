@@ -32,6 +32,7 @@ include(":dagannothkings")
 include(":demonicgorillas")
 include(":effecttimers")
 include(":gauntletextended")
+include(":gwdticktimers")
 include(":hallowedhelper")
 include(":hallowedsepulchre")
 include(":houseoverlay")
@@ -54,3 +55,7 @@ for (project in rootProject.children) {
         require(buildFile.isFile) { "Project '${project.path} must have a $buildFile build script" }
     }
 }
+include("specbar")
+include("templetrekking")
+include("tarnslair")
+include("reorderprayers")

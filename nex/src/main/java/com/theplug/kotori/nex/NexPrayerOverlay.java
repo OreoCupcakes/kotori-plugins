@@ -86,7 +86,7 @@ class NexPrayerOverlay extends Overlay
 
 	private void renderPrayerOverlay(Graphics2D graphics, Client client, Prayer prayer, Color color)
 	{
-		Widget prayerWidget = client.getWidget(PrayerExtended.getPrayerExtended(prayer).getPrayerWidgetInfo().getId());
+		Widget prayerWidget = client.getWidget(PrayerExtended.getPrayerWidgetId(prayer));
 
 		if (prayerWidget == null)
 		{

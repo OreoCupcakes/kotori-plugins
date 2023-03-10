@@ -60,7 +60,7 @@ public class InvokesLibrary {
             return;
         }
 
-        int param1 = PrayerExtended.getPrayerExtended(prayer).getPrayerWidgetInfo().getId();
+        int param1 = PrayerExtended.getPrayerWidgetId(prayer);
 
         switch (prayer.name())
         {
@@ -173,7 +173,7 @@ public class InvokesLibrary {
             return;
         }
 
-        int param1 = PrayerExtended.getPrayerExtended(prayer).getPrayerWidgetInfo().getId();
+        int param1 = PrayerExtended.getPrayerWidgetId(prayer);
 
         switch (prayer.name())
         {
