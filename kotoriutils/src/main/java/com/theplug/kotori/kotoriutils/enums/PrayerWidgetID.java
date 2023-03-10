@@ -24,7 +24,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.theplug.kotori.gauntletextended.utils;
+package com.theplug.kotori.kotoriutils.enums;
 
 public class PrayerWidgetID {
     public static final int PRAYER_GROUP_ID = 541;

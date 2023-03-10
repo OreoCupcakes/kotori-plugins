@@ -61,11 +61,11 @@ public class PrayerMarkerOverlay extends Overlay
 		switch (prayer)
 		{
 			case PROTECT_FROM_MELEE:
-				return 19;
+				return 23;
 			case PROTECT_FROM_MISSILES:
-				return 18;
+				return 22;
 			case PROTECT_FROM_MAGIC:
-				return 17;
+				return 21;
 			default:
 				return -1;
 		}

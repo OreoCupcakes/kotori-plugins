@@ -1,5 +1,6 @@
 package com.theplug.kotori.kotoriutils.libs;
 
+import com.theplug.kotori.kotoriutils.enums.PrayerExtended;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
@@ -59,40 +60,105 @@ public class InvokesLibrary {
             return;
         }
 
+        int param1 = PrayerExtended.getPrayerExtended(prayer).getPrayerWidgetInfo().getId();
+
         switch (prayer.name())
         {
+            case "THICK_SKIN":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Activate", "<col=ff9040>Thick Skin</col>", 0, 0);
+                break;
+            case "BURST_OF_STRENGTH":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Activate", "<col=ff9040>Burst of Strength</col>", 0, 0);
+                break;
+            case "CLARITY_OF_THOUGHT":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Activate", "<col=ff9040>Clarity of Thought</col>", 0, 0);
+                break;
+            case "ROCK_SKIN":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Activate", "<col=ff9040>Rock Skin</col>", 0, 0);
+                break;
+            case "SUPERHUMAN_STRENGTH":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Activate", "<col=ff9040>Superhuman Strength</col>", 0, 0);
+                break;
+            case "IMPROVED_REFLEXES":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Activate", "<col=ff9040>Improved Reflexes</col>", 0, 0);
+                break;
+            case "RAPID_RESTORE":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Activate", "<col=ff9040>Rapid Restore</col>", 0, 0);
+                break;
+            case "RAPID_HEAL":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Activate", "<col=ff9040>Rapid Heal</col>", 0, 0);
+                break;
+            case "PROTECT_ITEM":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Activate", "<col=ff9040>Protect Item</col>", 0, 0);
+                break;
+            case "STEEL_SKIN":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Activate", "<col=ff9040>Steel Skin</col>", 0, 0);
+                break;
+            case "ULTIMATE_STRENGTH":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Activate", "<col=ff9040>Ultimate Strength</col>", 0, 0);
+                break;
+            case "INCREDIBLE_REFLEXES":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Activate", "<col=ff9040>Incredible Reflexes</col>", 0, 0);
+                break;
             case "PROTECT_FROM_MAGIC":
-                //Invokes Protect from Magic
-                invoke(-1, 35454993, MenuAction.CC_OP.getId(), 1, -1, "Activate", "<col=ff9040>Protect from Magic</col>", 0, 0);
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Activate", "<col=ff9040>Protect from Magic</col>", 0, 0);
                 break;
             case "PROTECT_FROM_MISSILES":
-                //Invokes Protect from Missiles
-                invoke(-1, 35454994, MenuAction.CC_OP.getId(), 1, -1, "Activate", "<col=ff9040>Protect from Missiles</col>", 0, 0);
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Activate", "<col=ff9040>Protect from Missiles</col>", 0, 0);
                 break;
             case "PROTECT_FROM_MELEE":
-                //Invokes Protect from Melee
-                invoke(-1, 35454995, MenuAction.CC_OP.getId(), 1, -1, "Activate", "<col=ff9040>Protect from Melee</col>", 0, 0);
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Activate", "<col=ff9040>Protect from Melee</col>", 0, 0);
+                break;
+            case "RETRIBUTION":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Activate", "<col=ff9040>Retribution</col>", 0, 0);
+                break;
+            case "REDEMPTION":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Activate", "<col=ff9040>Redemption</col>", 0, 0);
+                break;
+            case "SMITE":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Activate", "<col=ff9040>Smite</col>", 0, 0);
+                break;
+            case "SHARP_EYE":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Activate", "<col=ff9040>Sharp Eye</col>", 0, 0);
+                break;
+            case "MYSTIC_WILL":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Activate", "<col=ff9040>Mystic Will</col>", 0, 0);
+                break;
+            case "HAWK_EYE":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Activate", "<col=ff9040>Hawk Eye</col>", 0, 0);
+                break;
+            case "MYSTIC_LORE":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Activate", "<col=ff9040>Mystic Lore</col>", 0, 0);
+                break;
+            case "EAGLE_EYE":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Activate", "<col=ff9040>Mystic Might</col>", 0, 0);
+                break;
+            case "MYSTIC_MIGHT":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Activate", "<col=ff9040>Eagle Eye</col>", 0, 0);
+                break;
+            case "CHIVALRY":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Activate", "<col=ff9040>Chivalry</col>", 0, 0);
                 break;
             case "PIETY":
-                invoke(-1, 35455006, MenuAction.CC_OP.getId(), 1, -1, "Activate", "<col=ff9040>Piety</col>", 0, 0);
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Activate", "<col=ff9040>Piety</col>", 0, 0);
                 break;
             case "RIGOUR":
                 if (client.getVarbitValue(5451) == 1)
                 {
-                    invoke(-1, 35455007, MenuAction.CC_OP.getId(), 1, -1, "Activate", "<col=ff9040>Rigour</col>", 0, 0);
+                    invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Activate", "<col=ff9040>Rigour</col>", 0, 0);
                 }
                 break;
             case "AUGURY":
                 if (client.getVarbitValue(5452) == 1)
                 {
-                    invoke(-1, 35455008, MenuAction.CC_OP.getId(), 1, -1, "Activate", "<col=ff9040>Augury</col>", 0, 0);
+                    invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Activate", "<col=ff9040>Augury</col>", 0, 0);
                 }
                 break;
-            case "EAGLE_EYE":
-                invoke(-1, 35455003, MenuAction.CC_OP.getId(), 1, -1, "Activate", "<col=ff9040>Mystic Might</col>", 0, 0);
-                break;
-            case "MYSTIC_MIGHT":
-                invoke(-1, 35455004, MenuAction.CC_OP.getId(), 1, -1, "Activate", "<col=ff9040>Eagle Eye</col>", 0, 0);
+            case "PRESERVE":
+                if (client.getVarbitValue(5453) == 1)
+                {
+                    invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Activate", "<col=ff9040>Preserve</col>", 0, 0);
+                }
                 break;
             default:
                 break;
@@ -107,40 +173,105 @@ public class InvokesLibrary {
             return;
         }
 
+        int param1 = PrayerExtended.getPrayerExtended(prayer).getPrayerWidgetInfo().getId();
+
         switch (prayer.name())
         {
+            case "THICK_SKIN":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Thick Skin</col>", 0, 0);
+                break;
+            case "BURST_OF_STRENGTH":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Burst of Strength</col>", 0, 0);
+                break;
+            case "CLARITY_OF_THOUGHT":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Clarity of Thought</col>", 0, 0);
+                break;
+            case "ROCK_SKIN":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Rock Skin</col>", 0, 0);
+                break;
+            case "SUPERHUMAN_STRENGTH":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Superhuman Strength</col>", 0, 0);
+                break;
+            case "IMPROVED_REFLEXES":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Improved Reflexes</col>", 0, 0);
+                break;
+            case "RAPID_RESTORE":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Rapid Restore</col>", 0, 0);
+                break;
+            case "RAPID_HEAL":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Rapid Heal</col>", 0, 0);
+                break;
+            case "PROTECT_ITEM":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Protect Item</col>", 0, 0);
+                break;
+            case "STEEL_SKIN":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Steel Skin</col>", 0, 0);
+                break;
+            case "ULTIMATE_STRENGTH":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Ultimate Strength</col>", 0, 0);
+                break;
+            case "INCREDIBLE_REFLEXES":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Incredible Reflexes</col>", 0, 0);
+                break;
             case "PROTECT_FROM_MAGIC":
-                //Invokes Protect from Magic
-                invoke(-1, 35454993, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Protect from Magic</col>", 0, 0);
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Protect from Magic</col>", 0, 0);
                 break;
             case "PROTECT_FROM_MISSILES":
-                //Invokes Protect from Missiles
-                invoke(-1, 35454994, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Protect from Missiles</col>", 0, 0);
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Protect from Missiles</col>", 0, 0);
                 break;
             case "PROTECT_FROM_MELEE":
-                //Invokes Protect from Melee
-                invoke(-1, 35454995, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Protect from Melee</col>", 0, 0);
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Protect from Melee</col>", 0, 0);
+                break;
+            case "RETRIBUTION":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Retribution</col>", 0, 0);
+                break;
+            case "REDEMPTION":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Redemption</col>", 0, 0);
+                break;
+            case "SMITE":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Smite</col>", 0, 0);
+                break;
+            case "SHARP_EYE":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Sharp Eye</col>", 0, 0);
+                break;
+            case "MYSTIC_WILL":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Mystic Will</col>", 0, 0);
+                break;
+            case "HAWK_EYE":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Hawk Eye</col>", 0, 0);
+                break;
+            case "MYSTIC_LORE":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Mystic Lore</col>", 0, 0);
+                break;
+            case "EAGLE_EYE":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Mystic Might</col>", 0, 0);
+                break;
+            case "MYSTIC_MIGHT":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Eagle Eye</col>", 0, 0);
+                break;
+            case "CHIVALRY":
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Chivalry</col>", 0, 0);
                 break;
             case "PIETY":
-                invoke(-1, 35455006, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Piety</col>", 0, 0);
+                invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Piety</col>", 0, 0);
                 break;
             case "RIGOUR":
                 if (client.getVarbitValue(5451) == 1)
                 {
-                    invoke(-1, 35455007, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Rigour</col>", 0, 0);
+                    invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Rigour</col>", 0, 0);
                 }
                 break;
             case "AUGURY":
                 if (client.getVarbitValue(5452) == 1)
                 {
-                    invoke(-1, 35455008, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Augury</col>", 0, 0);
+                    invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Augury</col>", 0, 0);
                 }
                 break;
-            case "EAGLE_EYE":
-                invoke(-1, 35455003, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Mystic Might</col>", 0, 0);
-                break;
-            case "MYSTIC_MIGHT":
-                invoke(-1, 35455004, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Eagle Eye</col>", 0, 0);
+            case "PRESERVE":
+                if (client.getVarbitValue(5453) == 1)
+                {
+                    invoke(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "Deactivate", "<col=ff9040>Preserve</col>", 0, 0);
+                }
                 break;
             default:
                 break;

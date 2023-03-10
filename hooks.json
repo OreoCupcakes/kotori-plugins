@@ -19,6 +19,6 @@
   "menuEntryParam1ArrayFieldHook": "client.nc",
   "menuEntryTargetsArrayFieldHook": "client.om",
   "menuEntryTypesArrayFieldHook": "client.ni",
-  "getActorAnimationIdFieldHook": "dq.cs",
+  "getActorAnimationIdFieldHook": "dq.cf",
   "getActorAnimationIdMultiplier": "-2121799935"
 }

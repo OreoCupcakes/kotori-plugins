@@ -56,6 +56,7 @@ public enum PrayerWidgetInfo {
     PRAYER_PIETY(PrayerWidgetID.PRAYER_GROUP_ID, PrayerWidgetID.Prayer.PIETY),
     PRAYER_RIGOUR(PrayerWidgetID.PRAYER_GROUP_ID, PrayerWidgetID.Prayer.RIGOUR),
     PRAYER_AUGURY(PrayerWidgetID.PRAYER_GROUP_ID, PrayerWidgetID.Prayer.AUGURY),
+    QUICK_PRAYER_PRAYERS(PrayerWidgetID.QUICK_PRAYERS_GROUP_ID, PrayerWidgetID.QuickPrayer.PRAYERS)
     ;
 
     private final int groupId;

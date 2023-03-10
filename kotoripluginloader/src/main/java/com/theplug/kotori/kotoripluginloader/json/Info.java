@@ -8,4 +8,6 @@ public class Info
     private int gameRevision;
     @Getter
     private String kotoriLoaderVersion;
+    @Getter
+    private boolean preventLoadOfPlugins;
 }

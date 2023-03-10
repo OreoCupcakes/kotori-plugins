@@ -189,4 +189,8 @@ public enum PrayerExtended {
         prayerName = prayerName.substring(7,prayerName.length());
         return Prayer.valueOf(prayerName);
     }
+
+    public static PrayerExtended getPrayerExtended(Prayer prayer) {
+        return PrayerExtended.valueOf(prayer.name());
+    }
 }

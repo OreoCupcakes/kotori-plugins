@@ -24,7 +24,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.theplug.kotori.alchemicalhydra.utils;
+package com.theplug.kotori.kotoriutils.enums;
 
 public enum PrayerWidgetInfo {
     PRAYER_THICK_SKIN(PrayerWidgetID.PRAYER_GROUP_ID, PrayerWidgetID.Prayer.THICK_SKIN),

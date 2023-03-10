@@ -1,4 +1,5 @@
 {
   "gameRevision": "212",
-  "kotoriLoaderVersion": "1.0.2"
+  "kotoriLoaderVersion": "1.0.3",
+  "preventLoadOfPlugins": "false"
 }

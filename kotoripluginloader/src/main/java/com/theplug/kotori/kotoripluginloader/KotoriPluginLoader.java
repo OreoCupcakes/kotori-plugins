@@ -301,6 +301,10 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
 
     private void buildPluginsLoadList()
     {
+        if (infoJsonObject.isPreventLoadOfPlugins())
+        {
+            return;
+        }
         //Plugin Choices That Require KotoriUtils and will break on a game revision update.
         if (checkGameRevision())
         {
