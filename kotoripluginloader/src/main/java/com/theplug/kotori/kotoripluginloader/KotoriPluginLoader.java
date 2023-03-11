@@ -442,6 +442,11 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
         {
             addPluginToLoadLists("Reorder Prayers");
         }
+
+        if (config.nightmareChoice())
+        {
+            addPluginToLoadLists("Nightmare");
+        }
     }
 
     private URL getPluginUrl(String pluginName)
@@ -754,6 +759,7 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
                 setConfigItem("templeTrekkingChoice","true");
                 setConfigItem("tarnsLairChoice", "true");
                 setConfigItem("reorderPrayersChoice", "true");
+                setConfigItem("nightmareChoice", "true");
 
                 if (config.rlplUser())
                 {
@@ -802,6 +808,7 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
                 setConfigItem("templeTrekkingChoice","false");
                 setConfigItem("tarnsLairChoice", "false");
                 setConfigItem("reorderPrayersChoice", "false");
+                setConfigItem("nightmareChoice", "false");
                 setConfigItem("multiIndicatorsChoice", "false");
                 setConfigItem("kotoriUtilsChoice","false");
             }

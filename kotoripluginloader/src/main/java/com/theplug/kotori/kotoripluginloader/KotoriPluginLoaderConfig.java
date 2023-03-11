@@ -273,6 +273,14 @@ public interface KotoriPluginLoaderConfig extends Config
     )
     default boolean reorderPrayersChoice() { return false; }
 
+    @ConfigItem(
+            keyName = "nightmareChoice",
+            name = "Nightmare",
+            description = "Load the Nightmare plugin.",
+            section = pluginsToLoad
+    )
+    default boolean nightmareChoice() { return false; }
+
     @Getter
     @AllArgsConstructor
     enum loadChoice
