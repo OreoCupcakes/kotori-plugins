@@ -46,7 +46,7 @@ import net.runelite.client.ui.overlay.OverlayManager;
 	name = "Tarn's Lair",
 	enabledByDefault = false,
 	description = "Mark tiles and clickboxes to help traverse the maze.",
-	tags = {"agility", "maze", "minigame", "overlay"}
+	tags = {"agility", "maze", "minigame", "overlay", "ported", "kotori"}
 )
 @Slf4j
 public class TarnsLairPlugin extends Plugin

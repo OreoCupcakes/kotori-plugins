@@ -39,9 +39,7 @@ import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
-import org.pf4j.Extension;
 
-@Extension
 @PluginDescriptor(
 	name = "Temple Trekking",
 	enabledByDefault = false,

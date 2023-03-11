@@ -28,10 +28,18 @@ import net.runelite.api.Prayer;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
+import net.runelite.client.config.ConfigSection;
 
 @ConfigGroup(ReorderPrayersPlugin.CONFIG_GROUP_KEY)
 public interface ReorderPrayersConfig extends Config
 {
+	@ConfigSection(
+			name = "<html>Reorder Prayers<br>Version 1.1.0</html>",
+			description = "",
+			position = 0,
+			closedByDefault = true
+	)
+	String versionInfo = "Loader Version";
 
 	@ConfigItem(
 		keyName = ReorderPrayersPlugin.CONFIG_UNLOCK_REORDERING_KEY,

@@ -437,6 +437,11 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
         {
             addPluginToLoadLists("Tarn's Lair");
         }
+
+        if (config.reorderPrayersChoice())
+        {
+            addPluginToLoadLists("Reorder Prayers");
+        }
     }
 
     private URL getPluginUrl(String pluginName)
@@ -748,6 +753,7 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
                 setConfigItem("specBarChoice","true");
                 setConfigItem("templeTrekkingChoice","true");
                 setConfigItem("tarnsLairChoice", "true");
+                setConfigItem("reorderPrayersChoice", "true");
 
                 if (config.rlplUser())
                 {
@@ -795,6 +801,7 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
                 setConfigItem("specBarChoice","false");
                 setConfigItem("templeTrekkingChoice","false");
                 setConfigItem("tarnsLairChoice", "false");
+                setConfigItem("reorderPrayersChoice", "false");
                 setConfigItem("multiIndicatorsChoice", "false");
                 setConfigItem("kotoriUtilsChoice","false");
             }

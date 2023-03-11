@@ -265,6 +265,14 @@ public interface KotoriPluginLoaderConfig extends Config
     )
     default boolean tarnsLairChoice() { return false; }
 
+    @ConfigItem(
+            keyName = "reorderPrayersChoice",
+            name = "Reorder Prayers",
+            description = "Load the Reorder Prayers plugin.",
+            section = pluginsToLoad
+    )
+    default boolean reorderPrayersChoice() { return false; }
+
     @Getter
     @AllArgsConstructor
     enum loadChoice

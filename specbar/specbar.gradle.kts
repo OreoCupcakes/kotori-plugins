@@ -23,7 +23,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "1.0.0"
+version = "1.1.0"
 
 project.extra["PluginName"] = "Spec Bar" // This is the name that is used in the external plugin manager panel
 project.extra["PluginDescription"] = "Adds a spec bar to every weapon." // This is the description that is used in the external plugin manager panel

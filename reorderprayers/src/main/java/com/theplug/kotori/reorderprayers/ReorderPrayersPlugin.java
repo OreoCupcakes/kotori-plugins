@@ -31,32 +31,26 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
-import net.runelite.api.Client;
-import net.runelite.api.GameState;
-import net.runelite.api.HashTable;
-import net.runelite.api.Prayer;
-import net.runelite.api.WidgetNode;
-import net.runelite.api.events.DraggingWidgetChanged;
-import net.runelite.api.events.GameStateChanged;
-import net.runelite.api.events.MenuOptionClicked;
-import net.runelite.api.events.WidgetLoaded;
+
+import net.runelite.api.*;
+import net.runelite.api.events.*;
 import net.runelite.api.widgets.Widget;
 import static net.runelite.api.widgets.WidgetConfig.DRAG;
 import static net.runelite.api.widgets.WidgetConfig.DRAG_ON;
-import net.runelite.api.widgets.WidgetID;
+
 import net.runelite.api.widgets.WidgetInfo;
+import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.menus.MenuManager;
-import net.runelite.client.menus.WidgetMenuOption;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 
 @PluginDescriptor(
 	name = "Reorder Prayers",
 	enabledByDefault = false,
-	description = "Reorder the prayers displayed on the Prayer panel"
+	description = "Reorder the prayers displayed on the Prayer panel."
 )
 public class ReorderPrayersPlugin extends Plugin
 {
@@ -153,26 +147,11 @@ public class ReorderPrayersPlugin extends Plugin
 
 	private static final String MENU_TARGET = "Reordering";
 
-	private static final WidgetMenuOption FIXED_PRAYER_TAB_LOCK = new WidgetMenuOption(LOCK,
-		MENU_TARGET, WidgetInfo.FIXED_VIEWPORT_PRAYER_TAB);
-
-	private static final WidgetMenuOption FIXED_PRAYER_TAB_UNLOCK = new WidgetMenuOption(UNLOCK,
-		MENU_TARGET, WidgetInfo.FIXED_VIEWPORT_PRAYER_TAB);
-
-	private static final WidgetMenuOption RESIZABLE_PRAYER_TAB_LOCK = new WidgetMenuOption(LOCK,
-		MENU_TARGET, WidgetInfo.RESIZABLE_VIEWPORT_PRAYER_TAB);
-
-	private static final WidgetMenuOption RESIZABLE_PRAYER_TAB_UNLOCK = new WidgetMenuOption(UNLOCK,
-		MENU_TARGET, WidgetInfo.RESIZABLE_VIEWPORT_PRAYER_TAB);
-
-	private static final WidgetMenuOption RESIZABLE_BOTTOM_LINE_PRAYER_TAB_LOCK = new WidgetMenuOption(LOCK,
-		MENU_TARGET, WidgetInfo.RESIZABLE_VIEWPORT_BOTTOM_LINE_PRAYER_TAB);
-
-	private static final WidgetMenuOption RESIZABLE_BOTTOM_LINE_PRAYER_TAB_UNLOCK = new WidgetMenuOption(UNLOCK,
-		MENU_TARGET, WidgetInfo.RESIZABLE_VIEWPORT_BOTTOM_LINE_PRAYER_TAB);
-
 	@Inject
 	private Client client;
+
+	@Inject
+	private ClientThread clientThread;
 
 	@Inject
 	private ReorderPrayersConfig config;
@@ -181,6 +160,10 @@ public class ReorderPrayersPlugin extends Plugin
 	private MenuManager menuManager;
 
 	private Prayer[] prayerOrder;
+
+	private boolean unlockPrayerReordering;
+	private boolean loadWidgetOnGameTick;
+	private final String defaultPrayerOrderString = prayerOrderToString(Prayer.values());
 
 	static String prayerOrderToString(Prayer[] prayerOrder)
 	{
@@ -203,12 +186,13 @@ public class ReorderPrayersPlugin extends Plugin
 		return x + y * PRAYER_COLUMN_COUNT;
 	}
 
-	private static void setWidgetPosition(Widget widget, int x, int y)
+	private void setWidgetPosition(Widget widget, int x, int y)
 	{
-		widget.setRelativeX(x);
-		widget.setRelativeY(y);
-		widget.setOriginalX(x);
-		widget.setOriginalY(y);
+		clientThread.invokeLater(() -> {
+			widget.setOriginalX(x);
+			widget.setOriginalY(y);
+			widget.revalidate();
+		});
 	}
 
 	@Provides
@@ -220,7 +204,6 @@ public class ReorderPrayersPlugin extends Plugin
 	@Override
 	protected void startUp()
 	{
-		refreshPrayerTabOption();
 		prayerOrder = stringToPrayerOrder(config.prayerOrder());
 		reorderPrayers();
 	}
@@ -228,18 +211,10 @@ public class ReorderPrayersPlugin extends Plugin
 	@Override
 	protected void shutDown()
 	{
-		clearPrayerTabMenus();
 		prayerOrder = Prayer.values();
 		reorderPrayers(false);
-	}
-
-	@Subscribe
-	private void onGameStateChanged(GameStateChanged event)
-	{
-		if (event.getGameState() == GameState.LOGGED_IN)
-		{
-			reorderPrayers();
-		}
+		config.unlockPrayerReordering(false);
+		unlockPrayerReordering = false;
 	}
 
 	@Subscribe
@@ -251,10 +226,6 @@ public class ReorderPrayersPlugin extends Plugin
 			{
 				prayerOrder = stringToPrayerOrder(config.prayerOrder());
 			}
-			else if (event.getKey().equals(CONFIG_UNLOCK_REORDERING_KEY))
-			{
-				refreshPrayerTabOption();
-			}
 			reorderPrayers();
 		}
 	}
@@ -262,9 +233,23 @@ public class ReorderPrayersPlugin extends Plugin
 	@Subscribe
 	private void onWidgetLoaded(WidgetLoaded event)
 	{
-		if (event.getGroupId() == PrayerWidgetID.PRAYER_GROUP_ID || event.getGroupId() == PrayerWidgetID.QUICK_PRAYERS_GROUP_ID)
+		if (event.getGroupId() == PrayerWidgetID.PRAYER_GROUP_ID)
+		{
+			loadWidgetOnGameTick = true;
+		}
+		if (event.getGroupId() == PrayerWidgetID.QUICK_PRAYERS_GROUP_ID)
 		{
 			reorderPrayers();
+		}
+	}
+
+	@Subscribe
+	private void onGameTick(GameTick event)
+	{
+		if (loadWidgetOnGameTick)
+		{
+			reorderPrayers();
+			loadWidgetOnGameTick = false;
 		}
 	}
 
@@ -301,47 +286,45 @@ public class ReorderPrayersPlugin extends Plugin
 	}
 
 	@Subscribe
+	private void onMenuOpened(MenuOpened event)
+	{
+		Widget menuWidget = event.getFirstEntry().getWidget();
+		if (menuWidget == null)
+		{
+			return;
+		}
+
+		int menuWidgetId = menuWidget.getId();
+
+		if (menuWidgetId == WidgetInfo.FIXED_VIEWPORT_PRAYER_TAB.getId() ||
+				menuWidgetId == WidgetInfo.RESIZABLE_VIEWPORT_PRAYER_TAB.getId() ||
+				menuWidgetId == WidgetInfo.RESIZABLE_VIEWPORT_BOTTOM_LINE_PRAYER_TAB.getId())
+		{
+			if (unlockPrayerReordering)
+			{
+				client.createMenuEntry(1).setOption(LOCK).setTarget(MENU_TARGET);
+			}
+			else
+			{
+				client.createMenuEntry(1).setOption(UNLOCK).setTarget(MENU_TARGET);
+			}
+		}
+	}
+
+	@Subscribe
 	private void onMenuOptionClicked(MenuOptionClicked event)
 	{
-		if (event.getWidget() == null)
-		{
-			System.out.println("Widget is null");
-		}
-		else
-			System.out.println(event.getWidget().getId());
-		//Its Null. No onWidgetMenuOptionClicked event so returns null. Convert to regular MenuEntry
-		if (event.getWidget().getId() == WidgetInfo.FIXED_VIEWPORT_PRAYER_TAB.getChildId()
-			|| event.getWidget().getId() == WidgetInfo.RESIZABLE_VIEWPORT_PRAYER_TAB.getChildId()
-			|| event.getWidget().getId() == WidgetInfo.RESIZABLE_VIEWPORT_BOTTOM_LINE_PRAYER_TAB.getChildId())
-		{
-			config.unlockPrayerReordering(event.getMenuOption().equals(UNLOCK));
-		}
-	}
+		String menuString = event.getMenuOption() + " " + event.getMenuTarget();
 
-	private void clearPrayerTabMenus()
-	{
-		menuManager.removeManagedCustomMenu(FIXED_PRAYER_TAB_LOCK);
-		menuManager.removeManagedCustomMenu(RESIZABLE_PRAYER_TAB_LOCK);
-		menuManager.removeManagedCustomMenu(RESIZABLE_BOTTOM_LINE_PRAYER_TAB_LOCK);
-		menuManager.removeManagedCustomMenu(FIXED_PRAYER_TAB_UNLOCK);
-		menuManager.removeManagedCustomMenu(RESIZABLE_PRAYER_TAB_UNLOCK);
-		menuManager.removeManagedCustomMenu(RESIZABLE_BOTTOM_LINE_PRAYER_TAB_UNLOCK);
-	}
-
-	private void refreshPrayerTabOption()
-	{
-		clearPrayerTabMenus();
-		if (config.unlockPrayerReordering())
+		if (menuString.equals("Unlock Reordering"))
 		{
-			menuManager.addManagedCustomMenu(FIXED_PRAYER_TAB_LOCK, null);
-			menuManager.addManagedCustomMenu(RESIZABLE_PRAYER_TAB_LOCK, null);
-			menuManager.addManagedCustomMenu(RESIZABLE_BOTTOM_LINE_PRAYER_TAB_LOCK, null);
+			config.unlockPrayerReordering(true);
+			unlockPrayerReordering = true;
 		}
-		else
+		else if (menuString.equals("Lock Reordering"))
 		{
-			menuManager.addManagedCustomMenu(FIXED_PRAYER_TAB_UNLOCK, null);
-			menuManager.addManagedCustomMenu(RESIZABLE_PRAYER_TAB_UNLOCK, null);
-			menuManager.addManagedCustomMenu(RESIZABLE_BOTTOM_LINE_PRAYER_TAB_UNLOCK, null);
+			config.unlockPrayerReordering(false);
+			unlockPrayerReordering = false;
 		}
 	}
 
@@ -457,5 +440,4 @@ public class ReorderPrayersPlugin extends Plugin
 			}
 		}
 	}
-
 }
