@@ -110,7 +110,7 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
         return false;
     }
 
-    private boolean checkLoaderVersion()
+    private boolean outdatedLoaderVersion()
     {
         if (infoJsonObject == null || pluginsJsonList.isEmpty())
         {
@@ -193,7 +193,7 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
     {
         buildPluginsLoadList();
 
-        if (!checkLoaderVersion())
+        if (outdatedLoaderVersion())
         {
             loaderOutdatedPopUp();
         }
