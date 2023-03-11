@@ -49,7 +49,7 @@ include(":specbar")
 include(":templetrekking")
 include(":tarnslair")
 include(":reorderprayers")
-include(":nightmare")
+//include(":nightmare")
 
 for (project in rootProject.children) {
     project.apply {
