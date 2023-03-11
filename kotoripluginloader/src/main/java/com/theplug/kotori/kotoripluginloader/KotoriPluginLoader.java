@@ -445,7 +445,7 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
 
         if (config.nightmareChoice())
         {
-            addPluginToLoadLists("Nightmare");
+            addPluginToLoadLists("Nightmare of Ashihama");
         }
     }
 
