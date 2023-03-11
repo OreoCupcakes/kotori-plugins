@@ -163,7 +163,6 @@ public class ReorderPrayersPlugin extends Plugin
 	private Prayer[] prayerOrder;
 
 	private boolean unlockPrayerReordering;
-	private boolean loadWidgetOnGameTick;
 	private final String defaultPrayerOrderString = prayerOrderToString(Prayer.values());
 
 	static String prayerOrderToString(Prayer[] prayerOrder)
@@ -189,11 +188,10 @@ public class ReorderPrayersPlugin extends Plugin
 
 	private void setWidgetPosition(Widget widget, int x, int y)
 	{
-		clientThread.invokeLater(() -> {
-			widget.setOriginalX(x);
-			widget.setOriginalY(y);
-			widget.revalidate();
-		});
+		widget.setRelativeX(x);
+		widget.setRelativeY(y);
+		widget.setOriginalX(x);
+		widget.setOriginalY(y);
 	}
 
 	@Provides
@@ -234,24 +232,16 @@ public class ReorderPrayersPlugin extends Plugin
 	@Subscribe
 	private void onWidgetLoaded(WidgetLoaded event)
 	{
-		if (event.getGroupId() == PrayerWidgetID.PRAYER_GROUP_ID)
-		{
-			loadWidgetOnGameTick = true;
-		}
-		if (event.getGroupId() == PrayerWidgetID.QUICK_PRAYERS_GROUP_ID)
+		if (event.getGroupId() == PrayerWidgetID.PRAYER_GROUP_ID || event.getGroupId() == PrayerWidgetID.QUICK_PRAYERS_GROUP_ID)
 		{
 			reorderPrayers();
 		}
 	}
 
 	@Subscribe
-	private void onGameTick(GameTick event)
+	private void onScriptPostFired(ScriptPostFired event)
 	{
-		if (loadWidgetOnGameTick)
-		{
-			reorderPrayers();
-			loadWidgetOnGameTick = false;
-		}
+		reorderPrayers();
 	}
 
 	@Subscribe
