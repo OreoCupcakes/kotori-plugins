@@ -124,23 +124,23 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
         if ((Integer.parseInt(pluginVersionSplit[0]) < Integer.parseInt(infoJsonVersionSplit[0]))
             || (Integer.parseInt(pluginVersionSplit[0]) < Integer.parseInt(githubVersionSplit[0])))
         {
-            return false;
+            return true;
         }
         //Check local minor version number, logic is if local minor is equal or greater, then continue on, else it's an older version
         else if ((Integer.parseInt(pluginVersionSplit[1]) < Integer.parseInt(infoJsonVersionSplit[1]))
                     || (Integer.parseInt(pluginVersionSplit[1]) < Integer.parseInt(githubVersionSplit[1])))
         {
-            return false;
+            return true;
         }
         //Check local patch version number, logic is if local patch is equal or greater, then continue on, else it's an older version
         else if ((Integer.parseInt(pluginVersionSplit[2]) < Integer.parseInt(infoJsonVersionSplit[2]))
                 || (Integer.parseInt(pluginVersionSplit[2]) < Integer.parseInt(githubVersionSplit[2])))
         {
-            return false;
+            return true;
         }
         else
         {
-            return true;
+            return false;
         }
     }
 
