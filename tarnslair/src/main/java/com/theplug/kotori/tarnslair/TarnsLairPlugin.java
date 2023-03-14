@@ -91,6 +91,8 @@ public class TarnsLairPlugin extends Plugin
 		staircases.clear();
 		wallTraps.clear();
 		floorTraps.clear();
+		groundObjectQueue.clear();
+		gameObjectQueue.clear();
 		inLair = false;
 	}
 
@@ -104,6 +106,11 @@ public class TarnsLairPlugin extends Plugin
 	@Subscribe
 	private void onGameObjectSpawned(GameObjectSpawned event)
 	{
+		if (!isInLair())
+		{
+			return;
+		}
+
 		if (!gameObjectQueue.containsKey(event.getTile()))
 		{
 			onTileObject(event.getTile(), null, event.getGameObject());
@@ -123,12 +130,22 @@ public class TarnsLairPlugin extends Plugin
 	@Subscribe
 	private void onGameObjectDespawned(GameObjectDespawned event)
 	{
+		if (!isInLair())
+		{
+			return;
+		}
+
 		onTileObject(event.getTile(), event.getGameObject(), null);
 	}
 
 	@Subscribe
 	private void onGroundObjectSpawned(GroundObjectSpawned event)
 	{
+		if (!isInLair())
+		{
+			return;
+		}
+
 		if (!groundObjectQueue.containsKey(event.getTile()))
 		{
 			onTileObject(event.getTile(), null, event.getGroundObject());
@@ -148,6 +165,11 @@ public class TarnsLairPlugin extends Plugin
 	@Subscribe
 	private void onGroundObjectDespawned(GroundObjectDespawned event)
 	{
+		if (!isInLair())
+		{
+			return;
+		}
+
 		onTileObject(event.getTile(), groundObjectQueue.get(event.getTile()), event.getGroundObject());
 	}
 
@@ -159,11 +181,18 @@ public class TarnsLairPlugin extends Plugin
 			staircases.clear();
 			wallTraps.clear();
 			floorTraps.clear();
+			groundObjectQueue.clear();
+			gameObjectQueue.clear();
 		}
 	}
 
 	private void onTileObject(Tile tile, TileObject oldObject, TileObject newObject)
 	{
+		if (!isInLair())
+		{
+			return;
+		}
+
 		staircases.remove(oldObject);
 		if (newObject != null && Obstacles.STAIRCASE_IDS.contains(newObject.getId()))
 		{
@@ -182,5 +211,4 @@ public class TarnsLairPlugin extends Plugin
 			floorTraps.put(newObject, tile);
 		}
 	}
-	
 }
