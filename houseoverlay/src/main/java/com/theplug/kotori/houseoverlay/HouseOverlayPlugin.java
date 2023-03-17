@@ -5,11 +5,10 @@ package com.theplug.kotori.houseoverlay;
 import com.google.inject.Provides;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
+import net.runelite.api.DecorativeObject;
+import net.runelite.api.GameObject;
 import net.runelite.api.GameState;
-import net.runelite.api.events.AnimationChanged;
-import net.runelite.api.events.BeforeRender;
-import net.runelite.api.events.GameTick;
-import net.runelite.api.events.WidgetLoaded;
+import net.runelite.api.events.*;
 import net.runelite.api.kit.KitType;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
@@ -20,6 +19,8 @@ import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -150,6 +151,8 @@ public class HouseOverlayPlugin extends Plugin {
     public boolean inhouse = false;
     public int currentanimation = 0;
     public boolean fairy_ring_has_staff = false;
+    public Collection<GameObject> gameObjectCollection = new ArrayList<>();
+    public Collection<DecorativeObject> decorativeObjectCollection = new ArrayList<>();
     @Subscribe
     private void onAnimationChanged(final AnimationChanged event)
     {
@@ -179,5 +182,41 @@ public class HouseOverlayPlugin extends Plugin {
         inhouse = client.getMapRegions()[0] == 7769 || client.getMapRegions()[0] == 7513 || client.getMapRegions()[0] == 8025;
         int currentweapon = client.getLocalPlayer().getPlayerComposition().getEquipmentIds()[KitType.WEAPON.getIndex()];
         fairy_ring_has_staff = currentweapon == 1284 || currentweapon == 9596;
+    }
+
+    @Subscribe
+    public void onGameObjectSpawned(GameObjectSpawned event) {
+        if (inhouse) {
+            GameObject spawnedGameObject = event.getGameObject();
+            if (spawnedGameObject != null) {
+                if (!gameObjectCollection.stream().anyMatch(o -> o.getId() == spawnedGameObject.getId())) {
+                    gameObjectCollection.add(spawnedGameObject);
+                }
+            }
+        }
+    }
+
+    @Subscribe
+    public void onDecorativeObjectSpawned(DecorativeObjectSpawned event) {
+        if (inhouse) {
+            DecorativeObject spawnedDecorativeObject = event.getDecorativeObject();
+            if (spawnedDecorativeObject != null) {
+                if (!decorativeObjectCollection.stream().anyMatch(o -> o.getId() == spawnedDecorativeObject.getId())) {
+                    decorativeObjectCollection.add(spawnedDecorativeObject);
+                }
+            }
+        }
+    }
+
+    @Subscribe
+    public void onGameStateChanged(GameStateChanged event) {
+        if (event.getGameState() == GameState.LOADING) {
+            if (!gameObjectCollection.isEmpty()) {
+                gameObjectCollection.clear();
+            }
+            if (!decorativeObjectCollection.isEmpty()) {
+                decorativeObjectCollection.clear();
+            }
+        }
     }
 }

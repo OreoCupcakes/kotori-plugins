@@ -85,40 +85,7 @@ class HouseOverlayOverlay extends Overlay {
     public Dimension render(Graphics2D graphics) {
         if(plugin.inhouse)
         {
-            //TileObjectQuery.getTiles() function
-            List<Tile> tilesList = new ArrayList<>();
-            Scene scene = client.getScene();
-            Tile[][][] tiles = scene.getTiles();
-            int z = client.getPlane();
-            for (int x =0; x < Constants.SCENE_SIZE; ++x ) {
-                for (int y = 0; y < Constants.SCENE_SIZE; ++y) {
-                    Tile tile = tiles[z][x][y];
-                    if (tile == null) {
-                        continue;
-                    }
-                    tilesList.add(tile);
-                }
-            }
-
-            //GameObjectQuery.getGameObjects() function; DecorativeObjectQuery.getDecorativeObjects() function
-            Collection<GameObject> gameObjectCollection = new ArrayList<>();
-            Collection<DecorativeObject> decorativeObjectCollection = new ArrayList<>();
-
-            for (Tile gameTiles : tilesList) {
-                GameObject[] gameObjects = gameTiles.getGameObjects();
-                if (gameObjects != null) {
-                    gameObjectCollection.addAll(Arrays.asList(gameObjects));
-                }
-                decorativeObjectCollection.add(gameTiles.getDecorativeObject());
-            }
-
-            //GameObjectQuery.results() function; DecorativeObjectQuery.results() function
-            Collection<GameObject> gameObjectCollectionFiltered = gameObjectCollection.stream().filter(Objects::nonNull)
-                    .distinct().collect(Collectors.toList());
-            Collection<DecorativeObject> decorativeObjectCollectionFiltered = decorativeObjectCollection.stream().filter(Objects::nonNull)
-                    .distinct().collect(Collectors.toList());
-
-            for (final GameObject gameObject : gameObjectCollectionFiltered)
+            for (final GameObject gameObject : plugin.gameObjectCollection)
             {
                 lastaction = "";
                 extrainfo = "";
@@ -249,7 +216,7 @@ class HouseOverlayOverlay extends Overlay {
                 ProcessObject(graphics, id, name, gameObject.getClickbox(), modelHeight, gameObject.getCanvasTextLocation(graphics, name, modelHeight), config.HouseObjectsDefaultColor());
             }
 
-            for (final DecorativeObject dob : decorativeObjectCollectionFiltered)
+            for (final DecorativeObject dob : plugin.decorativeObjectCollection)
             {
                 lastaction = "";
                 extrainfo = "";
