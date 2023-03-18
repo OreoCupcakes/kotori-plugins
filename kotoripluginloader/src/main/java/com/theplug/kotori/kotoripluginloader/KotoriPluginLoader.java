@@ -35,7 +35,7 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
 {
     final private String pluginsJsonURL = "https://github.com/OreoCupcakes/kotori-plugins-releases/blob/master/plugins.json?raw=true";
     final private String infoJsonURL = "https://github.com/OreoCupcakes/kotori-plugins-releases/blob/master/info.json?raw=true";
-    final private String currentLoaderVersion = "1.1.0";
+    final private String currentLoaderVersion = "1.1.1";
 
     @Inject
     private Client client;
@@ -301,62 +301,74 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
 
     private void buildPluginsLoadList()
     {
-        if (infoJsonObject.isPreventLoadOfPlugins())
+        if (infoJsonObject.isMasterPreventLoad())
         {
             return;
         }
         //Plugin Choices That Require KotoriUtils and will break on a game revision update.
         if (checkGameRevision())
         {
-            //load Plugin Utils if one of the following is selected.
-            if (config.kotoriUtilsChoice() || (config.alchemicalHydraChoice() && !config.rlplUser()) ||
-                    config.cerberusHelperChoice() || config.demonicGorillasChoice() ||
-                    config.gauntletExtendedChoice() || (config.vorkathOverlayChoice() && !config.rlplUser()))
+            if (!infoJsonObject.isPreventKotoriUtils())
             {
-                addPluginToLoadLists("Kotori Plugin Utils");
-            }
-
-            //Load Alch Hydra depending on client choice by user
-            if (config.alchemicalHydraChoice())
-            {
-                if (config.rlplUser())
+                //load Plugin Utils if one of the following is selected.
+                if (config.kotoriUtilsChoice() || (config.alchemicalHydraChoice() && !config.rlplUser()) ||
+                        config.cerberusHelperChoice() || config.demonicGorillasChoice() ||
+                        config.gauntletExtendedChoice() || (config.vorkathOverlayChoice() && !config.rlplUser()))
                 {
-                    addPluginToLoadLists("Alchemical Hydra (RLPL)");
+                    System.out.println("Hello number 1");
+                    addPluginToLoadLists("Kotori Plugin Utils");
                 }
-                else
+    
+                //Load Alch Hydra depending on client choice by user
+                if (config.alchemicalHydraChoice())
                 {
-                    addPluginToLoadLists("Alchemical Hydra");
+                    if (!config.rlplUser())
+                    {
+                        if (!infoJsonObject.isPreventAlchemicalHydra())
+                        {
+                            addPluginToLoadLists("Alchemical Hydra");
+                        }
+                    }
                 }
-            }
-
-            //Load Cerberus
-            if (config.cerberusHelperChoice())
-            {
-                addPluginToLoadLists("Cerberus Helper");
-            }
-
-            //Load Demonics
-            if (config.demonicGorillasChoice())
-            {
-                addPluginToLoadLists("Demonic Gorillas");
-            }
-
-            //Load Gauntlet
-            if (config.gauntletExtendedChoice())
-            {
-                addPluginToLoadLists("Gauntlet Extended");
-            }
-
-            //Load Vorkath depending on client choice by user
-            if (config.vorkathOverlayChoice())
-            {
-                if (config.rlplUser())
+    
+                //Load Cerberus
+                if (config.cerberusHelperChoice())
                 {
-                    addPluginToLoadLists("Vorkath (RLPL)");
+                    if (!infoJsonObject.isPreventCerberusHelper())
+                    {
+                        System.out.println("Hello number 2");
+                        addPluginToLoadLists("Cerberus Helper");
+                    }
                 }
-                else
+    
+                //Load Demonics
+                if (config.demonicGorillasChoice())
                 {
-                    addPluginToLoadLists("Vorkath");
+                    if (!infoJsonObject.isPreventDemonicGorillas())
+                    {
+                        addPluginToLoadLists("Demonic Gorillas");
+                    }
+                }
+    
+                //Load Gauntlet
+                if (config.gauntletExtendedChoice())
+                {
+                    if (!infoJsonObject.isPreventGauntletExtended())
+                    {
+                        addPluginToLoadLists("Gauntlet Extended");
+                    }
+                }
+    
+                //Load Vorkath depending on client choice by user
+                if (config.vorkathOverlayChoice())
+                {
+                    if (!config.rlplUser())
+                    {
+                        if (!infoJsonObject.isPreventVorkath())
+                        {
+                            addPluginToLoadLists("Vorkath");
+                        }
+                    }
                 }
             }
         }
@@ -364,88 +376,152 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
         {
             revisionOutdatedPopUp();
         }
+        
+        if (config.rlplUser())
+        {
+            if (config.alchemicalHydraChoice())
+            {
+                if (!infoJsonObject.isPreventAlchemicalHydraRLPL())
+                {
+                    addPluginToLoadLists("Alchemical Hydra (RLPL)");
+                }
+            }
+            
+            if (config.vorkathOverlayChoice())
+            {
+                if (!infoJsonObject.isPreventVorkathRLPL())
+                {
+                    addPluginToLoadLists("Vorkath (RLPL)");
+                }
+            }
+        }
 
         if (config.dagannothKingsChoice())
         {
-            addPluginToLoadLists("Dagannoth Kings");
+            if (!infoJsonObject.isPreventDagannothKings())
+            {
+                addPluginToLoadLists("Dagannoth Kings");
+            }
         }
 
         if (config.hallowedHelperChoice())
         {
-            addPluginToLoadLists("Hallowed Sepulchre (Deluxe)");
+            if (!infoJsonObject.isPreventHallowedHelper())
+            {
+                addPluginToLoadLists("Hallowed Sepulchre (Deluxe)");
+            }
         }
 
         if (config.hallowedSepulchreChoice())
         {
-            addPluginToLoadLists("Hallowed Sepulchre (Lightweight)");
+            if (!infoJsonObject.isPreventHallowedSepulchre())
+            {
+                addPluginToLoadLists("Hallowed Sepulchre (Lightweight)");
+            }
         }
 
         if (config.houseOverlayChoice())
         {
-            addPluginToLoadLists("House Overlay");
+            if (!infoJsonObject.isPreventHouseOverlay())
+            {
+                addPluginToLoadLists("House Overlay");
+            }
         }
 
         if (config.multiIndicatorsChoice())
         {
-            addPluginToLoadLists("Multi-Lines Indicators");
+            if (!infoJsonObject.isPreventMultiIndicators())
+            {
+                addPluginToLoadLists("Multi-Lines Indicators");
+            }
         }
 
         if (config.effectTimersChoice())
         {
-            if (config.multiIndicatorsChoice())
+            if (!config.multiIndicatorsChoice())
             {
-                addPluginToLoadLists("Effect Timers");
+                if (!infoJsonObject.isPreventMultiIndicators())
+                {
+                    addPluginToLoadLists("Multi-Lines Indicators");
+                }
             }
-            else
+    
+            if (!infoJsonObject.isPreventEffectTimers())
             {
-                addPluginToLoadLists("Multi-Lines Indicators");
                 addPluginToLoadLists("Effect Timers");
             }
         }
 
         if (config.zulrahOverlayChoice())
         {
-            addPluginToLoadLists("Zulrah");
+            if (!infoJsonObject.isPreventZulrah())
+            {
+                addPluginToLoadLists("Zulrah");
+            }
         }
 
         if (config.grotesqueGuardiansChoice())
         {
-            addPluginToLoadLists("Grotesque Guardians");
+            if (!infoJsonObject.isPreventGrotesqueGuardians())
+            {
+                addPluginToLoadLists("Grotesque Guardians");
+            }
         }
 
         if (config.nexExtendedChoice())
         {
-            addPluginToLoadLists("Nex Extended");
+            if (!infoJsonObject.isPreventNex())
+            {
+                addPluginToLoadLists("Nex Extended");
+            }
         }
 
         if (config.godWarsTickTimersChoice())
         {
-            addPluginToLoadLists("God Wars Tick Timers");
+            if (!infoJsonObject.isPreventGwdTickTimers())
+            {
+                addPluginToLoadLists("God Wars Tick Timers");
+            }
         }
 
         if (config.specBarChoice())
         {
-            addPluginToLoadLists("Spec Bar");
+            if (!infoJsonObject.isPreventSpecbar())
+            {
+                addPluginToLoadLists("Spec Bar");
+            }
         }
 
         if (config.templeTrekkingChoice())
         {
-            addPluginToLoadLists("Temple Trekking");
+            if (!infoJsonObject.isPreventTempleTrekking())
+            {
+                addPluginToLoadLists("Temple Trekking");
+            }
         }
 
         if (config.tarnsLairChoice())
         {
-            addPluginToLoadLists("Tarn's Lair");
+            if (!infoJsonObject.isPreventTarnsLair())
+            {
+                addPluginToLoadLists("Tarn's Lair");
+            }
         }
 
         if (config.reorderPrayersChoice())
         {
-            addPluginToLoadLists("Reorder Prayers");
+            if (!infoJsonObject.isPreventReorderPrayers())
+            {
+                addPluginToLoadLists("Reorder Prayers");
+            }
         }
 
         if (config.nightmareChoice())
         {
-            addPluginToLoadLists("Nightmare of Ashihama");
+            if (!infoJsonObject.isPreventNightmare())
+            {
+                addPluginToLoadLists("Nightmare of Ashihama");
+            }
         }
     }
 
@@ -544,9 +620,48 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
         }
     }
 
+    private void refreshConfigGui()
+    {
+        try
+        {
+            new Thread(() -> eventBus.post(new ProfileChanged())).start();
+        }
+        catch (Exception e)
+        {
+            log.error("Failed to refresh plugin configuration GUI via eventBus.", e);
+        }
+    }
+
     private void setConfigItem(String key, String value)
     {
-        configManager.setConfiguration("kotoripluginloader",key,value);
+        configManager.setConfiguration("kotoripluginloader", key, value);
+        refreshConfigGui();
+    }
+
+    private void setConfigItems(ArrayList<String> keys, String value)
+    {
+        for (String key : keys)
+        {
+            configManager.setConfiguration("kotoripluginloader", key, value);
+        }
+        refreshConfigGui();
+    }
+
+    private void setConfigItems(ArrayList<String> keys, ArrayList<String> values)
+    {
+        if (keys.size() != values.size())
+        {
+            return;
+        }
+
+        for (String key: keys)
+        {
+            for (String value : values)
+            {
+                configManager.setConfiguration("kotoripluginloader", key, value);
+            }
+        }
+        refreshConfigGui();
     }
 
     @Subscribe
@@ -586,14 +701,12 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
                     if (!config.multiIndicatorsChoice())
                     {
                         setConfigItem("multiIndicatorsChoice", "true");
-                        eventBus.post(new ProfileChanged());
                     }
                 }
             }
             else
             {
                 setConfigItem(event.getKey(),"false");
-                eventBus.post(new ProfileChanged());
             }
         }
 
@@ -609,14 +722,12 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
                         if (!config.kotoriUtilsChoice())
                         {
                             setConfigItem("kotoriUtilsChoice", "true");
-                            eventBus.post(new ProfileChanged());
                         }
                     }
                 }
                 else
                 {
                     setConfigItem(event.getKey(),"false");
-                    eventBus.post(new ProfileChanged());
                 }
             }
         }
@@ -631,14 +742,12 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
                     if (!config.kotoriUtilsChoice())
                     {
                         setConfigItem("kotoriUtilsChoice", "true");
-                        eventBus.post(new ProfileChanged());
                     }
                 }
             }
             else
             {
                 setConfigItem(event.getKey(),"false");
-                eventBus.post(new ProfileChanged());
             }
         }
 
@@ -652,14 +761,12 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
                     if (!config.kotoriUtilsChoice())
                     {
                         setConfigItem("kotoriUtilsChoice","true");
-                        eventBus.post(new ProfileChanged());
                     }
                 }
             }
             else
             {
                 setConfigItem(event.getKey(),"false");
-                eventBus.post(new ProfileChanged());
             }
         }
 
@@ -673,14 +780,12 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
                     if (!config.kotoriUtilsChoice())
                     {
                         setConfigItem("kotoriUtilsChoice","true");
-                        eventBus.post(new ProfileChanged());
                     }
                 }
             }
             else
             {
                 setConfigItem(event.getKey(),"false");
-                eventBus.post(new ProfileChanged());
             }
         }
 
@@ -696,14 +801,12 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
                         if (!config.kotoriUtilsChoice())
                         {
                             setConfigItem("kotoriUtilsChoice","true");
-                            eventBus.post(new ProfileChanged());
                         }
                     }
                 }
                 else
                 {
                     setConfigItem(event.getKey(),"false");
-                    eventBus.post(new ProfileChanged());
                 }
             }
         }
@@ -716,7 +819,6 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
                     || (config.vorkathOverlayChoice() && !config.rlplUser()))
             {
                 setConfigItem(event.getKey(),"true");
-                eventBus.post(new ProfileChanged());
             }
         }
 
@@ -726,7 +828,6 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
             if (config.effectTimersChoice())
             {
                 setConfigItem(event.getKey(),"true");
-                eventBus.post(new ProfileChanged());
             }
         }
 
@@ -736,7 +837,6 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
             if (!loadedPlugins.isEmpty())
             {
                 setConfigItem(event.getKey(),""+rlplChoiceAtLoad);
-                eventBus.post(new ProfileChanged());
             }
         }
 
@@ -746,73 +846,78 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
             if (config.selectAllPluginsChoice())
             {
                 //Check all independent plugins
-                setConfigItem("dagannothKingsChoice", "true");
-                setConfigItem("hallowedHelperChoice", "true");
-                setConfigItem("hallowedSepulchreChoice", "true");
-                setConfigItem("houseOverlayChoice", "true");
-                setConfigItem("multiIndicatorsChoice", "true");
-                setConfigItem("zulrahOverlayChoice", "true");
-                setConfigItem("grotesqueGuardiansChoice", "true");
-                setConfigItem("nexExtendedChoice", "true");
-                setConfigItem("godWarsTickTimersChoice", "true");
-                setConfigItem("specBarChoice","true");
-                setConfigItem("templeTrekkingChoice","true");
-                setConfigItem("tarnsLairChoice", "true");
-                setConfigItem("reorderPrayersChoice", "true");
-                setConfigItem("nightmareChoice", "true");
+                ArrayList<String> keys = new ArrayList<>();
+                keys.add("dagannothKingsChoice");
+                keys.add("hallowedHelperChoice");
+                keys.add("hallowedSepulchreChoice");
+                keys.add("houseOverlayChoice");
+                keys.add("multiIndicatorsChoice");
+                keys.add("zulrahOverlayChoice");
+                keys.add("grotesqueGuardiansChoice");
+                keys.add("nexExtendedChoice");
+                keys.add("godWarsTickTimersChoice");
+                keys.add("specBarChoice");
+                keys.add("templeTrekkingChoice");
+                keys.add("tarnsLairChoice");
+                keys.add("reorderPrayersChoice");
+                keys.add("nightmareChoice");
 
                 if (config.rlplUser())
                 {
-                    setConfigItem("alchemicalHydraChoice","true");
-                    setConfigItem("vorkathOverlayChoice","true");
+                    keys.add("alchemicalHydraChoice");
+                    keys.add("vorkathOverlayChoice");
                 }
 
                 //Check KotoriUtils and its dependents if it's not loaded already
                 if (!kotoriUtilsLoaded)
                 {
-                    setConfigItem("kotoriUtilsChoice","true");
-                    setConfigItem("demonicGorillasChoice","true");
-                    setConfigItem("gauntletExtendedChoice","true");
-                    setConfigItem("cerberusHelperChoice","true");
+                    keys.add("kotoriUtilsChoice");
+                    keys.add("demonicGorillasChoice");
+                    keys.add("gauntletExtendedChoice");
+                    keys.add("cerberusHelperChoice");
                     if (!config.rlplUser())
                     {
-                        setConfigItem("alchemicalHydraChoice","true");
-                        setConfigItem("vorkathOverlayChoice","true");
+                        keys.add("alchemicalHydraChoice");
+                        keys.add("vorkathOverlayChoice");
                     }
                 }
 
                 //Check Effect Timers if its not loaded already
                 if (!multiIndicatorsLoaded)
                 {
-                    setConfigItem("effectTimersChoice","true");
+                    keys.add("effectTimersChoice");
                 }
+
+                setConfigItems(keys,"true");
             }
             else
             {
                 //Unselect all plugins
-                setConfigItem("effectTimersChoice","false");
-                setConfigItem("alchemicalHydraChoice","false");
-                setConfigItem("vorkathOverlayChoice","false");
-                setConfigItem("demonicGorillasChoice","false");
-                setConfigItem("gauntletExtendedChoice","false");
-                setConfigItem("cerberusHelperChoice","false");
-                setConfigItem("dagannothKingsChoice", "false");
-                setConfigItem("hallowedHelperChoice", "false");
-                setConfigItem("hallowedSepulchreChoice", "false");
-                setConfigItem("houseOverlayChoice", "false");
-                setConfigItem("zulrahOverlayChoice", "false");
-                setConfigItem("grotesqueGuardiansChoice", "false");
-                setConfigItem("nexExtendedChoice", "false");
-                setConfigItem("godWarsTickTimersChoice", "false");
-                setConfigItem("specBarChoice","false");
-                setConfigItem("templeTrekkingChoice","false");
-                setConfigItem("tarnsLairChoice", "false");
-                setConfigItem("reorderPrayersChoice", "false");
-                setConfigItem("nightmareChoice", "false");
-                setConfigItem("multiIndicatorsChoice", "false");
-                setConfigItem("kotoriUtilsChoice","false");
+                ArrayList<String> keys = new ArrayList<>();
+                keys.add("effectTimersChoice");
+                keys.add("alchemicalHydraChoice");
+                keys.add("vorkathOverlayChoice");
+                keys.add("demonicGorillasChoice");
+                keys.add("gauntletExtendedChoice");
+                keys.add("cerberusHelperChoice");
+                keys.add("dagannothKingsChoice");
+                keys.add("hallowedHelperChoice");
+                keys.add("hallowedSepulchreChoice");
+                keys.add("houseOverlayChoice");
+                keys.add("zulrahOverlayChoice");
+                keys.add("grotesqueGuardiansChoice");
+                keys.add("nexExtendedChoice");
+                keys.add("godWarsTickTimersChoice");
+                keys.add("specBarChoice");
+                keys.add("templeTrekkingChoice");
+                keys.add("tarnsLairChoice");
+                keys.add("reorderPrayersChoice");
+                keys.add("nightmareChoice");
+                keys.add("multiIndicatorsChoice");
+                keys.add("kotoriUtilsChoice");
+
+                setConfigItems(keys,"false");
             }
-            eventBus.post(new ProfileChanged());
         }
 
         //Keep at the bottom
@@ -828,7 +933,6 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
                 //Rebuild Load List
                 loadPluginsSequence();
                 setConfigItem("manualLoad", "false");
-                eventBus.post(new ProfileChanged());
             }
         }
     }

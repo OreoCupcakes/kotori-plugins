@@ -13,7 +13,7 @@ public interface KotoriPluginLoaderConfig extends Config
 {
     //Sections
     @ConfigSection(
-            name = "<html>Kotori Plugin Loader<br>Version 1.1.0</html>",
+            name = "<html>Kotori Plugin Loader<br>Version 1.1.1</html>",
             description = "",
             position = 0,
             closedByDefault = true
@@ -80,23 +80,10 @@ public interface KotoriPluginLoaderConfig extends Config
     default loadChoice whenToLoad() { return loadChoice.GAME_STARTUP; }
 
     @ConfigItem(
-            keyName = "manualLoadInfoBox",
-            name = "Manually Loading Plugins Info",
-            description = "",
-            position = 4,
-            section = settings
-    )
-    default String pluginInfoStringBox() {
-        return  "You can manually hot load certain plugins that haven't already been loaded anytime. " +
-                "Not all plugins can hot load in! " +
-                "As such the selection menu will prevent you from selecting those plugins.";
-    }
-
-    @ConfigItem(
             keyName = "manualLoad",
             name = "Click to Load Plugins",
             description = "Check the box to manually load your selected plugins.",
-            position = 5,
+            position = 4,
             section = settings
     )
     default boolean manualLoad() { return false; }
@@ -275,7 +262,7 @@ public interface KotoriPluginLoaderConfig extends Config
 
     @ConfigItem(
             keyName = "nightmareChoice",
-            name = "Nightmare",
+            name = "Nightmare of Ashihama",
             description = "Load the Nightmare plugin.",
             section = pluginsToLoad
     )

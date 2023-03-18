@@ -14,6 +14,7 @@ import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.events.ProfileChanged;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.plugins.PluginManager;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -41,6 +42,9 @@ public class KotoriUtils extends Plugin {
 
     @Inject
     private ConfigManager configManager;
+
+    @Inject
+    private PluginManager pluginManager;
 
     @Inject
     private EventBus eventBus;
@@ -219,7 +223,14 @@ public class KotoriUtils extends Plugin {
 
                 //Reset check box
                 configManager.setConfiguration("kotoriutils","clickToLoadHooks","false");
-                eventBus.post(new ProfileChanged());
+                try
+                {
+                    new Thread(() -> eventBus.post(new ProfileChanged())).start();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
             }
         }
     }
