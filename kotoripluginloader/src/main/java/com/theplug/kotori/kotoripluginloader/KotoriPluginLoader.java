@@ -7,7 +7,7 @@ import javax.swing.*;
 
 import com.google.inject.Provides;
 import com.theplug.kotori.kotoripluginloader.json.Info;
-import com.theplug.kotori.kotoripluginloader.json.Plugin;
+import com.theplug.kotori.kotoripluginloader.json.PluginInfo;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.api.events.GameStateChanged;
@@ -35,7 +35,7 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
 {
     final private String pluginsJsonURL = "https://github.com/OreoCupcakes/kotori-plugins-releases/blob/master/plugins.json?raw=true";
     final private String infoJsonURL = "https://github.com/OreoCupcakes/kotori-plugins-releases/blob/master/info.json?raw=true";
-    final private String currentLoaderVersion = "1.1.1";
+    final private String currentLoaderVersion = "1.1.2";
 
     @Inject
     private Client client;
@@ -50,7 +50,7 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
 
     private Gson gson = new Gson();
     private Info infoJsonObject;
-    private Plugin[] pluginsJsonObjects;
+    private PluginInfo[] pluginsJsonObjects;
     private ArrayList<String> pluginsJsonList = new ArrayList<>();
     private ArrayList<URL> pluginUrlLoadList = new ArrayList<>();
     private ArrayList<String> pluginClassLoadList = new ArrayList<>();
@@ -259,7 +259,7 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
             {
                 URL pluginsJsonFile = new URL(pluginsJsonURL);
                 BufferedReader pluginsReader = new BufferedReader(new InputStreamReader(pluginsJsonFile.openStream()));
-                pluginsJsonObjects = gson.fromJson(pluginsReader, Plugin[].class);
+                pluginsJsonObjects = gson.fromJson(pluginsReader, PluginInfo[].class);
                 break;
             }
             catch (Exception e)
@@ -286,7 +286,7 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
         {
             if (pluginsJsonObjects != null)
             {
-                for (Plugin plugin : pluginsJsonObjects)
+                for (PluginInfo plugin : pluginsJsonObjects)
                 {
                     //0 = name, 1 = package, 2 = class, 3 = version, 4 = url
                     pluginsJsonList.add(plugin.getName());
@@ -315,7 +315,6 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
                         config.cerberusHelperChoice() || config.demonicGorillasChoice() ||
                         config.gauntletExtendedChoice() || (config.vorkathOverlayChoice() && !config.rlplUser()))
                 {
-                    System.out.println("Hello number 1");
                     addPluginToLoadLists("Kotori Plugin Utils");
                 }
     
@@ -336,7 +335,6 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
                 {
                     if (!infoJsonObject.isPreventCerberusHelper())
                     {
-                        System.out.println("Hello number 2");
                         addPluginToLoadLists("Cerberus Helper");
                     }
                 }
@@ -580,19 +578,18 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
 
         try
         {
-            URLClassLoader urlClassLoader = new URLClassLoader(pluginUrls.toArray(URL[]::new));
-
+            URLClassLoader kotoriClassLoader = new URLClassLoader(pluginUrls.toArray(URL[]::new),client.getClass().getClassLoader());
             ArrayList<Class<?>> loadedClasses = new ArrayList<>();
             for (String classPath : pluginClassPaths)
             {
-                loadedClasses.add(urlClassLoader.loadClass(classPath));
+                loadedClasses.add(kotoriClassLoader.loadClass(classPath));
             }
 
-            List<net.runelite.client.plugins.Plugin> scannedPlugins = manager.loadPlugins(loadedClasses,null);
+            List<Plugin> scannedPlugins = manager.loadPlugins(loadedClasses,null);
 
             SwingUtilities.invokeLater(() ->
             {
-                for (net.runelite.client.plugins.Plugin p : scannedPlugins)
+                for (Plugin p : scannedPlugins)
                 {
                     if (p == null)
                     {
