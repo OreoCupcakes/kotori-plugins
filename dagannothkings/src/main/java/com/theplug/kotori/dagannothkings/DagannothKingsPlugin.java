@@ -162,6 +162,10 @@ public class DagannothKingsPlugin extends Plugin
 	@Subscribe
 	private void onGameTick(final GameTick Event)
 	{
+		if (!atDks())
+		{
+			return;
+		}
 		lastTickTime = System.currentTimeMillis();
 
 		if (dagannothKings.isEmpty())
@@ -178,12 +182,20 @@ public class DagannothKingsPlugin extends Plugin
 	@Subscribe
 	private void onNpcSpawned(final NpcSpawned event)
 	{
+		if (!atDks())
+		{
+			return;
+		}
 		addNpc(event.getNpc());
 	}
 
 	@Subscribe
 	private void onNpcDespawned(final NpcDespawned event)
 	{
+		if (dagannothKings.isEmpty())
+		{
+			return;
+		}
 		removeNpc(event.getNpc());
 	}
 

@@ -41,7 +41,7 @@ public interface AlchemicalHydraConfig extends Config
 {
 	// Sections
 	@ConfigSection(
-			name = "<html>Alchemical Hydra (RLPL)<br>Version 1.1.4</html>",
+			name = "<html>Alchemical Hydra (RLPL)<br>Version 1.1.5</html>",
 			description = "",
 			position = -1,
 			closedByDefault = true

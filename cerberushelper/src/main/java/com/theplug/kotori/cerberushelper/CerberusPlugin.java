@@ -244,7 +244,7 @@ public class CerberusPlugin extends Plugin
 	@Subscribe
 	private void onGameTick(final GameTick event)
 	{
-		if (cerberus == null)
+		if (!inCerberusRegion() || cerberus == null)
 		{
 			return;
 		}
@@ -345,7 +345,7 @@ public class CerberusPlugin extends Plugin
 	@Subscribe
 	private void onProjectileMoved(final ProjectileMoved event)
 	{
-		if (cerberus == null)
+		if (!inCerberusRegion() || cerberus == null)
 		{
 			return;
 		}
@@ -424,7 +424,7 @@ public class CerberusPlugin extends Plugin
 	@Subscribe
 	private void onAnimationChanged(final AnimationChanged event)
 	{
-		if (cerberus == null)
+		if (!inCerberusRegion() || cerberus == null)
 		{
 			return;
 		}
@@ -501,6 +501,10 @@ public class CerberusPlugin extends Plugin
 	@Subscribe
 	private void onNpcSpawned(final NpcSpawned event)
 	{
+		if (!inCerberusRegion())
+		{
+			return;
+		}
 		final NPC npc = event.getNpc();
 
 		if (cerberus == null && npc != null && npc.getName() != null && npc.getName().toLowerCase().contains("cerberus"))
@@ -533,6 +537,10 @@ public class CerberusPlugin extends Plugin
 	@Subscribe
 	private void onNpcDespawned(final NpcDespawned event)
 	{
+		if (!inCerberusRegion())
+		{
+			return;
+		}
 		final NPC npc = event.getNpc();
 
 		if (npc != null && npc.getName() != null && npc.getName().toLowerCase().contains("cerberus"))

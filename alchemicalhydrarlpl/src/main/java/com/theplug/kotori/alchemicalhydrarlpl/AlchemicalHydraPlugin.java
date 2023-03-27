@@ -223,6 +223,10 @@ public class AlchemicalHydraPlugin extends Plugin
 	@Subscribe
 	private void onGameObjectDespawned(GameObjectDespawned event)
 	{
+		if (vents.isEmpty())
+		{
+			return;
+		}
 		GameObject gameobject = event.getGameObject();
 		vents.remove(gameobject);
 	}
@@ -231,20 +235,27 @@ public class AlchemicalHydraPlugin extends Plugin
 	@Subscribe
 	private void onGameTick(final GameTick event)
 	{
+		if (!isInHydraRegion())
+		{
+			return;
+		}
 		attackOverlay.decrementStunTicks();
 		updateVentTicks();
 		checkHydraAnimationID();
 	}
 
-	private void checkHydraAnimationID() {
-		if (hydra == null) {
+	private void checkHydraAnimationID()
+	{
+		if (hydra == null)
+		{
 			return;
 		}
 
 		int currentAnimationID = hydra.getNpc().getAnimation();
 
 		//Compare the animation ID of current game tick with previous game tick. Execute function only if the animation changed.
-		if (lastNPCAnim != currentAnimationID) {
+		if (lastNPCAnim != currentAnimationID)
+		{
 			lastNPCAnim = currentAnimationID;
 			changeHydraPhase();
 		}
@@ -274,7 +285,6 @@ public class AlchemicalHydraPlugin extends Plugin
 				break; // all vents trigger at same time so dont bother going through them all
 			}
 		}
-
 	}
 
 	int getAnimation(GameObject gameObject)
@@ -286,6 +296,10 @@ public class AlchemicalHydraPlugin extends Plugin
 	@Subscribe
 	private void onNpcSpawned(final NpcSpawned event)
 	{
+		if (!isInHydraRegion())
+		{
+			return;
+		}
 		final NPC npc = event.getNpc();
 
 		if (npc.getId() == NpcID.ALCHEMICAL_HYDRA)
@@ -349,6 +363,10 @@ public class AlchemicalHydraPlugin extends Plugin
 	@Subscribe
 	private void onProjectileMoved(final ProjectileMoved event)
 	{
+		if (!isInHydraRegion())
+		{
+			return;
+		}
 		final Projectile projectile = event.getProjectile();
 
 		if (hydra == null || client.getGameCycle() >= projectile.getStartCycle())
@@ -379,6 +397,10 @@ public class AlchemicalHydraPlugin extends Plugin
 	@Subscribe
 	private void onChatMessage(final ChatMessage event)
 	{
+		if (!isInHydraRegion())
+		{
+			return;
+		}
 		final ChatMessageType chatMessageType = event.getType();
 
 		if (chatMessageType != ChatMessageType.SPAM && chatMessageType != ChatMessageType.GAMEMESSAGE)

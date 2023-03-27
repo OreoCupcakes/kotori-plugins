@@ -23,7 +23,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "1.1.4"
+version = "1.1.5"
 
 project.extra["PluginName"] = "Alchemical Hydra (RLPL)" // This is the name that is used in the external plugin manager panel
 project.extra["PluginDescription"] = "An overlay plugin for the Alchemical Hydra boss." // This is the description that is used in the external plugin manager panel
