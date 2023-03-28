@@ -15,6 +15,7 @@ import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.util.QuantityFormatter;
 import org.apache.commons.lang3.ArrayUtils;
+import org.checkerframework.checker.units.qual.C;
 
 public class PvPUtil
 {
@@ -27,8 +28,15 @@ public class PvPUtil
                     3531, 3530, 3529, 3528, 3527, 3526, 3526, 3525},
             43
     );
-    private static final Cuboid MAIN_WILDERNESS_CUBOID = new Cuboid(2944, 3525, 0, 3391, 4351, 3);
+    private static final Cuboid MAIN_WILDERNESS_CUBOID = new Cuboid(2944, 3522, 0, 3391, 4351, 3);
     private static final Cuboid GOD_WARS_WILDERNESS_CUBOID = new Cuboid(3008, 10112, 0, 3071, 10175, 3);
+    private static final Cuboid VETION_WILDERNESS_CUBOID = new Cuboid(3264,10176,0,3327,10239,3);
+    private static final Cuboid VENENATIS_WILDERNESS_CUBOID = new Cuboid(3392,10176,0,3455,10239,3);
+    private static final Cuboid CALLISTO_WILDERNESS_CUBOID = new Cuboid(3328,10304,0,3391,10367,3);
+    private static final Cuboid ARTIO_WILDERNESS_CUBOID = new Cuboid(1728,11520,0,1791,11583,3);
+    private static final Cuboid CALVARION_WILDERNESS_CUBOID = new Cuboid(1856,11520,0,1919,11583,3);
+    private static final Cuboid SPINDEL_WILDERNESS_CUBOID = new Cuboid(1600,11520,0,1663,11583,3);
+    private static final Cuboid WILDERNESS_ESCAPE_CAVES_CUBOID = new Cuboid(3328,10240,0,3391,10303,3);
     private static final Cuboid WILDERNESS_UNDERGROUND_CUBOID = new Cuboid(2944, 9920, 0, 3455, 10879, 3);
 
     /**
@@ -41,8 +49,10 @@ public class PvPUtil
     public static int getWildernessLevelFrom(WorldPoint point)
     {
         int regionID = point.getRegionID();
-        if (regionID == 12700 /* soul wars underground ferox */ ||
-                regionID == 12187 /* falador party room museum */)
+        if (regionID == 11931 /* falador party room museum */ ||
+                regionID == 12700 /* soul wars underground ferox */ ||
+                regionID == 12187 /* falador party room museum */ ||
+                regionID == 12955 /*  Bryophyta's lair */)
         {
             return 0;
         }
@@ -59,6 +69,34 @@ public class PvPUtil
         else if (GOD_WARS_WILDERNESS_CUBOID.contains(point))
         {
             return ((point.getY() - 9920) / 8) - 1; // calc(((coordz(coord) - (155 * 64)) / 8) - 1)
+        }
+        else if (VETION_WILDERNESS_CUBOID.contains(point))
+        {
+            return 35;
+        }
+        else if (VENENATIS_WILDERNESS_CUBOID.contains(point))
+        {
+            return 35;
+        }
+        else if (CALLISTO_WILDERNESS_CUBOID.contains(point))
+        {
+            return 40;
+        }
+        else if (ARTIO_WILDERNESS_CUBOID.contains(point))
+        {
+            return 21;
+        }
+        else if (CALVARION_WILDERNESS_CUBOID.contains(point))
+        {
+            return 21;
+        }
+        else if (SPINDEL_WILDERNESS_CUBOID.contains(point))
+        {
+            return 29;
+        }
+        else if (WILDERNESS_ESCAPE_CAVES_CUBOID.contains(point))
+        {
+            return (33 + ((point.getY() % 64) - 6));
         }
         else if (WILDERNESS_UNDERGROUND_CUBOID.contains(point))
         {
