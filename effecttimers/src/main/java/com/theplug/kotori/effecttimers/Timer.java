@@ -67,8 +67,10 @@ public class Timer
 			//Ancient Sceptre ID = 27624
 			if (client.getItemContainer(InventoryID.EQUIPMENT).getItem(3).getId() == 27624)
 			{
-				length = length + (length / 10);
-				
+				if (effect == PlayerEffect.RUSH || effect == PlayerEffect.BURST || effect == PlayerEffect.BLITZ || effect == PlayerEffect.BARRAGE)
+				{
+					length = length + (length / 10);
+				}
 			}
 			if (resist)
 			{
