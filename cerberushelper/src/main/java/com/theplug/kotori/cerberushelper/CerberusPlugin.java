@@ -244,7 +244,7 @@ public class CerberusPlugin extends Plugin
 	@Subscribe
 	private void onGameTick(final GameTick event)
 	{
-		if (!inCerberusRegion() || cerberus == null)
+		if (!inArena || cerberus == null)
 		{
 			return;
 		}
@@ -345,7 +345,7 @@ public class CerberusPlugin extends Plugin
 	@Subscribe
 	private void onProjectileMoved(final ProjectileMoved event)
 	{
-		if (!inCerberusRegion() || cerberus == null)
+		if (!inArena || cerberus == null)
 		{
 			return;
 		}
@@ -424,7 +424,7 @@ public class CerberusPlugin extends Plugin
 	@Subscribe
 	private void onAnimationChanged(final AnimationChanged event)
 	{
-		if (!inCerberusRegion() || cerberus == null)
+		if (!inArena || cerberus == null)
 		{
 			return;
 		}
@@ -501,7 +501,7 @@ public class CerberusPlugin extends Plugin
 	@Subscribe
 	private void onNpcSpawned(final NpcSpawned event)
 	{
-		if (!inCerberusRegion())
+		if (!inArena)
 		{
 			return;
 		}
@@ -537,7 +537,7 @@ public class CerberusPlugin extends Plugin
 	@Subscribe
 	private void onNpcDespawned(final NpcDespawned event)
 	{
-		if (!inCerberusRegion())
+		if (!inArena)
 		{
 			return;
 		}

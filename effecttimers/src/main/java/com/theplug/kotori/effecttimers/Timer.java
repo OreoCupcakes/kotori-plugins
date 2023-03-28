@@ -30,6 +30,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Setter;
 import lombok.ToString;
 import net.runelite.api.Client;
+import net.runelite.api.InventoryID;
 
 @ToString
 @EqualsAndHashCode
@@ -49,18 +50,33 @@ public class Timer
 
 	public Timer(EffectTimersPlugin plugin, PlayerEffect effect)
 	{
-		this(plugin, effect, false);
+		this(plugin, effect, false, false);
 	}
 
-	public Timer(EffectTimersPlugin plugin, PlayerEffect effect, boolean half)
+	public Timer(EffectTimersPlugin plugin, PlayerEffect effect, boolean half, boolean resist)
 	{
 		this.plugin = plugin;
 		this.client = plugin.getClient();
 		this.ticksStart = client.getTickCount();
 		this.startMillis = System.currentTimeMillis();
-		this.ticksLength = effect == null ? 0 : half ? effect.getTimerLengthTicks() / 2 : effect.getTimerLengthTicks();
-		this.cooldownLength = effect == null ? 0 : effect.getType().getImmunityLength();
 		this.type = effect == null ? null : effect.getType();
+		this.cooldownLength = effect == null ? 0 : effect.getType().getImmunityLength();
+		int length = effect == null ? 0 : half ? effect.getTimerLengthTicks() / 2 : effect.getTimerLengthTicks();
+		if (type == TimerType.FREEZE)
+		{
+			//Ancient Sceptre ID = 27624
+			if (client.getItemContainer(InventoryID.EQUIPMENT).getItem(3).getId() == 27624)
+			{
+				length = length + (length / 10);
+				
+			}
+			if (resist)
+			{
+				length = length * 2 / 3;
+			}
+		}
+		// if effect is null, then length is 0, else if half is true, then length is halved, else if resist is true, then length is 2/3, else normal length
+		this.ticksLength = length;
 	}
 
 	public boolean isValid()

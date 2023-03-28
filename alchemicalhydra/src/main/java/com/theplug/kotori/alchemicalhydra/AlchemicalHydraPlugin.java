@@ -213,7 +213,7 @@ public class AlchemicalHydraPlugin extends Plugin
 	@Subscribe
 	private void onGameObjectSpawned(GameObjectSpawned event)
 	{
-		if (!isInHydraRegion())
+		if (!atHydra)
 		{
 			return;
 		}
@@ -240,7 +240,7 @@ public class AlchemicalHydraPlugin extends Plugin
 	@Subscribe
 	private void onGameTick(final GameTick event)
 	{
-		if (!isInHydraRegion())
+		if (!atHydra)
 		{
 			return;
 		}
@@ -301,7 +301,7 @@ public class AlchemicalHydraPlugin extends Plugin
 	@Subscribe
 	private void onNpcSpawned(final NpcSpawned event)
 	{
-		if (!isInHydraRegion())
+		if (!atHydra)
 		{
 			return;
 		}
@@ -367,7 +367,7 @@ public class AlchemicalHydraPlugin extends Plugin
 	@Subscribe
 	private void onProjectileMoved(final ProjectileMoved event)
 	{
-		if (!isInHydraRegion())
+		if (!atHydra)
 		{
 			return;
 		}
@@ -401,7 +401,7 @@ public class AlchemicalHydraPlugin extends Plugin
 	@Subscribe
 	private void onChatMessage(final ChatMessage event)
 	{
-		if (!isInHydraRegion())
+		if (!atHydra)
 		{
 			return;
 		}

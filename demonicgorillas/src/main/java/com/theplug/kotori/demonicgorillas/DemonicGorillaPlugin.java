@@ -92,6 +92,8 @@ public class DemonicGorillaPlugin extends Plugin
 	private List<PendingGorillaAttack> pendingAttacks;
 
 	private Map<Player, MemorizedPlayer> memorizedPlayers;
+	private static final Set<Integer> REGION_IDS = Set.of(8280, 8536);
+	private boolean atGorillas;
 	private ArrayList<Projectile> gorillaProjectiles;
 
 	@Provides
@@ -103,6 +105,30 @@ public class DemonicGorillaPlugin extends Plugin
 	@Override
 	protected void startUp()
 	{
+		if (client.getGameState() != GameState.LOGGED_IN || !atDemonicGorillas())
+		{
+			return;
+		}
+		
+		init();
+	}
+
+	@Override
+	protected void shutDown()
+	{
+		atGorillas = false;
+		
+		overlayManager.remove(overlay);
+		gorillas = null;
+		recentBoulders = null;
+		pendingAttacks = null;
+		memorizedPlayers = null;
+	}
+	
+	private void init()
+	{
+		atGorillas = true;
+		
 		overlayManager.add(overlay);
 		gorillas = new HashMap<>();
 		recentBoulders = new ArrayList<>();
@@ -110,16 +136,6 @@ public class DemonicGorillaPlugin extends Plugin
 		gorillaProjectiles = new ArrayList<>();
 		memorizedPlayers = new HashMap<>();
 		clientThread.invoke(this::reset); // Updates the list of gorillas and players
-	}
-
-	@Override
-	protected void shutDown()
-	{
-		overlayManager.remove(overlay);
-		gorillas = null;
-		recentBoulders = null;
-		pendingAttacks = null;
-		memorizedPlayers = null;
 	}
 
 	private void clear()
@@ -541,6 +557,11 @@ public class DemonicGorillaPlugin extends Plugin
 	@Subscribe
 	private void onProjectileMoved(ProjectileMoved event)
 	{
+		if (!atGorillas)
+		{
+			return;
+		}
+		
 		final Projectile projectile = event.getProjectile();
 		final int projectileId = projectile.getId();
 
@@ -627,7 +648,7 @@ public class DemonicGorillaPlugin extends Plugin
 	@Subscribe
 	private void onHitsplatApplied(HitsplatApplied event)
 	{
-		if (gorillas.isEmpty())
+		if (!atGorillas || gorillas.isEmpty())
 		{
 			return;
 		}
@@ -656,19 +677,45 @@ public class DemonicGorillaPlugin extends Plugin
 	@Subscribe
 	private void onGameStateChanged(GameStateChanged event)
 	{
-		GameState gs = event.getGameState();
-		if (gs == GameState.LOGGING_IN ||
-			gs == GameState.CONNECTION_LOST ||
-			gs == GameState.HOPPING)
+		final GameState gs = event.getGameState();
+		
+		switch(gs)
 		{
-			reset();
+			case LOGGED_IN:
+				if (atDemonicGorillas())
+				{
+					if (!atGorillas)
+					{
+						init();
+					}
+				}
+				else
+				{
+					if (atGorillas)
+					{
+						shutDown();
+					}
+				}
+				break;
+			case HOPPING:
+			case LOGGING_IN:
+			case CONNECTION_LOST:
+			case LOGIN_SCREEN:
+				if (atGorillas)
+				{
+					shutDown();
+					reset();
+				}
+				break;
+			default:
+				break;
 		}
 	}
 
 	@Subscribe
 	private void onPlayerSpawned(PlayerSpawned event)
 	{
-		if (gorillas.isEmpty())
+		if (!atGorillas || gorillas.isEmpty())
 		{
 			return;
 		}
@@ -680,7 +727,7 @@ public class DemonicGorillaPlugin extends Plugin
 	@Subscribe
 	private void onPlayerDespawned(PlayerDespawned event)
 	{
-		if (gorillas.isEmpty())
+		if (memorizedPlayers.isEmpty() || gorillas.isEmpty())
 		{
 			return;
 		}
@@ -691,6 +738,10 @@ public class DemonicGorillaPlugin extends Plugin
 	@Subscribe
 	private void onNpcSpawned(NpcSpawned event)
 	{
+		if (!atGorillas)
+		{
+			return;
+		}
 		NPC npc = event.getNpc();
 		if (isNpcGorilla(npc.getId()))
 		{
@@ -717,6 +768,10 @@ public class DemonicGorillaPlugin extends Plugin
 	@Subscribe
 	private void onGameTick(GameTick event)
 	{
+		if (!atGorillas)
+		{
+			return;
+		}
 		checkGorillaAttacks();
 		checkPendingAttacks();
 		updatePlayers();
@@ -727,5 +782,17 @@ public class DemonicGorillaPlugin extends Plugin
 	private void clearProjectileArray()
 	{
 		gorillaProjectiles.removeIf(p -> p.getRemainingCycles() <= 0);
+	}
+	
+	private boolean atDemonicGorillas()
+	{
+		for (final int regionId : client.getMapRegions())
+		{
+			if (REGION_IDS.contains(regionId))
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 }

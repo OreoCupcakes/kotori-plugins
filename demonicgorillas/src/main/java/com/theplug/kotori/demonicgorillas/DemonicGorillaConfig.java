@@ -9,7 +9,7 @@ import net.runelite.client.config.ConfigSection;
 public interface DemonicGorillaConfig extends Config
 {
     @ConfigSection(
-            name = "<html>Demonic Gorillas<br>Version 1.1.6</html>",
+            name = "<html>Demonic Gorillas<br>Version 1.1.7</html>",
             description = "",
             position = 0,
             closedByDefault = true
@@ -22,5 +22,5 @@ public interface DemonicGorillaConfig extends Config
             description = "",
             section = versionInfo
     )
-    default String versionString() { return ""; }
+    default Boolean versionString() { return true; }
 }

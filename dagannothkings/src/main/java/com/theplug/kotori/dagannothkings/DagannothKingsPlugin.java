@@ -162,7 +162,7 @@ public class DagannothKingsPlugin extends Plugin
 	@Subscribe
 	private void onGameTick(final GameTick Event)
 	{
-		if (!atDks())
+		if (!atDks)
 		{
 			return;
 		}
@@ -182,7 +182,7 @@ public class DagannothKingsPlugin extends Plugin
 	@Subscribe
 	private void onNpcSpawned(final NpcSpawned event)
 	{
-		if (!atDks())
+		if (!atDks)
 		{
 			return;
 		}

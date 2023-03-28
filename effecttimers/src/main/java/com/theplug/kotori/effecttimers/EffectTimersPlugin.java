@@ -79,6 +79,7 @@ public class EffectTimersPlugin extends Plugin
 	private KeyManager keyManager;
 
 	private int fakeSpotAnim = -1;
+	private NPC muspah;
 	private HotkeyListener hotkeyListener = new HotkeyListener(() -> config.debugKeybind())
 	{
 		public void hotkeyPressed()
@@ -175,7 +176,9 @@ public class EffectTimersPlugin extends Plugin
 			return;
 		}
 
-		timerManager.setTimerFor(actor, effect.getType(), new Timer(this, effect, effect.isHalvable() && prayerTracker.getPrayerIconLastTick(actor) == HeadIcons.MAGIC));
+		timerManager.setTimerFor(actor, effect.getType(), new Timer(this, effect,
+				effect.isHalvable() && prayerTracker.getPrayerIconLastTick(actor) == HeadIcons.MAGIC,
+				effect.isResistance() && (actor.getName() != null && actor.getName().contains("Phantom Muspah"))));
 	}
 
 	@Subscribe
@@ -194,7 +197,7 @@ public class EffectTimersPlugin extends Plugin
 	{
 		return ArrayUtils.contains(client.getMapRegions(), VORKATH_REGION);
 	}
-
+	
 	@Subscribe
 	public void onNpcDespawned(NpcDespawned event)
 	{
@@ -214,6 +217,14 @@ public class EffectTimersPlugin extends Plugin
 		{
 			// TODO: not sure if we're meant to jump to cooldown here or just remove the timer completely, doesn't mechanically make a difference though
 			timerManager.setTimerFor(client.getLocalPlayer(), TimerType.FREEZE, new Timer(this, null)); // empty timer
+		}
+		
+		if (npc.getName().contains("Phantom Muspah"))
+		{
+			if (muspah != null)
+			{
+				muspah = null;
+			}
 		}
 	}
 
