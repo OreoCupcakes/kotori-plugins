@@ -4015,8 +4015,8 @@ public class MapLocations
 
 		// Underground
 		addPolygonTo(ROUGH_WILDERNESS,
-			2944, 9918,
-			2944, 10360,
+			2944, 9984,
+			2944, 10367,
 			3264, 10360,
 			3264, 9918);
 	}

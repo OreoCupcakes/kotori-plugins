@@ -52,7 +52,12 @@ public class PvPUtil
         if (regionID == 11931 /* falador party room museum */ ||
                 regionID == 12700 /* soul wars underground ferox */ ||
                 regionID == 12187 /* falador party room museum */ ||
-                regionID == 12955 /*  Bryophyta's lair */)
+                regionID == 12955 /*  Bryophyta's lair */ ||
+                regionID == 12611 /* Verzik's lair */ ||
+                regionID == 12867 /* ToB reward room */ ||
+                regionID == 13123 /* Sotetseg's lair */ ||
+                regionID == 13122 /* Nylos' lair */ ||
+                regionID == 11842 /* some cave */ )
         {
             return 0;
         }
@@ -96,7 +101,14 @@ public class PvPUtil
         }
         else if (WILDERNESS_ESCAPE_CAVES_CUBOID.contains(point))
         {
-            return (33 + ((point.getY() % 64) - 6));
+            /*
+                Escape cave levels 33 to 40, level 33 9 tiles, level 40 3 tiles, rest 7 tiles
+                clientscript function is: calc(33 + scale(coordz(coord) % 64 - 6, 50, 7));
+                Don't know what the formula for scale is, but the following works for now
+             */
+            double a = point.getY() % 64.0 - 6;
+            double b = 50.0/7.0;
+            return 33 + (int)(a/b);
         }
         else if (WILDERNESS_UNDERGROUND_CUBOID.contains(point))
         {

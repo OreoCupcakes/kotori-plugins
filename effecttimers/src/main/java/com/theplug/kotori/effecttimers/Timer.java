@@ -185,5 +185,4 @@ public class Timer
 		COOLDOWN,
 		INACTIVE
 	}
-
 }

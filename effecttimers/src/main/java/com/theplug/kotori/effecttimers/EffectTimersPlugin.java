@@ -79,7 +79,7 @@ public class EffectTimersPlugin extends Plugin
 	private KeyManager keyManager;
 
 	private int fakeSpotAnim = -1;
-	private NPC muspah;
+	
 	private HotkeyListener hotkeyListener = new HotkeyListener(() -> config.debugKeybind())
 	{
 		public void hotkeyPressed()
@@ -217,14 +217,6 @@ public class EffectTimersPlugin extends Plugin
 		{
 			// TODO: not sure if we're meant to jump to cooldown here or just remove the timer completely, doesn't mechanically make a difference though
 			timerManager.setTimerFor(client.getLocalPlayer(), TimerType.FREEZE, new Timer(this, null)); // empty timer
-		}
-		
-		if (npc.getName().contains("Phantom Muspah"))
-		{
-			if (muspah != null)
-			{
-				muspah = null;
-			}
 		}
 	}
 
