@@ -214,10 +214,10 @@ public class MapLocations
 
 		// Wildy zamorak temple
 		addPolygonOnPlane(MULTICOMBAT, 0,
-			2944, 3832,
+			2946, 3832,
 			2960, 3832,
 			2960, 3816,
-			2944, 3816);
+			2946, 3816);
 
 		// Wildy bandit camp
 		addPolygonOnPlane(MULTICOMBAT, 0,

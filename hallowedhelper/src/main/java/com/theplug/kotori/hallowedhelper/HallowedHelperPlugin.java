@@ -511,8 +511,11 @@ public class HallowedHelperPlugin extends Plugin {
     @Subscribe
     private void onGraphicsObjectCreated(GraphicsObjectCreated g)
     {
-        //log.info("Graphics object created: " + g.getGraphicsObject().getId());
-        if(g.getGraphicsObject().getId() == LIGHTNING_ID)
+        if (!playerInSepulchre)
+        {
+            return;
+        }
+        if (g.getGraphicsObject().getId() == LIGHTNING_ID)
         {
             addgraphicsobject(g.getGraphicsObject());
         }
@@ -1022,6 +1025,10 @@ public class HallowedHelperPlugin extends Plugin {
     @Subscribe
     private void onGameObjectSpawned(GameObjectSpawned event)
     {
+        if (!playerInSepulchre)
+        {
+            return;
+        }
         GameObject GO = event.getGameObject();
         addGameObject(GO);
     }
@@ -1119,6 +1126,10 @@ public class HallowedHelperPlugin extends Plugin {
     @Subscribe
     private void onGameObjectDespawned(GameObjectDespawned event)
     {
+        if (!playerInSepulchre)
+        {
+            return;
+        }
         GameObject gameobject = event.getGameObject();
         int id = gameobject.getId();
         if (CROSSBOWMAN_STATUE_IDS.contains(id))
@@ -1290,6 +1301,10 @@ public class HallowedHelperPlugin extends Plugin {
     @Subscribe
     private void onGroundObjectSpawned(GroundObjectSpawned event)
     {
+        if (!playerInSepulchre)
+        {
+            return;
+        }
         GroundObject GO = event.getGroundObject();
         addGroundObject(GO);
     }
@@ -1298,6 +1313,10 @@ public class HallowedHelperPlugin extends Plugin {
     @Subscribe
     private void onGroundObjectDespawned(GroundObjectDespawned event)
     {
+        if (!playerInSepulchre)
+        {
+            return;
+        }
         GroundObject GO = event.getGroundObject();
         if(bridge_id == GO.getId())
         {

@@ -189,13 +189,12 @@ public class GodWarsTickTimersPlugin extends Plugin
 	@Subscribe
 	public void onGameTick(GameTick Event)
 	{
-		lastTickTime = System.currentTimeMillis();
-
 		if (!validRegion)
 		{
 			return;
 		}
-
+		
+		lastTickTime = System.currentTimeMillis();
 		handleBosses();
 	}
 

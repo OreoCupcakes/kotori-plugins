@@ -413,6 +413,10 @@ public class GauntletExtendedPlugin extends Plugin
 	@Subscribe
 	private void onWidgetLoaded(final WidgetLoaded event)
 	{
+		if (!inGauntlet && !inHunllef)
+		{
+			return;
+		}
 		if (event.getGroupId() == WidgetID.GAUNTLET_TIMER_GROUP_ID)
 		{
 			overlayTimer.setGauntletStart();
@@ -423,6 +427,10 @@ public class GauntletExtendedPlugin extends Plugin
 	@Subscribe
 	private void onGameObjectSpawned(final GameObjectSpawned event)
 	{
+		if (!inGauntlet && !inHunllef)
+		{
+			return;
+		}
 		final GameObject gameObject = event.getGameObject();
 
 		final int id = gameObject.getId();
@@ -440,6 +448,10 @@ public class GauntletExtendedPlugin extends Plugin
 	@Subscribe
 	private void onGameObjectDespawned(final GameObjectDespawned event)
 	{
+		if (!inGauntlet && !inHunllef)
+		{
+			return;
+		}
 		final GameObject gameObject = event.getGameObject();
 
 		final int id = gameObject.getId();
@@ -457,6 +469,10 @@ public class GauntletExtendedPlugin extends Plugin
 	@Subscribe
 	private void onNpcSpawned(final NpcSpawned event)
 	{
+		if (!inGauntlet && !inHunllef)
+		{
+			return;
+		}
 		final NPC npc = event.getNpc();
 
 		final int id = npc.getId();
@@ -495,6 +511,10 @@ public class GauntletExtendedPlugin extends Plugin
 	@Subscribe
 	private void onNpcDespawned(final NpcDespawned event)
 	{
+		if (!inGauntlet && !inHunllef)
+		{
+			return;
+		}
 		final NPC npc = event.getNpc();
 
 		final int id = npc.getId();
@@ -565,6 +585,10 @@ public class GauntletExtendedPlugin extends Plugin
 	@Subscribe
 	private void onChatMessage(final ChatMessage event)
 	{
+		if (!inGauntlet)
+		{
+			return;
+		}
 		final ChatMessageType type = event.getType();
 
 		if (type == ChatMessageType.SPAM || type == ChatMessageType.GAMEMESSAGE)
@@ -576,7 +600,7 @@ public class GauntletExtendedPlugin extends Plugin
 	@Subscribe
 	private void onActorDeath(final ActorDeath event)
 	{
-		if (event.getActor() != client.getLocalPlayer())
+		if ((!inGauntlet && !inHunllef) || event.getActor() != client.getLocalPlayer())
 		{
 			return;
 		}
@@ -587,7 +611,7 @@ public class GauntletExtendedPlugin extends Plugin
 	@Subscribe
 	private void onAnimationChanged(final AnimationChanged event)
 	{
-		if (!isHunllefVarbitSet() || hunllef == null)
+		if (!inHunllef || hunllef == null)
 		{
 			return;
 		}

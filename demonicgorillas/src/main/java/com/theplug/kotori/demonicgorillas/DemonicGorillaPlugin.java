@@ -727,7 +727,7 @@ public class DemonicGorillaPlugin extends Plugin
 	@Subscribe
 	private void onPlayerDespawned(PlayerDespawned event)
 	{
-		if (memorizedPlayers.isEmpty() || gorillas.isEmpty())
+		if (!atGorillas || gorillas.isEmpty())
 		{
 			return;
 		}
@@ -759,6 +759,10 @@ public class DemonicGorillaPlugin extends Plugin
 	@Subscribe
 	private void onNpcDespawned(NpcDespawned event)
 	{
+		if (!atGorillas)
+		{
+			return;
+		}
 		if (gorillas.remove(event.getNpc()) != null && gorillas.isEmpty())
 		{
 			clear();

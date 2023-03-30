@@ -192,7 +192,7 @@ public class DagannothKingsPlugin extends Plugin
 	@Subscribe
 	private void onNpcDespawned(final NpcDespawned event)
 	{
-		if (dagannothKings.isEmpty())
+		if (!atDks)
 		{
 			return;
 		}

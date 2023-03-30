@@ -189,6 +189,10 @@ public class GrotesqueGuardiansPlugin extends Plugin
 	@Subscribe
 	private void onGameTick(final GameTick event)
 	{
+		if (!onRoof)
+		{
+			return;
+		}
 		lastTickTime = System.currentTimeMillis();
 
 		if (dusk != null)
@@ -200,18 +204,30 @@ public class GrotesqueGuardiansPlugin extends Plugin
 	@Subscribe
 	private void onNpcSpawned(final NpcSpawned event)
 	{
+		if (!onRoof)
+		{
+			return;
+		}
 		addNpc(event.getNpc());
 	}
 
 	@Subscribe
 	private void onNpcDespawned(final NpcDespawned event)
 	{
+		if (!onRoof)
+		{
+			return;
+		}
 		removeNpc(event.getNpc());
 	}
 
 	@Subscribe
 	private void onAnimationChanged(final AnimationChanged event)
 	{
+		if (!onRoof)
+		{
+			return;
+		}
 		final Actor actor = event.getActor();
 
 		if (dusk == null || actor != dusk.getNpc() || !dusk.isLastPhase())
@@ -225,7 +241,7 @@ public class GrotesqueGuardiansPlugin extends Plugin
 	@Subscribe
 	private void onGraphicsObjectCreated(final GraphicsObjectCreated event)
 	{
-		if (flashOnDanger)
+		if (flashOnDanger || !onRoof)
 		{
 			return;
 		}

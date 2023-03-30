@@ -37,9 +37,6 @@ import net.runelite.client.ui.overlay.components.TextComponent;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.awt.*;
-import java.util.List;
-import java.util.*;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Singleton
@@ -83,7 +80,7 @@ class HouseOverlayOverlay extends Overlay {
 
     @Override
     public Dimension render(Graphics2D graphics) {
-        if(plugin.inhouse)
+        if(plugin.inHouse)
         {
             for (final GameObject gameObject : plugin.gameObjectCollection)
             {
@@ -472,14 +469,17 @@ class HouseOverlayOverlay extends Overlay {
             return Color.RED;
         }
 
-        if(id == 29228)//Fairy Ring
+        if(id == 29228 || id == 29229)//Fairy Ring
         {
-            if(config.fairyStaff())
-                if(!plugin.fairy_ring_has_staff)
+            //Check if lumbridge elite diary is done
+            if (client.getVarbitValue(4498) == 0)
+            {
+                if (!plugin.fairy_ring_has_staff)
                 {
                     extrainfo = "WIELD STAFF";
                     return Color.PINK;
                 }
+            }
         }
 
         return defaultcolor;

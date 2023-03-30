@@ -4,10 +4,7 @@ package com.theplug.kotori.houseoverlay;
 
 import com.google.inject.Provides;
 import lombok.extern.slf4j.Slf4j;
-import net.runelite.api.Client;
-import net.runelite.api.DecorativeObject;
-import net.runelite.api.GameObject;
-import net.runelite.api.GameState;
+import net.runelite.api.*;
 import net.runelite.api.events.*;
 import net.runelite.api.kit.KitType;
 import net.runelite.client.callback.ClientThread;
@@ -19,10 +16,7 @@ import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @PluginDescriptor(
         name = "House Overlay",
@@ -30,7 +24,8 @@ import java.util.Map;
         tags = {"imno","ported","house", "overlay", "poh","kotori"}
 )
 @Slf4j
-public class HouseOverlayPlugin extends Plugin {
+public class HouseOverlayPlugin extends Plugin
+{
     // Injects our config
     @Inject
     private ConfigManager configManager;
@@ -46,12 +41,14 @@ public class HouseOverlayPlugin extends Plugin {
     private HouseOverlayOverlay overlay;
 
     @Provides
-    HouseOverlayConfig provideConfig(ConfigManager configManager) {
+    HouseOverlayConfig provideConfig(ConfigManager configManager)
+    {
         return configManager.getConfig(HouseOverlayConfig.class);
     }
 
     @Subscribe
-    private void onConfigChanged(ConfigChanged event) {
+    private void onConfigChanged(ConfigChanged event)
+    {
         if (event.getGroup().equals("HouseOverlay"))
         {
             switch(event.getKey())
@@ -137,86 +134,152 @@ public class HouseOverlayPlugin extends Plugin {
     }
 
     @Override
-    protected void startUp() {
+    protected void startUp()
+    {
+        if (client.getGameState() != GameState.LOGGED_IN || !isInHouse())
+        {
+            return;
+        }
+        
+        init();
+    }
+    
+    private void init()
+    {
+        inHouse = true;
         overlayManager.add(overlay);
         init_fairy_rings();
+        checkWeaponSlot();
     }
 
     @Override
-    protected void shutDown() {
+    protected void shutDown()
+    {
+        inHouse = false;
         overlayManager.remove(overlay);
         cached_fairy_ring_names.clear();
+        gameObjectCollection.clear();
+        decorativeObjectCollection.clear();
+        fairy_ring_has_staff = false;
     }
 
-    public boolean inhouse = false;
+    private static final Set<Integer> REGION_IDS = Set.of(7257, 7512, 7513, 7514, 7768, 7769, 7770, 8025, 8026);
+    public boolean inHouse = false;
     public int currentanimation = 0;
     public boolean fairy_ring_has_staff = false;
     public Collection<GameObject> gameObjectCollection = new ArrayList<>();
     public Collection<DecorativeObject> decorativeObjectCollection = new ArrayList<>();
+    
     @Subscribe
     private void onAnimationChanged(final AnimationChanged event)
     {
-        if(inhouse)
+        if (!inHouse)
         {
-            if(event.getActor() == client.getLocalPlayer()) {
-                currentanimation = event.getActor().getAnimation();
-            }
-        }
-    }
-
-    @Subscribe
-    private void onBeforeRender(final BeforeRender event) {
-        if (this.client.getGameState() != GameState.LOGGED_IN) {
             return;
         }
+        
+        if(event.getActor() == client.getLocalPlayer())
+        {
+            currentanimation = event.getActor().getAnimation();
+        }
     }
-
+    
     @Subscribe
-    private void onWidgetLoaded(WidgetLoaded event)
+    private void onItemContainerChanged(ItemContainerChanged event)
     {
-
+        if (!inHouse || event.getItemContainer().getId() != InventoryID.EQUIPMENT.getId())
+        {
+            return;
+        }
+        
+        checkWeaponSlot();
     }
 
     @Subscribe
-    public void onGameTick(GameTick event) {
-        inhouse = client.getMapRegions()[0] == 7769 || client.getMapRegions()[0] == 7513 || client.getMapRegions()[0] == 8025;
-        int currentweapon = client.getLocalPlayer().getPlayerComposition().getEquipmentIds()[KitType.WEAPON.getIndex()];
-        fairy_ring_has_staff = currentweapon == 1284 || currentweapon == 9596;
+    private void onGameObjectSpawned(GameObjectSpawned event)
+    {
+        if (!inHouse)
+        {
+            return;
+        }
+        GameObject spawnedGameObject = event.getGameObject();
+        if (spawnedGameObject != null)
+        {
+            if (!gameObjectCollection.stream().anyMatch(o -> o.getId() == spawnedGameObject.getId()))
+            {
+                gameObjectCollection.add(spawnedGameObject);
+            }
+        }
     }
 
     @Subscribe
-    public void onGameObjectSpawned(GameObjectSpawned event) {
-        if (inhouse) {
-            GameObject spawnedGameObject = event.getGameObject();
-            if (spawnedGameObject != null) {
-                if (!gameObjectCollection.stream().anyMatch(o -> o.getId() == spawnedGameObject.getId())) {
-                    gameObjectCollection.add(spawnedGameObject);
+    private void onDecorativeObjectSpawned(DecorativeObjectSpawned event)
+    {
+        if (!inHouse)
+        {
+            return;
+        }
+        DecorativeObject spawnedDecorativeObject = event.getDecorativeObject();
+        if (spawnedDecorativeObject != null)
+        {
+            if (!decorativeObjectCollection.stream().anyMatch(o -> o.getId() == spawnedDecorativeObject.getId()))
+            {
+                decorativeObjectCollection.add(spawnedDecorativeObject);
+            }
+        }
+    }
+
+    @Subscribe
+    private void onGameStateChanged(GameStateChanged event)
+    {
+        final GameState gameState = event.getGameState();
+        
+        switch (gameState)
+        {
+            case LOGGED_IN:
+                if (isInHouse())
+                {
+                    if (!inHouse)
+                    {
+                        init();
+                    }
                 }
-            }
-        }
-    }
-
-    @Subscribe
-    public void onDecorativeObjectSpawned(DecorativeObjectSpawned event) {
-        if (inhouse) {
-            DecorativeObject spawnedDecorativeObject = event.getDecorativeObject();
-            if (spawnedDecorativeObject != null) {
-                if (!decorativeObjectCollection.stream().anyMatch(o -> o.getId() == spawnedDecorativeObject.getId())) {
-                    decorativeObjectCollection.add(spawnedDecorativeObject);
+                else
+                {
+                    if (inHouse)
+                    {
+                        shutDown();
+                    }
                 }
-            }
+                break;
+            case HOPPING:
+            case LOGIN_SCREEN:
+                if (inHouse)
+                {
+                    shutDown();
+                }
+            default:
+                break;
         }
     }
-
-    @Subscribe
-    public void onGameStateChanged(GameStateChanged event) {
-        if (event.getGameState() == GameState.LOADING) {
-            if (!gameObjectCollection.isEmpty()) {
-                gameObjectCollection.clear();
-            }
-            if (!decorativeObjectCollection.isEmpty()) {
-                decorativeObjectCollection.clear();
+    
+    private boolean isInHouse()
+    {
+        for (int regionId : client.getMapRegions())
+        {
+            if (REGION_IDS.contains(regionId))
+            {
+                return true;
             }
         }
+        return false;
+    }
+    
+    private void checkWeaponSlot()
+    {
+        ItemContainer itemContainer = client.getItemContainer(InventoryID.EQUIPMENT);
+        
+        int currentweapon = itemContainer.getItem(EquipmentInventorySlot.WEAPON.getSlotIdx()).getId();
+        fairy_ring_has_staff = currentweapon == 772 || currentweapon == 9084;
     }
 }

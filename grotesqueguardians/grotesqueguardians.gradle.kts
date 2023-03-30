@@ -23,7 +23,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "1.0.3"
+version = "1.0.4"
 
 project.extra["PluginName"] = "Grotesque Guardians" // This is the name that is used in the external plugin manager panel
 project.extra["PluginDescription"] = "A plugin for Grotesque Guardians boss." // This is the description that is used in the external plugin manager panel

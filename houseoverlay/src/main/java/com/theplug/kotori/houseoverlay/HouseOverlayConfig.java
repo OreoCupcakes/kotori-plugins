@@ -33,7 +33,7 @@ import java.awt.*;
 public interface HouseOverlayConfig extends Config {
 
     @ConfigSection(
-            name = "<html>House Overlay<br>Version 1.1.5</html>",
+            name = "<html>House Overlay<br>Version 1.1.6</html>",
             description = "",
             position = -1,
             closedByDefault = true
@@ -41,24 +41,11 @@ public interface HouseOverlayConfig extends Config {
     String versionInfo = "Version";
 
     @ConfigSection(
-            name = "Settings",
+            name = "Color Settings",
             description = "",
             position = 0
     )
     String settings = "Settings";
-
-
-    @ConfigItem(
-            name = "Need Fairy Ring Staff",
-            description = "Turn off if you completed Lumbridge Elite Diary",
-            position = 1,
-            keyName = "fairyStaff",
-            section = settings
-    )
-    default boolean fairyStaff()
-    {
-        return true;
-    }
 
     @Alpha
     @ConfigItem(

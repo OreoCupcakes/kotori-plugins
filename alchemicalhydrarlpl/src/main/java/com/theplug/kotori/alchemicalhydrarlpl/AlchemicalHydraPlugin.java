@@ -223,7 +223,7 @@ public class AlchemicalHydraPlugin extends Plugin
 	@Subscribe
 	private void onGameObjectDespawned(GameObjectDespawned event)
 	{
-		if (vents.isEmpty())
+		if (!atHydra)
 		{
 			return;
 		}
