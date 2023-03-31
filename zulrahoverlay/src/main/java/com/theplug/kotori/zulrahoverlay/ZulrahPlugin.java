@@ -6,6 +6,7 @@ import com.theplug.kotori.zulrahoverlay.overlays.*;
 import com.theplug.kotori.zulrahoverlay.rotationutils.RotationType;
 import com.theplug.kotori.zulrahoverlay.rotationutils.ZulrahData;
 import com.theplug.kotori.zulrahoverlay.rotationutils.ZulrahPhase;
+import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.events.*;
@@ -33,6 +34,7 @@ import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
+@Slf4j
 @PluginDescriptor(
 		name = "Zulrah",
 		description = "All-in-One tool to help during the Zulrah fight",
@@ -42,7 +44,6 @@ import java.util.stream.Collectors;
 
 public class ZulrahPlugin extends Plugin implements KeyListener
 {
-	private static final Logger log = LoggerFactory.getLogger(ZulrahPlugin.class);
 	@Inject
 	private Client client;
 	@Inject
@@ -63,7 +64,9 @@ public class ZulrahPlugin extends Plugin implements KeyListener
 	private SceneOverlay sceneOverlay;
 	@Inject
 	private ZulrahConfig config;
+	private static final Set<Integer> ZULRAH_REGION_IDS = Set.of(9007,9008);
 	private NPC zulrahNpc = null;
+	private boolean inZulrahRegion;
 	private int stage = 0;
 	private int phaseTicks = -1;
 	private int attackTicks = -1;
@@ -80,9 +83,10 @@ public class ZulrahPlugin extends Plugin implements KeyListener
 	private Counter zulrahTotalTicksInfoBox;
 	public static final BufferedImage[] ZULRAH_IMAGES = new BufferedImage[3];
 	private static final BufferedImage CLOCK_ICON = ImageUtil.loadImageResource(ZulrahPlugin.class, "clock.png");
-	private final BiConsumer<RotationType, RotationType> phaseTicksHandler = (current, potential) -> {
-		if (zulrahReset) 
+	private final BiConsumer<RotationType, RotationType> phaseTicksHandler = (current, potential) ->
 	{
+		if (zulrahReset) 
+		{
 			phaseTicks = 38;
 		}
 		else
@@ -101,6 +105,16 @@ public class ZulrahPlugin extends Plugin implements KeyListener
 
 	protected void startUp() 
 	{
+		if (client.getGameState() != GameState.LOGGED_IN || !inZulrahRegion())
+		{
+			return;
+		}
+		init();
+	}
+	
+	private void init()
+	{
+		inZulrahRegion = true;
 		overlayManager.add(instanceTimerOverlay);
 		overlayManager.add(phaseOverlay);
 		overlayManager.add(prayerHelperOverlay);
@@ -111,6 +125,7 @@ public class ZulrahPlugin extends Plugin implements KeyListener
 
 	protected void shutDown() 
 	{
+		inZulrahRegion = false;
 		reset();
 		overlayManager.remove(instanceTimerOverlay);
 		overlayManager.remove(phaseOverlay);
@@ -143,12 +158,13 @@ public class ZulrahPlugin extends Plugin implements KeyListener
 
 	public void keyTyped(KeyEvent e) 
 	{
+	
 	}
 
 	public void keyPressed(KeyEvent e) 
 	{
 		if (config.snakelingSetting() == ZulrahConfig.SnakelingSettings.MES && config.snakelingMesHotkey().matches(e)) 
-	{
+		{
 			holdingSnakelingHotkey = true;
 		}
 	}
@@ -156,8 +172,43 @@ public class ZulrahPlugin extends Plugin implements KeyListener
 	public void keyReleased(KeyEvent e) 
 	{
 		if (config.snakelingSetting() == ZulrahConfig.SnakelingSettings.MES && config.snakelingMesHotkey().matches(e)) 
-	{
+		{
 			holdingSnakelingHotkey = false;
+		}
+	}
+	
+	@Subscribe
+	private void onGameStateChanged(GameStateChanged event)
+	{
+		GameState gameState = event.getGameState();
+		
+		switch (gameState)
+		{
+			case LOGGED_IN:
+				if (inZulrahRegion())
+				{
+					if (!inZulrahRegion)
+					{
+						init();
+					}
+				}
+				else
+				{
+					if (inZulrahRegion)
+					{
+						shutDown();
+					}
+				}
+				break;
+			case HOPPING:
+			case LOGIN_SCREEN:
+				if (inZulrahRegion)
+				{
+					shutDown();
+				}
+				break;
+			default:
+				break;
 		}
 	}
 
@@ -165,24 +216,28 @@ public class ZulrahPlugin extends Plugin implements KeyListener
 	private void onConfigChanged(ConfigChanged event) 
 	{
 		if (event.getGroup().equalsIgnoreCase("znzulrah")) 
-	{
+		{
 			switch (event.getKey()) 
-	{
+			{
 				case "snakelingSetting":
-				{
 					if (config.snakelingSetting() != ZulrahConfig.SnakelingSettings.ENTITY) 
-	{
+					{
 						clearSnakelingCollection();
 					}
-					if (config.snakelingSetting() == ZulrahConfig.SnakelingSettings.MES) break;
+					if (config.snakelingSetting() == ZulrahConfig.SnakelingSettings.MES)
+					{
+						break;
+					}
 					holdingSnakelingHotkey = false;
 					break;
-				}
 				case "totalTickCounter":
-				{
-					if (config.totalTickCounter()) break;
+					if (config.totalTickCounter())
+					{
+						break;
+					}
 					handleTotalTicksInfoBox(true);
-				}
+				default:
+					break;
 			}
 		}
 	}
@@ -196,12 +251,12 @@ public class ZulrahPlugin extends Plugin implements KeyListener
 	@Subscribe
 	private void onClientTick(ClientTick event) 
 	{
-		if (client.getGameState() != GameState.LOGGED_IN || zulrahNpc == null) 
-	{
+		if (!inZulrahRegion || client.getGameState() != GameState.LOGGED_IN || zulrahNpc == null)
+		{
 			return;
 		}
 		if (config.snakelingSetting() == ZulrahConfig.SnakelingSettings.ENTITY) 
-	{
+		{
 			snakelings.addAll(client.getNpcs().stream().filter(npc -> npc != null && npc.getName() != null && npc.getName().equalsIgnoreCase("snakeling") && npc.getCombatLevel() == 90).collect(Collectors.toList()));
 			snakelings.forEach(npc -> ZulrahPlugin.setHidden(npc, true));
 		}
@@ -210,26 +265,26 @@ public class ZulrahPlugin extends Plugin implements KeyListener
 	@Subscribe
 	private void onGameTick(GameTick event) 
 	{
-		if (client.getGameState() != GameState.LOGGED_IN || zulrahNpc == null) 
-	{
+		if (!inZulrahRegion || client.getGameState() != GameState.LOGGED_IN || zulrahNpc == null)
+		{
 			return;
 		}
 		++totalTicks;
 		if (attackTicks >= 0) 
-	{
+		{
 			--attackTicks;
 		}
 		if (phaseTicks >= 0) 
-	{
+		{
 			--phaseTicks;
 		}
 		if (projectilesMap.size() > 0) 
-	{
+		{
 			projectilesMap.values().removeIf(v -> v <= 0);
 			projectilesMap.replaceAll((k, v) -> v - 1);
 		}
 		if (toxicCloudsMap.size() > 0) 
-	{
+		{
 			toxicCloudsMap.values().removeIf(v -> v <= 0);
 			toxicCloudsMap.replaceAll((k, v) -> v - 1);
 		}
@@ -239,44 +294,42 @@ public class ZulrahPlugin extends Plugin implements KeyListener
 	@Subscribe
 	private void onAnimationChanged(AnimationChanged event) 
 	{
-		if (!(event.getActor() instanceof NPC)) 
-	{
+		if (!inZulrahRegion || !(event.getActor() instanceof NPC))
+		{
 			return;
 		}
 		NPC npc = (NPC)((Object)event.getActor());
 		if (npc.getName() != null && !npc.getName().equalsIgnoreCase("zulrah")) 
-	{
+		{
 			return;
 		}
 		switch (npc.getAnimation()) 
-	{
+		{
 			case 5071:
-			{
 				zulrahNpc = npc;
 				instanceTimerOverlay.setTimer();
 				potentialRotations = RotationType.findPotentialRotations(npc, stage);
 				phaseTicksHandler.accept(currentRotation, potentialRotations.get(0));
 				log.debug("New Zulrah Encounter Started");
 				break;
-			}
 			case 5073:
-			{
 				++stage;
 				if (currentRotation == null) 
-	{
+				{
 					potentialRotations = RotationType.findPotentialRotations(npc, stage);
 					currentRotation = potentialRotations.size() == 1 ? potentialRotations.get(0) : null;
 				}
 				phaseTicksHandler.accept(currentRotation, potentialRotations.get(0));
 				break;
-			}
 			case 5072:
-			{
 				if (zulrahReset) 
-	{
+				{
 					zulrahReset = false;
 				}
-				if (currentRotation == null || !isLastPhase(currentRotation)) break;
+				if (currentRotation == null || !isLastPhase(currentRotation))
+				{
+					break;
+				}
 				stage = -1;
 				currentRotation = null;
 				potentialRotations.clear();
@@ -286,33 +339,36 @@ public class ZulrahPlugin extends Plugin implements KeyListener
 				zulrahReset = true;
 				log.debug("Resetting Zulrah");
 				break;
-			}
 			case 5069:
-			{
 				attackTicks = 4;
-				if (currentRotation == null || !getCurrentPhase(currentRotation).getZulrahNpc().isJad()) break;
+				if (currentRotation == null || !getCurrentPhase(currentRotation).getZulrahNpc().isJad())
+				{
+					break;
+				}
 				flipPhasePrayer = !flipPhasePrayer;
 				break;
-			}
 			case 5806:
 			case 5807:
-			{
 				attackTicks = 8;
 				flipStandLocation = !flipStandLocation;
 				break;
-			}
 			case 5804:
-			{
 				reset();
-			}
+				break;
+			default:
+				break;
 		}
 	}
 
 	@Subscribe
 	private void onFocusChanged(FocusChanged event) 
 	{
+		if (!inZulrahRegion)
+		{
+			return;
+		}
 		if (!event.isFocused()) 
-	{
+		{
 			holdingSnakelingHotkey = false;
 		}
 	}
@@ -320,15 +376,15 @@ public class ZulrahPlugin extends Plugin implements KeyListener
 	@Subscribe
 	private void onMenuEntryAdded(MenuEntryAdded event) 
 	{
-		if (config.snakelingSetting() != ZulrahConfig.SnakelingSettings.MES || zulrahNpc == null || zulrahNpc.isDead()) 
-	{
+		if (!inZulrahRegion || config.snakelingSetting() != ZulrahConfig.SnakelingSettings.MES || zulrahNpc == null || zulrahNpc.isDead())
+		{
 			return;
 		}
 		if (!holdingSnakelingHotkey && event.getTarget().contains("Snakeling") && event.getOption().equalsIgnoreCase("attack")) 
-	{
+		{
 			NPC npc = client.getCachedNPCs()[event.getIdentifier()];
 			if (npc == null) 
-	{
+			{
 				return;
 			}
 			client.setMenuEntries(Arrays.copyOf(client.getMenuEntries(), client.getMenuEntries().length - 1));
@@ -338,50 +394,33 @@ public class ZulrahPlugin extends Plugin implements KeyListener
 	@Subscribe
 	private void onProjectileMoved(ProjectileMoved event) 
 	{
-		if (zulrahNpc == null) 
-	{
+		if (!inZulrahRegion || zulrahNpc == null)
+		{
 			return;
 		}
 		Projectile p = event.getProjectile();
 		switch (p.getId()) 
-	{
+		{
 			case 1045:
 			case 1047:
-			{
 				projectilesMap.put(event.getPosition(), p.getRemainingCycles() / 30);
-			}
+				break;
+			default:
+				break;
 		}
 	}
 
 	@Subscribe
-	private void onGameObjectSpawned(GameObjectSpawned event) 
+	private void onGameObjectSpawned(GameObjectSpawned event)
 	{
-		if (zulrahNpc == null) 
-	{
+		if (!inZulrahRegion || zulrahNpc == null)
+		{
 			return;
 		}
 		GameObject obj = event.getGameObject();
-		if (obj.getId() == 11700) 
-	{
+		if (obj.getId() == 11700)
+		{
 			toxicCloudsMap.put(obj, 30);
-		}
-	}
-
-	@Subscribe
-	private void onGameStateChanged(GameStateChanged event) 
-	{
-		if (zulrahNpc == null) 
-	{
-			return;
-		}
-		switch (event.getGameState()) 
-	{
-			case LOADING:
-			case CONNECTION_LOST:
-			case HOPPING:
-			{
-				reset();
-			}
 		}
 	}
 
@@ -406,7 +445,7 @@ public class ZulrahPlugin extends Plugin implements KeyListener
 	{
 		LinkedHashSet<ZulrahData> zulrahDataSet = new LinkedHashSet<ZulrahData>();
 		if (currentRotation == null) 
-	{
+		{
 			potentialRotations.forEach(type -> zulrahDataSet.add(new ZulrahData(getCurrentPhase((RotationType)((Object)type)), getNextPhase((RotationType)((Object)type)))));
 		}
 		else
@@ -419,14 +458,14 @@ public class ZulrahPlugin extends Plugin implements KeyListener
 	private void handleTotalTicksInfoBox(boolean remove) 
 	{
 		if (remove) 
-	{
+		{
 			infoBoxManager.removeInfoBox(zulrahTotalTicksInfoBox);
 			zulrahTotalTicksInfoBox = null;
 		}
 		else if (config.totalTickCounter())
-	{
+		{
 			if (zulrahTotalTicksInfoBox == null) 
-	{
+			{
 				zulrahTotalTicksInfoBox = new Counter(CLOCK_ICON, this, totalTicks);
 				zulrahTotalTicksInfoBox.setTooltip("Total Ticks Alive");
 				infoBoxManager.addInfoBox(zulrahTotalTicksInfoBox);
@@ -446,7 +485,7 @@ public class ZulrahPlugin extends Plugin implements KeyListener
 			setHidden = renderable.getClass().getMethod("setHidden", Boolean.TYPE);
 		}
 		catch (NoSuchMethodException e) 
-	{
+		{
 			log.debug("Couldn't find method setHidden for class {}", renderable.getClass());
 			return;
 		}
@@ -455,7 +494,7 @@ public class ZulrahPlugin extends Plugin implements KeyListener
 			setHidden.invoke(renderable, hidden);
 		}
 		catch (IllegalAccessException | InvocationTargetException e) 
-	{
+		{
 			log.debug("Couldn't call method setHidden for class {}", renderable.getClass());
 		}
 	}
@@ -510,5 +549,17 @@ public class ZulrahPlugin extends Plugin implements KeyListener
 		ZulrahPlugin.ZULRAH_IMAGES[0] = ImageUtil.loadImageResource(ZulrahPlugin.class, "zulrah_range.png");
 		ZulrahPlugin.ZULRAH_IMAGES[1] = ImageUtil.loadImageResource(ZulrahPlugin.class, "zulrah_melee.png");
 		ZulrahPlugin.ZULRAH_IMAGES[2] = ImageUtil.loadImageResource(ZulrahPlugin.class, "zulrah_magic.png");
+	}
+	
+	private boolean inZulrahRegion()
+	{
+		for (final int regionId : client.getMapRegions())
+		{
+			if (ZULRAH_REGION_IDS.contains(regionId))
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 }

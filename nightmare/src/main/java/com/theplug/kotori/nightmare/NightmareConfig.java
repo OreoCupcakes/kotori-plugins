@@ -36,7 +36,7 @@ import net.runelite.client.config.Units;
 public interface NightmareConfig extends Config
 {
 	@ConfigSection(
-			name = "<html>Nightmare<br>Version 1.1.0</html>",
+			name = "<html>Nightmare<br>Version 1.1.2</html>",
 			description = "",
 			position = -1,
 			closedByDefault = true

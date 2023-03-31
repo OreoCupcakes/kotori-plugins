@@ -96,6 +96,11 @@ public class TempleTrekkingPlugin extends Plugin
 	@Subscribe
 	public void onGroundObjectSpawned(GroundObjectSpawned event)
 	{
+		if (!inTrek)
+		{
+			return;
+		}
+		
 		GroundObject obj = event.getGroundObject();
 		if (obj.getId() == ObjectID.BOG)
 		{

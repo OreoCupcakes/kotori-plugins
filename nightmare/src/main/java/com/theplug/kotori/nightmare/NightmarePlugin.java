@@ -30,7 +30,7 @@ import net.runelite.client.util.Text;
 	name = "Nightmare of Ashihama",
 	enabledByDefault = false,
 	description = "Show what prayer to use and which tiles to avoid.",
-	tags = {"bosses", "combat", "nm", "overlay", "nightmare", "pve", "pvm", "ashihama", "kotori", "ported", "cuell"}
+	tags = {"bosses", "combat", "nm", "overlay", "nightmare", "pve", "pvm", "ashihama", "kotori", "ported"}
 )
 
 @Slf4j
@@ -68,6 +68,7 @@ public class NightmarePlugin extends Plugin
 	private static final int NIGHTMARE_PRE_MUSHROOM = 37738;
 	private static final int NIGHTMARE_MUSHROOM = 37739;
 	private static final int NIGHTMARE_SHADOW = 1767;   // graphics object
+	private static final int NIGHTMARE_REGION_ID = 15515;
 
 	private static final LocalPoint MIDDLE_LOCATION = new LocalPoint(6208, 8128);
 	private static final Set<LocalPoint> PHOSANIS_MIDDLE_LOCATIONS = ImmutableSet.of(new LocalPoint(6208, 7104), new LocalPoint(7232, 7104));
@@ -95,6 +96,8 @@ public class NightmarePlugin extends Plugin
 	private NPC nm;
 	@Getter(AccessLevel.PACKAGE)
 	private boolean inFight;
+	
+	private boolean inRegion;
 
 	private boolean cursed;
 
@@ -136,6 +139,17 @@ public class NightmarePlugin extends Plugin
 	@Override
 	protected void startUp()
 	{
+		if (client.getGameState() != GameState.LOGGED_IN || !inNightmareRegion())
+		{
+			return;
+		}
+		
+		init();
+	}
+	
+	private void init()
+	{
+		inRegion = true;
 		overlayManager.add(overlay);
 		overlayManager.add(prayerOverlay);
 		overlayManager.add(prayerInfoBox);
@@ -146,6 +160,7 @@ public class NightmarePlugin extends Plugin
 	@Override
 	protected void shutDown()
 	{
+		inRegion = false;
 		overlayManager.remove(overlay);
 		overlayManager.remove(prayerOverlay);
 		overlayManager.remove(prayerInfoBox);
@@ -176,11 +191,46 @@ public class NightmarePlugin extends Plugin
 		parasiteTargets.clear();
 		sleepwalkers.clear();
 	}
+	
+	@Subscribe
+	private void onGameStateChanged(GameStateChanged event)
+	{
+		final GameState gamestate = event.getGameState();
+		
+		switch (gamestate)
+		{
+			case LOGGED_IN:
+				if (inNightmareRegion())
+				{
+					if (!inRegion)
+					{
+						init();
+					}
+				}
+				else
+				{
+					if (inRegion)
+					{
+						shutDown();
+					}
+				}
+				break;
+			case HOPPING:
+			case LOGIN_SCREEN:
+				if (inRegion)
+				{
+					shutDown();
+				}
+				break;
+			default:
+				break;
+		}
+	}
 
 	@Subscribe
 	private void onGameObjectSpawned(GameObjectSpawned event)
 	{
-		if (!inFight)
+		if (!inRegion || !inFight)
 		{
 			return;
 		}
@@ -196,7 +246,7 @@ public class NightmarePlugin extends Plugin
 	@Subscribe
 	private void onGameObjectDespawned(GameObjectDespawned event)
 	{
-		if (!inFight)
+		if (!inRegion || !inFight)
 		{
 			return;
 		}
@@ -212,7 +262,7 @@ public class NightmarePlugin extends Plugin
 	@Subscribe
 	public void onGraphicsObjectCreated(GraphicsObjectCreated event)
 	{
-		if (!inFight)
+		if (!inRegion || !inFight)
 		{
 			return;
 		}
@@ -229,7 +279,7 @@ public class NightmarePlugin extends Plugin
 	@Subscribe
 	private void onProjectileMoved(ProjectileMoved event)
 	{
-		if (!inFight)
+		if (!inRegion || !inFight)
 		{
 			return;
 		}
@@ -260,6 +310,11 @@ public class NightmarePlugin extends Plugin
 	@Subscribe
 	public void onAnimationChanged(AnimationChanged event)
 	{
+		if (!inRegion)
+		{
+			return;
+		}
+		
 		Actor actor = event.getActor();
 		if (!(actor instanceof NPC))
 		{
@@ -332,6 +387,11 @@ public class NightmarePlugin extends Plugin
 	@Subscribe
 	public void onNpcChanged(NpcChanged event)
 	{
+		if (!inRegion)
+		{
+			return;
+		}
+		
 		final NPC npc = event.getNpc();
 
 		//if npc is in the totems map, update its phase
@@ -354,6 +414,11 @@ public class NightmarePlugin extends Plugin
 	@Subscribe
 	public void onNpcSpawned(NpcSpawned event)
 	{
+		if (!inRegion)
+		{
+			return;
+		}
+		
 		final NPC npc = event.getNpc();
 
 		if (npc.getName() != null && npc.getName().equalsIgnoreCase("parasite"))
@@ -375,6 +440,11 @@ public class NightmarePlugin extends Plugin
 	@Subscribe
 	public void onNpcDespawned(NpcDespawned event)
 	{
+		if (!inRegion)
+		{
+			return;
+		}
+		
 		final NPC npc = event.getNpc();
 
 		if (npc.getName() != null && npc.getName().equalsIgnoreCase("sleepwalker"))
@@ -386,6 +456,11 @@ public class NightmarePlugin extends Plugin
 	@Subscribe
 	public void onActorDeath(ActorDeath event)
 	{
+		if (!inRegion)
+		{
+			return;
+		}
+		
 		if (event.getActor() instanceof NPC && event.getActor().getName() != null)
 		{
 			final NPC npc = (NPC)event.getActor();
@@ -405,7 +480,7 @@ public class NightmarePlugin extends Plugin
 	@Subscribe
 	private void onChatMessage(ChatMessage event)
 	{
-		if (!inFight || nm == null || event.getType() != ChatMessageType.GAMEMESSAGE)
+		if (!inRegion || !inFight || nm == null || event.getType() != ChatMessageType.GAMEMESSAGE)
 		{
 			return;
 		}
@@ -447,21 +522,9 @@ public class NightmarePlugin extends Plugin
 	}
 
 	@Subscribe
-	private void onGameStateChanged(GameStateChanged event)
-	{
-		GameState gamestate = event.getGameState();
-
-		//if loading happens while inFight, the user has left the area (either via death or teleporting).
-		if (gamestate == GameState.LOADING && inFight)
-		{
-			reset();
-		}
-	}
-
-	@Subscribe
 	private void onGameTick(final GameTick event)
 	{
-		if (!inFight || nm == null)
+		if (!inRegion || !inFight || nm == null)
 		{
 			return;
 		}
@@ -504,7 +567,7 @@ public class NightmarePlugin extends Plugin
 	@Subscribe
 	public void onMenuEntryAdded(MenuEntryAdded event)
 	{
-		if (!inFight || nm == null || event.getMenuEntry().getType() != MenuAction.NPC_SECOND_OPTION)
+		if (!inRegion || !inFight || nm == null || event.getMenuEntry().getType() != MenuAction.NPC_SECOND_OPTION)
 		{
 			return;
 		}
@@ -525,10 +588,7 @@ public class NightmarePlugin extends Plugin
 	private void removeNPCMenuEntry(String target)
 	{
 		MenuEntry[] menuEntries = client.getMenuEntries();
-		MenuEntry[] newEntries = Arrays.stream(menuEntries).filter((e) -> {
-			NPC npc = e.getNpc();
-			return npc == null || Objects.equals(npc.getName().toLowerCase(), target);
-		}).toArray(x$0 -> new MenuEntry[x$0]);
+		MenuEntry[] newEntries = Arrays.stream(menuEntries).filter(e -> e.getNpc() == null || e.getNpc().getName().equalsIgnoreCase(target)).toArray(MenuEntry[]::new);
 		if (menuEntries.length != newEntries.length)
 		{
 			client.setMenuEntries(newEntries);
@@ -538,5 +598,10 @@ public class NightmarePlugin extends Plugin
 	private boolean isPhosanis(int id)
 	{
 		return (id >= 9416 && id <= 9424) || (id >= 11153 && id <= 11155);
+	}
+	
+	private boolean inNightmareRegion()
+	{
+		return Arrays.stream(client.getMapRegions()).anyMatch(r -> r == NIGHTMARE_REGION_ID);
 	}
 }

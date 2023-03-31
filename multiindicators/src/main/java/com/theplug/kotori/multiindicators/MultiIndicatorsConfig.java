@@ -36,7 +36,7 @@ import java.awt.*;
 public interface MultiIndicatorsConfig extends Config
 {
 	@ConfigSection(
-			name = "<html>Multi-Lines Indicators<br>Version 1.1.2</html>",
+			name = "<html>Multi-Lines Indicators<br>Version 1.1.3</html>",
 			description = "",
 			position = -1,
 			closedByDefault = true

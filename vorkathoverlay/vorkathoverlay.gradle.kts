@@ -23,7 +23,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "1.1.3"
+version = "1.1.4"
 
 project.extra["PluginName"] = "Vorkath" // This is the name that is used in the external plugin manager panel
 project.extra["PluginDescription"] = "Count Vorkath attacks, indicate next phase, WooxWalk timer, indicate path through acid" // This is the description that is used in the external plugin manager panel

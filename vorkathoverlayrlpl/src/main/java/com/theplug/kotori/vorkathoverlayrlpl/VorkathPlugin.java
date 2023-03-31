@@ -375,6 +375,11 @@ public class VorkathPlugin extends Plugin
 	@Subscribe
 	private void onClientTick(ClientTick event)
 	{
+		if (!isAtVorkath())
+		{
+			return;
+		}
+		
 		if (acidSpots.size() != lastAcidSpotsSize)
 		{
 			if (acidSpots.size() == 0)

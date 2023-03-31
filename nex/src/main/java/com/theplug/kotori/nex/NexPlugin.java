@@ -7,10 +7,8 @@ package com.theplug.kotori.nex;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Sets;
 import com.google.inject.Provides;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import javax.inject.Inject;
@@ -105,7 +103,10 @@ public class NexPlugin extends Plugin
 	// two ticks after but chat messages happen before onTick
 	private static final int NEX_WING_READ_DELAY = 3;
 	private static final int NEX_WING_DISTANCE = 10;
-
+	
+	private static final int NEX_REGION_ID = 11601;
+	
+	private boolean inNexRegion;
 	@Getter
 	private boolean inFight;
 
@@ -221,6 +222,18 @@ public class NexPlugin extends Plugin
 	@Override
 	protected void startUp()
 	{
+		if (client.getGameState() != GameState.LOGGED_IN || !isInNexRegion())
+		{
+			return;
+		}
+		
+		init();
+	}
+	
+	private void init()
+	{
+		inNexRegion = true;
+		
 		overlayManager.add(overlay);
 		overlayManager.add(prayerOverlay);
 		overlayManager.add(prayerInfoBox);
@@ -231,14 +244,18 @@ public class NexPlugin extends Plugin
 	@Override
 	protected void shutDown()
 	{
+		inNexRegion = false;
+		
 		overlayManager.remove(overlay);
 		overlayManager.remove(prayerOverlay);
 		overlayManager.remove(prayerInfoBox);
 		hooks.unregisterRenderableDrawListener(drawListener);
+		reset();
 	}
 
 	private void reset()
 	{
+		inFight = false;
 		minionActive = false;
 		currentPhase = NexPhase.NONE;
 		selfCoughingPlayer = null;
@@ -257,10 +274,50 @@ public class NexPlugin extends Plugin
 		teamSize = 0;
 		coughingPlayersChanged = false;
 	}
+	
+	@Subscribe
+	private void onGameStateChanged(GameStateChanged event)
+	{
+		GameState gamestate = event.getGameState();
+		
+		switch(gamestate)
+		{
+			case LOGGED_IN:
+				if (isInNexRegion())
+				{
+					if (!inNexRegion)
+					{
+						init();
+					}
+				}
+				else
+				{
+					if (inNexRegion)
+					{
+						shutDown();
+					}
+				}
+				break;
+			case HOPPING:
+			case LOGIN_SCREEN:
+				if (inNexRegion)
+				{
+					shutDown();
+				}
+				break;
+			default:
+				break;
+		}
+	}
 
 	@Subscribe
 	public void onAnimationChanged(AnimationChanged event)
 	{
+		if (!inNexRegion)
+		{
+			return;
+		}
+		
 		Actor actor = event.getActor();
 		if (!(actor instanceof NPC))
 		{
@@ -304,7 +361,7 @@ public class NexPlugin extends Plugin
 	@Subscribe
 	public void onInteractingChanged(InteractingChanged event)
 	{
-		if (!inFight || currentPhase != NexPhase.ZAROS)
+		if (!inNexRegion || !inFight || currentPhase != NexPhase.ZAROS)
 		{
 			return;
 		}
@@ -333,7 +390,7 @@ public class NexPlugin extends Plugin
 	@Subscribe
 	private void onGameTick(final GameTick event)
 	{
-		if (!inFight)
+		if (!inNexRegion || !inFight)
 		{
 			return;
 		}
@@ -448,7 +505,7 @@ public class NexPlugin extends Plugin
 	@Subscribe
 	public void onGameObjectSpawned(GameObjectSpawned event)
 	{
-		if (!inFight)
+		if (!inNexRegion || !inFight)
 		{
 			return;
 		}
@@ -476,7 +533,7 @@ public class NexPlugin extends Plugin
 	@Subscribe
 	public void onGameObjectDespawned(GameObjectDespawned event)
 	{
-		if (!inFight)
+		if (!inNexRegion || !inFight)
 		{
 			return;
 		}
@@ -492,7 +549,7 @@ public class NexPlugin extends Plugin
 	@Subscribe
 	public void onGraphicChanged(GraphicChanged event)
 	{
-		if (!inFight)
+		if (!inNexRegion || !inFight)
 		{
 			return;
 		}
@@ -519,22 +576,9 @@ public class NexPlugin extends Plugin
 	}
 
 	@Subscribe
-	private void onGameStateChanged(GameStateChanged event)
-	{
-		GameState gamestate = event.getGameState();
-
-		//if loading happens while inFight, the user has left the area (either via death or teleporting).
-		if (gamestate == GameState.LOADING && inFight)
-		{
-			reset();
-			inFight = false;
-		}
-	}
-
-	@Subscribe
 	private void onChatMessage(ChatMessage event)
 	{
-		if (!inFight || event.getType() != ChatMessageType.GAMEMESSAGE)
+		if (!inNexRegion || !inFight || event.getType() != ChatMessageType.GAMEMESSAGE)
 		{
 			return;
 		}
@@ -779,5 +823,10 @@ public class NexPlugin extends Plugin
 		}
 
 		return true;
+	}
+	
+	private boolean isInNexRegion()
+	{
+		return Arrays.stream(client.getMapRegions()).anyMatch(r -> r == NEX_REGION_ID);
 	}
 }

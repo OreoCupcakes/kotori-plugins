@@ -26,6 +26,7 @@ package com.theplug.kotori.tarnslair;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import javax.inject.Inject;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -51,8 +52,7 @@ import net.runelite.client.ui.overlay.OverlayManager;
 @Slf4j
 public class TarnsLairPlugin extends Plugin
 {
-	private static final int TARNS_LAIR_NORTH_REGION = 12616;
-	private static final int TARNS_LAIR_SOUTH_REGION = 12615;
+	private static final Set<Integer> TARNS_LAIR_REGION_IDS = Set.of(12615, 12616);
 
 	@Getter(AccessLevel.PACKAGE)
 	private final Map<TileObject, Tile> staircases = new HashMap<>();
@@ -63,7 +63,6 @@ public class TarnsLairPlugin extends Plugin
 	@Getter(AccessLevel.PACKAGE)
 	private final Map<TileObject, Tile> floorTraps = new HashMap<>();
 
-	@Getter(AccessLevel.PACKAGE)
 	private boolean inLair;
 
 	@Inject
@@ -81,32 +80,79 @@ public class TarnsLairPlugin extends Plugin
 	@Override
 	protected void startUp()
 	{
+		if (client.getGameState() != GameState.LOGGED_IN || !isInTarnsLair())
+		{
+			return;
+		}
+		
+		init();
+	}
+	
+	private void init()
+	{
+		inLair = true;
 		overlayManager.add(overlay);
 	}
 
 	@Override
 	protected void shutDown()
 	{
+		inLair = false;
 		overlayManager.remove(overlay);
 		staircases.clear();
 		wallTraps.clear();
 		floorTraps.clear();
 		groundObjectQueue.clear();
 		gameObjectQueue.clear();
-		inLair = false;
 	}
-
+	
 	@Subscribe
-	private void onGameTick(GameTick event)
+	private void onGameStateChanged(GameStateChanged event)
 	{
-		int regionID = client.getLocalPlayer().getWorldLocation().getRegionID();
-		inLair = (regionID == TARNS_LAIR_NORTH_REGION || regionID == TARNS_LAIR_SOUTH_REGION);
+		final GameState gameState = event.getGameState();
+		
+		switch(gameState)
+		{
+			case LOGGED_IN:
+				if (isInTarnsLair())
+				{
+					if (!inLair)
+					{
+						init();
+					}
+					else
+					{
+						staircases.clear();
+						wallTraps.clear();
+						floorTraps.clear();
+						groundObjectQueue.clear();
+						gameObjectQueue.clear();
+					}
+				}
+				else
+				{
+					if (inLair)
+					{
+						shutDown();
+					}
+				}
+				break;
+			case HOPPING:
+			case LOGIN_SCREEN:
+				if (inLair)
+				{
+					shutDown();
+				}
+				break;
+			default:
+				break;
+		}
 	}
 
 	@Subscribe
 	private void onGameObjectSpawned(GameObjectSpawned event)
 	{
-		if (!isInLair())
+		if (!inLair)
 		{
 			return;
 		}
@@ -130,7 +176,7 @@ public class TarnsLairPlugin extends Plugin
 	@Subscribe
 	private void onGameObjectDespawned(GameObjectDespawned event)
 	{
-		if (!isInLair())
+		if (!inLair)
 		{
 			return;
 		}
@@ -141,7 +187,7 @@ public class TarnsLairPlugin extends Plugin
 	@Subscribe
 	private void onGroundObjectSpawned(GroundObjectSpawned event)
 	{
-		if (!isInLair())
+		if (!inLair)
 		{
 			return;
 		}
@@ -165,7 +211,7 @@ public class TarnsLairPlugin extends Plugin
 	@Subscribe
 	private void onGroundObjectDespawned(GroundObjectDespawned event)
 	{
-		if (!isInLair())
+		if (!inLair)
 		{
 			return;
 		}
@@ -173,22 +219,9 @@ public class TarnsLairPlugin extends Plugin
 		onTileObject(event.getTile(), groundObjectQueue.get(event.getTile()), event.getGroundObject());
 	}
 
-	@Subscribe
-	private void onGameStateChanged(GameStateChanged event)
-	{
-		if (event.getGameState() == GameState.LOADING)
-		{
-			staircases.clear();
-			wallTraps.clear();
-			floorTraps.clear();
-			groundObjectQueue.clear();
-			gameObjectQueue.clear();
-		}
-	}
-
 	private void onTileObject(Tile tile, TileObject oldObject, TileObject newObject)
 	{
-		if (!isInLair())
+		if (!inLair)
 		{
 			return;
 		}
@@ -210,5 +243,17 @@ public class TarnsLairPlugin extends Plugin
 		{
 			floorTraps.put(newObject, tile);
 		}
+	}
+	
+	private boolean isInTarnsLair()
+	{
+		for (int regionId : TARNS_LAIR_REGION_IDS)
+		{
+			if (TARNS_LAIR_REGION_IDS.contains(regionId))
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 }
