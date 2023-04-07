@@ -37,7 +37,7 @@ import net.runelite.client.config.Range;
 public interface GodWarsTickTimersConfig extends Config
 {
 	@ConfigSection(
-			name = "<html>God Wars Tick Timers<br>Version 1.1.1</html>",
+			name = "<html>God Wars Tick Timers<br>Version 1.1.0</html>",
 			description = "",
 			position = -1,
 			closedByDefault = true

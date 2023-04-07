@@ -245,7 +245,7 @@ public class TarnsLairPlugin extends Plugin
 		}
 	}
 	
-	private boolean isInTarnsLair()
+	public boolean isInTarnsLair()
 	{
 		for (int regionId : TARNS_LAIR_REGION_IDS)
 		{

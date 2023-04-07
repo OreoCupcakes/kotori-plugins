@@ -101,14 +101,7 @@ public class PvPUtil
         }
         else if (WILDERNESS_ESCAPE_CAVES_CUBOID.contains(point))
         {
-            /*
-                Escape cave levels 33 to 40, level 33 9 tiles, level 40 3 tiles, rest 7 tiles
-                clientscript function is: calc(33 + scale(coordz(coord) % 64 - 6, 50, 7));
-                Don't know what the formula for scale is, but the following works for now
-             */
-            double a = point.getY() % 64.0 - 6;
-            double b = 50.0/7.0;
-            return 33 + (int)(a/b);
+            return 33 + ((point.getY() % 64 - 6) * 7 / 50); // calc(33 + scale(coordz(coord) % 64 - 6, 50, 7))
         }
         else if (WILDERNESS_UNDERGROUND_CUBOID.contains(point))
         {

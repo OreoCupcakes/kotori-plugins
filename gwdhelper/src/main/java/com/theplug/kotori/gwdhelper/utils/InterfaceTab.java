@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Owain van Brakel <https:github.com/Owain94>
+ * Copyright (c) 2019, Lucas <https://github.com/Lucwousin>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -23,41 +23,29 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-rootProject.name = "kotori-ported-plugins"
+package com.theplug.kotori.gwdhelper.utils;
 
-include(":alchemicalhydra")
-include(":alchemicalhydrarlpl")
-include(":cerberushelper")
-include(":dagannothkings")
-include(":demonicgorillas")
-include(":effecttimers")
-include(":gauntletextended")
-include(":gwdticktimers")
-include(":hallowedhelper")
-include(":hallowedsepulchre")
-include(":houseoverlay")
-include(":javaexample")
-include(":kotoripluginloader")
-include(":kotoriutils")
-include(":multiindicators")
-include(":nex")
-include(":vorkathoverlay")
-include(":vorkathoverlayrlpl")
-include(":zulrahoverlay")
-include(":grotesqueguardians")
-include(":specbar")
-include(":templetrekking")
-include(":tarnslair")
-include(":reorderprayers")
-include(":nightmare")
-include(":gwdhelper")
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-for (project in rootProject.children) {
-    project.apply {
-        projectDir = file(name)
-        buildFileName = "$name.gradle.kts"
+@AllArgsConstructor
+@Getter
+public enum InterfaceTab
+{
+    COMBAT(0),
+    STATS(1),
+    QUEST(2),
+    INVENTORY(3),
+    EQUIPMENT(4),
+    PRAYER(5),
+    SPELLBOOK(6),
+    CLAN(7),
+    ACCOUNT_MANAGMENT(8),
+    FRIENDS(9),
+    LOGOUT(10),
+    OPTIONS(11),
+    EMOTES(12),
+    MUSIC(13);
 
-        require(projectDir.isDirectory) { "Project '${project.path} must have a $projectDir directory" }
-        require(buildFile.isFile) { "Project '${project.path} must have a $buildFile build script" }
-    }
+    private final int id;
 }

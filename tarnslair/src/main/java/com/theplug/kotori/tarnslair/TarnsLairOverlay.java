@@ -59,7 +59,7 @@ public class TarnsLairOverlay extends Overlay
 	@Override
 	public Dimension render(Graphics2D graphics)
 	{
-		if (!plugin.isInLair())
+		if (!plugin.isInTarnsLair())
 		{
 			return null;
 		}
