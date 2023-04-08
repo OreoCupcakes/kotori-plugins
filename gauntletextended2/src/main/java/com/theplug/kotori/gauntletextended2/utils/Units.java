@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Owain van Brakel <https:github.com/Owain94>
+ * Copyright (c) 2020, Hydrox6 <ikada@protonmail.ch>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -23,42 +23,32 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-rootProject.name = "kotori-ported-plugins"
+package com.theplug.kotori.gauntletextended2.utils;
 
-include(":alchemicalhydra")
-include(":alchemicalhydrarlpl")
-include(":cerberushelper")
-include(":dagannothkings")
-include(":demonicgorillas")
-include(":effecttimers")
-include(":gauntletextended")
-include(":gwdticktimers")
-include(":hallowedhelper")
-include(":hallowedsepulchre")
-include(":houseoverlay")
-include(":javaexample")
-include(":kotoripluginloader")
-include(":kotoriutils")
-include(":multiindicators")
-include(":nex")
-include(":vorkathoverlay")
-include(":vorkathoverlayrlpl")
-include(":zulrahoverlay")
-include(":grotesqueguardians")
-include(":specbar")
-include(":templetrekking")
-include(":tarnslair")
-include(":reorderprayers")
-include(":nightmare")
-include(":gwdhelper")
-include(":gauntletextended2")
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-for (project in rootProject.children) {
-    project.apply {
-        projectDir = file(name)
-        buildFileName = "$name.gradle.kts"
+/**
+ * Used with ConfigItem, defines what units are shown to the side of the box.
+ */
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+@Documented
+public @interface Units
+{
+    String MILLISECONDS = "ms";
+    String MINUTES = " mins";
+    String PERCENT = "%";
+    String PIXELS = "px";
+    String POINTS = "pt";
+    String SECONDS = "s";
+    String TICKS = " ticks";
+    String LEVELS = " lvls";
+    String FPS = " fps";
+    String GP = " GP";
 
-        require(projectDir.isDirectory) { "Project '${project.path} must have a $projectDir directory" }
-        require(buildFile.isFile) { "Project '${project.path} must have a $buildFile build script" }
-    }
+    String value();
 }

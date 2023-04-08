@@ -348,6 +348,16 @@ public interface GodWarsHelperConfig extends Config
 	)
 	default int sergeantStrongstackPriority() { return 0; }
 	
+	@ConfigItem(
+			position = 15,
+			keyName = "bandosLine5",
+			name = "-------------------------------------",
+			description = "",
+			section = bandosHelper
+	)
+	default Boolean bandosLine5() { return false; }
+	
+	
 	
 	
 	//Zamorak section
@@ -987,6 +997,27 @@ public interface GodWarsHelperConfig extends Config
 			section = armadylHelper
 	)
 	default int flightKilisaPriority() { return 0; }
+	
+	
+	
+	// Universal God Wars Dungeon Helper Settings
+	@ConfigSection(
+			name = "<html>Universal God Wars Dungeon<br>" +
+					"Helper Settings</html>",
+			description = "Universal helper settings that work anywhere inside the original God Wars Dungeon.",
+			position = 6,
+			closedByDefault = true
+	)
+	String universalHelper = "Universal Helper Settings";
+	
+	@ConfigItem(
+			position = 0,
+			keyName = "universalLine0",
+			name = "Left Click Cast Spell Hotkeys",
+			description = "Set hotkeys to left click cast certain spells when inside the boss room.<br>",
+			section = universalHelper
+	)
+	default Boolean universalLine0() { return false; }
 	
 	
 	

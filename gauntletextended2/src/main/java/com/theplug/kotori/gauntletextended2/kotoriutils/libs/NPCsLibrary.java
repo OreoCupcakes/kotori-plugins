@@ -1,4 +1,4 @@
-package com.theplug.kotori.kotoriutils.libs;
+package com.theplug.kotori.gauntletextended2.kotoriutils.libs;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;

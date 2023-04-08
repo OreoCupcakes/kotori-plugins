@@ -283,122 +283,119 @@ public class GodWarsHelperPlugin extends Plugin
 			return;
 		}
 		
-		Actor npc = event.getActor();
+		Actor actor = event.getActor();
 		
-		if (npc == null)
+		if (actor == null)
 		{
 			return;
 		}
 		
-		String npcName = npc.getName();
-		
-		if (npcName == null)
+		if (actor instanceof NPC)
 		{
-			return;
-		}
-		
-		int npcAnimation = npc.getAnimation();
-		
-		switch(npcName)
-		{
-			case "General Graardor":
-				if (npcAnimation == GENERAL_GRAARDOR_DEATH_ID)
-				{
-					bossAlive = false;
-				}
-				break;
-			case "Sergeant Strongstack":
-				if (npcAnimation == BANDOS_BODYGUARDS_DEATH_ID)
-				{
-					meleeMinionAlive = false;
-				}
-				break;
-			case "Sergeant Steelwill":
-				if (npcAnimation == BANDOS_BODYGUARDS_DEATH_ID)
-				{
-					magicMinionAlive = false;
-				}
-				break;
-			case "Sergeant Grimspike":
-				if (npcAnimation == BANDOS_BODYGUARDS_DEATH_ID)
-				{
-					rangedMinionAlive = false;
-				}
-				break;
-			case "K'ril Tsutsaroth":
-				if (npcAnimation == KRIL_TSUTSAROTH_DEATH_ID)
-				{
-					bossAlive = false;
-				}
-				break;
-			case "Balfrug Kreeyath":
-				if (npcAnimation == ZAMORAK_BODYGUARDS_DEATH_ID)
-				{
-					magicMinionAlive = false;
-				}
-				break;
-			case "Tstanon Karlak":
-				if (npcAnimation == TSTANON_KARLAK_DEATH_ID)
-				{
-					meleeMinionAlive = false;
-				}
-				break;
-			case "Zakl'n Gritch":
-				if (npcAnimation == ZAMORAK_BODYGUARDS_DEATH_ID)
-				{
-					rangedMinionAlive = false;
-				}
-				break;
-			case "Commander Zilyana":
-				if (npcAnimation == COMMANDER_ZILYANA_DEATH_ID)
-				{
-					bossAlive = false;
-				}
-				break;
-			case "Starlight":
-				if (npcAnimation == STARLIGHT_DEATH_ID)
-				{
-					meleeMinionAlive = false;
-				}
-				break;
-			case "Growler":
-				if (npcAnimation == GROWLER_DEATH_ID)
-				{
-					magicMinionAlive = false;
-				}
-				break;
-			case "Bree":
-				if (npcAnimation == BREE_DEATH_ID)
-				{
-					rangedMinionAlive = false;
-				}
-				break;
-			case "Kree'arra":
-				if (npcAnimation == KREE_ARRA_DEATH_ID)
-				{
-					bossAlive = false;
-				}
-				break;
-			case "Wingman Skree":
-				if (npcAnimation == ARMADYL_BODYGUARDS_DEATH_ID)
-				{
-					magicMinionAlive = false;
-				}
-				break;
-			case "Flockleader Geerin":
-				if (npcAnimation == ARMADYL_BODYGUARDS_DEATH_ID)
-				{
-					rangedMinionAlive = false;
-				}
-				break;
-			case "Flight Kilisa":
-				if (npcAnimation == ARMADYL_BODYGUARDS_DEATH_ID)
-				{
-					meleeMinionAlive = false;
-				}
-				break;
-			default:
-				break;
+			NPC npc = (NPC) actor;
+			int npcAnimation = npc.getAnimation();
+			
+			switch(npc.getComposition().getId())
+			{
+				case NpcID.GENERAL_GRAARDOR:
+					if (npcAnimation == GENERAL_GRAARDOR_DEATH_ID)
+					{
+						bossAlive = false;
+					}
+					break;
+				case NpcID.SERGEANT_STRONGSTACK:
+					if (npcAnimation == BANDOS_BODYGUARDS_DEATH_ID)
+					{
+						meleeMinionAlive = false;
+					}
+					break;
+				case NpcID.SERGEANT_STEELWILL:
+					if (npcAnimation == BANDOS_BODYGUARDS_DEATH_ID)
+					{
+						magicMinionAlive = false;
+					}
+					break;
+				case NpcID.SERGEANT_GRIMSPIKE:
+					if (npcAnimation == BANDOS_BODYGUARDS_DEATH_ID)
+					{
+						rangedMinionAlive = false;
+					}
+					break;
+				case NpcID.KRIL_TSUTSAROTH:
+					if (npcAnimation == KRIL_TSUTSAROTH_DEATH_ID)
+					{
+						bossAlive = false;
+					}
+					break;
+				case NpcID.BALFRUG_KREEYATH:
+					if (npcAnimation == ZAMORAK_BODYGUARDS_DEATH_ID)
+					{
+						magicMinionAlive = false;
+					}
+					break;
+				case NpcID.TSTANON_KARLAK:
+					if (npcAnimation == TSTANON_KARLAK_DEATH_ID)
+					{
+						meleeMinionAlive = false;
+					}
+					break;
+				case NpcID.ZAKLN_GRITCH:
+					if (npcAnimation == ZAMORAK_BODYGUARDS_DEATH_ID)
+					{
+						rangedMinionAlive = false;
+					}
+					break;
+				case NpcID.COMMANDER_ZILYANA:
+					if (npcAnimation == COMMANDER_ZILYANA_DEATH_ID)
+					{
+						bossAlive = false;
+					}
+					break;
+				case NpcID.STARLIGHT:
+					if (npcAnimation == STARLIGHT_DEATH_ID)
+					{
+						meleeMinionAlive = false;
+					}
+					break;
+				case NpcID.GROWLER:
+					if (npcAnimation == GROWLER_DEATH_ID)
+					{
+						magicMinionAlive = false;
+					}
+					break;
+				case NpcID.BREE:
+					if (npcAnimation == BREE_DEATH_ID)
+					{
+						rangedMinionAlive = false;
+					}
+					break;
+				case NpcID.KREEARRA:
+					if (npcAnimation == KREE_ARRA_DEATH_ID)
+					{
+						bossAlive = false;
+					}
+					break;
+				case NpcID.WINGMAN_SKREE:
+					if (npcAnimation == ARMADYL_BODYGUARDS_DEATH_ID)
+					{
+						magicMinionAlive = false;
+					}
+					break;
+				case NpcID.FLOCKLEADER_GEERIN:
+					if (npcAnimation == ARMADYL_BODYGUARDS_DEATH_ID)
+					{
+						rangedMinionAlive = false;
+					}
+					break;
+				case NpcID.FLIGHT_KILISA:
+					if (npcAnimation == ARMADYL_BODYGUARDS_DEATH_ID)
+					{
+						meleeMinionAlive = false;
+					}
+					break;
+				default:
+					break;
+			}
 		}
 	}
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Owain van Brakel <https:github.com/Owain94>
+ * Copyright (c) 2017, Adam <Adam@sigterm.info>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -23,42 +23,43 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-rootProject.name = "kotori-ported-plugins"
+package com.theplug.kotori.gauntletextended2.utils;
 
-include(":alchemicalhydra")
-include(":alchemicalhydrarlpl")
-include(":cerberushelper")
-include(":dagannothkings")
-include(":demonicgorillas")
-include(":effecttimers")
-include(":gauntletextended")
-include(":gwdticktimers")
-include(":hallowedhelper")
-include(":hallowedsepulchre")
-include(":houseoverlay")
-include(":javaexample")
-include(":kotoripluginloader")
-include(":kotoriutils")
-include(":multiindicators")
-include(":nex")
-include(":vorkathoverlay")
-include(":vorkathoverlayrlpl")
-include(":zulrahoverlay")
-include(":grotesqueguardians")
-include(":specbar")
-include(":templetrekking")
-include(":tarnslair")
-include(":reorderprayers")
-include(":nightmare")
-include(":gwdhelper")
-include(":gauntletextended2")
+import net.runelite.api.Perspective;
+import lombok.Value;
 
-for (project in rootProject.children) {
-    project.apply {
-        projectDir = file(name)
-        buildFileName = "$name.gradle.kts"
+/**
+ * Represents a point in a three-dimensional space.
+ */
+@Value
+public class Vertex {
+    private final int x;
+    private final int y;
+    private final int z;
 
-        require(projectDir.isDirectory) { "Project '${project.path} must have a $projectDir directory" }
-        require(buildFile.isFile) { "Project '${project.path} must have a $buildFile build script" }
+    /**
+     * Rotates the triangle by the given orientation.
+     *
+     * @param orientation passed orientation
+     * @return new instance
+     */
+    public Vertex rotate(int orientation)
+    {
+        // models are orientated north (1024) and there are 2048 angles total
+        orientation = (orientation + 1024) % 2048;
+
+        if (orientation == 0)
+        {
+            return this;
+        }
+
+        int sin = Perspective.SINE[orientation];
+        int cos = Perspective.COSINE[orientation];
+
+        return new Vertex(
+                x * cos + z * sin >> 16,
+                y,
+                z * cos - x * sin >> 16
+        );
     }
 }
