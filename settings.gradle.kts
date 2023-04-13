@@ -52,6 +52,7 @@ include(":reorderprayers")
 include(":nightmare")
 include(":gwdhelper")
 include(":gauntletextended2")
+include(":kotoritest")
 
 for (project in rootProject.children) {
     project.apply {

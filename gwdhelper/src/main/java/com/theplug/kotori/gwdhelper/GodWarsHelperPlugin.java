@@ -24,21 +24,23 @@
 package com.theplug.kotori.gwdhelper;
 
 import com.google.inject.Provides;
-import com.theplug.kotori.gwdhelper.kotoriutils.KotoriUtils;
+import com.theplug.kotori.kotoriutils.KotoriUtils;
+import com.theplug.kotori.gwdhelper.utils.WidgetIDPlus;
+import com.theplug.kotori.gwdhelper.utils.WidgetInfoPlus;
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
 import net.runelite.api.*;
 import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.*;
+import net.runelite.api.widgets.Widget;
+import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.chat.ChatColorType;
 import net.runelite.client.chat.ChatMessageBuilder;
 import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.chat.QueuedMessage;
 import net.runelite.client.config.ConfigManager;
-import net.runelite.client.config.Keybind;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.input.KeyManager;
 import net.runelite.client.plugins.Plugin;
@@ -48,7 +50,6 @@ import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.util.HotkeyListener;
 
 import javax.inject.Inject;
-import java.awt.event.KeyEvent;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -103,7 +104,7 @@ public class GodWarsHelperPlugin extends Plugin
 	public static final WorldArea BANDOS_BOSS_ROOM = new WorldArea(2863,5350,15,24,2);
 	public static final WorldArea ZAMMY_BOSS_ROOM = new WorldArea(2916,5317,25,16,2);
 	public static final WorldArea SARA_BOSS_ROOM = new WorldArea(2884,5257,25,20,0);
-	public static final WorldArea ARMADYL_BOSS_ROOM = new WorldArea(2820,5295,24,15,2);
+	public static final WorldArea ARMA_BOSS_ROOM = new WorldArea(2820,5295,24,15,2);
 	
 	
 	//general graardor - attack 7018,7019 - death 7020
@@ -160,6 +161,9 @@ public class GodWarsHelperPlugin extends Plugin
 	private boolean isZammyPrayerHotkeyOn;
 	private boolean isSaraPrayerHotkeyOn;
 	private boolean isArmaPrayerHotkeyOn;
+	private boolean isSpellHotkey1Pressed;
+	private boolean isSpellHotkey2Pressed;
+	private int spellbookSpriteId;
 
 	@Getter(AccessLevel.PACKAGE)
 	private long lastTickTime;
@@ -188,11 +192,14 @@ public class GodWarsHelperPlugin extends Plugin
 			addNpc(npc);
 		}
 		validRegion = true;
+		spellbookSpriteId = determineSpellbookActive();
 		overlayManager.add(timersOverlay);
 		keyManager.registerKeyListener(bandosPrayerHotkey);
 		keyManager.registerKeyListener(zamorakPrayerHotkey);
 		keyManager.registerKeyListener(saradominPrayerHotkey);
 		keyManager.registerKeyListener(armadylPrayerHotkey);
+		keyManager.registerKeyListener(spellHotkey1);
+		keyManager.registerKeyListener(spellHotkey2);
 	}
 
 	@Override
@@ -204,6 +211,8 @@ public class GodWarsHelperPlugin extends Plugin
 		keyManager.unregisterKeyListener(zamorakPrayerHotkey);
 		keyManager.unregisterKeyListener(saradominPrayerHotkey);
 		keyManager.unregisterKeyListener(armadylPrayerHotkey);
+		keyManager.unregisterKeyListener(spellHotkey1);
+		keyManager.unregisterKeyListener(spellHotkey2);
 		validRegion = false;
 		inBossRoom = false;
 		bossAlive = false;
@@ -214,6 +223,7 @@ public class GodWarsHelperPlugin extends Plugin
 		isZammyPrayerHotkeyOn = false;
 		isSaraPrayerHotkeyOn = false;
 		isArmaPrayerHotkeyOn = false;
+		spellbookSpriteId = -1;
 		sendChatMessage("All God Wars Dungeon automatic protection prayers turned off.");
 	}
 
@@ -295,102 +305,46 @@ public class GodWarsHelperPlugin extends Plugin
 			NPC npc = (NPC) actor;
 			int npcAnimation = npc.getAnimation();
 			
-			switch(npc.getComposition().getId())
+			switch(npc.getId())
 			{
 				case NpcID.GENERAL_GRAARDOR:
-					if (npcAnimation == GENERAL_GRAARDOR_DEATH_ID)
+				case NpcID.KRIL_TSUTSAROTH:
+				case NpcID.COMMANDER_ZILYANA:
+				case NpcID.KREEARRA:
+					if (npcAnimation == GENERAL_GRAARDOR_DEATH_ID || npcAnimation == KRIL_TSUTSAROTH_DEATH_ID || npcAnimation == COMMANDER_ZILYANA_DEATH_ID ||
+							npcAnimation == KREE_ARRA_DEATH_ID)
 					{
 						bossAlive = false;
 					}
 					break;
 				case NpcID.SERGEANT_STRONGSTACK:
-					if (npcAnimation == BANDOS_BODYGUARDS_DEATH_ID)
+				case NpcID.TSTANON_KARLAK:
+				case NpcID.STARLIGHT:
+				case NpcID.FLIGHT_KILISA:
+					if (npcAnimation == BANDOS_BODYGUARDS_DEATH_ID || npcAnimation == TSTANON_KARLAK_DEATH_ID || npcAnimation == STARLIGHT_DEATH_ID ||
+							npcAnimation == ARMADYL_BODYGUARDS_DEATH_ID)
 					{
 						meleeMinionAlive = false;
 					}
 					break;
 				case NpcID.SERGEANT_STEELWILL:
-					if (npcAnimation == BANDOS_BODYGUARDS_DEATH_ID)
+				case NpcID.BALFRUG_KREEYATH:
+				case NpcID.GROWLER:
+				case NpcID.WINGMAN_SKREE:
+					if (npcAnimation == BANDOS_BODYGUARDS_DEATH_ID || npcAnimation == ZAMORAK_BODYGUARDS_DEATH_ID || npcAnimation == GROWLER_DEATH_ID ||
+							npcAnimation == ARMADYL_BODYGUARDS_DEATH_ID)
 					{
 						magicMinionAlive = false;
 					}
 					break;
 				case NpcID.SERGEANT_GRIMSPIKE:
-					if (npcAnimation == BANDOS_BODYGUARDS_DEATH_ID)
-					{
-						rangedMinionAlive = false;
-					}
-					break;
-				case NpcID.KRIL_TSUTSAROTH:
-					if (npcAnimation == KRIL_TSUTSAROTH_DEATH_ID)
-					{
-						bossAlive = false;
-					}
-					break;
-				case NpcID.BALFRUG_KREEYATH:
-					if (npcAnimation == ZAMORAK_BODYGUARDS_DEATH_ID)
-					{
-						magicMinionAlive = false;
-					}
-					break;
-				case NpcID.TSTANON_KARLAK:
-					if (npcAnimation == TSTANON_KARLAK_DEATH_ID)
-					{
-						meleeMinionAlive = false;
-					}
-					break;
 				case NpcID.ZAKLN_GRITCH:
-					if (npcAnimation == ZAMORAK_BODYGUARDS_DEATH_ID)
-					{
-						rangedMinionAlive = false;
-					}
-					break;
-				case NpcID.COMMANDER_ZILYANA:
-					if (npcAnimation == COMMANDER_ZILYANA_DEATH_ID)
-					{
-						bossAlive = false;
-					}
-					break;
-				case NpcID.STARLIGHT:
-					if (npcAnimation == STARLIGHT_DEATH_ID)
-					{
-						meleeMinionAlive = false;
-					}
-					break;
-				case NpcID.GROWLER:
-					if (npcAnimation == GROWLER_DEATH_ID)
-					{
-						magicMinionAlive = false;
-					}
-					break;
 				case NpcID.BREE:
-					if (npcAnimation == BREE_DEATH_ID)
-					{
-						rangedMinionAlive = false;
-					}
-					break;
-				case NpcID.KREEARRA:
-					if (npcAnimation == KREE_ARRA_DEATH_ID)
-					{
-						bossAlive = false;
-					}
-					break;
-				case NpcID.WINGMAN_SKREE:
-					if (npcAnimation == ARMADYL_BODYGUARDS_DEATH_ID)
-					{
-						magicMinionAlive = false;
-					}
-					break;
 				case NpcID.FLOCKLEADER_GEERIN:
-					if (npcAnimation == ARMADYL_BODYGUARDS_DEATH_ID)
+					if (npcAnimation == BANDOS_BODYGUARDS_DEATH_ID || npcAnimation == ZAMORAK_BODYGUARDS_DEATH_ID || npcAnimation == BREE_DEATH_ID ||
+							npcAnimation == ARMADYL_BODYGUARDS_DEATH_ID)
 					{
 						rangedMinionAlive = false;
-					}
-					break;
-				case NpcID.FLIGHT_KILISA:
-					if (npcAnimation == ARMADYL_BODYGUARDS_DEATH_ID)
-					{
-						meleeMinionAlive = false;
 					}
 					break;
 				default:
@@ -413,6 +367,52 @@ public class GodWarsHelperPlugin extends Plugin
 		autoDefensivePrayers();
 		autoOffensivePrayers();
 		autoDeactivatePrayers();
+	}
+	
+	@Subscribe
+	public void onClientTick(ClientTick event)
+	{
+		if (!validRegion || client.getGameState() != GameState.LOGGED_IN || client.getLocalPlayer() == null)
+		{
+			return;
+		}
+		
+		if (isSpellHotkey1Pressed)
+		{
+			createSpellHotkeyMenuEntry(config.spellChoice1());
+		}
+		
+		if (isSpellHotkey2Pressed)
+		{
+			createSpellHotkeyMenuEntry(config.spellChoice2());
+		}
+	}
+	
+	@Subscribe
+	public void onMenuOptionClicked(MenuOptionClicked event)
+	{
+		if (!validRegion)
+		{
+			return;
+		}
+		String spell1Option = "<col=39ff14>Cast " + config.spellChoice1().getSpellString() + "</col> -> ";
+		String spell2Option = "<col=39ff14>Cast " + config.spellChoice2().getSpellString() + "</col> -> ";
+		String entryOption = event.getMenuOption();
+		
+		if (entryOption.equals(spell1Option))
+		{
+			if (!checkSpellExistInActiveSpellbook(config.spellChoice1().getWidgetInfo()) || event.getMenuTarget().equals(" "))
+			{
+				event.consume();
+			}
+		}
+		else if (entryOption.equals(spell2Option))
+		{
+			if (!checkSpellExistInActiveSpellbook(config.spellChoice2().getWidgetInfo()) || event.getMenuTarget().equals(" "))
+			{
+				event.consume();
+			}
+		}
 	}
 
 	private void handleBosses()
@@ -485,7 +485,7 @@ public class GodWarsHelperPlugin extends Plugin
 				}
 				break;
 			case ARMA_REGION:
-				if (ARMADYL_BOSS_ROOM.contains(point))
+				if (ARMA_BOSS_ROOM.contains(point))
 				{
 					inBossRoom = true;
 				}
@@ -494,6 +494,66 @@ public class GodWarsHelperPlugin extends Plugin
 				inBossRoom = false;
 				break;
 		}
+	}
+	
+	private int determineSpellbookActive()
+	{
+		int spriteId = -1;
+		
+		Widget fixedMagicIcon = client.getWidget(WidgetInfo.FIXED_VIEWPORT_MAGIC_ICON);
+		Widget resizableMagicIcon = client.getWidget(WidgetInfo.RESIZABLE_VIEWPORT_MAGIC_ICON);
+		Widget resizableBottomMagicIcon = client.getWidget(WidgetInfo.RESIZABLE_VIEWPORT_BOTTOM_LINE_MAGIC_ICON);
+		
+		if (!fixedMagicIcon.isHidden())
+		{
+			spriteId = fixedMagicIcon.getSpriteId();
+		}
+		else if (!resizableMagicIcon.isHidden())
+		{
+			spriteId = resizableMagicIcon.getSpriteId();
+		}
+		else if (!resizableBottomMagicIcon.isHidden())
+		{
+			spriteId = resizableBottomMagicIcon.getSpriteId();
+		}
+		
+		return spriteId;
+	}
+	
+	private boolean checkSpellExistInActiveSpellbook(WidgetInfoPlus widgetInfoPlus)
+	{
+		boolean correctSpellbook = false;
+		int spellSpriteType = 0;
+		
+		if (widgetInfoPlus.getGroupId() != WidgetIDPlus.SPELLBOOK_GROUP_ID)
+		{
+			return false;
+		}
+		
+		int spellChildId = widgetInfoPlus.getChildId();
+		
+		if (spellChildId < 76 && spellChildId > 5)
+		{
+			spellSpriteType = 780;
+		}
+		else if (spellChildId < 101)
+		{
+			spellSpriteType = 1583;
+		}
+		else if (spellChildId < 145)
+		{
+			spellSpriteType = 1584;
+		}
+		else if (spellChildId < 190)
+		{
+			spellSpriteType = 1711;
+		}
+		
+		if (spellbookSpriteId == spellSpriteType)
+		{
+			correctSpellbook = true;
+		}
+		return correctSpellbook;
 	}
 
 	private void addNpc(NPC npc)
@@ -617,145 +677,64 @@ public class GodWarsHelperPlugin extends Plugin
 	
 	private void autoDefensivePrayers()
 	{
-		NPCContainer npcToPrayAgainst = null;
 		switch(currentRegion)
 		{
 			case GENERAL_REGION:
 			{
-				switch (config.autoBandosDefensePrayers())
-				{
-					case ONLY_MINIONS:
-						if (bossAlive)
-						{
-							return;
-						}
-						npcToPrayAgainst = identifyNpcToPrayAgainst(config.generalGraadorPriority(), config.sergeantSteelwillPriority(),
-								config.sergeantGrimspikePriority(), config.sergeantStrongstackPriority());
-						identifyAndInvokeProtectionPrayer(npcToPrayAgainst);
-						break;
-					case ALL_KILL_LONG:
-						npcToPrayAgainst = identifyNpcToPrayAgainst(config.generalGraadorPriority(), config.sergeantSteelwillPriority(),
-								config.sergeantGrimspikePriority(), config.sergeantStrongstackPriority());
-						identifyAndInvokeProtectionPrayer(npcToPrayAgainst);
-						break;
-					case HOTKEY:
-						if (!isBandosPrayerHotkeyOn)
-						{
-							return;
-						}
-						npcToPrayAgainst = identifyNpcToPrayAgainst(config.generalGraadorPriority(), config.sergeantSteelwillPriority(),
-								config.sergeantGrimspikePriority(), config.sergeantStrongstackPriority());
-						identifyAndInvokeProtectionPrayer(npcToPrayAgainst);
-						break;
-					case OFF:
-						return;
-					default:
-						break;
-				}
+				chooseDefensiveConfigStyle(config.autoBandosDefensePrayers(), config.generalGraadorPriority(), config.sergeantSteelwillPriority(), config.sergeantGrimspikePriority(),
+						config.sergeantStrongstackPriority(), isBandosPrayerHotkeyOn);
 				break;
 			}
 			case ZAMMY_REGION:
 			{
-				switch (config.autoZamorakDefensePrayers())
-				{
-					case ONLY_MINIONS:
-						if (bossAlive)
-						{
-							return;
-						}
-						npcToPrayAgainst = identifyNpcToPrayAgainst(config.krilTsutsarothPriority(), config.balfrugKreeyathPriority(),
-								config.zaklnGritchPriority(), config.tstanonKarlakPriority());
-						identifyAndInvokeProtectionPrayer(npcToPrayAgainst);
-						break;
-					case ALL_KILL_LONG:
-						npcToPrayAgainst = identifyNpcToPrayAgainst(config.krilTsutsarothPriority(), config.balfrugKreeyathPriority(),
-								config.zaklnGritchPriority(), config.tstanonKarlakPriority());
-						identifyAndInvokeProtectionPrayer(npcToPrayAgainst);
-						break;
-					case HOTKEY:
-						if (!isZammyPrayerHotkeyOn)
-						{
-							return;
-						}
-						npcToPrayAgainst = identifyNpcToPrayAgainst(config.krilTsutsarothPriority(), config.balfrugKreeyathPriority(),
-								config.zaklnGritchPriority(), config.tstanonKarlakPriority());
-						identifyAndInvokeProtectionPrayer(npcToPrayAgainst);
-						break;
-					case OFF:
-						return;
-					default:
-						break;
-				}
+				chooseDefensiveConfigStyle(config.autoZamorakDefensePrayers(), config.krilTsutsarothPriority(), config.balfrugKreeyathPriority(), config.zaklnGritchPriority(),
+						config.tstanonKarlakPriority(), isZammyPrayerHotkeyOn);
 				break;
 			}
 			case SARA_REGION:
 			{
-				switch (config.autoSaradominDefensePrayers())
-				{
-					case ONLY_MINIONS:
-						if (bossAlive)
-						{
-							return;
-						}
-						npcToPrayAgainst = identifyNpcToPrayAgainst(config.commanderZilyanaPriority(), config.growlerPriority(),
-								config.breePriority(), config.starlightPriority());
-						identifyAndInvokeProtectionPrayer(npcToPrayAgainst);
-						break;
-					case ALL_KILL_LONG:
-						npcToPrayAgainst = identifyNpcToPrayAgainst(config.commanderZilyanaPriority(), config.growlerPriority(),
-								config.breePriority(), config.starlightPriority());
-						identifyAndInvokeProtectionPrayer(npcToPrayAgainst);
-						break;
-					case HOTKEY:
-						if (!isSaraPrayerHotkeyOn)
-						{
-							return;
-						}
-						npcToPrayAgainst = identifyNpcToPrayAgainst(config.commanderZilyanaPriority(), config.growlerPriority(),
-								config.breePriority(), config.starlightPriority());
-						identifyAndInvokeProtectionPrayer(npcToPrayAgainst);
-						break;
-					case OFF:
-						return;
-					default:
-						break;
-				}
+				chooseDefensiveConfigStyle(config.autoSaradominDefensePrayers(), config.commanderZilyanaPriority(), config.growlerPriority(), config.breePriority(),
+						config.starlightPriority(), isSaraPrayerHotkeyOn);
 				break;
 			}
 			case ARMA_REGION:
 			{
-				switch (config.autoArmadylDefensePrayers())
-				{
-					case ONLY_MINIONS:
-						if (bossAlive)
-						{
-							return;
-						}
-						npcToPrayAgainst = identifyNpcToPrayAgainst(config.kreearraPriority(), config.wingmanSkreePriority(),
-								config.flockleaderGeerinPriority(), config.flightKilisaPriority());
-						identifyAndInvokeProtectionPrayer(npcToPrayAgainst);
-						break;
-					case ALL_KILL_LONG:
-						npcToPrayAgainst = identifyNpcToPrayAgainst(config.kreearraPriority(), config.wingmanSkreePriority(),
-								config.flockleaderGeerinPriority(), config.flightKilisaPriority());
-						identifyAndInvokeProtectionPrayer(npcToPrayAgainst);
-						break;
-					case HOTKEY:
-						if (!isArmaPrayerHotkeyOn)
-						{
-							return;
-						}
-						npcToPrayAgainst = identifyNpcToPrayAgainst(config.kreearraPriority(), config.wingmanSkreePriority(),
-								config.flockleaderGeerinPriority(), config.flightKilisaPriority());
-						identifyAndInvokeProtectionPrayer(npcToPrayAgainst);
-						break;
-					case OFF:
-						return;
-					default:
-						break;
-				}
+				chooseDefensiveConfigStyle(config.autoArmadylDefensePrayers(), config.kreearraPriority(), config.wingmanSkreePriority(), config.flockleaderGeerinPriority(),
+						config.flightKilisaPriority(), isArmaPrayerHotkeyOn);
 				break;
 			}
+			default:
+				break;
+		}
+	}
+	
+	private void chooseDefensiveConfigStyle(GodWarsHelperConfig.PrayerSwitchChoice style, int bossPriority, int magePriority, int rangedPriority, int meleePriority, boolean hotkey)
+	{
+		NPCContainer npcToPrayAgainst = null;
+		switch (style)
+		{
+			case ONLY_MINIONS:
+				if (bossAlive)
+				{
+					return;
+				}
+				npcToPrayAgainst = identifyNpcToPrayAgainst(bossPriority, magePriority, rangedPriority, meleePriority);
+				identifyAndInvokeProtectionPrayer(npcToPrayAgainst);
+				break;
+			case ALL_KILL_LONG:
+				npcToPrayAgainst = identifyNpcToPrayAgainst(bossPriority, magePriority, rangedPriority, meleePriority);
+				identifyAndInvokeProtectionPrayer(npcToPrayAgainst);
+				break;
+			case HOTKEY:
+				if (!hotkey)
+				{
+					return;
+				}
+				npcToPrayAgainst = identifyNpcToPrayAgainst(bossPriority, magePriority, rangedPriority, meleePriority);
+				identifyAndInvokeProtectionPrayer(npcToPrayAgainst);
+				break;
+			case OFF:
+				return;
 			default:
 				break;
 		}
@@ -776,7 +755,7 @@ public class GodWarsHelperPlugin extends Plugin
 					case KRIL_TSUTSAROTH:
 					case COMMANDER_ZILYANA:
 					case KREEARRA:
-						if (bossPriorityConfig > highestPriorityConfig)
+						if (bossPriorityConfig >= highestPriorityConfig)
 						{
 							highestPriorityConfig = bossPriorityConfig;
 							npcAboutToAttack = npc;
@@ -846,7 +825,7 @@ public class GodWarsHelperPlugin extends Plugin
 			if (actor instanceof NPC)
 			{
 				NPC attackedNpc = (NPC) actor;
-				npcId = attackedNpc.getComposition().getId();
+				npcId = attackedNpc.getId();
 			}
 			
 			switch (npcId)
@@ -909,7 +888,7 @@ public class GodWarsHelperPlugin extends Plugin
 				prayerToUse = config.krilProtectionPrayerChoice().getPrayer();
 				break;
 			case COMMANDER_ZILYANA:
-				
+				prayerToUse = config.zilyanaProtectionPrayerChoice().getPrayer();
 				break;
 			default:
 				prayerToUse = npc.getAttackStyle().getPrayer();
@@ -924,15 +903,56 @@ public class GodWarsHelperPlugin extends Plugin
 		kotoriUtils.getInvokesLibrary().invokePrayer(prayerToUse);
 	}
 	
+	private void createSpellHotkeyMenuEntry(GodWarsHelperConfig.SpellChoice spellChoice)
+	{
+		if (client.isMenuOpen())
+		{
+			return;
+		}
+		
+		MenuEntry[] entries = client.getMenuEntries();
+		MenuEntry npcEntry = null;
+		for (MenuEntry e: entries)
+		{
+			if (e.getType() == MenuAction.NPC_SECOND_OPTION)
+			{
+				npcEntry = e;
+				break;
+			}
+		}
+		kotoriUtils.getSpellsLibrary().setSelectedSpell(spellChoice.getWidgetInfo().getId(), -1, -1);
+		String menuOptionText = "<col=39ff14>Cast " + spellChoice.getSpellString() + "</col> -> ";
+		MenuEntry hotkeyEntry = client.createMenuEntry(-1).setForceLeftClick(true).setParam0(0).setParam1(0).setType(MenuAction.WIDGET_TARGET_ON_NPC)
+				.setOption(menuOptionText);
+		if (npcEntry == null)
+		{
+			hotkeyEntry.setTarget(" ").setIdentifier(0);
+		}
+		else
+		{
+			hotkeyEntry.setTarget(npcEntry.getTarget()).setIdentifier(npcEntry.getIdentifier());
+		}
+	}
+	
+	private void sendChatMessage(String chatMessage)
+	{
+		final String message = new ChatMessageBuilder()
+				.append(ChatColorType.HIGHLIGHT)
+				.append(chatMessage)
+				.build();
+		
+		chatMessageManager.queue(
+				QueuedMessage.builder()
+						.type(ChatMessageType.CONSOLE)
+						.runeLiteFormattedMessage(message)
+						.build());
+	}
+	
 	private final HotkeyListener bandosPrayerHotkey = new HotkeyListener(() -> config.bandosAutoPrayerHotkey())
 	{
 		@Override
 		public void hotkeyPressed()
 		{
-			if (!validRegion)
-			{
-				return;
-			}
 			if (!isBandosPrayerHotkeyOn)
 			{
 				isBandosPrayerHotkeyOn = true;
@@ -951,10 +971,6 @@ public class GodWarsHelperPlugin extends Plugin
 		@Override
 		public void hotkeyPressed()
 		{
-			if (!validRegion)
-			{
-				return;
-			}
 			if (!isZammyPrayerHotkeyOn)
 			{
 				isZammyPrayerHotkeyOn = true;
@@ -973,10 +989,6 @@ public class GodWarsHelperPlugin extends Plugin
 		@Override
 		public void hotkeyPressed()
 		{
-			if (!validRegion)
-			{
-				return;
-			}
 			if (!isSaraPrayerHotkeyOn)
 			{
 				isSaraPrayerHotkeyOn = true;
@@ -995,10 +1007,6 @@ public class GodWarsHelperPlugin extends Plugin
 		@Override
 		public void hotkeyPressed()
 		{
-			if (!validRegion)
-			{
-				return;
-			}
 			if (!isArmaPrayerHotkeyOn)
 			{
 				isArmaPrayerHotkeyOn = true;
@@ -1012,17 +1020,33 @@ public class GodWarsHelperPlugin extends Plugin
 		}
 	};
 	
-	private void sendChatMessage(String chatMessage)
+	private final HotkeyListener spellHotkey1 = new HotkeyListener(() -> config.spellHotkey1())
 	{
-		final String message = new ChatMessageBuilder()
-				.append(ChatColorType.HIGHLIGHT)
-				.append(chatMessage)
-				.build();
+		@Override
+		public void hotkeyPressed()
+		{
+			isSpellHotkey1Pressed = true;
+		}
 		
-		chatMessageManager.queue(
-				QueuedMessage.builder()
-						.type(ChatMessageType.CONSOLE)
-						.runeLiteFormattedMessage(message)
-						.build());
-	}
+		@Override
+		public void hotkeyReleased()
+		{
+			isSpellHotkey1Pressed = false;
+		}
+	};
+	
+	private final HotkeyListener spellHotkey2 = new HotkeyListener(() -> config.spellHotkey2())
+	{
+		@Override
+		public void hotkeyPressed()
+		{
+			isSpellHotkey2Pressed = true;
+		}
+		
+		@Override
+		public void hotkeyReleased()
+		{
+			isSpellHotkey2Pressed = false;
+		}
+	};
 }

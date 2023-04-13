@@ -28,11 +28,13 @@ package com.theplug.kotori.demonicgorillas;
 import com.google.common.collect.ImmutableSet;
 
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
 
 import com.google.inject.Provides;
 import com.theplug.kotori.demonicgorillas.utils.GraphicIDPlus;
+import com.theplug.kotori.demonicgorillas.utils.WorldAreaExtended;
 import com.theplug.kotori.kotoriutils.KotoriUtils;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -451,8 +453,8 @@ public class DemonicGorillaPlugin extends Plugin
 
 				if (mp != null && mp.getLastWorldArea() != null && gorilla.getLastWorldArea() != null)
 				{
-					WorldArea predictedNewArea = gorilla.getLastWorldArea().calculateNextTravellingPoint(
-						client, mp.getLastWorldArea(), true, x ->
+					WorldArea predictedNewArea = WorldAreaExtended.calculateNextTravellingPoint(
+						client, gorilla.getLastWorldArea(), mp.getLastWorldArea(), true, x ->
 						{
 							// Gorillas can't normally walk through other gorillas
 							// or other players

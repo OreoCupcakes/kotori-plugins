@@ -56,8 +56,32 @@ public enum PrayerWidgetInfo {
     PRAYER_PIETY(PrayerWidgetID.PRAYER_GROUP_ID, PrayerWidgetID.Prayer.PIETY),
     PRAYER_RIGOUR(PrayerWidgetID.PRAYER_GROUP_ID, PrayerWidgetID.Prayer.RIGOUR),
     PRAYER_AUGURY(PrayerWidgetID.PRAYER_GROUP_ID, PrayerWidgetID.Prayer.AUGURY),
-    QUICK_PRAYER_PRAYERS(PrayerWidgetID.QUICK_PRAYERS_GROUP_ID, PrayerWidgetID.QuickPrayer.PRAYERS)
-    ;
+    
+    PRAYER_ANCIENT_STRENGTH(PrayerWidgetID.PRAYER_GROUP_ID, PrayerWidgetID.RuinousPrayers.ANCIENT_STRENGTH),
+    PRAYER_ANCIENT_SIGHT(PrayerWidgetID.PRAYER_GROUP_ID, PrayerWidgetID.RuinousPrayers.ANCIENT_SIGHT),
+    PRAYER_ANCIENT_WILL(PrayerWidgetID.PRAYER_GROUP_ID, PrayerWidgetID.RuinousPrayers.ANCIENT_WILL),
+    PRAYER_TRINITAS(PrayerWidgetID.PRAYER_GROUP_ID, PrayerWidgetID.RuinousPrayers.TRINITAS),
+    PRAYER_DECIMATE(PrayerWidgetID.PRAYER_GROUP_ID, PrayerWidgetID.RuinousPrayers.DECIMATE),
+    PRAYER_ANNIHILATE(PrayerWidgetID.PRAYER_GROUP_ID, PrayerWidgetID.RuinousPrayers.ANNIHILATE),
+    PRAYER_VAPORISE(PrayerWidgetID.PRAYER_GROUP_ID, PrayerWidgetID.RuinousPrayers.VAPORISE),
+    PRAYER_DEFLECT_MELEE(PrayerWidgetID.PRAYER_GROUP_ID, PrayerWidgetID.RuinousPrayers.DEFLECT_MELEE),
+    PRAYER_DEFLECT_RANGED(PrayerWidgetID.PRAYER_GROUP_ID, PrayerWidgetID.RuinousPrayers.DEFLECT_RANGED),
+    PRAYER_DEFLECT_MAGIC(PrayerWidgetID.PRAYER_GROUP_ID, PrayerWidgetID.RuinousPrayers.DEFLECT_MAGIC),
+    PRAYER_PURGE(PrayerWidgetID.PRAYER_GROUP_ID, PrayerWidgetID.RuinousPrayers.PURGE),
+    PRAYER_REJUVENATION(PrayerWidgetID.PRAYER_GROUP_ID, PrayerWidgetID.RuinousPrayers.REJUVENATION),
+    PRAYER_RUINOUS_GRACE(PrayerWidgetID.PRAYER_GROUP_ID, PrayerWidgetID.RuinousPrayers.RUINOUS_GRACE),
+    PRAYER_WRATH(PrayerWidgetID.PRAYER_GROUP_ID, PrayerWidgetID.RuinousPrayers.WRATH),
+    PRAYER_METABOLISE(PrayerWidgetID.PRAYER_GROUP_ID, PrayerWidgetID.RuinousPrayers.METABOLISE),
+    PRAYER_BERSERKER(PrayerWidgetID.PRAYER_GROUP_ID, PrayerWidgetID.RuinousPrayers.BERSERKER),
+    PRAYER_FUMUS_VOW(PrayerWidgetID.PRAYER_GROUP_ID, PrayerWidgetID.RuinousPrayers.FUMUS_VOW),
+    PRAYER_CRUORS_VOW(PrayerWidgetID.PRAYER_GROUP_ID, PrayerWidgetID.RuinousPrayers.CRUORS_VOW),
+    PRAYER_UMBRAS_VOW(PrayerWidgetID.PRAYER_GROUP_ID, PrayerWidgetID.RuinousPrayers.UMBRAS_VOW),
+    PRAYER_GLACIES_VOW(PrayerWidgetID.PRAYER_GROUP_ID, PrayerWidgetID.RuinousPrayers.GLACIES_VOW),
+    PRAYER_GAMBIT(PrayerWidgetID.PRAYER_GROUP_ID, PrayerWidgetID.RuinousPrayers.GAMBIT),
+    PRAYER_REBUKE(PrayerWidgetID.PRAYER_GROUP_ID, PrayerWidgetID.RuinousPrayers.REBUKE),
+    PRAYER_VINDICATION(PrayerWidgetID.PRAYER_GROUP_ID, PrayerWidgetID.RuinousPrayers.VINDICATION),
+    
+    QUICK_PRAYER_PRAYERS(PrayerWidgetID.QUICK_PRAYERS_GROUP_ID, PrayerWidgetID.QuickPrayer.PRAYERS);
 
     private final int groupId;
     private final int childId;

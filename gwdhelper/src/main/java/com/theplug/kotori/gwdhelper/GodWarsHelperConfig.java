@@ -23,6 +23,7 @@
  */
 package com.theplug.kotori.gwdhelper;
 
+import com.theplug.kotori.gwdhelper.utils.WidgetInfoPlus;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -929,7 +930,6 @@ public interface GodWarsHelperConfig extends Config
 	)
 	default Boolean armadylLine3() { return false; }
 	
-	
 	@ConfigItem(
 			position = 10,
 			keyName = "armadylLine4",
@@ -998,6 +998,24 @@ public interface GodWarsHelperConfig extends Config
 	)
 	default int flightKilisaPriority() { return 0; }
 	
+	@ConfigItem(
+			position = 15,
+			keyName = "armadylLine5",
+			name = "-------------------------------------",
+			description = "",
+			section = armadylHelper
+	)
+	default Boolean armadylLine5() { return false; }
+	
+	@ConfigItem(
+			position = 17,
+			keyName = "kreearraGearIds",
+			name = "Kree'arra Gear Switch",
+			description = "Enter in the Item IDs to switch to when ",
+			section = armadylHelper
+	)
+	default String kreearraGearIds() { return "0,0,0"; }
+	
 	
 	
 	// Universal God Wars Dungeon Helper Settings
@@ -1013,13 +1031,49 @@ public interface GodWarsHelperConfig extends Config
 	@ConfigItem(
 			position = 0,
 			keyName = "universalLine0",
-			name = "Left Click Cast Spell Hotkeys",
+			name = "Assign Hotkeys to Left Click Cast Spells",
 			description = "Set hotkeys to left click cast certain spells when inside the boss room.<br>",
 			section = universalHelper
 	)
 	default Boolean universalLine0() { return false; }
 	
+	@ConfigItem(
+			position = 1,
+			keyName = "spellChoice1",
+			name = "Spell Choice 1",
+			description = "Select the spell to assign to Spell Hotkey 1.",
+			section = universalHelper
+	)
+	default SpellChoice spellChoice1() { return SpellChoice.OFF; }
 	
+	@ConfigItem(
+			position = 2,
+			keyName = "spellHotkey1",
+			name = "Spell Hotkey 1",
+			description = "Assign a hotkey to <b>Hold Down</b> and be able to left click cast your selected spell.<br>" +
+					"This hotkey will only work within the original God Wars Dungeon and not at Nex.",
+			section = universalHelper
+	)
+	default Keybind spellHotkey1() { return Keybind.NOT_SET; }
+	
+	@ConfigItem(
+			position = 1,
+			keyName = "spellChoice2",
+			name = "Spell Choice 2",
+			description = "Select the spell to assign to Spell Hotkey 2.",
+			section = universalHelper
+	)
+	default SpellChoice spellChoice2() { return SpellChoice.OFF; }
+	
+	@ConfigItem(
+			position = 2,
+			keyName = "spellHotkey2",
+			name = "Spell Hotkey 2",
+			description = "Assign a hotkey to <b>Hold Down</b> and be able to left click cast your selected spell.<br>" +
+					"This hotkey will only work within the original God Wars Dungeon and not at Nex.",
+			section = universalHelper
+	)
+	default Keybind spellHotkey2() { return Keybind.NOT_SET; }
 	
 	
 	
@@ -1075,5 +1129,22 @@ public interface GodWarsHelperConfig extends Config
 		OFF(null);
 		
 		private Prayer prayer;
+	}
+	
+	@Getter
+	@AllArgsConstructor
+	enum SpellChoice
+	{
+		BLOOD_BURST("Blood Burst", WidgetInfoPlus.SPELL_BLOOD_BURST),
+		ICE_BURST("Ice Burst", WidgetInfoPlus.SPELL_ICE_BURST),
+		BLOOD_BARRAGE("Blood Barrage", WidgetInfoPlus.SPELL_BLOOD_BARRAGE),
+		ICE_BARRAGE("Ice Barrage", WidgetInfoPlus.SPELL_ICE_BARRAGE),
+		SUPERIOR_DEMONBANE("Superior Demonbane", WidgetInfoPlus.SPELL_SUPERIOR_DEMONBANE),
+		DARK_DEMONBANE("Dark Demonbane", WidgetInfoPlus.SPELL_DARK_DEMONBANE),
+		MARK_OF_DARKNESS("Mark of Darkness", WidgetInfoPlus.SPELL_MARK_OF_DARKNESS),
+		OFF("Off", null);
+		
+		private String spellString;
+		private WidgetInfoPlus widgetInfo;
 	}
 }

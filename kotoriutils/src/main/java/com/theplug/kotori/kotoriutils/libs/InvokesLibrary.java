@@ -1,6 +1,6 @@
 package com.theplug.kotori.kotoriutils.libs;
 
-import com.theplug.kotori.kotoriutils.enums.PrayerExtended;
+import com.theplug.kotori.kotoriutils.rlapi.PrayerExtended;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;

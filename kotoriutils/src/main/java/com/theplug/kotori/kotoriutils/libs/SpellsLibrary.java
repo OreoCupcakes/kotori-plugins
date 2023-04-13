@@ -72,4 +72,11 @@ public class SpellsLibrary {
             log.error("Failed to set the selected Spell Item Id.", e);
         }
     }
+    
+    public void setSelectedSpell(int widgetGroupId, int childIndex, int itemId)
+    {
+        setSelectedSpellWidget(widgetGroupId);
+        setSelectedSpellChildIndex(childIndex);
+        setSelectedSpellItemId(itemId);
+    }
 }

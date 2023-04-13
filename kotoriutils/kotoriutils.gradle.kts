@@ -23,7 +23,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "1.0.4"
+version = "1.0.5"
 
 project.extra["PluginName"] = "Kotori Plugin Utils" // This is the name that is used in the external plugin manager panel
 project.extra["PluginDescription"] = "Utilities needed for certain ported plugins to work." // This is the description that is used in the external plugin manager panel

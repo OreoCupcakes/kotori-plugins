@@ -34,7 +34,7 @@ import net.runelite.client.config.ConfigSection;
 public interface ReorderPrayersConfig extends Config
 {
 	@ConfigSection(
-			name = "<html>Reorder Prayers<br>Version 1.1.2</html>",
+			name = "<html>Reorder Prayers<br>Version 1.1.3</html>",
 			description = "",
 			position = 0,
 			closedByDefault = true

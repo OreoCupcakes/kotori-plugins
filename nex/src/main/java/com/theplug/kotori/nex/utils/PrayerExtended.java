@@ -145,7 +145,99 @@ public enum PrayerExtended {
     /**
      * Augury (Level 77, Magic/Magic Def./Defence).
      */
-    AUGURY(Varbits.PRAYER_AUGURY, 40.0, PrayerWidgetInfo.PRAYER_AUGURY);
+    AUGURY(Varbits.PRAYER_AUGURY, 40.0, PrayerWidgetInfo.PRAYER_AUGURY),
+    /**
+     * Rejuvenation (Level 60, Hitpoints).
+     */
+    REJUVENATION(14840, 60.0 / 9, PrayerWidgetInfo.PRAYER_REJUVENATION),
+    /**
+     * Ancient Strength (Level 61, Strength/Attack).
+     */
+    ANCIENT_STRENGTH(14829, 40.0, PrayerWidgetInfo.PRAYER_ANCIENT_STRENGTH),
+    /**
+     * Ancient Sight (Level 62, Ranging/Damage).
+     */
+    ANCIENT_SIGHT(14830, 40.0, PrayerWidgetInfo.PRAYER_ANCIENT_SIGHT),
+    /**
+     * Ancient Will (level 63, Magic).
+     */
+    ANCIENT_WILL(14831, 40.0, PrayerWidgetInfo.PRAYER_ANCIENT_WILL),
+    /**
+     * Ruinous Grace (Level 64, Run Energy).
+     */
+    RUINOUS_GRACE(14841, 60.0 / 36, PrayerWidgetInfo.PRAYER_RUINOUS_GRACE),
+    /**
+     * Deflect Magic (Level 65).
+     */
+    DEFLECT_MAGIC(14838, 30.0, PrayerWidgetInfo.PRAYER_DEFLECT_MAGIC),
+    /**
+     * Deflect Ranged (Level 68).
+     */
+    DEFLECT_RANGED(14837, 30.0, PrayerWidgetInfo.PRAYER_DEFLECT_RANGED),
+    /**
+     * Deflect Melee (Level 70).
+     */
+    DEFLECT_MELEE(14836, 30.0, PrayerWidgetInfo.PRAYER_DEFLECT_MELEE),
+    /**
+     * Trinitas (Level 71, Attack/Strength/Ranging/Damage/Magic).
+     */
+    TRINITAS(14832, 50.0, PrayerWidgetInfo.PRAYER_TRINITAS),
+    /**
+     * Berserker (Level 73, Stats).
+     */
+    BERSERKER(14844, 60.0 / 18, PrayerWidgetInfo.PRAYER_BERSERKER),
+    /**
+     * Purge (Level 74).
+     */
+    PURGE(14839, 60.0 / 1.63, PrayerWidgetInfo.PRAYER_PURGE),
+    /**
+     * Metabolise (Level 75).
+     */
+    METABOLISE(14843, 20.0, PrayerWidgetInfo.PRAYER_METABOLISE),
+    /**
+     * Decimate (Level 76, Attack/Strength).
+     */
+    DECIMATE(14833, 50.0, PrayerWidgetInfo.PRAYER_DECIMATE),
+    /**
+     * Annihilate (Level 78, Ranging/Damage).
+     */
+    ANNIHILATE(14834, 50.0, PrayerWidgetInfo.PRAYER_ANNIHILATE),
+    /**
+     * Vaporise (Level 80, Magic/Damage).
+     */
+    VAPORISE(14835, 50.0, PrayerWidgetInfo.PRAYER_VAPORISE),
+    /**
+     * Rebuke (Level 81).
+     */
+    REBUKE(14850, 30.0, PrayerWidgetInfo.PRAYER_REBUKE),
+    /**
+     * Fumus' Vow (Level 82).
+     */
+    FUMUS_VOW(14845, 20.0, PrayerWidgetInfo.PRAYER_FUMUS_VOW),
+    /**
+     * Umbra's Vow (Level 84).
+     */
+    UMBRAS_VOW(14847, 20.0, PrayerWidgetInfo.PRAYER_UMBRAS_VOW),
+    /**
+     * Cruor's Vow (Level 86).
+     */
+    CRUORS_VOW(14846, 20.0, PrayerWidgetInfo.PRAYER_CRUORS_VOW),
+    /**
+     * Glacie's Vow (Level 88).
+     */
+    GLACIES_VOW(14848, 20.0, PrayerWidgetInfo.PRAYER_GLACIES_VOW),
+    /**
+     * Wrath (Level 89).
+     */
+    WRATH(14842, 5.0, PrayerWidgetInfo.PRAYER_WRATH),
+    /**
+     * Vindication (Level 90).
+     */
+    VINDICATION(14851, 15.0, PrayerWidgetInfo.PRAYER_VINDICATION),
+    /**
+     * Gambit (Level 92).
+     */
+    GAMBIT(14849, 40.0, PrayerWidgetInfo.PRAYER_GAMBIT);
 
     private final int varbit;
     private final double drainRate;

@@ -3,6 +3,8 @@ package com.theplug.kotori.kotoriutils.libs;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
+import net.runelite.api.coords.LocalPoint;
+import net.runelite.api.coords.WorldPoint;
 
 import javax.inject.Inject;
 import java.lang.reflect.Field;
@@ -81,5 +83,32 @@ public class WalkingLibrary {
         }
 
         return checkClick;
+    }
+    
+    public void sceneWalk(WorldPoint point)
+    {
+        if (client.getPlane() != point.getPlane())
+        {
+            return;
+        }
+        
+        int scenePointX = point.getX() - client.getBaseX();
+        int scenePointY = point.getY() - client.getBaseY();
+        
+        setXandYCoordinates(scenePointX, scenePointY);
+        setCheckClick(false);
+        setViewportWalking(true);
+    }
+    
+    public void sceneWalk(LocalPoint localPoint)
+    {
+        WorldPoint worldPoint = WorldPoint.fromLocal(client, localPoint);
+        sceneWalk(worldPoint);
+    }
+    
+    public void sceneWalk(int worldPointX, int worldPointY, int plane)
+    {
+        WorldPoint point = new WorldPoint(worldPointX, worldPointY, plane);
+        sceneWalk(point);
     }
 }
