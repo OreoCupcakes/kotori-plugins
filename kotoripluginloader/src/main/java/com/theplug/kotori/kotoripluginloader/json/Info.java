@@ -31,4 +31,5 @@ public class Info
     private boolean preventVorkath;
     private boolean preventVorkathRLPL;
     private boolean preventZulrah;
+    private boolean preventGwdHelper;
 }

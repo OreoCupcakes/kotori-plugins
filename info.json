@@ -24,5 +24,6 @@
   "preventTempleTrekking": "false",
   "preventVorkath": "false",
   "preventVorkathRLPL": "false",
-  "preventZulrah": "false"
+  "preventZulrah": "false",
+  "preventGwdHelper": "false"
 }

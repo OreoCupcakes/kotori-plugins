@@ -1,8 +1,8 @@
 package com.theplug.kotori.gwdhelper;
 
 import com.google.common.base.Strings;
-import com.theplug.kotori.gwdhelper.utils.InterfaceTab;
-import com.theplug.kotori.gwdhelper.utils.PrayerExtended;
+import com.theplug.kotori.kotoriutils.rlapi.InterfaceTab;
+import com.theplug.kotori.kotoriutils.rlapi.PrayerExtended;
 import net.runelite.api.Point;
 import net.runelite.api.*;
 import net.runelite.api.coords.LocalPoint;

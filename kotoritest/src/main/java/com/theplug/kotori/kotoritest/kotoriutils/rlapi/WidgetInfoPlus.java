@@ -22,7 +22,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.theplug.kotori.gwdhelper.utils;
+package com.theplug.kotori.kotoritest.kotoriutils.rlapi;
 
 /**
  * Represents a group-child Widget relationship.

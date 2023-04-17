@@ -25,8 +25,9 @@ package com.theplug.kotori.gwdhelper;
 
 import com.google.inject.Provides;
 import com.theplug.kotori.kotoriutils.KotoriUtils;
-import com.theplug.kotori.gwdhelper.utils.WidgetIDPlus;
-import com.theplug.kotori.gwdhelper.utils.WidgetInfoPlus;
+import com.theplug.kotori.kotoriutils.interactionapi.InventoryInteraction;
+import com.theplug.kotori.kotoriutils.rlapi.WidgetIDPlus;
+import com.theplug.kotori.kotoriutils.rlapi.WidgetInfoPlus;
 import lombok.AccessLevel;
 import lombok.Getter;
 import net.runelite.api.*;
@@ -67,25 +68,29 @@ public class GodWarsHelperPlugin extends Plugin
 	public static final int SARA_REGION = 11602;
 	public static final int ZAMMY_REGION = 11603;
 	public static final Set<Integer> GWD_REGION_IDS = Set.of(GENERAL_REGION,ARMA_REGION,SARA_REGION,ZAMMY_REGION);
-	public static final int MINION_AUTO1 = 6154;
-	public static final int MINION_AUTO2 = 6156;
-	public static final int MINION_AUTO3 = 7071;
-	public static final int MINION_AUTO4 = 7073;
+	public static final int SERGEANT_STRONGSTACK_AUTO = 6154;
+	public static final int SERGEANT_STEELWILL_AUTO = 7071;
+	public static final int SERGEANT_GRIMSPIKE_AUTO = 7073;
 	public static final int GENERAL_AUTO1 = 7018;
-	public static final int GENERAL_AUTO2 = 7020;
-	public static final int GENERAL_AUTO3 = 7021;
-	public static final int ZAMMY_GENERIC_AUTO = 64;
-	public static final int KRIL_AUTO = 6948;
+	public static final int GENERAL_AUTO2 = 7019;
+	public static final int ZAMMY_GENERIC_AUTO_1 = 64;
+	public static final int ZAMMY_GENERIC_AUTO_2 = 65;
+	public static final int KRIL_AUTO = 6947;
+	public static final int KRIL_AUTO_2 = 6948;
 	public static final int KRIL_SPEC = 6950;
 	public static final int ZAKL_AUTO = 7077;
 	public static final int BALFRUG_AUTO = 4630;
 	public static final int ZILYANA_MELEE_AUTO = 6964;
 	public static final int ZILYANA_AUTO = 6967;
+	public static final int ZILYANA_AUTO_2 = 6969;
 	public static final int ZILYANA_SPEC = 6970;
-	public static final int STARLIGHT_AUTO = 6376;
+	public static final int STARLIGHT_AUTO = 6375;
+	public static final int STARLIGHT_AUTO_2 = 6376;
 	public static final int BREE_AUTO = 7026;
-	public static final int GROWLER_AUTO = 7037;
+	public static final int GROWLER_AUTO = 7035;
+	public static final int GROWLER_AUTO_2 = 7037;
 	public static final int KREE_RANGED = 6978;
+	public static final int KREE_RANGED_2 = 6980;
 	public static final int SKREE_AUTO = 6955;
 	public static final int GEERIN_AUTO = 6956;
 	public static final int GEERIN_FLINCH = 6958;
@@ -152,17 +157,43 @@ public class GodWarsHelperPlugin extends Plugin
 	private Set<NPCContainer> npcContainers = new HashSet<>();
 	private boolean validRegion;
 	private int currentRegion;
+	private int lastRegion;
 	private boolean inBossRoom;
 	private boolean bossAlive;
 	private boolean meleeMinionAlive;
 	private boolean magicMinionAlive;
 	private boolean rangedMinionAlive;
+	private boolean set1EquippedOnce;
+	private boolean set2EquippedOnce;
+	private boolean set3EquippedOnce;
+	private boolean set4EquippedOnce;
+	private boolean set5EquippedOnce;
 	private boolean isBandosPrayerHotkeyOn;
 	private boolean isZammyPrayerHotkeyOn;
 	private boolean isSaraPrayerHotkeyOn;
 	private boolean isArmaPrayerHotkeyOn;
 	private boolean isSpellHotkey1Pressed;
 	private boolean isSpellHotkey2Pressed;
+	private boolean isGraardorGearHotkeyPressed;
+	private boolean isSteelwillGearHotkeyPressed;
+	private boolean isGrimspikeGearHotkeyPressed;
+	private boolean isStrongstackGearHotkeyPressed;
+	private boolean isBandosGearHotkeyPressed;
+	private boolean isKrilGearHotkeyPressed;
+	private boolean isBalfrugGearHotkeyPressed;
+	private boolean isZalknGearHotkeyPressed;
+	private boolean isTstanonGearHotkeyPressed;
+	private boolean isZamorakGearHotkeyPressed;
+	private boolean isZilyanaGearHotkeyPressed;
+	private boolean isGrowlerGearHotkeyPressed;
+	private boolean isBreeGearHotkeyPressed;
+	private boolean isStarlightGearHotkeyPressed;
+	private boolean isSaradominGearHotkeyPressed;
+	private boolean isKreearraGearHotkeyPressed;
+	private boolean isWingmanGearHotkeyPressed;
+	private boolean isFlockleaderGearHotkeyPressed;
+	private boolean isFlightGearHotkeyPressed;
+	private boolean isArmadylGearHotkeyPressed;
 	private int spellbookSpriteId;
 
 	@Getter(AccessLevel.PACKAGE)
@@ -200,6 +231,7 @@ public class GodWarsHelperPlugin extends Plugin
 		keyManager.registerKeyListener(armadylPrayerHotkey);
 		keyManager.registerKeyListener(spellHotkey1);
 		keyManager.registerKeyListener(spellHotkey2);
+		activateGearHotkeysByRegion();
 	}
 
 	@Override
@@ -213,6 +245,7 @@ public class GodWarsHelperPlugin extends Plugin
 		keyManager.unregisterKeyListener(armadylPrayerHotkey);
 		keyManager.unregisterKeyListener(spellHotkey1);
 		keyManager.unregisterKeyListener(spellHotkey2);
+		deactivateGearHotkeysByRegion();
 		validRegion = false;
 		inBossRoom = false;
 		bossAlive = false;
@@ -223,6 +256,11 @@ public class GodWarsHelperPlugin extends Plugin
 		isZammyPrayerHotkeyOn = false;
 		isSaraPrayerHotkeyOn = false;
 		isArmaPrayerHotkeyOn = false;
+		set1EquippedOnce = false;
+		set2EquippedOnce = false;
+		set3EquippedOnce = false;
+		set4EquippedOnce = false;
+		set5EquippedOnce = false;
 		spellbookSpriteId = -1;
 		sendChatMessage("All God Wars Dungeon automatic protection prayers turned off.");
 	}
@@ -315,6 +353,7 @@ public class GodWarsHelperPlugin extends Plugin
 							npcAnimation == KREE_ARRA_DEATH_ID)
 					{
 						bossAlive = false;
+						set5EquippedOnce = false;
 					}
 					break;
 				case NpcID.SERGEANT_STRONGSTACK:
@@ -367,6 +406,7 @@ public class GodWarsHelperPlugin extends Plugin
 		autoDefensivePrayers();
 		autoOffensivePrayers();
 		autoDeactivatePrayers();
+		gearSwitch();
 	}
 	
 	@Subscribe
@@ -438,13 +478,10 @@ public class GodWarsHelperPlugin extends Plugin
 
 	private boolean regionCheck()
 	{
+		lastRegion = currentRegion;
 		currentRegion = client.getLocalPlayer().getWorldLocation().getRegionID();
 		
-		if (GWD_REGION_IDS.contains(currentRegion))
-		{
-			return true;
-		}
-		return false;
+		return GWD_REGION_IDS.contains(currentRegion);
 	}
 	
 	private void bossRoomCheck()
@@ -496,6 +533,80 @@ public class GodWarsHelperPlugin extends Plugin
 		}
 	}
 	
+	private void activateGearHotkeysByRegion()
+	{
+		switch (currentRegion)
+		{
+			case GENERAL_REGION:
+				keyManager.registerKeyListener(graardorDeathGearHotkey);
+				keyManager.registerKeyListener(steelwillDeathGearHotkey);
+				keyManager.registerKeyListener(grimspikeDeathGearHotkey);
+				keyManager.registerKeyListener(strongstackDeathGearHotkey);
+				keyManager.registerKeyListener(bandosDeathSpawnGearHotkey);
+				break;
+			case ZAMMY_REGION:
+				keyManager.registerKeyListener(krilDeathGearHotkey);
+				keyManager.registerKeyListener(balfrugDeathGearHotkey);
+				keyManager.registerKeyListener(zaklnDeathGearHotkey);
+				keyManager.registerKeyListener(tstanonDeathGearHotkey);
+				keyManager.registerKeyListener(zamorakDeathSpawnGearHotkey);
+				break;
+			case SARA_REGION:
+				keyManager.registerKeyListener(zilyanaDeathGearHotkey);
+				keyManager.registerKeyListener(growlerDeathGearHotkey);
+				keyManager.registerKeyListener(breeDeathGearHotkey);
+				keyManager.registerKeyListener(starlightDeathGearHotkey);
+				keyManager.registerKeyListener(saradominDeathSpawnGearHotkey);
+				break;
+			case ARMA_REGION:
+				keyManager.registerKeyListener(kreearraDeathGearHotkey);
+				keyManager.registerKeyListener(wingmanDeathGearHotkey);
+				keyManager.registerKeyListener(flockleaderDeathGearHotkey);
+				keyManager.registerKeyListener(flightDeathGearHotkey);
+				keyManager.registerKeyListener(armadylDeathSpawnGearHotkey);
+				break;
+			default:
+				break;
+		}
+	}
+	
+	private void deactivateGearHotkeysByRegion()
+	{
+		switch (lastRegion)
+		{
+			case GENERAL_REGION:
+				keyManager.unregisterKeyListener(graardorDeathGearHotkey);
+				keyManager.unregisterKeyListener(steelwillDeathGearHotkey);
+				keyManager.unregisterKeyListener(grimspikeDeathGearHotkey);
+				keyManager.unregisterKeyListener(strongstackDeathGearHotkey);
+				keyManager.unregisterKeyListener(bandosDeathSpawnGearHotkey);
+				break;
+			case ZAMMY_REGION:
+				keyManager.unregisterKeyListener(krilDeathGearHotkey);
+				keyManager.unregisterKeyListener(balfrugDeathGearHotkey);
+				keyManager.unregisterKeyListener(zaklnDeathGearHotkey);
+				keyManager.unregisterKeyListener(tstanonDeathGearHotkey);
+				keyManager.unregisterKeyListener(zamorakDeathSpawnGearHotkey);
+				break;
+			case SARA_REGION:
+				keyManager.unregisterKeyListener(zilyanaDeathGearHotkey);
+				keyManager.unregisterKeyListener(growlerDeathGearHotkey);
+				keyManager.unregisterKeyListener(breeDeathGearHotkey);
+				keyManager.unregisterKeyListener(starlightDeathGearHotkey);
+				keyManager.unregisterKeyListener(saradominDeathSpawnGearHotkey);
+				break;
+			case ARMA_REGION:
+				keyManager.unregisterKeyListener(kreearraDeathGearHotkey);
+				keyManager.unregisterKeyListener(wingmanDeathGearHotkey);
+				keyManager.unregisterKeyListener(flockleaderDeathGearHotkey);
+				keyManager.unregisterKeyListener(flightDeathGearHotkey);
+				keyManager.unregisterKeyListener(armadylDeathSpawnGearHotkey);
+				break;
+			default:
+				break;
+		}
+	}
+	
 	private int determineSpellbookActive()
 	{
 		int spriteId = -1;
@@ -504,15 +615,15 @@ public class GodWarsHelperPlugin extends Plugin
 		Widget resizableMagicIcon = client.getWidget(WidgetInfo.RESIZABLE_VIEWPORT_MAGIC_ICON);
 		Widget resizableBottomMagicIcon = client.getWidget(WidgetInfo.RESIZABLE_VIEWPORT_BOTTOM_LINE_MAGIC_ICON);
 		
-		if (!fixedMagicIcon.isHidden())
+		if (fixedMagicIcon != null)
 		{
 			spriteId = fixedMagicIcon.getSpriteId();
 		}
-		else if (!resizableMagicIcon.isHidden())
+		else if (resizableMagicIcon != null)
 		{
 			spriteId = resizableMagicIcon.getSpriteId();
 		}
-		else if (!resizableBottomMagicIcon.isHidden())
+		else if (resizableBottomMagicIcon != null)
 		{
 			spriteId = resizableBottomMagicIcon.getSpriteId();
 		}
@@ -570,6 +681,11 @@ public class GodWarsHelperPlugin extends Plugin
 			case NpcID.COMMANDER_ZILYANA:
 			case NpcID.KREEARRA:
 				bossAlive = true;
+				set1EquippedOnce = false;
+				set2EquippedOnce = false;
+				set3EquippedOnce = false;
+				set4EquippedOnce = false;
+				set5EquippedOnce = false;
 				npcContainers.add(new NPCContainer(npc));
 				break;
 			case NpcID.SERGEANT_STEELWILL:
@@ -653,6 +769,11 @@ public class GodWarsHelperPlugin extends Plugin
 	
 	private void autoOffensivePrayers()
 	{
+		if (!inBossRoom)
+		{
+			return;
+		}
+		
 		switch(currentRegion)
 		{
 			case GENERAL_REGION:
@@ -677,6 +798,11 @@ public class GodWarsHelperPlugin extends Plugin
 	
 	private void autoDefensivePrayers()
 	{
+		if (!inBossRoom)
+		{
+			return;
+		}
+		
 		switch(currentRegion)
 		{
 			case GENERAL_REGION:
@@ -903,6 +1029,84 @@ public class GodWarsHelperPlugin extends Plugin
 		kotoriUtils.getInvokesLibrary().invokePrayer(prayerToUse);
 	}
 	
+	private void gearSwitch()
+	{
+		switch (currentRegion)
+		{
+			case GENERAL_REGION:
+				parseGearConfigsAndEquip(config.generalGraardorDeathGearBoolean(), config.generalGraardorGearIds(), config.sergeantSteelwillDeathGearBoolean(), config.sergeantSteelwillGearIds(),
+						config.sergeantGrimspikeDeathGearBoolean(), config.sergeantGrimspikeGearIds(), config.sergeantStrongstackDeathGearBoolean(), config.sergeantStrongstackGearIds(),
+						config.bandosDeathSpawnGearBoolean(), config.bandosDeathSpawnGearIds());
+				break;
+			case ZAMMY_REGION:
+				parseGearConfigsAndEquip(config.krilTsutsarothDeathGearBoolean(), config.krilTsutsarothGearIds(), config.balfrugKreeyathDeathGearBoolean(), config.balfrugKreeyathGearIds(),
+						config.zaklnGritchDeathGearBoolean(), config.zaklnGritchGearIds(), config.tstanonKarlakDeathGearBoolean(), config.tstanonKarlakGearIds(),
+						config.zamorakDeathSpawnGearBoolean(), config.zamorakDeathSpawnGearIds());
+				break;
+			case SARA_REGION:
+				parseGearConfigsAndEquip(config.commanderZilyanaDeathGearBoolean(), config.commanderZilyanaGearIds(), config.growlerDeathGearBoolean(), config.growlerGearIds(),
+						config.breeGearBoolean(), config.breeGearIds(), config.starlightDeathGearBoolean(), config.starlightGearIds(),
+						config.saradominDeathSpawnGearBoolean(), config.saradominDeathSpawnGearIds());
+				break;
+			case ARMA_REGION:
+				parseGearConfigsAndEquip(config.kreearraDeathGearBoolean(), config.kreearraGearIds(), config.wingmanSkreeDeathGearBoolean(), config.wingmanSkreeGearIds(),
+						config.flockleaderGeerinDeathGearBoolean(), config.flockleaderGeerinGearIds(), config.flightKilisaDeathGearBoolean(), config.flightKilisaGearIds(),
+						config.armadylDeathSpawnGearBoolean(), config.armadylDeathSpawnGearIds());
+				break;
+			default:
+				break;
+		}
+	}
+	
+	private void parseGearConfigsAndEquip(boolean bossBoolean, String bossGear, boolean magicBoolean, String magicGear, boolean rangedBoolean, String rangedGear,
+										  boolean meleeBoolean, String meleeGear, boolean allBoolean, String allGear)
+	{
+		if (!bossAlive)
+		{
+			if (bossBoolean && !set1EquippedOnce)
+			{
+				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(bossGear));
+				set1EquippedOnce = true;
+				return;
+			}
+			
+			if (!magicMinionAlive && magicBoolean && !set2EquippedOnce)
+			{
+				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(magicGear));
+				set2EquippedOnce = true;
+				return;
+			}
+			
+			if (!rangedMinionAlive && rangedBoolean && !set3EquippedOnce)
+			{
+				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(rangedGear));
+				set3EquippedOnce = true;
+				return;
+			}
+			
+			if (!meleeMinionAlive && meleeBoolean && !set4EquippedOnce)
+			{
+				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(meleeGear));
+				set4EquippedOnce = true;
+				return;
+			}
+			
+			if (!magicMinionAlive && !rangedMinionAlive && !meleeMinionAlive && allBoolean && !set5EquippedOnce)
+			{
+				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(allGear));
+				set5EquippedOnce = true;
+			}
+		}
+		else
+		{
+			if (allBoolean && !set5EquippedOnce)
+			{
+				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(allGear));
+				set5EquippedOnce = true;
+			}
+		}
+	}
+	
 	private void createSpellHotkeyMenuEntry(GodWarsHelperConfig.SpellChoice spellChoice)
 	{
 		if (client.isMenuOpen())
@@ -948,6 +1152,8 @@ public class GodWarsHelperPlugin extends Plugin
 						.build());
 	}
 	
+	
+	// Defensive Prayer Hotkeys
 	private final HotkeyListener bandosPrayerHotkey = new HotkeyListener(() -> config.bandosAutoPrayerHotkey())
 	{
 		@Override
@@ -1020,6 +1226,8 @@ public class GodWarsHelperPlugin extends Plugin
 		}
 	};
 	
+	
+	// Spell Hotkeys
 	private final HotkeyListener spellHotkey1 = new HotkeyListener(() -> config.spellHotkey1())
 	{
 		@Override
@@ -1047,6 +1255,388 @@ public class GodWarsHelperPlugin extends Plugin
 		public void hotkeyReleased()
 		{
 			isSpellHotkey2Pressed = false;
+		}
+	};
+	
+	
+	// Gear Switching Hotkeys
+	private final HotkeyListener graardorDeathGearHotkey = new HotkeyListener(() -> config.generalGraardorDeathGearHotkey())
+	{
+		@Override
+		public void hotkeyPressed()
+		{
+			if (!isGraardorGearHotkeyPressed)
+			{
+				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(config.generalGraardorGearIds()));
+			}
+			isGraardorGearHotkeyPressed = true;
+		}
+		
+		@Override
+		public void hotkeyReleased()
+		{
+			isGraardorGearHotkeyPressed = false;
+		}
+	};
+	
+	private final HotkeyListener steelwillDeathGearHotkey = new HotkeyListener(() -> config.sergeantSteelwillDeathGearHotkey())
+	{
+		@Override
+		public void hotkeyPressed()
+		{
+			if (!isSteelwillGearHotkeyPressed)
+			{
+				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(config.sergeantSteelwillGearIds()));
+			}
+			isSteelwillGearHotkeyPressed = true;
+		}
+		
+		@Override
+		public void hotkeyReleased()
+		{
+			isSteelwillGearHotkeyPressed = false;
+		}
+	};
+	
+	private final HotkeyListener grimspikeDeathGearHotkey = new HotkeyListener(() -> config.sergeantGrimspikeGearHotkey())
+	{
+		@Override
+		public void hotkeyPressed()
+		{
+			if (!isGrimspikeGearHotkeyPressed)
+			{
+				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(config.sergeantGrimspikeGearIds()));
+			}
+			isGrimspikeGearHotkeyPressed = true;
+		}
+		
+		@Override
+		public void hotkeyReleased()
+		{
+			isSteelwillGearHotkeyPressed = false;
+		}
+	};
+	
+	private final HotkeyListener strongstackDeathGearHotkey = new HotkeyListener(() -> config.sergeantStrongstackGearHotkey())
+	{
+		@Override
+		public void hotkeyPressed()
+		{
+			if (!isStrongstackGearHotkeyPressed)
+			{
+				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(config.sergeantStrongstackGearIds()));
+			}
+			isStrongstackGearHotkeyPressed = true;
+		}
+		
+		@Override
+		public void hotkeyReleased()
+		{
+			isStrongstackGearHotkeyPressed = false;
+		}
+	};
+	
+	private final HotkeyListener bandosDeathSpawnGearHotkey = new HotkeyListener(() -> config.bandosDeathSpawnGearHotkey())
+	{
+		@Override
+		public void hotkeyPressed()
+		{
+			if (!isBandosGearHotkeyPressed)
+			{
+				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(config.bandosDeathSpawnGearIds()));
+			}
+			isBandosGearHotkeyPressed = true;
+		}
+		
+		@Override
+		public void hotkeyReleased()
+		{
+			isBandosGearHotkeyPressed = true;
+		}
+	};
+	
+	private final HotkeyListener krilDeathGearHotkey = new HotkeyListener(() -> config.krilTsutsarothDeathGearHotkey())
+	{
+		@Override
+		public void hotkeyPressed()
+		{
+			if (!isKrilGearHotkeyPressed)
+			{
+				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(config.krilTsutsarothGearIds()));
+			}
+			isKrilGearHotkeyPressed = true;
+		}
+		
+		@Override
+		public void hotkeyReleased()
+		{
+			isKrilGearHotkeyPressed = false;
+		}
+	};
+	
+	private final HotkeyListener balfrugDeathGearHotkey = new HotkeyListener(() -> config.balfrugKreeyathDeathGearHotkey())
+	{
+		@Override
+		public void hotkeyPressed()
+		{
+			if (!isBalfrugGearHotkeyPressed)
+			{
+				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(config.balfrugKreeyathGearIds()));
+			}
+			isBalfrugGearHotkeyPressed = true;
+		}
+		
+		@Override
+		public void hotkeyReleased()
+		{
+			isBalfrugGearHotkeyPressed = false;
+		}
+	};
+	
+	private final HotkeyListener zaklnDeathGearHotkey = new HotkeyListener(() -> config.zaklnGritchDeathGearHotkey())
+	{
+		@Override
+		public void hotkeyPressed()
+		{
+			if (!isZalknGearHotkeyPressed)
+			{
+				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(config.zaklnGritchGearIds()));
+			}
+			isZalknGearHotkeyPressed = true;
+		}
+		
+		@Override
+		public void hotkeyReleased()
+		{
+			isZalknGearHotkeyPressed = false;
+		}
+	};
+	
+	private final HotkeyListener tstanonDeathGearHotkey = new HotkeyListener(() -> config.tstanonKarlakDeathGearHotkey())
+	{
+		@Override
+		public void hotkeyPressed()
+		{
+			if (!isTstanonGearHotkeyPressed)
+			{
+				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(config.tstanonKarlakGearIds()));
+			}
+			isTstanonGearHotkeyPressed = true;
+		}
+		
+		@Override
+		public void hotkeyReleased()
+		{
+			isTstanonGearHotkeyPressed = false;
+		}
+	};
+	
+	private final HotkeyListener zamorakDeathSpawnGearHotkey = new HotkeyListener(() -> config.zamorakDeathSpawnGearHotkey())
+	{
+		@Override
+		public void hotkeyPressed()
+		{
+			if (!isZamorakGearHotkeyPressed)
+			{
+				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(config.zamorakDeathSpawnGearIds()));
+			}
+			isZamorakGearHotkeyPressed = true;
+		}
+		
+		@Override
+		public void hotkeyReleased()
+		{
+			isZamorakGearHotkeyPressed = true;
+		}
+	};
+	
+	private final HotkeyListener zilyanaDeathGearHotkey = new HotkeyListener(() -> config.commanderZilyanaDeathGearHotkey())
+	{
+		@Override
+		public void hotkeyPressed()
+		{
+			if (!isZilyanaGearHotkeyPressed)
+			{
+				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(config.commanderZilyanaGearIds()));
+			}
+			isZilyanaGearHotkeyPressed = true;
+		}
+		
+		@Override
+		public void hotkeyReleased()
+		{
+			isZilyanaGearHotkeyPressed = false;
+		}
+	};
+	
+	private final HotkeyListener growlerDeathGearHotkey = new HotkeyListener(() -> config.growlerDeathGearHotkey())
+	{
+		@Override
+		public void hotkeyPressed()
+		{
+			if (!isGrowlerGearHotkeyPressed)
+			{
+				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(config.growlerGearIds()));
+			}
+			isGrowlerGearHotkeyPressed = true;
+		}
+		
+		@Override
+		public void hotkeyReleased()
+		{
+			isGrowlerGearHotkeyPressed = false;
+		}
+	};
+	
+	private final HotkeyListener breeDeathGearHotkey = new HotkeyListener(() -> config.breeDeathGearHotkey())
+	{
+		@Override
+		public void hotkeyPressed()
+		{
+			if (!isBreeGearHotkeyPressed)
+			{
+				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(config.breeGearIds()));
+			}
+			isBreeGearHotkeyPressed = true;
+		}
+		
+		@Override
+		public void hotkeyReleased()
+		{
+			isBreeGearHotkeyPressed = false;
+		}
+	};
+	
+	private final HotkeyListener starlightDeathGearHotkey = new HotkeyListener(() -> config.starlightDeathGearHotkey())
+	{
+		@Override
+		public void hotkeyPressed()
+		{
+			if (!isStarlightGearHotkeyPressed)
+			{
+				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(config.starlightGearIds()));
+			}
+			isStarlightGearHotkeyPressed = true;
+		}
+		
+		@Override
+		public void hotkeyReleased()
+		{
+			isStarlightGearHotkeyPressed = false;
+		}
+	};
+	
+	private final HotkeyListener saradominDeathSpawnGearHotkey = new HotkeyListener(() -> config.saradominDeathSpawnGearHotkey())
+	{
+		@Override
+		public void hotkeyPressed()
+		{
+			if (!isSaradominGearHotkeyPressed)
+			{
+				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(config.saradominDeathSpawnGearIds()));
+			}
+			isSaradominGearHotkeyPressed = true;
+		}
+		
+		@Override
+		public void hotkeyReleased()
+		{
+			isSaradominGearHotkeyPressed = true;
+		}
+	};
+	
+	private final HotkeyListener kreearraDeathGearHotkey = new HotkeyListener(() -> config.kreearraDeathGearHotkey())
+	{
+		@Override
+		public void hotkeyPressed()
+		{
+			if (!isKreearraGearHotkeyPressed)
+			{
+				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(config.kreearraGearIds()));
+			}
+			isKreearraGearHotkeyPressed = true;
+		}
+		
+		@Override
+		public void hotkeyReleased()
+		{
+			isKreearraGearHotkeyPressed = false;
+		}
+	};
+	
+	private final HotkeyListener wingmanDeathGearHotkey = new HotkeyListener(() -> config.wingmanSkreeDeathGearHotkey())
+	{
+		@Override
+		public void hotkeyPressed()
+		{
+			if (!isWingmanGearHotkeyPressed)
+			{
+				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(config.wingmanSkreeGearIds()));
+			}
+			isWingmanGearHotkeyPressed = true;
+		}
+		
+		@Override
+		public void hotkeyReleased()
+		{
+			isWingmanGearHotkeyPressed = false;
+		}
+	};
+	
+	private final HotkeyListener flockleaderDeathGearHotkey = new HotkeyListener(() -> config.flockleaderGeerinDeathGearHotkey())
+	{
+		@Override
+		public void hotkeyPressed()
+		{
+			if (!isFlockleaderGearHotkeyPressed)
+			{
+				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(config.flockleaderGeerinGearIds()));
+			}
+			isFlockleaderGearHotkeyPressed = true;
+		}
+		
+		@Override
+		public void hotkeyReleased()
+		{
+			isFlockleaderGearHotkeyPressed = false;
+		}
+	};
+	
+	private final HotkeyListener flightDeathGearHotkey = new HotkeyListener(() -> config.flightKilisaDeathGearHotkey())
+	{
+		@Override
+		public void hotkeyPressed()
+		{
+			if (!isFlightGearHotkeyPressed)
+			{
+				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(config.flightKilisaGearIds()));
+			}
+			isFlightGearHotkeyPressed = true;
+		}
+		
+		@Override
+		public void hotkeyReleased()
+		{
+			isFlightGearHotkeyPressed = false;
+		}
+	};
+	
+	private final HotkeyListener armadylDeathSpawnGearHotkey = new HotkeyListener(() -> config.armadylDeathSpawnGearHotkey())
+	{
+		@Override
+		public void hotkeyPressed()
+		{
+			if (!isArmadylGearHotkeyPressed)
+			{
+				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(config.armadylDeathSpawnGearIds()));
+			}
+			isArmadylGearHotkeyPressed = true;
+		}
+		
+		@Override
+		public void hotkeyReleased()
+		{
+			isArmadylGearHotkeyPressed = true;
 		}
 	};
 }

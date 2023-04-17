@@ -13,7 +13,7 @@ public interface KotoriPluginLoaderConfig extends Config
 {
     //Sections
     @ConfigSection(
-            name = "<html>Kotori Plugin Loader<br>Version 1.1.2</html>",
+            name = "<html>Kotori Plugin Loader<br>Version 1.2.0</html>",
             description = "",
             position = 0,
             closedByDefault = true
@@ -221,12 +221,12 @@ public interface KotoriPluginLoaderConfig extends Config
     default boolean nexExtendedChoice() { return false; }
 
     @ConfigItem(
-            keyName = "godWarsTickTimersChoice",
-            name = "God Wars Tick Timers",
-            description = "Load the God Wars Tick Timers plugin.",
+            keyName = "godWarsHelperChoice",
+            name = "God Wars Helper",
+            description = "Load the God Wars Helper plugin.",
             section = pluginsToLoad
     )
-    default boolean godWarsTickTimersChoice() { return false; }
+    default boolean godWarsHelperChoice() { return false; }
 
     @ConfigItem(
             keyName = "specBarChoice",

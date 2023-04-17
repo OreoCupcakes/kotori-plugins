@@ -23,7 +23,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.theplug.kotori.gwdhelper.utils;
+package com.theplug.kotori.kotoriutils.rlapi;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

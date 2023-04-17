@@ -23,7 +23,7 @@
  */
 package com.theplug.kotori.gwdhelper;
 
-import com.theplug.kotori.gwdhelper.utils.WidgetInfoPlus;
+import com.theplug.kotori.kotoriutils.rlapi.WidgetInfoPlus;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -50,9 +50,18 @@ public interface GodWarsHelperConfig extends Config
 		closedByDefault = true
 	)
 	String overlaySettings = "Overlay Settings";
+	
+	@ConfigItem(
+			position = 0,
+			keyName = "showTickTimers",
+			name = "Show Tick Timers",
+			description = "Show the tick timers of the NPCs' next attack.",
+			section = overlaySettings
+	)
+	default boolean showTickTimers() { return true; }
 
 	@ConfigItem(
-		position = 0,
+		position = 1,
 		keyName = "prayerWidgetHelper",
 		name = "Prayer Widget Helper",
 		description = "Shows you which prayer to click and the time until click.",
@@ -64,7 +73,7 @@ public interface GodWarsHelperConfig extends Config
 	}
 
 	@ConfigItem(
-		position = 1,
+		position = 2,
 		keyName = "showHitSquares",
 		name = "Show Hit Squares",
 		description = "Shows you where the melee bosses can hit you from.",
@@ -76,7 +85,7 @@ public interface GodWarsHelperConfig extends Config
 	}
 
 	@ConfigItem(
-		position = 2,
+		position = 3,
 		keyName = "changeTickColor",
 		name = "Change Tick Color",
 		description = "If this is enabled, it will change the tick color to white" +
@@ -89,7 +98,7 @@ public interface GodWarsHelperConfig extends Config
 	}
 
 	@ConfigItem(
-		position = 3,
+		position = 4,
 		keyName = "ignoreNonAttacking",
 		name = "Ignore Non-Attacking",
 		description = "Ignore monsters that are not attacking you",
@@ -101,7 +110,7 @@ public interface GodWarsHelperConfig extends Config
 	}
 
 	@ConfigItem(
-		position = 4,
+		position = 5,
 		keyName = "guitarHeroMode",
 		name = "Guitar Hero Mode",
 		description = "Render \"Guitar Hero\" style prayer helper",
@@ -111,9 +120,18 @@ public interface GodWarsHelperConfig extends Config
 	{
 		return false;
 	}
+	
+	@ConfigItem(
+			position = 6,
+			keyName = "overlayLine0",
+			name = "-------------------------------------",
+			description = "",
+			section = overlaySettings
+	)
+	default Boolean overlayLine0() { return false; }
 
 	@ConfigItem(
-		position = 5,
+		position = 7,
 		keyName = "fontStyle",
 		name = "Font Style",
 		description = "Plain | Bold | Italics",
@@ -129,7 +147,7 @@ public interface GodWarsHelperConfig extends Config
 		max = 40
 	)
 	@ConfigItem(
-		position = 6,
+		position = 8,
 		keyName = "textSize",
 		name = "Text Size",
 		description = "Text Size for Timers.",
@@ -141,7 +159,7 @@ public interface GodWarsHelperConfig extends Config
 	}
 
 	@ConfigItem(
-		position = 7,
+		position = 9,
 		keyName = "shadows",
 		name = "Text Shadows",
 		description = "Adds Shadows to text.",
@@ -357,6 +375,185 @@ public interface GodWarsHelperConfig extends Config
 			section = bandosHelper
 	)
 	default Boolean bandosLine5() { return false; }
+	
+	@ConfigItem(
+			position = 16,
+			keyName = "bandosLine6",
+			name = "Automate Gear Switching On:",
+			description = "Underneath are settings to switch gear within Bandos' Stronghold. You can configure to <br>" +
+					"automate gear switching at a predetermined event and/or with a hotkey.",
+			section = bandosHelper
+	)
+	default Boolean bandosLine6() { return false; }
+	
+	@ConfigItem(
+			position = 17,
+			keyName = "generalGraardorDeathGearBoolean",
+			name = "General Graardor's Death?",
+			description = "<b><u>Gear IDs Set 1 - Event:</u></b><br>" +
+					"If enabled, this will switch to the specified item ids after you killed the boss.<br>" +
+					"This will only trigger once, on General Graardor's death.",
+			section = bandosHelper
+	)
+	default boolean generalGraardorDeathGearBoolean() { return false; }
+	
+	@ConfigItem(
+			position = 18,
+			keyName = "generalGraardorDeathGearHotkey",
+			name = "Hotkey Trigger",
+			description = "<b><u>Gear IDs Set 1 - Hotkey:</u></b><br>" +
+					"Assign a hotkey to trigger the switching of gear ids found in Gear IDs Set 1.<br>" +
+					"Anytime you press the assigned hotkey, it will switch to this set of gear.",
+			section = bandosHelper
+	)
+	default Keybind generalGraardorDeathGearHotkey() { return Keybind.NOT_SET; }
+	
+	@ConfigItem(
+			position = 19,
+			keyName = "generalGraardorGearIds",
+			name = "Enter Gear IDs Here:",
+			description = "<b><u>Gear IDs Set 1:</u></b><br>" +
+					"Enter in the item ids to switch to with the format \"1234,4321\".<br>" +
+					"This set is for the General Graardor's death event trigger and it's hotkey trigger.<br>",
+			section = bandosHelper
+	)
+	default String generalGraardorGearIds() { return "0,0"; }
+	
+	@ConfigItem(
+			position = 20,
+			keyName = "sergeantSteelwillDeathGearBoolean",
+			name = "Sergeant Steelwill's Death?",
+			description = "<b><u>Gear IDs Set 2 - Event:</u></b><br>" +
+					"If enabled, this will switch to the specified item ids after you killed the magic minion.<br>" +
+					"This will only trigger once, on Sergeant Steelwill's (Magic) death.",
+			section = bandosHelper
+	)
+	default boolean sergeantSteelwillDeathGearBoolean() { return false; }
+	
+	@ConfigItem(
+			position = 21,
+			keyName = "sergeantSteelwillDeathGearHotkey",
+			name = "Hotkey Trigger",
+			description = "<b><u>Gear IDs Set 2 - Hotkey:</u></b><br>" +
+					"Assign a hotkey to trigger the switching of gear ids found in Gear IDs Set 2.<br>" +
+					"Anytime you press the assigned hotkey, it will switch to this set of gear.",
+			section = bandosHelper
+	)
+	default Keybind sergeantSteelwillDeathGearHotkey() { return Keybind.NOT_SET; }
+	
+	@ConfigItem(
+			position = 22,
+			keyName = "sergeantSteelwillGearIds",
+			name = "Enter Gear IDs Here:",
+			description = "<b><u>Gear IDs Set 2:</u></b><br>" +
+					"Enter in the item ids to switch to with the format \"1234,4321\".<br>" +
+					"This set is for the Sergeant Steelwill's death event trigger and it's hotkey trigger.<br>",
+			section = bandosHelper
+	)
+	default String sergeantSteelwillGearIds() { return "0,0"; }
+	
+	@ConfigItem(
+			position = 23,
+			keyName = "sergeantGrimspikeDeathGearBoolean",
+			name = "Sergeant Grimspike's Death?",
+			description = "<b><u>Gear IDs Set 3 - Event:</u></b><br>" +
+					"If enabled, this will switch to the specified item ids after you killed the ranged minion.<br>" +
+					"This will only trigger once, on Sergeant Grimspike's (Ranged) death.",
+			section = bandosHelper
+	)
+	default boolean sergeantGrimspikeDeathGearBoolean() { return false; }
+	
+	@ConfigItem(
+			position = 24,
+			keyName = "sergeantGrimspikeDeathGearHotkey",
+			name = "Hotkey Trigger",
+			description = "<b><u>Gear IDs Set 3 - Hotkey:</u></b><br>" +
+					"Assign a hotkey to trigger the switching of gear ids found in Gear IDs Set 3.<br>" +
+					"Anytime you press the assigned hotkey, it will switch to this set of gear.",
+			section = bandosHelper
+	)
+	default Keybind sergeantGrimspikeGearHotkey() { return Keybind.NOT_SET; }
+	
+	@ConfigItem(
+			position = 25,
+			keyName = "sergeantGrimspikeGearIds",
+			name = "Enter Gear IDs Here:",
+			description = "<b><u>Gear IDs Set 3:</u></b><br>" +
+					"Enter in the item ids to switch to with the format \"1234,4321\".<br>" +
+					"This set is for the Sergeant Grimspike's death event trigger and it's hotkey trigger.<br>",
+			section = bandosHelper
+	)
+	default String sergeantGrimspikeGearIds() { return "0,0"; }
+	
+	@ConfigItem(
+			position = 26,
+			keyName = "sergeantStrongstackDeathGearBoolean",
+			name = "Sergeant Strongstack's Death?",
+			description = "<b><u>Gear IDs Set 4 - Event:</u></b><br>" +
+					"If enabled, this will switch to the specified item ids after you killed the melee minion.<br>" +
+					"This will only trigger once, on Sergeant Strongstack's (Melee) death.",
+			section = bandosHelper
+	)
+	default boolean sergeantStrongstackDeathGearBoolean() { return false; }
+	
+	@ConfigItem(
+			position = 27,
+			keyName = "sergeantStrongstackDeathGearHotkey",
+			name = "Hotkey Trigger",
+			description = "<b><u>Gear IDs Set 4 - Hotkey:</u></b><br>" +
+					"Assign a hotkey to trigger the switching of gear ids found in Gear IDs Set 4.<br>" +
+					"Anytime you press the assigned hotkey, it will switch to this set of gear.",
+			section = bandosHelper
+	)
+	default Keybind sergeantStrongstackGearHotkey() { return Keybind.NOT_SET; }
+	
+	@ConfigItem(
+			position = 28,
+			keyName = "sergeantStrongstackGearIds",
+			name = "Enter Gear IDs Here:",
+			description = "<b><u>Gear IDs Set 4:</u></b><br>" +
+					"Enter in the item ids to switch to with the format \"1234,4321\".<br>" +
+					"This set is for the Sergeant Strongstack's death event trigger and it's hotkey trigger.<br>",
+			section = bandosHelper
+	)
+	default String sergeantStrongstackGearIds() { return "0,0"; }
+	
+	@ConfigItem(
+			position = 29,
+			keyName = "bandosDeathSpawnGearBoolean",
+			name = "All Dead or Graardor's Spawn?",
+			description = "<b><u>Gear IDs Set 5 - Event:</u></b><br>" +
+					"If enabled, this will switch to the specified item ids after you killed all the NPCs or General Graardor spawns.<br>" +
+					"This will only trigger once, on boss and minions' deaths or on boss spawn.",
+			section = bandosHelper
+	)
+	default boolean bandosDeathSpawnGearBoolean() { return false; }
+	
+	@ConfigItem(
+			position = 30,
+			keyName = "bandosDeathSpawnGearHotkey",
+			name = "Hotkey Trigger",
+			description = "<b><u>Gear IDs Set 5 - Hotkey:</u></b><br>" +
+					"Assign a hotkey to trigger the switching of gear ids found in Gear IDs Set 5.<br>" +
+					"Anytime you press the assigned hotkey, it will switch to this set of gear.",
+			section = bandosHelper
+	)
+	default Keybind bandosDeathSpawnGearHotkey() { return Keybind.NOT_SET; }
+	
+	@ConfigItem(
+			position = 31,
+			keyName = "bandosDeathSpawnGearIds",
+			name = "Enter Gear IDs Here:",
+			description = "<b><u>Gear IDs Set 5:</u></b><br>" +
+					"Enter in the item ids to switch to with the format \"1234,4321\".<br>" +
+					"This set is for the All Dead or Graardor's Spawn event trigger and it's hotkey trigger.<br>",
+			section = bandosHelper
+	)
+	default String bandosDeathSpawnGearIds() { return "0,0"; }
+	
+	
+	
+	
 	
 	
 	
@@ -579,6 +776,192 @@ public interface GodWarsHelperConfig extends Config
 	)
 	default int tstanonKarlakPriority() { return 0; }
 	
+	@ConfigItem(
+			position = 17,
+			keyName = "zamorakLine6",
+			name = "-------------------------------------",
+			description = "",
+			section = zamorakHelper
+	)
+	default Boolean zamorakLine6() { return false; }
+	
+	@ConfigItem(
+			position = 18,
+			keyName = "zamorakLine7",
+			name = "Automate Gear Switching On:",
+			description = "Underneath are settings to switch gear within Zamorak's Fortress. You can configure to <br>" +
+					"automate gear switching at a predetermined event and/or with a hotkey.",
+			section = zamorakHelper
+	)
+	default Boolean zamorakLine7() { return false; }
+	
+	@ConfigItem(
+			position = 19,
+			keyName = "krilTsutsarothDeathGearBoolean",
+			name = "K'ril Tsutsaroth's Death?",
+			description = "<b><u>Gear IDs Set 1 - Event:</u></b><br>" +
+					"If enabled, this will switch to the specified item ids after you killed the boss.<br>" +
+					"This will only trigger once, on K'ril Tsutsaroth's death.",
+			section = zamorakHelper
+	)
+	default boolean krilTsutsarothDeathGearBoolean() { return false; }
+	
+	@ConfigItem(
+			position = 20,
+			keyName = "krilTsutsarothDeathGearHotkey",
+			name = "Hotkey Trigger",
+			description = "<b><u>Gear IDs Set 1 - Hotkey:</u></b><br>" +
+					"Assign a hotkey to trigger the switching of gear ids found in Gear IDs Set 1.<br>" +
+					"Anytime you press the assigned hotkey, it will switch to this set of gear.",
+			section = zamorakHelper
+	)
+	default Keybind krilTsutsarothDeathGearHotkey() { return Keybind.NOT_SET; }
+	
+	@ConfigItem(
+			position = 21,
+			keyName = "krilTsutsarothGearIds",
+			name = "Enter Gear IDs Here:",
+			description = "<b><u>Gear IDs Set 1:</u></b><br>" +
+					"Enter in the item ids to switch to with the format \"1234,4321\".<br>" +
+					"This set is for the K'ril Tsutsaroth's death event trigger and it's hotkey trigger.<br>",
+			section = zamorakHelper
+	)
+	default String krilTsutsarothGearIds() { return "0,0"; }
+	
+	@ConfigItem(
+			position = 22,
+			keyName = "balfrugKreeyathDeathGearBoolean",
+			name = "Balfrug Kreeyath's Death?",
+			description = "<b><u>Gear IDs Set 2 - Event:</u></b><br>" +
+					"If enabled, this will switch to the specified item ids after you killed the magic minion.<br>" +
+					"This will only trigger once, on Balfrug Kreeyath's (Magic) death.",
+			section = zamorakHelper
+	)
+	default boolean balfrugKreeyathDeathGearBoolean() { return false; }
+	
+	@ConfigItem(
+			position = 23,
+			keyName = "balfrugKreeyathDeathGearHotkey",
+			name = "Hotkey Trigger",
+			description = "<b><u>Gear IDs Set 2 - Hotkey:</u></b><br>" +
+					"Assign a hotkey to trigger the switching of gear ids found in Gear IDs Set 2.<br>" +
+					"Anytime you press the assigned hotkey, it will switch to this set of gear.",
+			section = zamorakHelper
+	)
+	default Keybind balfrugKreeyathDeathGearHotkey() { return Keybind.NOT_SET; }
+	
+	@ConfigItem(
+			position = 24,
+			keyName = "balfrugKreeyathGearIds",
+			name = "Enter Gear IDs Here:",
+			description = "<b><u>Gear IDs Set 2:</u></b><br>" +
+					"Enter in the item ids to switch to with the format \"1234,4321\".<br>" +
+					"This set is for the Balfrug Kreeyath's death event trigger and it's hotkey trigger.<br>",
+			section = zamorakHelper
+	)
+	default String balfrugKreeyathGearIds() { return "0,0"; }
+	
+	@ConfigItem(
+			position = 25,
+			keyName = "zaklnGritchDeathGearBoolean",
+			name = "Zakl'n Gritch's Death?",
+			description = "<b><u>Gear IDs Set 3 - Event:</u></b><br>" +
+					"If enabled, this will switch to the specified item ids after you killed the ranged minion.<br>" +
+					"This will only trigger once, on Zakl'n Gritch's (Ranged) death.",
+			section = zamorakHelper
+	)
+	default boolean zaklnGritchDeathGearBoolean() { return false; }
+	
+	@ConfigItem(
+			position = 26,
+			keyName = "zaklnGritchGearHotkey",
+			name = "Hotkey Trigger",
+			description = "<b><u>Gear IDs Set 3 - Hotkey:</u></b><br>" +
+					"Assign a hotkey to trigger the switching of gear ids found in Gear IDs Set 3.<br>" +
+					"Anytime you press the assigned hotkey, it will switch to this set of gear.",
+			section = zamorakHelper
+	)
+	default Keybind zaklnGritchDeathGearHotkey() { return Keybind.NOT_SET; }
+	
+	@ConfigItem(
+			position = 27,
+			keyName = "zaklnGritchGearIds",
+			name = "Enter Gear IDs Here:",
+			description = "<b><u>Gear IDs Set 3:</u></b><br>" +
+					"Enter in the item ids to switch to with the format \"1234,4321\".<br>" +
+					"This set is for the Zakl'n Gritch's death event trigger and it's hotkey trigger.<br>",
+			section = zamorakHelper
+	)
+	default String zaklnGritchGearIds() { return "0,0"; }
+	
+	@ConfigItem(
+			position = 28,
+			keyName = "tstanonKarlakDeathGearBoolean",
+			name = "Tstanon Karlak's Death?'",
+			description = "<b><u>Gear IDs Set 4 - Event:</u></b><br>" +
+					"If enabled, this will switch to the specified item ids after you killed the melee minion.<br>" +
+					"This will only trigger once, on Tstanon Karlak's (Melee) death.",
+			section = zamorakHelper
+	)
+	default boolean tstanonKarlakDeathGearBoolean() { return false; }
+	
+	@ConfigItem(
+			position = 29,
+			keyName = "tstanonKarlakDeathGearHotkey",
+			name = "Hotkey Trigger",
+			description = "<b><u>Gear IDs Set 4 - Hotkey:</u></b><br>" +
+					"Assign a hotkey to trigger the switching of gear ids found in Gear IDs Set 4.<br>" +
+					"Anytime you press the assigned hotkey, it will switch to this set of gear.",
+			section = zamorakHelper
+	)
+	default Keybind tstanonKarlakDeathGearHotkey() { return Keybind.NOT_SET; }
+	
+	@ConfigItem(
+			position = 30,
+			keyName = "tstanonKarlakGearIds",
+			name = "Enter Gear IDs Here:",
+			description = "<b><u>Gear IDs Set 4:</u></b><br>" +
+					"Enter in the item ids to switch to with the format \"1234,4321\".<br>" +
+					"This set is for the Tstanon Karlak's death event trigger and it's hotkey trigger.<br>",
+			section = zamorakHelper
+	)
+	default String tstanonKarlakGearIds() { return "0,0"; }
+	
+	@ConfigItem(
+			position = 31,
+			keyName = "zamorakDeathSpawnGearBoolean",
+			name = "All Dead or K'ril's Spawn?",
+			description = "<b><u>Gear IDs Set 5 - Event:</u></b><br>" +
+					"If enabled, this will switch to the specified item ids after you killed all the NPCs or K'ril Tsutsaroth spawns.<br>" +
+					"This will only trigger once, on boss and minions' deaths or on boss spawn.",
+			section = zamorakHelper
+	)
+	default boolean zamorakDeathSpawnGearBoolean() { return false; }
+	
+	@ConfigItem(
+			position = 32,
+			keyName = "zamorakDeathSpawnGearHotkey",
+			name = "Hotkey Trigger",
+			description = "<b><u>Gear IDs Set 5 - Hotkey:</u></b><br>" +
+					"Assign a hotkey to trigger the switching of gear ids found in Gear IDs Set 5.<br>" +
+					"Anytime you press the assigned hotkey, it will switch to this set of gear.",
+			section = zamorakHelper
+	)
+	default Keybind zamorakDeathSpawnGearHotkey() { return Keybind.NOT_SET; }
+	
+	@ConfigItem(
+			position = 33,
+			keyName = "zamorakDeathSpawnGearIds",
+			name = "Enter Gear IDs Here:",
+			description = "<b><u>Gear IDs Set 5:</u></b><br>" +
+					"Enter in the item ids to switch to with the format \"1234,4321\".<br>" +
+					"This set is for the All Dead or K'ril's Spawn event trigger and it's hotkey trigger.<br>",
+			section = zamorakHelper
+	)
+	default String zamorakDeathSpawnGearIds() { return "0,0"; }
+	
+	
+	
 	
 	
 	//Saradomin Section
@@ -799,6 +1182,190 @@ public interface GodWarsHelperConfig extends Config
 	)
 	default int starlightPriority() { return 0; }
 	
+	@ConfigItem(
+			position = 17,
+			keyName = "saradominLine6",
+			name = "-------------------------------------",
+			description = "",
+			section = saradominHelper
+	)
+	default Boolean saradominLine6() { return false; }
+	
+	@ConfigItem(
+			position = 18,
+			keyName = "saradomineLine7",
+			name = "Automate Gear Switching On:",
+			description = "Underneath are settings to switch gear within Saradomin's Encampment. You can<br>" +
+					"configure to automate gear switching at a predetermined event and/or with a hotkey.",
+			section = saradominHelper
+	)
+	default Boolean saradominLine7() { return false; }
+	
+	@ConfigItem(
+			position = 19,
+			keyName = "commanderZilyanaDeathGearBoolean",
+			name = "Commander Zilyana's Death?",
+			description = "<b><u>Gear IDs Set 1 - Event:</u></b><br>" +
+					"If enabled, this will switch to the specified item ids after you killed the boss.<br>" +
+					"This will only trigger once, on Commander Zilyana's death.",
+			section = saradominHelper
+	)
+	default boolean commanderZilyanaDeathGearBoolean() { return false; }
+	
+	@ConfigItem(
+			position = 20,
+			keyName = "commanderZilyanaDeathGearHotkey",
+			name = "Hotkey Trigger",
+			description = "<b><u>Gear IDs Set 1 - Hotkey:</u></b><br>" +
+					"Assign a hotkey to trigger the switching of gear ids found in Gear IDs Set 1.<br>" +
+					"Anytime you press the assigned hotkey, it will switch to this set of gear.",
+			section = saradominHelper
+	)
+	default Keybind commanderZilyanaDeathGearHotkey() { return Keybind.NOT_SET; }
+	
+	@ConfigItem(
+			position = 21,
+			keyName = "commanderZilyanaGearIds",
+			name = "Enter Gear IDs Here:",
+			description = "<b><u>Gear IDs Set 1:</u></b><br>" +
+					"Enter in the item ids to switch to with the format \"1234,4321\".<br>" +
+					"This set is for the Commander Zilyana's death event trigger and it's hotkey trigger.<br>",
+			section = saradominHelper
+	)
+	default String commanderZilyanaGearIds() { return "0,0"; }
+	
+	@ConfigItem(
+			position = 22,
+			keyName = "growlerDeathGearBoolean",
+			name = "Growler's Death?",
+			description = "<b><u>Gear IDs Set 2 - Event:</u></b><br>" +
+					"If enabled, this will switch to the specified item ids after you killed the magic minion.<br>" +
+					"This will only trigger once, on Growler's (Magic) death.",
+			section = saradominHelper
+	)
+	default boolean growlerDeathGearBoolean() { return false; }
+	
+	@ConfigItem(
+			position = 23,
+			keyName = "growlerDeathGearHotkey",
+			name = "Hotkey Trigger",
+			description = "<b><u>Gear IDs Set 2 - Hotkey:</u></b><br>" +
+					"Assign a hotkey to trigger the switching of gear ids found in Gear IDs Set 2.<br>" +
+					"Anytime you press the assigned hotkey, it will switch to this set of gear.",
+			section = saradominHelper
+	)
+	default Keybind growlerDeathGearHotkey() { return Keybind.NOT_SET; }
+	
+	@ConfigItem(
+			position = 24,
+			keyName = "growlerGearIds",
+			name = "Growler Gear Ids",
+			description = "<b><u>Gear IDs Set 2:</u></b><br>" +
+					"Enter in the item ids to switch to with the format \"1234,4321\".<br>" +
+					"This set is for the Growler's death event trigger and it's hotkey trigger.<br>",
+			section = saradominHelper
+	)
+	default String growlerGearIds() { return "0,0"; }
+	
+	@ConfigItem(
+			position = 25,
+			keyName = "breeDeathGearBoolean",
+			name = "Bree's Death?",
+			description = "<b><u>Gear IDs Set 3 - Event:</u></b><br>" +
+					"If enabled, this will switch to the specified item ids after you killed the ranged minion.<br>" +
+					"This will only trigger once, on Bree's (Ranged) death.",
+			section = saradominHelper
+	)
+	default boolean breeGearBoolean() { return false; }
+	
+	@ConfigItem(
+			position = 26,
+			keyName = "breeDeathGearHotkey",
+			name = "Hotkey Trigger",
+			description = "<b><u>Gear IDs Set 3 - Hotkey:</u></b><br>" +
+					"Assign a hotkey to trigger the switching of gear ids found in Gear IDs Set 3.<br>" +
+					"Anytime you press the assigned hotkey, it will switch to this set of gear.",
+			section = saradominHelper
+	)
+	default Keybind breeDeathGearHotkey() { return Keybind.NOT_SET; }
+	
+	@ConfigItem(
+			position = 27,
+			keyName = "breeGearIds",
+			name = "Enter Gear IDs Here:",
+			description = "<b><u>Gear IDs Set 3:</u></b><br>" +
+					"Enter in the item ids to switch to with the format \"1234,4321\".<br>" +
+					"This set is for the Bree's death event trigger and it's hotkey trigger.<br>",
+			section = saradominHelper
+	)
+	default String breeGearIds() { return "0,0"; }
+	
+	@ConfigItem(
+			position = 28,
+			keyName = "starlightDeathGearBoolean",
+			name = "Starlight Gear Switch?",
+			description = "<b><u>Gear IDs Set 4 - Event:</u></b><br>" +
+					"If enabled, this will switch to the specified item ids after you killed the melee minion.<br>" +
+					"This will only trigger once, on Starlight's (Melee) death.",
+			section = saradominHelper
+	)
+	default boolean starlightDeathGearBoolean() { return false; }
+	
+	@ConfigItem(
+			position = 29,
+			keyName = "starlightDeathGearHotkey",
+			name = "Hotkey Trigger",
+			description = "<b><u>Gear IDs Set 4 - Hotkey:</u></b><br>" +
+					"Assign a hotkey to trigger the switching of gear ids found in Gear IDs Set 4.<br>" +
+					"Anytime you press the assigned hotkey, it will switch to this set of gear.",
+			section = saradominHelper
+	)
+	default Keybind starlightDeathGearHotkey() { return Keybind.NOT_SET; }
+	
+	@ConfigItem(
+			position = 30,
+			keyName = "starlightGearIds",
+			name = "Starlight Gear Ids",
+			description = "<b><u>Gear IDs Set 4:</u></b><br>" +
+					"Enter in the item ids to switch to with the format \"1234,4321\".<br>" +
+					"This set is for the Starlight's death event trigger and it's hotkey trigger.<br>",
+			section = saradominHelper
+	)
+	default String starlightGearIds() { return "0,0"; }
+	
+	@ConfigItem(
+			position = 31,
+			keyName = "saradominDeathSpawnGearBoolean",
+			name = "All Dead or Zilyana's Spawn?",
+			description = "<b><u>Gear IDs Set 5 - Event:</u></b><br>" +
+					"If enabled, this will switch to the specified item ids after you killed all the NPCs or Commander Zilyana spawns.<br>" +
+					"This will only trigger once, on boss and minions' deaths or on boss spawn.",
+			section = saradominHelper
+	)
+	default boolean saradominDeathSpawnGearBoolean() { return false; }
+	
+	@ConfigItem(
+			position = 32,
+			keyName = "saradominDeathSpawnGearHotkey",
+			name = "Hotkey Trigger",
+			description = "<b><u>Gear IDs Set 5 - Hotkey:</u></b><br>" +
+					"Assign a hotkey to trigger the switching of gear ids found in Gear IDs Set 5.<br>" +
+					"Anytime you press the assigned hotkey, it will switch to this set of gear.",
+			section = saradominHelper
+	)
+	default Keybind saradominDeathSpawnGearHotkey() { return Keybind.NOT_SET; }
+	
+	@ConfigItem(
+			position = 33,
+			keyName = "saradominDeathSpawnGearIds",
+			name = "Enter Gear IDs Here:",
+			description = "<b><u>Gear IDs Set 5:</u></b><br>" +
+					"Enter in the item ids to switch to with the format \"1234,4321\".<br>" +
+					"This set is for the All Dead or Zilyana's Spawn event trigger and it's hotkey trigger.<br>",
+			section = saradominHelper
+	)
+	default String saradominDeathSpawnGearIds() { return "0,0"; }
+	
 	
 	
 	
@@ -1008,13 +1575,179 @@ public interface GodWarsHelperConfig extends Config
 	default Boolean armadylLine5() { return false; }
 	
 	@ConfigItem(
-			position = 17,
-			keyName = "kreearraGearIds",
-			name = "Kree'arra Gear Switch",
-			description = "Enter in the Item IDs to switch to when ",
+			position = 16,
+			keyName = "armadylLine6",
+			name = "Automate Gear Switching On:",
+			description = "Underneath are settings to switch gear within Armadyl's Eyrie. You can configure to <br>" +
+					"automate gear switching at a predetermined event and/or with a hotkey.",
 			section = armadylHelper
 	)
-	default String kreearraGearIds() { return "0,0,0"; }
+	default Boolean armadylLine6() { return false; }
+	
+	@ConfigItem(
+			position = 17,
+			keyName = "kreearraDeathGearBoolean",
+			name = "Kree'arra's Death?",
+			description = "<b><u>Gear IDs Set 1 - Event:</u></b><br>" +
+					"If enabled, this will switch to the specified item ids after you killed the boss.<br>" +
+					"This will only trigger once, on Kree'arra's death.",
+			section = armadylHelper
+	)
+	default boolean kreearraDeathGearBoolean() { return false; }
+	
+	@ConfigItem(
+			position = 18,
+			keyName = "kreearraDeathGearHotkey",
+			name = "Hotkey Trigger",
+			description = "<b><u>Gear IDs Set 1 - Hotkey:</u></b><br>" +
+					"Assign a hotkey to trigger the switching of gear ids found in Gear IDs Set 1.<br>" +
+					"Anytime you press the assigned hotkey, it will switch to this set of gear.",
+			section = armadylHelper
+	)
+	default Keybind kreearraDeathGearHotkey() { return Keybind.NOT_SET; }
+	
+	@ConfigItem(
+			position = 19,
+			keyName = "kreearraGearIds",
+			name = "Enter Gear IDs Here:",
+			description = "<b><u>Gear IDs Set 1:</u></b><br>" +
+					"Enter in the item ids to switch to with the format \"1234,4321\".<br>" +
+					"This set is for the Kree'arra's death event trigger and it's hotkey trigger.<br>",
+			section = armadylHelper
+	)
+	default String kreearraGearIds() { return "0,0"; }
+	
+	@ConfigItem(
+			position = 20,
+			keyName = "wingmanSkreeDeathGearBoolean",
+			name = "Wingman Skree's Death?",
+			description = "<b><u>Gear IDs Set 2 - Event:</u></b><br>" +
+					"If enabled, this will switch to the specified item ids after you killed the magic minion.<br>" +
+					"This will only trigger once, on Wingman Skree's (Magic) death.",
+			section = armadylHelper
+	)
+	default boolean wingmanSkreeDeathGearBoolean() { return false; }
+	
+	@ConfigItem(
+			position = 21,
+			keyName = "wingmanSkreeDeathGearHotkey",
+			name = "Hotkey Trigger",
+			description = "<b><u>Gear IDs Set 2 - Hotkey:</u></b><br>" +
+					"Assign a hotkey to trigger the switching of gear ids found in Gear IDs Set 2.<br>" +
+					"Anytime you press the assigned hotkey, it will switch to this set of gear.",
+			section = armadylHelper
+	)
+	default Keybind wingmanSkreeDeathGearHotkey() { return Keybind.NOT_SET; }
+	
+	@ConfigItem(
+			position = 22,
+			keyName = "wingmanSkreeGearIds",
+			name = "Enter Gear IDs Here:",
+			description = "<b><u>Gear IDs Set 2:</u></b><br>" +
+					"Enter in the item ids to switch to with the format \"1234,4321\".<br>" +
+					"This set is for the Wingman Skree's (Magic) death event trigger and it's hotkey trigger.<br>",
+			section = armadylHelper
+	)
+	default String wingmanSkreeGearIds() { return "0,0"; }
+	
+	@ConfigItem(
+			position = 23,
+			keyName = "flockleaderGeerinDeathGearBoolean",
+			name = "Flockleader Geerin's Death?",
+			description = "<b><u>Gear IDs Set 3 - Event:</u></b><br>" +
+					"If enabled, this will switch to the specified item ids after you killed the ranged minion.<br>" +
+					"This will only trigger once, on Flockleader Geerin's (Ranged) death.",
+			section = armadylHelper
+	)
+	default boolean flockleaderGeerinDeathGearBoolean() { return false; }
+	
+	@ConfigItem(
+			position = 24,
+			keyName = "flockleaderGeerinDeathGearHotkey",
+			name = "Hotkey Trigger",
+			description = "<b><u>Gear IDs Set 3 - Hotkey:</u></b><br>" +
+					"Assign a hotkey to trigger the switching of gear ids found in Gear IDs Set 3.<br>" +
+					"Anytime you press the assigned hotkey, it will switch to this set of gear.",
+			section = armadylHelper
+	)
+	default Keybind flockleaderGeerinDeathGearHotkey() { return Keybind.NOT_SET; }
+	
+	@ConfigItem(
+			position = 25,
+			keyName = "flockleaderGeerinGearIds",
+			name = "Enter Gear IDs Here:",
+			description = "<b><u>Gear IDs Set 3:</u></b><br>" +
+					"Enter in the item ids to switch to with the format \"1234,4321\".<br>" +
+					"This set is for the Flockleader Geerin's (Ranged) death event trigger and it's hotkey trigger.<br>",
+			section = armadylHelper
+	)
+	default String flockleaderGeerinGearIds() { return "0,0"; }
+	
+	@ConfigItem(
+			position = 26,
+			keyName = "flightKilisaDeathGearBoolean",
+			name = "Flight Kilisa's Death?",
+			description = "<b><u>Gear IDs Set 4 - Event:</u></b><br>" +
+					"If enabled, this will switch to the specified item ids after you killed the melee minion.<br>" +
+					"This will only trigger once, on Flight Kilisa's (Melee) death.",
+			section = armadylHelper
+	)
+	default boolean flightKilisaDeathGearBoolean() { return false; }
+	
+	@ConfigItem(
+			position = 27,
+			keyName = "flockleaderGeerinDeathGearHotkey",
+			name = "Hotkey Trigger",
+			description = "<b><u>Gear IDs Set 4 - Hotkey:</u></b><br>" +
+					"Assign a hotkey to trigger the switching of gear ids found in Gear IDs Set 4.<br>" +
+					"Anytime you press the assigned hotkey, it will switch to this set of gear.",
+			section = armadylHelper
+	)
+	default Keybind flightKilisaDeathGearHotkey() { return Keybind.NOT_SET; }
+	
+	@ConfigItem(
+			position = 28,
+			keyName = "flightKilisaGearIds",
+			name = "Enter Gear IDs Here:",
+			description = "<b><u>Gear IDs Set 4:</u></b><br>" +
+					"Enter in the item ids to switch to with the format \"1234,4321\".<br>" +
+					"This set is for the Flight Kilisa's (Melee) death event trigger and it's hotkey trigger.<br>",
+			section = armadylHelper
+	)
+	default String flightKilisaGearIds() { return "0,0"; }
+	
+	@ConfigItem(
+			position = 29,
+			keyName = "armadylDeathSpawnGearBoolean",
+			name = "All Dead or Kree'arra's Spawn?",
+			description = "<b><u>Gear IDs Set 5 - Event:</u></b><br>" +
+					"If enabled, this will switch to the specified item ids after you killed all the NPCs or Kree'arra spawns.<br>" +
+					"This will only trigger once, on boss and minions' deaths or on boss spawn.",
+			section = armadylHelper
+	)
+	default boolean armadylDeathSpawnGearBoolean() { return false; }
+	
+	@ConfigItem(
+			position = 30,
+			keyName = "armadylDeathSpawnGearHotkey",
+			name = "Hotkey Trigger",
+			description = "<b><u>Gear IDs Set 5 - Hotkey:</u></b><br>" +
+					"Assign a hotkey to trigger the switching of gear ids found in Gear IDs Set 5.<br>" +
+					"Anytime you press the assigned hotkey, it will switch to this set of gear.",
+			section = armadylHelper
+	)
+	default Keybind armadylDeathSpawnGearHotkey() { return Keybind.NOT_SET; }
+	
+	@ConfigItem(
+			position = 31,
+			keyName = "armadylDeathSpawnGearIds",
+			name = "Enter Gear IDs Here:",
+			description = "<b><u>Gear IDs Set 5:</u></b><br>" +
+					"Enter in the item ids to switch to with the format \"1234,4321\".<br>" +
+					"This set is for the All Dead or Kree'arra's Spawn event trigger and it's hotkey trigger.<br>",
+			section = armadylHelper
+	)
+	default String armadylDeathSpawnGearIds() { return "0,0"; }
 	
 	
 	
@@ -1031,8 +1764,8 @@ public interface GodWarsHelperConfig extends Config
 	@ConfigItem(
 			position = 0,
 			keyName = "universalLine0",
-			name = "Assign Hotkeys to Left Click Cast Spells",
-			description = "Set hotkeys to left click cast certain spells when inside the boss room.<br>",
+			name = "Hotkeys to Left Click Cast Spells",
+			description = "Assign hotkeys to left click cast certain spells when inside the boss room.",
 			section = universalHelper
 	)
 	default Boolean universalLine0() { return false; }
@@ -1040,7 +1773,7 @@ public interface GodWarsHelperConfig extends Config
 	@ConfigItem(
 			position = 1,
 			keyName = "spellChoice1",
-			name = "Spell Choice 1",
+			name = "Spell 1",
 			description = "Select the spell to assign to Spell Hotkey 1.",
 			section = universalHelper
 	)
@@ -1057,16 +1790,16 @@ public interface GodWarsHelperConfig extends Config
 	default Keybind spellHotkey1() { return Keybind.NOT_SET; }
 	
 	@ConfigItem(
-			position = 1,
+			position = 3,
 			keyName = "spellChoice2",
-			name = "Spell Choice 2",
+			name = "Spell 2",
 			description = "Select the spell to assign to Spell Hotkey 2.",
 			section = universalHelper
 	)
 	default SpellChoice spellChoice2() { return SpellChoice.OFF; }
 	
 	@ConfigItem(
-			position = 2,
+			position = 4,
 			keyName = "spellHotkey2",
 			name = "Spell Hotkey 2",
 			description = "Assign a hotkey to <b>Hold Down</b> and be able to left click cast your selected spell.<br>" +
@@ -1074,6 +1807,7 @@ public interface GodWarsHelperConfig extends Config
 			section = universalHelper
 	)
 	default Keybind spellHotkey2() { return Keybind.NOT_SET; }
+	
 	
 	
 	
@@ -1085,8 +1819,8 @@ public interface GodWarsHelperConfig extends Config
 		ITALIC("Italic", Font.ITALIC),
 		PLAIN("Plain", Font.PLAIN);
 
-		private String name;
-		private int font;
+		private final String name;
+		private final int font;
 
 		@Override
 		public String toString()
@@ -1104,7 +1838,7 @@ public interface GodWarsHelperConfig extends Config
 		HOTKEY(2),
 		OFF(3);
 		
-		private int choice;
+		private final int choice;
 	}
 	
 	@Getter
@@ -1114,7 +1848,7 @@ public interface GodWarsHelperConfig extends Config
 		PROTECT_FROM_MELEE(Prayer.PROTECT_FROM_MELEE),
 		PROTECT_FROM_MAGIC(Prayer.PROTECT_FROM_MAGIC);
 		
-		private Prayer prayer;
+		private final Prayer prayer;
 	}
 	
 	@Getter
@@ -1128,7 +1862,7 @@ public interface GodWarsHelperConfig extends Config
 		AUGURY(Prayer.AUGURY),
 		OFF(null);
 		
-		private Prayer prayer;
+		private final Prayer prayer;
 	}
 	
 	@Getter
@@ -1144,7 +1878,7 @@ public interface GodWarsHelperConfig extends Config
 		MARK_OF_DARKNESS("Mark of Darkness", WidgetInfoPlus.SPELL_MARK_OF_DARKNESS),
 		OFF("Off", null);
 		
-		private String spellString;
-		private WidgetInfoPlus widgetInfo;
+		private final String spellString;
+		private final WidgetInfoPlus widgetInfo;
 	}
 }

@@ -24,7 +24,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.theplug.kotori.gwdhelper.utils;
+package com.theplug.kotori.kotoritest.kotoriutils.rlapi;
 
 import net.runelite.api.Prayer;
 import net.runelite.api.Varbits;

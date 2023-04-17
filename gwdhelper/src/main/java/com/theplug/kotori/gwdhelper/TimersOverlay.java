@@ -24,7 +24,7 @@
  */
 package com.theplug.kotori.gwdhelper;
 
-import com.theplug.kotori.gwdhelper.utils.PrayerExtended;
+import com.theplug.kotori.kotoriutils.rlapi.PrayerExtended;
 import net.runelite.api.Client;
 import net.runelite.api.Point;
 import net.runelite.api.Prayer;
@@ -116,8 +116,12 @@ public class TimersOverlay extends Overlay
 			}
 
 			final Point canvasPoint = npc.getNpc().getCanvasTextLocation(graphics, ticksLeftStr, 0);
-			OverlayUtil.renderTextLocation(graphics, ticksLeftStr, config.textSize(), font, color, canvasPoint, shadows, 0);
-
+			
+			if (config.showTickTimers())
+			{
+				OverlayUtil.renderTextLocation(graphics, ticksLeftStr, config.textSize(), font, color, canvasPoint, shadows, 0);
+			}
+			
 			if (config.showPrayerWidgetHelper() && attackStyle.getPrayer() != null)
 			{
 				Rectangle bounds = OverlayUtil.renderPrayerOverlay(graphics, client, attackStyle.getPrayer(), color);

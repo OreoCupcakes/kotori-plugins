@@ -35,7 +35,7 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
 {
     final private String pluginsJsonURL = "https://github.com/OreoCupcakes/kotori-plugins-releases/blob/master/plugins.json?raw=true";
     final private String infoJsonURL = "https://github.com/OreoCupcakes/kotori-plugins-releases/blob/master/info.json?raw=true";
-    final private String currentLoaderVersion = "1.1.2";
+    final private String currentLoaderVersion = "1.2.0";
 
     @Inject
     private Client client;
@@ -121,26 +121,32 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
         String[] githubVersionSplit = pluginsJsonList.get(pluginsJsonList.indexOf("Kotori Plugin Loader")+3).split("\\.");
 
         //Check local major version number, logic is if local major is equal or greater, then continue on, else it's an older version
-        if ((Integer.parseInt(pluginVersionSplit[0]) < Integer.parseInt(infoJsonVersionSplit[0]))
-            || (Integer.parseInt(pluginVersionSplit[0]) < Integer.parseInt(githubVersionSplit[0])))
+        if ((Integer.parseInt(pluginVersionSplit[0]) > Integer.parseInt(infoJsonVersionSplit[0]))
+            || (Integer.parseInt(pluginVersionSplit[0]) > Integer.parseInt(githubVersionSplit[0])))
         {
-            return true;
+            System.out.println("Plugin Major: " + Integer.parseInt(pluginVersionSplit[0]) + ", Info Major: " + Integer.parseInt(infoJsonVersionSplit[0]) +
+                    ", GitHub Major: " + Integer.parseInt(githubVersionSplit[0]));
+            return false;
         }
         //Check local minor version number, logic is if local minor is equal or greater, then continue on, else it's an older version
-        else if ((Integer.parseInt(pluginVersionSplit[1]) < Integer.parseInt(infoJsonVersionSplit[1]))
-                    || (Integer.parseInt(pluginVersionSplit[1]) < Integer.parseInt(githubVersionSplit[1])))
+        else if ((Integer.parseInt(pluginVersionSplit[1]) > Integer.parseInt(infoJsonVersionSplit[1]))
+                    || (Integer.parseInt(pluginVersionSplit[1]) > Integer.parseInt(githubVersionSplit[1])))
         {
-            return true;
+            System.out.println("Plugin Minor: " + Integer.parseInt(pluginVersionSplit[1]) + ", Info Minor: " + Integer.parseInt(infoJsonVersionSplit[1]) +
+                    ", GitHub Minor: " + Integer.parseInt(githubVersionSplit[1]));
+            return false;
         }
         //Check local patch version number, logic is if local patch is equal or greater, then continue on, else it's an older version
-        else if ((Integer.parseInt(pluginVersionSplit[2]) < Integer.parseInt(infoJsonVersionSplit[2]))
-                || (Integer.parseInt(pluginVersionSplit[2]) < Integer.parseInt(githubVersionSplit[2])))
+        else if ((Integer.parseInt(pluginVersionSplit[2]) >= Integer.parseInt(infoJsonVersionSplit[2]))
+                || (Integer.parseInt(pluginVersionSplit[2]) >= Integer.parseInt(githubVersionSplit[2])))
         {
-            return true;
+            System.out.println("Plugin Patch: " + Integer.parseInt(pluginVersionSplit[2]) + ", Info Patch: " + Integer.parseInt(infoJsonVersionSplit[2]) +
+                    ", GitHub Patch: " + Integer.parseInt(githubVersionSplit[2]));
+            return false;
         }
         else
         {
-            return false;
+            return true;
         }
     }
 
@@ -474,11 +480,11 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
             }
         }
 
-        if (config.godWarsTickTimersChoice())
+        if (config.godWarsHelperChoice())
         {
-            if (!infoJsonObject.isPreventGwdTickTimers())
+            if (!infoJsonObject.isPreventGwdHelper())
             {
-                addPluginToLoadLists("God Wars Tick Timers");
+                addPluginToLoadLists("God Wars Helper");
             }
         }
 
@@ -785,6 +791,25 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
                 setConfigItem(event.getKey(),"false");
             }
         }
+        
+        //If selecting GWD Helper, turn on Kotori Utils if not already on, else if Kotori Utils is already loaded then keep it turned off
+        if (event.getKey().equals("godWarsHelperChoice"))
+        {
+            if (!kotoriUtilsLoaded)
+            {
+                if (config.godWarsHelperChoice())
+                {
+                    if (!config.kotoriUtilsChoice())
+                    {
+                        setConfigItem("kotoriUtilsChoice","true");
+                    }
+                }
+            }
+            else
+            {
+                setConfigItem(event.getKey(), "false");
+            }
+        }
 
         //If selecting Vorkath, turn on Kotori Utils if not already on, else if Kotori Utils is already loaded then keep it turned off
         if (event.getKey().equals("vorkathOverlayChoice"))
@@ -852,7 +877,6 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
                 keys.add("zulrahOverlayChoice");
                 keys.add("grotesqueGuardiansChoice");
                 keys.add("nexExtendedChoice");
-                keys.add("godWarsTickTimersChoice");
                 keys.add("specBarChoice");
                 keys.add("templeTrekkingChoice");
                 keys.add("tarnsLairChoice");
@@ -872,6 +896,7 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
                     keys.add("demonicGorillasChoice");
                     keys.add("gauntletExtendedChoice");
                     keys.add("cerberusHelperChoice");
+                    keys.add("godWarsHelperChoice");
                     if (!config.rlplUser())
                     {
                         keys.add("alchemicalHydraChoice");
@@ -904,7 +929,7 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
                 keys.add("zulrahOverlayChoice");
                 keys.add("grotesqueGuardiansChoice");
                 keys.add("nexExtendedChoice");
-                keys.add("godWarsTickTimersChoice");
+                keys.add("godWarsHelperChoice");
                 keys.add("specBarChoice");
                 keys.add("templeTrekkingChoice");
                 keys.add("tarnsLairChoice");
