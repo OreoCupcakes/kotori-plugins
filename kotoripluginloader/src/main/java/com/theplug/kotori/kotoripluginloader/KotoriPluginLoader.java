@@ -120,34 +120,21 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
         String[] infoJsonVersionSplit = infoJsonObject.getKotoriLoaderVersion().split("\\.");
         String[] githubVersionSplit = pluginsJsonList.get(pluginsJsonList.indexOf("Kotori Plugin Loader")+3).split("\\.");
 
-        //Check local major version number, logic is if local major is equal or greater, then continue on, else it's an older version
+        //Check local major version number, logic is if local major is greater, then it's not an older version.
         if ((Integer.parseInt(pluginVersionSplit[0]) > Integer.parseInt(infoJsonVersionSplit[0]))
             || (Integer.parseInt(pluginVersionSplit[0]) > Integer.parseInt(githubVersionSplit[0])))
         {
-            System.out.println("Plugin Major: " + Integer.parseInt(pluginVersionSplit[0]) + ", Info Major: " + Integer.parseInt(infoJsonVersionSplit[0]) +
-                    ", GitHub Major: " + Integer.parseInt(githubVersionSplit[0]));
             return false;
         }
-        //Check local minor version number, logic is if local minor is equal or greater, then continue on, else it's an older version
+        //Check local minor version number, logic is if local minor is greater, then it's not an older version.
         else if ((Integer.parseInt(pluginVersionSplit[1]) > Integer.parseInt(infoJsonVersionSplit[1]))
                     || (Integer.parseInt(pluginVersionSplit[1]) > Integer.parseInt(githubVersionSplit[1])))
         {
-            System.out.println("Plugin Minor: " + Integer.parseInt(pluginVersionSplit[1]) + ", Info Minor: " + Integer.parseInt(infoJsonVersionSplit[1]) +
-                    ", GitHub Minor: " + Integer.parseInt(githubVersionSplit[1]));
             return false;
         }
-        //Check local patch version number, logic is if local patch is equal or greater, then continue on, else it's an older version
-        else if ((Integer.parseInt(pluginVersionSplit[2]) >= Integer.parseInt(infoJsonVersionSplit[2]))
-                || (Integer.parseInt(pluginVersionSplit[2]) >= Integer.parseInt(githubVersionSplit[2])))
-        {
-            System.out.println("Plugin Patch: " + Integer.parseInt(pluginVersionSplit[2]) + ", Info Patch: " + Integer.parseInt(infoJsonVersionSplit[2]) +
-                    ", GitHub Patch: " + Integer.parseInt(githubVersionSplit[2]));
-            return false;
-        }
-        else
-        {
-            return true;
-        }
+        //Check local patch version number, logic is if local patch is less, then it is an older version. If equal or greater, then not older version.
+        else return (Integer.parseInt(pluginVersionSplit[2]) < Integer.parseInt(infoJsonVersionSplit[2]))
+                    && (Integer.parseInt(pluginVersionSplit[2]) < Integer.parseInt(githubVersionSplit[2]));
     }
 
     private void loaderOutdatedPopUp()
