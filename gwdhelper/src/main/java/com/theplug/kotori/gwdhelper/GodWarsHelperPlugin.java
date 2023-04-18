@@ -32,7 +32,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
-import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.*;
@@ -249,23 +248,19 @@ public class GodWarsHelperPlugin extends Plugin
 		keyManager.unregisterKeyListener(spellHotkey1);
 		keyManager.unregisterKeyListener(spellHotkey2);
 		deactivateGearHotkeysByRegion();
+		resetPrayerHotkeyBooleans();
 		validRegion = false;
 		inBossRoom = false;
 		bossAlive = false;
 		meleeMinionAlive = false;
 		magicMinionAlive = false;
 		rangedMinionAlive = false;
-		isBandosPrayerHotkeyOn = false;
-		isZammyPrayerHotkeyOn = false;
-		isSaraPrayerHotkeyOn = false;
-		isArmaPrayerHotkeyOn = false;
 		set1EquippedOnce = false;
 		set2EquippedOnce = false;
 		set3EquippedOnce = false;
 		set4EquippedOnce = false;
 		set5EquippedOnce = false;
 		spellbookSpriteId = -1;
-		sendChatMessage("All God Wars Dungeon automatic protection prayers turned off.");
 	}
 
 	@Subscribe
@@ -482,15 +477,7 @@ public class GodWarsHelperPlugin extends Plugin
 	private boolean regionCheck()
 	{
 		lastRegion = currentRegion;
-		if (client.isInInstancedRegion())
-		{
-			LocalPoint localPoint = client.getLocalPlayer().getLocalLocation();
-			currentRegion = WorldPoint.fromLocalInstance(client, localPoint).getRegionID();
-		}
-		else
-		{
-			currentRegion = client.getLocalPlayer().getWorldLocation().getRegionID();
-		}
+		currentRegion = WorldPoint.fromLocalInstance(client, client.getLocalPlayer().getLocalLocation()).getRegionID();
 		
 		return GWD_REGION_IDS.contains(currentRegion);
 	}
@@ -511,16 +498,7 @@ public class GodWarsHelperPlugin extends Plugin
 			return;
 		}
 		
-		WorldPoint point;
-		if (client.isInInstancedRegion())
-		{
-			LocalPoint localPoint = client.getLocalPlayer().getLocalLocation();
-			point = WorldPoint.fromLocalInstance(client, localPoint);
-		}
-		else
-		{
-			point = client.getLocalPlayer().getWorldLocation();
-		}
+		WorldPoint point = WorldPoint.fromLocalInstance(client, client.getLocalPlayer().getLocalLocation());
 		currentRegion = point.getRegionID();
 		
 		switch (currentRegion)
@@ -556,6 +534,31 @@ public class GodWarsHelperPlugin extends Plugin
 			default:
 				inBossRoom = false;
 				break;
+		}
+	}
+	
+	private void resetPrayerHotkeyBooleans()
+	{
+		if (isBandosPrayerHotkeyOn)
+		{
+			isBandosPrayerHotkeyOn = false;
+			sendChatMessage("Bandos God Wars Dungeon automatic protection prayers turned off.");
+		}
+		
+		if (isZammyPrayerHotkeyOn)
+		{
+			isZammyPrayerHotkeyOn = false;
+			sendChatMessage("Zamorak God Wars Dungeon automatic protection prayers turned off.");
+		}
+		if (isSaraPrayerHotkeyOn)
+		{
+			isSaraPrayerHotkeyOn = false;
+			sendChatMessage("Saradomin God Wars Dungeon automatic protection prayers turned off.");
+		}
+		if (isArmaPrayerHotkeyOn)
+		{
+			isArmaPrayerHotkeyOn = false;
+			sendChatMessage("Armadyl God Wars Dungeon automatic protection prayers turned off.");
 		}
 	}
 	
