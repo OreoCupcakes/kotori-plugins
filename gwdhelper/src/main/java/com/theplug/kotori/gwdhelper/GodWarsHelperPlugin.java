@@ -30,7 +30,9 @@ import com.theplug.kotori.kotoriutils.rlapi.WidgetIDPlus;
 import com.theplug.kotori.kotoriutils.rlapi.WidgetInfoPlus;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
+import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.*;
@@ -54,6 +56,7 @@ import javax.inject.Inject;
 import java.util.HashSet;
 import java.util.Set;
 
+@Slf4j
 @PluginDependency(KotoriUtils.class)
 @PluginDescriptor(
 	name = "God Wars Helper",
@@ -73,6 +76,7 @@ public class GodWarsHelperPlugin extends Plugin
 	public static final int SERGEANT_GRIMSPIKE_AUTO = 7073;
 	public static final int GENERAL_AUTO1 = 7018;
 	public static final int GENERAL_AUTO2 = 7019;
+	public static final int GENERAL_AUTO3 = 7021;
 	public static final int ZAMMY_GENERIC_AUTO_1 = 64;
 	public static final int ZAMMY_GENERIC_AUTO_2 = 65;
 	public static final int KRIL_AUTO = 6947;
@@ -231,7 +235,6 @@ public class GodWarsHelperPlugin extends Plugin
 		keyManager.registerKeyListener(armadylPrayerHotkey);
 		keyManager.registerKeyListener(spellHotkey1);
 		keyManager.registerKeyListener(spellHotkey2);
-		activateGearHotkeysByRegion();
 	}
 
 	@Override
@@ -479,7 +482,15 @@ public class GodWarsHelperPlugin extends Plugin
 	private boolean regionCheck()
 	{
 		lastRegion = currentRegion;
-		currentRegion = client.getLocalPlayer().getWorldLocation().getRegionID();
+		if (client.isInInstancedRegion())
+		{
+			LocalPoint localPoint = client.getLocalPlayer().getLocalLocation();
+			currentRegion = WorldPoint.fromLocalInstance(client, localPoint).getRegionID();
+		}
+		else
+		{
+			currentRegion = client.getLocalPlayer().getWorldLocation().getRegionID();
+		}
 		
 		return GWD_REGION_IDS.contains(currentRegion);
 	}
@@ -500,31 +511,46 @@ public class GodWarsHelperPlugin extends Plugin
 			return;
 		}
 		
-		WorldPoint point = client.getLocalPlayer().getWorldLocation();
+		WorldPoint point;
+		if (client.isInInstancedRegion())
+		{
+			LocalPoint localPoint = client.getLocalPlayer().getLocalLocation();
+			point = WorldPoint.fromLocalInstance(client, localPoint);
+		}
+		else
+		{
+			point = client.getLocalPlayer().getWorldLocation();
+		}
+		currentRegion = point.getRegionID();
+		
 		switch (currentRegion)
 		{
 			case GENERAL_REGION:
 				if (BANDOS_BOSS_ROOM.contains(point))
 				{
 					inBossRoom = true;
+					activateGearHotkeysByRegion();
 				}
 				break;
 			case ZAMMY_REGION:
 				if (ZAMMY_BOSS_ROOM.contains(point))
 				{
 					inBossRoom = true;
+					activateGearHotkeysByRegion();
 				}
 				break;
 			case SARA_REGION:
 				if (SARA_BOSS_ROOM.contains(point))
 				{
 					inBossRoom = true;
+					activateGearHotkeysByRegion();
 				}
 				break;
 			case ARMA_REGION:
 				if (ARMA_BOSS_ROOM.contains(point))
 				{
 					inBossRoom = true;
+					activateGearHotkeysByRegion();
 				}
 				break;
 			default:
@@ -834,7 +860,8 @@ public class GodWarsHelperPlugin extends Plugin
 		}
 	}
 	
-	private void chooseDefensiveConfigStyle(GodWarsHelperConfig.PrayerSwitchChoice style, int bossPriority, int magePriority, int rangedPriority, int meleePriority, boolean hotkey)
+	private void chooseDefensiveConfigStyle(GodWarsHelperConfig.PrayerSwitchChoice style, int bossPriority, int magePriority, int rangedPriority,
+											int meleePriority, boolean hotkey)
 	{
 		NPCContainer npcToPrayAgainst = null;
 		switch (style)

@@ -36,7 +36,7 @@ import java.awt.*;
 public interface GodWarsHelperConfig extends Config
 {
 	@ConfigSection(
-			name = "<html>God Wars Helper<br>Version 2.0.0</html>",
+			name = "<html>God Wars Helper<br>Version 2.0.1</html>",
 			description = "",
 			position = -1,
 			closedByDefault = true

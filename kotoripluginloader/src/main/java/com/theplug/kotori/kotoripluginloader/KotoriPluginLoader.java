@@ -332,6 +332,15 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
                     }
                 }
     
+                //Load God Wars Helper
+                if (config.godWarsHelperChoice())
+                {
+                    if (!infoJsonObject.isPreventGwdHelper())
+                    {
+                        addPluginToLoadLists("God Wars Helper");
+                    }
+                }
+    
                 //Load Demonics
                 if (config.demonicGorillasChoice())
                 {
@@ -464,14 +473,6 @@ public class KotoriPluginLoader extends net.runelite.client.plugins.Plugin
             if (!infoJsonObject.isPreventNex())
             {
                 addPluginToLoadLists("Nex Extended");
-            }
-        }
-
-        if (config.godWarsHelperChoice())
-        {
-            if (!infoJsonObject.isPreventGwdHelper())
-            {
-                addPluginToLoadLists("God Wars Helper");
             }
         }
 
