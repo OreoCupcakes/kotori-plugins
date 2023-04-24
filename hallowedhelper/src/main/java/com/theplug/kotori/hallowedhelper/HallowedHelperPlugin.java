@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.api.coords.LocalPoint;
+import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.*;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
@@ -146,7 +147,17 @@ public class HallowedHelperPlugin extends Plugin {
             subfloor = 2;//MID
         }
     }
+    
+    public boolean isFloor4ComplicatedWizardStatues;
 
+    public void get_fourth_floor_wizard_statues_subdivision()
+    {
+        if (currentfloor == 4 && client.getPlane() == 2)
+        {
+            WorldPoint wp = WorldPoint.fromLocalInstance(client, client.getLocalPlayer().getLocalLocation());
+            isFloor4ComplicatedWizardStatues = wp.getY() > 5856;
+        }
+    }
 
     @Inject
     private ConfigManager configManager;
@@ -232,6 +243,7 @@ public class HallowedHelperPlugin extends Plugin {
             ObjectID.KNIGHT_STATUE_38436,//Floor2?
             ObjectID.KNIGHT_STATUE_38440,
             ObjectID.KNIGHT_STATUE_38441,//Floor 4 maby 5 too.
+            ObjectID.KNIGHT_STATUE_38442,//Floor 5 Section 2
             ObjectID.KNIGHT_STATUE_38443//Floor 4 maby 5 too.
             // hierboven breekt de sowrd ofzo
     );
@@ -360,6 +372,10 @@ public class HallowedHelperPlugin extends Plugin {
 
     private void addGroundObject(final GroundObject groundObject)
     {
+        if (groundObject == null)
+        {
+            return;
+        }
         final int id = groundObject.getId();
         if(id == bridge_id)
         {
@@ -566,12 +582,12 @@ public class HallowedHelperPlugin extends Plugin {
         floor_5_first_fire_detected = false;
         floor5_2A_first_fire_detected = false;
         floor_5_4_first_fire_detected = false;
-        Floor5TopLeft = null;
-        Floor5BottomLeft = null;
-        Floor5_2ATopLeft = null;
-        Floor5_2AOneUnderTopLeft = null;
-        Floor5_4BottomLeft = null;
-        Floor5_4BottomRight = null;
+        floor5TopLeft = null;
+        floor5BottomLeft = null;
+        floor5_2ATopLeft = null;
+        floor5_2AOneUnderTopLeft = null;
+        floor5_4BottomLeft = null;
+        floor5_4Bottomright = null;
         swords.clear();
         arrows.clear();
         chests.clear();
@@ -610,7 +626,7 @@ public class HallowedHelperPlugin extends Plugin {
 
     @Override
     protected void startUp() {
-        Rotation.init(config.SafeTileColor(), config.UnsafeTileColor(), Color.BLUE, new Color(255, 102, 0));
+        Rotation.init(config.SafeTileColor(), config.UnsafeTileColor(), Color.BLUE, Color.YELLOW);
         LocalDateTime l = LocalDateTime.now();
         /*
         for (Map.Entry<Integer, Object> entry : client.getVarcMap().entrySet()) {
@@ -716,6 +732,10 @@ public class HallowedHelperPlugin extends Plugin {
             {
                 lightningboltlocations.clear();
                 lastplane = client.getPlane();
+            }
+            if (client.getPlane() == 2)
+            {
+                get_fourth_floor_wizard_statues_subdivision();
             }
             update_floor4_statues();
         }
@@ -840,20 +860,20 @@ public class HallowedHelperPlugin extends Plugin {
     //FLOOR 5 - PLANE 2
     public void update_floor5_statues()
     {
-        if(Floor5TopLeft == null) {
+        if(floor5TopLeft == null) {
             return;
         }
-        if(Floor5BottomLeft == null) {
+        if(floor5BottomLeft == null) {
             return;
         }
         if(!floor_5_first_fire_detected) {
-            if(isfiring(Floor5BottomLeft))
+            if(isfiring(floor5BottomLeft))
             {
                 floor5_fire_rotation = 1;
                 floor_5_ticks_since_statue = -4;
                 floor_5_first_fire_detected = true;
             }
-            else if(isfiring(Floor5TopLeft))
+            else if(isfiring(floor5TopLeft))
             {
                 floor5_fire_rotation = 2;
                 floor_5_ticks_since_statue = -4;
@@ -875,17 +895,17 @@ public class HallowedHelperPlugin extends Plugin {
     //FLOOR 5 - PLANE 1
     public void update_floor5_2A_statues()
     {
-        if(Floor5_2ATopLeft == null) {
+        if(floor5_2ATopLeft == null) {
             return;
         }
-        if(Floor5_2AOneUnderTopLeft == null)
+        if(floor5_2AOneUnderTopLeft == null)
         {
             return;
         }
         if(!floor5_2A_first_fire_detected) {
-            if(isfiring(Floor5_2ATopLeft) || isfiring(Floor5_2AOneUnderTopLeft))
+            if(isfiring(floor5_2ATopLeft) || isfiring(floor5_2AOneUnderTopLeft))
             {
-                if(isfiring(Floor5_2ATopLeft) && isfiring(Floor5_2AOneUnderTopLeft)) {
+                if(isfiring(floor5_2ATopLeft) && isfiring(floor5_2AOneUnderTopLeft)) {
                     floor5_2A_fire_rotation = 1;
                 }
                 else
@@ -1056,15 +1076,18 @@ public class HallowedHelperPlugin extends Plugin {
                     if(FloorParts.FLOOR5_1.isinarea(twp))
                     {
                         Process_Floor_5_WizardSpot(gameObject);
+                        wizardStatues.add(new HallowedSepulchreWizardStatue(gameObject, WIZARD_STATUE_ANIM_FIRE, ANIM_TICK_SPEED_2));
                         return;
                     }
                 }
                 else if(client.getPlane() == 1) {
                     if (FloorParts.FLOOR5_2.isinarea(twp)) {
                         Process_Floor5_2A_WizardSpot(gameObject);
+                        wizardStatues.add(new HallowedSepulchreWizardStatue(gameObject, WIZARD_STATUE_ANIM_FIRE, ANIM_TICK_SPEED_2));
                         return;
                     }
                     if (FloorParts.FLOOR5_3.isinarea(twp)) {
+                        wizardStatues.add(new HallowedSepulchreWizardStatue(gameObject, WIZARD_STATUE_ANIM_FIRE, ANIM_TICK_SPEED_2));
                         //Dont do anything.
                         return;
                     }
@@ -1072,9 +1095,11 @@ public class HallowedHelperPlugin extends Plugin {
                 else if(client.getPlane() == 0) {
                     if (FloorParts.FLOOR5_4.isinarea(twp)) {
                         Process_Floor_5_4_WizardSpot(gameObject);
+                        wizardStatues.add(new HallowedSepulchreWizardStatue(gameObject, WIZARD_STATUE_ANIM_FIRE, ANIM_TICK_SPEED_2));
                         return;
                     }
                     if (FloorParts.FLOOR5_5.isinarea(twp)) {
+                        wizardStatues.add(new HallowedSepulchreWizardStatue(gameObject, WIZARD_STATUE_ANIM_FIRE, ANIM_TICK_SPEED_2));
                         //Dont do anything.
                         return;
                     }
@@ -1090,6 +1115,7 @@ public class HallowedHelperPlugin extends Plugin {
                 if(FloorParts.FLOOR4_1.isinarea(twp))
                 {
                     Process_Floor_4_WizardSpot(gameObject);
+                    wizardStatues.add(new HallowedSepulchreWizardStatue(gameObject, WIZARD_STATUE_ANIM_FIRE, ANIM_TICK_SPEED_3));
                     return;
                 }
             }
@@ -1218,10 +1244,10 @@ public class HallowedHelperPlugin extends Plugin {
         }
     }
 
-    public GameObject Floor5TopLeft;
-    public GameObject Floor5BottomLeft;
-    LocalPoint floor5TopLeft = new LocalPoint(4096, 9088);
-    LocalPoint floor5BottomLeft = new LocalPoint(5632, 9088);
+    public GameObject floor5TopLeft;
+    public GameObject floor5BottomLeft;
+    LocalPoint floor5TopLeft_lp = new LocalPoint(4096, 9088);
+    LocalPoint floor5BottomLeft_lp = new LocalPoint(5632, 9088);
 
     public int floor_5_ticks_since_statue = 0;
     public boolean floor_5_first_fire_detected = false;
@@ -1229,22 +1255,22 @@ public class HallowedHelperPlugin extends Plugin {
     public void Process_Floor_5_WizardSpot(GameObject g)
     {
         LocalPoint check = g.getLocalLocation();
-        if(check.equals(floor5TopLeft))
+        if(check.equals(floor5TopLeft_lp))
         {
-            Floor5TopLeft = g;
+            floor5TopLeft = g;
             floor_5_ticks_since_statue = 0;
             return;
         }
-        if(check.equals(floor5BottomLeft))
+        if(check.equals(floor5BottomLeft_lp))
         {
-            Floor5BottomLeft = g;
+            floor5BottomLeft = g;
             return;
         }
     }
-    public GameObject Floor5_2ATopLeft;
-    public GameObject Floor5_2AOneUnderTopLeft;
-    LocalPoint floor5_2ATopLeft = new LocalPoint(3840, 9088);
-    LocalPoint floor5_2A1OneUnderTopLeft = new LocalPoint(4096, 9088);
+    public GameObject floor5_2ATopLeft;
+    public GameObject floor5_2AOneUnderTopLeft;
+    LocalPoint floor5_2ATopLeft_lp = new LocalPoint(3840, 9088);
+    LocalPoint floor5_2A1OneUnderTopLeft_lp = new LocalPoint(4096, 9088);
 
     public int floor5_2A_ticks_since_statue = 0;
     public boolean floor5_2A_first_fire_detected = false;
@@ -1252,23 +1278,23 @@ public class HallowedHelperPlugin extends Plugin {
     public void Process_Floor5_2A_WizardSpot(GameObject g)
     {
         LocalPoint check = g.getLocalLocation();
-        if(check.equals(floor5_2ATopLeft))
+        if(check.equals(floor5_2ATopLeft_lp))
         {
-            Floor5_2ATopLeft = g;
+            floor5_2ATopLeft = g;
             floor5_2A_ticks_since_statue = 0;
             return;
         }
-        if(check.equals(floor5_2A1OneUnderTopLeft))
+        if(check.equals(floor5_2A1OneUnderTopLeft_lp))
         {
-            Floor5_2AOneUnderTopLeft = g;
+            floor5_2AOneUnderTopLeft = g;
             return;
         }
     }
 
     public GameObject floor5_4BottomLeft;
     public GameObject floor5_4Bottomright;
-    LocalPoint Floor5_4BottomLeft = new LocalPoint(8960, 8448);
-    LocalPoint Floor5_4BottomRight = new LocalPoint(8960, 9088);
+    LocalPoint floor5_4BottomLeft_lp = new LocalPoint(8960, 8448);
+    LocalPoint floor5_4BottomRight_lp = new LocalPoint(8960, 9088);
 
     public int floor_5_4_ticks_since_statue = 0;
     public boolean floor_5_4_first_fire_detected = false;
@@ -1276,17 +1302,38 @@ public class HallowedHelperPlugin extends Plugin {
     public void Process_Floor_5_4_WizardSpot(GameObject g)
     {
         LocalPoint check = g.getLocalLocation();
-        log.info("Process_Floor_5_4_WizardSpot: " + check.getX() + "-" + check.getY());
-        if(check.equals(Floor5_4BottomLeft))
+        if(check.equals(floor5_4BottomLeft_lp))
         {
-            log.info("Found Left");
             floor5_4BottomLeft = g;
             floor_5_4_ticks_since_statue = 0;
             return;
         }
-        if(check.equals(Floor5_4BottomRight))
+        if(check.equals(floor5_4BottomRight_lp))
         {
             floor5_4Bottomright = g;
+            return;
+        }
+    }
+    
+    public GameObject floor4_SouthA_BottomLeft;
+    public GameObject floor4_SouthA_BottomRight;
+    LocalPoint floor4_SouthA_BottomLeft_LP = new LocalPoint(5376,5120);
+    LocalPoint floor4_SouthA_BottomRight_LP = new LocalPoint(5376,5760);
+    public int floor4_SouthA_ticks_since_statue = 0;
+    public boolean floor4_SouthA_first_fire_detected = false;
+    
+    public void Process_Floor4_SouthA_WizardSpot(GameObject g)
+    {
+        LocalPoint check = g.getLocalLocation();
+        if (check.equals(floor4_SouthA_BottomLeft_LP))
+        {
+            floor4_SouthA_BottomLeft = g;
+            floor4_SouthA_ticks_since_statue = 0;
+            return;
+        }
+        if (check.equals(floor4_SouthA_BottomRight_LP))
+        {
+            floor4_SouthA_BottomRight = g;
             return;
         }
     }

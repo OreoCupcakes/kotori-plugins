@@ -24,7 +24,7 @@
  */
 
 object ProjectVersions {
-    const val runeliteVersion = "1.9.13.3"
+    const val runeliteVersion = "1.9.15.2"
     const val apiVersion = "^1.0.0"
 }
 

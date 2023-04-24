@@ -62,14 +62,12 @@ public class KotoriTestPlugin extends Plugin
 	@Override
 	protected void shutDown()
 	{
-		valid = false;
-		keyManager.unregisterKeyListener(hotkey);
+	
 	}
 	
 	public void init()
 	{
-		valid = true;
-		keyManager.registerKeyListener(hotkey);
+	
 	}
 	
 	@Subscribe
@@ -107,22 +105,7 @@ public class KotoriTestPlugin extends Plugin
 	@Subscribe
 	private void onClientTick(ClientTick event)
 	{
-		if (hotkeyOn)
-		{
-			if (activationNum > 1)
-			{
-				return;
-			}
-			fakeClick = true;
-			kotoriUtils.getMenusLibrary().insertMenuEntry(client.getMenuEntries().length-1, "Activate", "Thick Skin", MenuAction.CC_OP.getId(), 1, -1, WidgetInfoPlus.PRAYER_THICK_SKIN.getId(), -1);
-			MouseEvent eventPressed = new MouseEvent(client.getCanvas(), MouseEvent.MOUSE_PRESSED, System.currentTimeMillis(), 0, 0, 0, 1, false,1);
-			MouseEvent eventReleased = new MouseEvent(client.getCanvas(), MouseEvent.MOUSE_RELEASED, System.currentTimeMillis(), 0, 0, 0, 1, false,1);
-			MouseEvent eventClicked = new MouseEvent(client.getCanvas(), MouseEvent.MOUSE_CLICKED, System.currentTimeMillis(), 0, 0, 0, 1, false,1);
-			client.getCanvas().dispatchEvent(eventPressed);
-			client.getCanvas().dispatchEvent(eventReleased);
-			client.getCanvas().dispatchEvent(eventClicked);
-			activationNum++;
-		}
+	
 	}
 	
 	@Subscribe
@@ -134,35 +117,17 @@ public class KotoriTestPlugin extends Plugin
 	@Subscribe
 	private void onMenuOptionClicked(MenuOptionClicked event)
 	{
-		if (!fakeClick)
-		{
-			return;
-		}
-		
-		int index = kotoriUtils.getMenusLibrary().getMenuEntryIndex(event.getMenuEntry());
-		kotoriUtils.getMenusLibrary().insertMenuEntry(index, "Activate", "Thick Skin", MenuAction.CC_OP.getId(), 1, -1, WidgetInfoPlus.PRAYER_THICK_SKIN.getId(), -1);
-	//	event.consume();
-		fakeClick = false;
-	}
 	
-	private final HotkeyListener hotkey = new HotkeyListener(() -> config.keybind())
-	{
-		@Override
-		public void hotkeyPressed()
-		{
-			hotkeyOn = true;
-		}
-		
-		@Override
-		public void hotkeyReleased()
-		{
-			hotkeyOn = false;
-			activationNum = 0;
-		}
-	};
+	}
 	
 	@Subscribe
 	private void onConfigChanged(ConfigChanged event)
+	{
+	
+	}
+	
+	@Subscribe
+	private void onGraphicChanged(GraphicChanged event)
 	{
 	
 	}

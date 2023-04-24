@@ -36,7 +36,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import com.theplug.kotori.gauntletextended2.entity.Hunllef;
-import com.theplug.kotori.gauntletextended2.utils.PrayerExtended;
+import com.theplug.kotori.gauntletextended2.kotoriutils.enums.PrayerExtended;
 import net.runelite.api.Client;
 import net.runelite.api.NPC;
 import net.runelite.api.Point;

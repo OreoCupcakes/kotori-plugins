@@ -159,7 +159,7 @@ class HallowedHelperOverlay extends Overlay
         if(plugin.Floor4WizardBottom1 != null) {
             w = plugin.Floor4WizardBottom1.getWorldLocation();
             w = new WorldPoint(w.getX() + 1, w.getY() + 1, w.getPlane());
-            ArrayList<Color> rotation = Rotation.floor4_rotations.get(plugin.floor4_fire_rotation - 1);
+            ArrayList<Color> rotation = Rotation.floor4_rotations_north.get(plugin.floor4_fire_rotation - 1);
             if(rotation != null)
             {
                 if(unreachable)
@@ -170,10 +170,15 @@ class HallowedHelperOverlay extends Overlay
                 {
                     if(unreachable)
                     {
-                        current = config.UnsafeTileColor();
+                        if (plugin.floor4_fire_rotation < 5)
+                        {
+                            current = config.UnsafeTileColor();
+                        }
                     }
                     up();
                     render_server_line(g, current, w, currentpoint);
+                    String ticksText = "" + (7 - plugin.floor_4_ticks_since_statue);
+                    render_statue_ticks_floor_4_5_line(g, current, w, currentpoint, ticksText);
                 }
             }
         }
@@ -182,8 +187,8 @@ class HallowedHelperOverlay extends Overlay
     public void render_floor5_statues(Graphics2D g)
     {
         currentpoint = 1;
-        if(plugin.Floor5BottomLeft != null) {
-            w = plugin.Floor5BottomLeft.getWorldLocation();
+        if(plugin.floor5BottomLeft != null) {
+            w = plugin.floor5BottomLeft.getWorldLocation();
             w = new WorldPoint(w.getX() + 1, w.getY() + 1, w.getPlane());
             ArrayList<Color> rotation = Rotation.floor5_rotations.get(plugin.floor5_fire_rotation - 1);
             if(rotation != null)
@@ -205,8 +210,8 @@ class HallowedHelperOverlay extends Overlay
     public void render_floor5_2A_statues(Graphics2D g)
     {
         currentpoint = 1;
-        if(plugin.Floor5_2ATopLeft != null) {
-            w = plugin.Floor5_2ATopLeft.getWorldLocation();
+        if(plugin.floor5_2ATopLeft != null) {
+            w = plugin.floor5_2ATopLeft.getWorldLocation();
             //Offset since were at the top.
             w = new WorldPoint(w.getX() + 12 + 1, w.getY() + 1, w.getPlane());
             ArrayList<Color> rotation = Rotation.floor5_2A_rotations.get(plugin.floor5_2A_fire_rotation - 1);
@@ -218,7 +223,7 @@ class HallowedHelperOverlay extends Overlay
                     up();
                     if(!plugin.floor5_2A_first_fire_detected)
                     {
-                        render_server_line(g, Color.ORANGE, w, currentpoint);
+                        render_server_line(g, Color.YELLOW, w, currentpoint);
                     }
                     else {
                         render_server_line(g, current, w, currentpoint);
@@ -236,14 +241,13 @@ class HallowedHelperOverlay extends Overlay
                     up();
                     if(!plugin.floor5_2A_first_fire_detected)
                     {
-                        render_server_line(g, Color.ORANGE, w, currentpoint);
+                        render_server_line(g, Color.YELLOW, w, currentpoint);
                     }
                     else {
                         render_server_line(g, current, w, currentpoint);
                     }
                 }
             }
-
         }
     }
 
@@ -265,7 +269,7 @@ class HallowedHelperOverlay extends Overlay
                     }
                     if(!plugin.floor_5_4_first_fire_detected)
                     {
-                        render_server_line(g, Color.ORANGE, w, currentpoint);
+                        render_server_line(g, Color.YELLOW, w, currentpoint);
                     }
                     else {
                         render_server_line(g, current, w, currentpoint);
@@ -307,6 +311,24 @@ class HallowedHelperOverlay extends Overlay
         render_object_server_tile(g, w, c, offsetx, 1);
         render_object_server_tile(g, w, c, offsetx, 2);
         render_object_server_tile(g, w, c, offsetx, 3);
+    }
+    
+    public void render_statue_ticks_floor_4_5_line(Graphics2D g, Color c, WorldPoint w, int offsetx, String text)
+    {
+        render_statue_ticks_floor_4_5_tile(g, w, c, text, offsetx, 2);
+    }
+    
+    public void render_statue_ticks_floor_4_5_tile(Graphics2D graphics, WorldPoint worldPoint, Color color, String text, int offsetx, int offsety)
+    {
+        WorldPoint w = new WorldPoint(worldPoint.getX() + offsetx, worldPoint.getY() + offsety, worldPoint.getPlane());
+        final LocalPoint localPoint = LocalPoint.fromWorld(client, w);
+    
+        if (localPoint == null)
+        {
+            return;
+        }
+    
+        OverlayTextManual(graphics, localPoint, text, color, 0, 0);
     }
 
     public BufferedImage getRedCog()
@@ -1285,8 +1307,11 @@ class HallowedHelperOverlay extends Overlay
             offset++;
             offset2++;
 
-            if(overlaytext != "") {
-                OverlayText(graphics, lp, overlaytext, color, offset, offset2);
+            if(!overlaytext.equals("")) {
+                if (plugin.currentfloor != 4 || !plugin.isFloor4ComplicatedWizardStatues)
+                {
+                    OverlayText(graphics, lp, overlaytext, color, offset, offset2);
+                }
             }
 
 
@@ -1343,6 +1368,10 @@ class HallowedHelperOverlay extends Overlay
                 int distance3 = WorldPoint.fromLocal(client, pointoffset3).distanceTo2D(client.getLocalPlayer().getWorldLocation());
                 OverlayText(graphics, lp, "" + distance3 + " (" + (Math.abs(distance - diffrenceinticks)) + ")", Color.ORANGE, (base * 3) + offset, offset2);
             }
+            if ((plugin.currentfloor == 4 && plugin.isFloor4ComplicatedWizardStatues)|| plugin.currentfloor == 5)
+            {
+                return;
+            }
             Polygon pl  = TileOffsetter(lp, (base * 1) + offset, offset2);
             if(pl == null)
             {
@@ -1376,8 +1405,11 @@ class HallowedHelperOverlay extends Overlay
             offset++;
             offset2++;
 
-            if(overlaytext != "") {
-                OverlayText(graphics, lp, overlaytext, color, offset, offset2);
+            if(!overlaytext.equals("")) {
+                if (plugin.currentfloor != 4 || !plugin.isFloor4ComplicatedWizardStatues)
+                {
+                    OverlayText(graphics, lp, overlaytext, color, offset, offset2);
+                }
             }
 
             LocalPoint pointoffset1 = localpointoffset(lp, offset2, (base * 1) + offset);
@@ -1410,8 +1442,12 @@ class HallowedHelperOverlay extends Overlay
                 int distance3 = WorldPoint.fromLocal(client, pointoffset3).distanceTo2D(client.getLocalPlayer().getWorldLocation());
                 OverlayText(graphics, lp, "" + distance3 + " (" + (Math.abs(distance - diffrenceinticks)) + ")", Color.ORANGE, offset2, (base * 3) + offset);
             }
-
-
+    
+            
+            if ((plugin.currentfloor == 4 && plugin.isFloor4ComplicatedWizardStatues) || plugin.currentfloor == 5)
+            {
+                return;
+            }
             Polygon pl  = TileOffsetter(lp, offset2, (base * 1) + offset);
             if(pl == null)
             {

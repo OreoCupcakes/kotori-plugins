@@ -8,7 +8,7 @@ import java.awt.Polygon;
 import java.awt.Rectangle;
 
 import com.theplug.kotori.gauntletextended2.utils.InterfaceTab;
-import com.theplug.kotori.gauntletextended2.utils.PrayerExtended;
+import com.theplug.kotori.gauntletextended2.kotoriutils.enums.PrayerExtended;
 import net.runelite.api.Client;
 import net.runelite.api.Point;
 import net.runelite.api.VarClientInt;
@@ -20,7 +20,7 @@ public class OverlayUtil
 {
 	public static Rectangle renderPrayerOverlay(Graphics2D graphics, Client client, PrayerExtended prayer, Color color)
 	{
-		final int prayerWidgetInfoPackedID = prayer.getPrayerWidgetInfo().getPackedId();
+		final int prayerWidgetInfoPackedID = prayer.getWidgetInfoPlus().getPackedId();
 		Widget widget = client.getWidget(prayerWidgetInfoPackedID);
 
 		if (widget == null || client.getVarcIntValue(VarClientInt.INVENTORY_TAB) != InterfaceTab.PRAYER.getId())
