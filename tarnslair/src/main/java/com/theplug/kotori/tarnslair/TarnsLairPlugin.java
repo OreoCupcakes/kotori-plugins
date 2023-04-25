@@ -28,16 +28,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import javax.inject.Inject;
+
+import com.google.inject.Provides;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
-import net.runelite.api.events.GameObjectDespawned;
-import net.runelite.api.events.GameObjectSpawned;
-import net.runelite.api.events.GameStateChanged;
-import net.runelite.api.events.GameTick;
-import net.runelite.api.events.GroundObjectDespawned;
-import net.runelite.api.events.GroundObjectSpawned;
+import net.runelite.api.events.*;
+import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
@@ -76,6 +74,18 @@ public class TarnsLairPlugin extends Plugin
 
 	private Map<Tile, GameObject> gameObjectQueue = new HashMap<>();
 	private Map<Tile, GroundObject> groundObjectQueue = new HashMap<>();
+	public Tile toadBattaTile = null;
+	
+	// Injects our config
+	@Inject
+	private TarnsLairConfig config;
+	
+	// Provides our config
+	@Provides
+	TarnsLairConfig provideConfig(ConfigManager configManager)
+	{
+		return configManager.getConfig(TarnsLairConfig.class);
+	}
 
 	@Override
 	protected void startUp()
@@ -104,6 +114,7 @@ public class TarnsLairPlugin extends Plugin
 		floorTraps.clear();
 		groundObjectQueue.clear();
 		gameObjectQueue.clear();
+		toadBattaTile = null;
 	}
 	
 	@Subscribe
@@ -146,6 +157,34 @@ public class TarnsLairPlugin extends Plugin
 				break;
 			default:
 				break;
+		}
+	}
+	
+	@Subscribe
+	private void onItemSpawned(ItemSpawned event)
+	{
+		if (!inLair && !isInTarnsLair())
+		{
+			return;
+		}
+		
+		if (event.getItem().getId() == ItemID.TOAD_BATTA)
+		{
+		 	toadBattaTile = event.getTile();
+		}
+	}
+	
+	@Subscribe
+	private void onItemDespawned(ItemDespawned event)
+	{
+		if (!inLair && !isInTarnsLair())
+		{
+			return;
+		}
+		
+		if (event.getItem().getId() == ItemID.TOAD_BATTA)
+		{
+			toadBattaTile = null;
 		}
 	}
 
