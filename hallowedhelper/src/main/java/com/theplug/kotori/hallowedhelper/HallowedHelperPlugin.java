@@ -149,6 +149,7 @@ public class HallowedHelperPlugin extends Plugin {
     }
     
     public boolean isFloor4ComplicatedWizardStatues;
+    public boolean isFloor4SouthAWizardStatuesCleared;
 
     public void get_fourth_floor_wizard_statues_subdivision()
     {
@@ -156,6 +157,7 @@ public class HallowedHelperPlugin extends Plugin {
         {
             WorldPoint wp = WorldPoint.fromLocalInstance(client, client.getLocalPlayer().getLocalLocation());
             isFloor4ComplicatedWizardStatues = wp.getY() > 5856;
+            isFloor4SouthAWizardStatuesCleared = wp.getY() < 5838;
         }
     }
 
@@ -578,7 +580,13 @@ public class HallowedHelperPlugin extends Plugin {
         Floor4WizardBottom1 = null;
         Floor4WizardBottom2 = null;
         Floor4WizardBottom3 = null;
+        floor4_SouthA_BottomLeft = null;
+        floor4_SouthA_BottomMiddle = null;
+        floor4_SouthB_BottomLeft = null;
+        floor4_SouthB_TopLeft = null;
         floor_4_first_fire_detected = false;
+        floor4_SouthA_first_fire_detected = false;
+        floor4_SouthB_first_fire_detected = false;
         floor_5_first_fire_detected = false;
         floor5_2A_first_fire_detected = false;
         floor_5_4_first_fire_detected = false;
@@ -602,6 +610,7 @@ public class HallowedHelperPlugin extends Plugin {
         lastplane = 2;
         reload_next_tick = false;
         delayed_reload_wait = 3;
+        gameticksOnFloor4Plane2SouthSide = 0;
     }
 
 
@@ -691,6 +700,9 @@ public class HallowedHelperPlugin extends Plugin {
     public int floor5_fire_rotation = 1;
     public int floor5_2A_fire_rotation = 1;
     public int floor5_4_fire_rotation = 1;
+    public int floor4_southA_fire_rotation = 1;
+    public int floor4_southB_fire_rotation = 1;
+    public int gameticksOnFloor4Plane2SouthSide = 0;
 
     private int lastplane = 2;
 
@@ -737,7 +749,19 @@ public class HallowedHelperPlugin extends Plugin {
             {
                 get_fourth_floor_wizard_statues_subdivision();
             }
-            update_floor4_statues();
+            if (isFloor4ComplicatedWizardStatues)
+            {
+                update_floor4_statues();
+            }
+            else
+            {
+                update_floor4_southA_statues();
+                update_floor4_southB_statues();
+                if (floor4_SouthA_first_fire_detected)
+                {
+                    gameticksOnFloor4Plane2SouthSide++;
+                }
+            }
         }
         else if(currentfloor == 5 && !config.DisableFloor5Implentation()){
             if(client.getPlane() != lastplane)
@@ -967,6 +991,78 @@ public class HallowedHelperPlugin extends Plugin {
             floor5_4_fire_rotation = 1;
         }
     }
+    
+    //FLOOR 4 - South A
+    public void update_floor4_southA_statues()
+    {
+        if(floor4_SouthA_BottomLeft == null) {
+            return;
+        }
+        if(floor4_SouthA_BottomMiddle == null) {
+            return;
+        }
+        if(!floor4_SouthA_first_fire_detected) {
+            if(isfiring(floor4_SouthA_BottomMiddle))
+            {
+                floor4_southA_fire_rotation = 2;
+                floor4_SouthA_ticks_since_statue = 4;
+                floor4_SouthA_first_fire_detected = true;
+            }
+            else if(isfiring(floor4_SouthA_BottomLeft))
+            {
+                floor4_southA_fire_rotation = 1;
+                floor4_SouthA_ticks_since_statue = 4;
+                floor4_SouthA_first_fire_detected = true;
+            }
+        }
+        floor4_SouthA_ticks_since_statue++;
+        if(floor4_SouthA_ticks_since_statue == 8)
+        {
+            floor4_southA_fire_rotation++;
+            floor4_SouthA_ticks_since_statue = 0;
+        }
+        
+        if(floor4_southA_fire_rotation == 3)
+        {
+            floor4_southA_fire_rotation = 1;
+        }
+    }
+    
+    //FLOOR 4 - South B
+    public void update_floor4_southB_statues()
+    {
+        if(floor4_SouthB_BottomLeft == null) {
+            return;
+        }
+        if(floor4_SouthB_TopLeft == null) {
+            return;
+        }
+        if(!floor4_SouthB_first_fire_detected) {
+            if(isfiring(floor4_SouthB_TopLeft))
+            {
+                floor4_southB_fire_rotation = 1;
+                floor4_SouthB_ticks_since_statue = 4;
+                floor4_SouthB_first_fire_detected = true;
+            }
+            else if(isfiring(floor4_SouthB_BottomLeft))
+            {
+                floor4_southB_fire_rotation = 2;
+                floor4_SouthB_ticks_since_statue = 4;
+                floor4_SouthB_first_fire_detected = true;
+            }
+        }
+        floor4_SouthB_ticks_since_statue++;
+        if(floor4_SouthB_ticks_since_statue == 8)
+        {
+            floor4_southB_fire_rotation++;
+            floor4_SouthB_ticks_since_statue = 0;
+        }
+        
+        if(floor4_southB_fire_rotation == 3)
+        {
+            floor4_southB_fire_rotation = 1;
+        }
+    }
 
 
     public boolean isfiring(GameObject g)
@@ -1115,6 +1211,18 @@ public class HallowedHelperPlugin extends Plugin {
                 if(FloorParts.FLOOR4_1.isinarea(twp))
                 {
                     Process_Floor_4_WizardSpot(gameObject);
+                    wizardStatues.add(new HallowedSepulchreWizardStatue(gameObject, WIZARD_STATUE_ANIM_FIRE, ANIM_TICK_SPEED_3));
+                    return;
+                }
+                if (FloorParts.FLOOR4_2.isinarea(twp))
+                {
+                    Process_Floor4_SouthA_WizardSpot(gameObject);
+                    wizardStatues.add(new HallowedSepulchreWizardStatue(gameObject, WIZARD_STATUE_ANIM_FIRE, ANIM_TICK_SPEED_3));
+                    return;
+                }
+                if (FloorParts.FLOOR4_3.isinarea(twp))
+                {
+                    Process_Floor4_SouthB_WizardSpot(gameObject);
                     wizardStatues.add(new HallowedSepulchreWizardStatue(gameObject, WIZARD_STATUE_ANIM_FIRE, ANIM_TICK_SPEED_3));
                     return;
                 }
@@ -1316,9 +1424,9 @@ public class HallowedHelperPlugin extends Plugin {
     }
     
     public GameObject floor4_SouthA_BottomLeft;
-    public GameObject floor4_SouthA_BottomRight;
-    LocalPoint floor4_SouthA_BottomLeft_LP = new LocalPoint(5376,5120);
-    LocalPoint floor4_SouthA_BottomRight_LP = new LocalPoint(5376,5760);
+    public GameObject floor4_SouthA_BottomMiddle;
+    LocalPoint floor4_SouthA_BottomLeft_LP = new LocalPoint(5248,5120);
+    LocalPoint floor4_SouthA_BottomMiddle_LP = new LocalPoint(4736,5120);
     public int floor4_SouthA_ticks_since_statue = 0;
     public boolean floor4_SouthA_first_fire_detected = false;
     
@@ -1331,9 +1439,32 @@ public class HallowedHelperPlugin extends Plugin {
             floor4_SouthA_ticks_since_statue = 0;
             return;
         }
-        if (check.equals(floor4_SouthA_BottomRight_LP))
+        if (check.equals(floor4_SouthA_BottomMiddle_LP))
         {
-            floor4_SouthA_BottomRight = g;
+            floor4_SouthA_BottomMiddle = g;
+            return;
+        }
+    }
+    
+    public GameObject floor4_SouthB_BottomLeft;
+    public GameObject floor4_SouthB_TopLeft;
+    LocalPoint floor4_SouthB_BottomLeft_LP = new LocalPoint(3328,2944);
+    LocalPoint floor4_SouthB_TopLeft_LP = new LocalPoint(3328,3968);
+    public int floor4_SouthB_ticks_since_statue = 0;
+    public boolean floor4_SouthB_first_fire_detected = false;
+    
+    public void Process_Floor4_SouthB_WizardSpot(GameObject g)
+    {
+        LocalPoint check = g.getLocalLocation();
+        if (check.equals(floor4_SouthB_BottomLeft_LP))
+        {
+            floor4_SouthB_BottomLeft = g;
+            floor4_SouthB_ticks_since_statue = 0;
+            return;
+        }
+        if (check.equals(floor4_SouthB_TopLeft_LP))
+        {
+            floor4_SouthB_TopLeft = g;
             return;
         }
     }

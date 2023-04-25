@@ -403,6 +403,7 @@ public class GodWarsHelperPlugin extends Plugin
 		bossRoomCheck();
 		autoDefensivePrayers();
 		autoOffensivePrayers();
+		autoPreservePrayer();
 		autoDeactivatePrayers();
 		gearSwitch();
 	}
@@ -789,10 +790,30 @@ public class GodWarsHelperPlugin extends Plugin
 				}
 				if (client.isPrayerActive(p))
 				{
+					if (p.equals(Prayer.PRESERVE))
+					{
+						if (config.keepPreservePrayerOn())
+						{
+							return;
+						}
+					}
 					kotoriUtils.getInvokesLibrary().deactivatePrayer(p);
 					actionsTaken++;
 				}
 			}
+		}
+	}
+	
+	private void autoPreservePrayer()
+	{
+		if (!inBossRoom)
+		{
+			return;
+		}
+		
+		if (config.keepPreservePrayerOn())
+		{
+			kotoriUtils.getInvokesLibrary().invokePrayer(Prayer.PRESERVE);
 		}
 	}
 	

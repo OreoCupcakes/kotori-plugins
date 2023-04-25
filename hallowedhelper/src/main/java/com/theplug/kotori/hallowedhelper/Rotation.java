@@ -6,8 +6,8 @@ import java.util.ArrayList;
 
 public class Rotation {
     public static ArrayList<ArrayList<Color>> floor4_rotations_north = new ArrayList<>();
- //   public static ArrayList<ArrayList<Color>> floor4_rotations_southA = new ArrayList<>();
- //   public static ArrayList<ArrayList<Color>> floor4_rotations_southB = new ArrayList<>();
+    public static ArrayList<ArrayList<Color>> floor4_rotations_southA = new ArrayList<>();
+    public static ArrayList<ArrayList<Color>> floor4_rotations_southB = new ArrayList<>();
     public static ArrayList<ArrayList<Color>> floor5_rotations = new ArrayList<>();
     public static ArrayList<ArrayList<Color>> floor5_2A_rotations = new ArrayList<>();
     public static ArrayList<ArrayList<Color>> floor5_3A_rotations = new ArrayList<>();
@@ -26,15 +26,15 @@ public class Rotation {
         farsafe = setfarsafe;
         nextsafe = setnextsafe;
         floor4_rotations_north.clear();
-    //    floor4_rotations_southA.clear();
-    //    floor4_rotations_southB.clear();
+        floor4_rotations_southA.clear();
+        floor4_rotations_southB.clear();
         floor5_rotations.clear();
         floor5_2A_rotations.clear();
         floor5_3A_rotations.clear();
         floor5_4_rotations.clear();
         init_floor4_north();
-    //    init_floor4_southA();
-    //    init_floor4_southB();
+        init_floor4_southA();
+        init_floor4_southB();
         init_floor5();
         init_floor5_2A();
         init_floor5_3A();
@@ -170,45 +170,45 @@ public class Rotation {
         add(danger);
         add(danger);
         add(danger);
-    //    addrotationto(floor4_rotations_southA);
+        addrotationto(floor4_rotations_southA);
         add(danger);
         add(danger);
         add(danger);
         add(danger);
-        add(danger);
+        add(nextsafe);
         blanks(2);
+        add(nextsafe);
         add(danger);
         add(danger);
         add(danger);
         add(danger);
-        add(danger);
-    //    addrotationto(floor4_rotations_southA);
+        addrotationto(floor4_rotations_southA);
     }
     
     public static void init_floor4_southB()
     {
-        add(danger);
-        add(danger);
-        add(blank);
-        add(safe);
-        add(danger);
-        add(danger);
-        add(danger);
         add(safe);
         add(safe);
         add(safe);
-    //    addrotationto(floor4_rotations_southB);
-        add(safe);
+        add(danger);
+        add(danger);
+        add(danger);
         add(safe);
         add(blank);
+        add(nextsafe);
+        add(nextsafe);
+        addrotationto(floor4_rotations_southB);
+        add(nextsafe);
+        add(nextsafe);
+        add(nextsafe);
         add(danger);
         add(danger);
         add(danger);
-        add(danger);
-        add(danger);
-        add(danger);
-        add(danger);
-    //    addrotationto(floor4_rotations_southB);
+        add(nextsafe);
+        add(blank);
+        add(safe);
+        add(safe);
+        addrotationto(floor4_rotations_southB);
     }
     
     public static void init_floor5()

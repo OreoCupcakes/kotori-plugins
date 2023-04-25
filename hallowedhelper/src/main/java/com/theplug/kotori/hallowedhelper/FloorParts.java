@@ -6,7 +6,10 @@ import net.runelite.api.coords.LocalPoint;
 @RequiredArgsConstructor
 public enum FloorParts
 {
+	//Right to Left movement, Last point is top right, First point bottom left statues
 	FLOOR4_1(new LocalPoint(4992, 8704), new LocalPoint(7296, 9344)),
+	FLOOR4_2(new LocalPoint(3968,5120), new LocalPoint(5248,5760)),
+	FLOOR4_3(new LocalPoint(3328,2944), new LocalPoint(3968,3968)),
 	FLOOR5_1(new LocalPoint(4096, 9088), new LocalPoint(5632, 9728)),
 	FLOOR5_2(new LocalPoint(3840, 9088), new LocalPoint(5376, 9728)),
 	FLOOR5_3(new LocalPoint(7040, 9088), new LocalPoint(8576, 9728)),

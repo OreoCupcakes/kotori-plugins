@@ -36,7 +36,7 @@ import java.awt.*;
 public interface GodWarsHelperConfig extends Config
 {
 	@ConfigSection(
-			name = "<html>God Wars Helper<br>Version 2.0.2</html>",
+			name = "<html>God Wars Helper<br>Version 2.0.3</html>",
 			description = "",
 			position = -1,
 			closedByDefault = true
@@ -1808,6 +1808,15 @@ public interface GodWarsHelperConfig extends Config
 	)
 	default Keybind spellHotkey2() { return Keybind.NOT_SET; }
 	
+	@ConfigItem(
+			position = 5,
+			keyName = "keepPreservePrayerOn",
+			name = "Keep Preserve Prayer Turned On?",
+			description = "This will automatically turn on the Preserve Prayer upon entering the boss room.<br>" +
+					"It will stay turned on and ignore the automatic deactivation of prayers after a kill.",
+			section = universalHelper
+	)
+	default boolean keepPreservePrayerOn() { return false; }
 	
 	
 	
