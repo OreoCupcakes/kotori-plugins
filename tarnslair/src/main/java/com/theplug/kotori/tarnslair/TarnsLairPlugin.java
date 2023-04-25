@@ -152,7 +152,7 @@ public class TarnsLairPlugin extends Plugin
 	@Subscribe
 	private void onGameObjectSpawned(GameObjectSpawned event)
 	{
-		if (!inLair)
+		if (!inLair && !isInTarnsLair())
 		{
 			return;
 		}
@@ -176,7 +176,7 @@ public class TarnsLairPlugin extends Plugin
 	@Subscribe
 	private void onGameObjectDespawned(GameObjectDespawned event)
 	{
-		if (!inLair)
+		if (!inLair && !isInTarnsLair())
 		{
 			return;
 		}
@@ -187,7 +187,7 @@ public class TarnsLairPlugin extends Plugin
 	@Subscribe
 	private void onGroundObjectSpawned(GroundObjectSpawned event)
 	{
-		if (!inLair)
+		if (!inLair && !isInTarnsLair())
 		{
 			return;
 		}
@@ -211,7 +211,7 @@ public class TarnsLairPlugin extends Plugin
 	@Subscribe
 	private void onGroundObjectDespawned(GroundObjectDespawned event)
 	{
-		if (!inLair)
+		if (!inLair && !isInTarnsLair())
 		{
 			return;
 		}
@@ -221,11 +221,6 @@ public class TarnsLairPlugin extends Plugin
 
 	private void onTileObject(Tile tile, TileObject oldObject, TileObject newObject)
 	{
-		if (!inLair)
-		{
-			return;
-		}
-
 		staircases.remove(oldObject);
 		if (newObject != null && Obstacles.STAIRCASE_IDS.contains(newObject.getId()))
 		{
@@ -247,7 +242,7 @@ public class TarnsLairPlugin extends Plugin
 	
 	public boolean isInTarnsLair()
 	{
-		for (int regionId : TARNS_LAIR_REGION_IDS)
+		for (int regionId : client.getMapRegions())
 		{
 			if (TARNS_LAIR_REGION_IDS.contains(regionId))
 			{
