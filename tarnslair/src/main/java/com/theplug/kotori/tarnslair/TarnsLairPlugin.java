@@ -44,8 +44,8 @@ import net.runelite.client.ui.overlay.OverlayManager;
 @PluginDescriptor(
 	name = "Tarn's Lair",
 	enabledByDefault = false,
-	description = "Mark tiles and clickboxes to help traverse the maze.",
-	tags = {"agility", "maze", "minigame", "overlay", "ported", "kotori"}
+	description = "Mark tiles and clickboxes to help traverse the maze. Overlays the path to the elite clue step.",
+	tags = {"agility", "maze", "minigame", "overlay", "ported", "kotori", "clue", "elite clue"}
 )
 @Slf4j
 public class TarnsLairPlugin extends Plugin
@@ -72,8 +72,8 @@ public class TarnsLairPlugin extends Plugin
 	@Inject
 	private TarnsLairOverlay overlay;
 
-	private Map<Tile, GameObject> gameObjectQueue = new HashMap<>();
-	private Map<Tile, GroundObject> groundObjectQueue = new HashMap<>();
+	private final Map<Tile, GameObject> gameObjectQueue = new HashMap<>();
+	private final Map<Tile, GroundObject> groundObjectQueue = new HashMap<>();
 	public Tile toadBattaTile = null;
 	
 	// Injects our config
@@ -131,14 +131,6 @@ public class TarnsLairPlugin extends Plugin
 					{
 						init();
 					}
-					else
-					{
-						staircases.clear();
-						wallTraps.clear();
-						floorTraps.clear();
-						groundObjectQueue.clear();
-						gameObjectQueue.clear();
-					}
 				}
 				else
 				{
@@ -157,6 +149,26 @@ public class TarnsLairPlugin extends Plugin
 				break;
 			default:
 				break;
+		}
+	}
+	
+	@Subscribe
+	private void onGameTick(GameTick event)
+	{
+		if (!inLair && !isInTarnsLair())
+		{
+			return;
+		}
+		
+		//Hotfix to clear old stored objects on loading. GameStateChanged is deprioritized over GameObjectSpawned/GroundObjectSpawned even when it's priority
+		//is set higher.
+		if (client.getGameState().equals(GameState.LOADING))
+		{
+			staircases.clear();
+			wallTraps.clear();
+			floorTraps.clear();
+			groundObjectQueue.clear();
+			gameObjectQueue.clear();
 		}
 	}
 	
@@ -195,19 +207,28 @@ public class TarnsLairPlugin extends Plugin
 		{
 			return;
 		}
-
-		if (!gameObjectQueue.containsKey(event.getTile()))
+		
+		GameObject gameObject = event.getGameObject();
+		Tile tile = event.getTile();
+		int gameObjectId = gameObject.getId();
+		
+		if (!Obstacles.STAIRCASE_IDS.contains(gameObjectId) && !Obstacles.WALL_TRAP_IDS.contains(gameObjectId))
 		{
-			onTileObject(event.getTile(), null, event.getGameObject());
-			gameObjectQueue.put(event.getTile(), event.getGameObject());
+			return;
+		}
+
+		if (!gameObjectQueue.containsKey(tile))
+		{
+			onTileObject(tile, null, gameObject);
+			gameObjectQueue.put(tile, gameObject);
 		}
 		else
 		{
-			if (gameObjectQueue.get(event.getTile()).getId() != event.getGameObject().getId())
+			if (gameObjectQueue.get(tile).getId() != gameObjectId)
 			{
-				onTileObject(event.getTile(), gameObjectQueue.get(event.getTile()), event.getGameObject());
-				gameObjectQueue.remove(event.getTile());
-				gameObjectQueue.put(event.getTile(), event.getGameObject());
+				onTileObject(tile, gameObjectQueue.get(tile), gameObject);
+				gameObjectQueue.remove(tile);
+				gameObjectQueue.put(tile, gameObject);
 			}
 		}
 	}
@@ -230,19 +251,28 @@ public class TarnsLairPlugin extends Plugin
 		{
 			return;
 		}
-
-		if (!groundObjectQueue.containsKey(event.getTile()))
+		
+		GroundObject groundObject = event.getGroundObject();
+		Tile tile = event.getTile();
+		int groundObjectId = groundObject.getId();
+		
+		if (!Obstacles.FLOOR_TRAP_IDS.contains(groundObjectId))
 		{
-			onTileObject(event.getTile(), null, event.getGroundObject());
-			groundObjectQueue.put(event.getTile(), event.getGroundObject());
+			return;
+		}
+
+		if (!groundObjectQueue.containsKey(tile))
+		{
+			onTileObject(tile, null, groundObject);
+			groundObjectQueue.put(tile, groundObject);
 		}
 		else
 		{
-			if (groundObjectQueue.get(event.getTile()).getId() != event.getGroundObject().getId())
+			if (groundObjectQueue.get(tile).getId() != groundObjectId)
 			{
-				onTileObject(event.getTile(), groundObjectQueue.get(event.getTile()), event.getGroundObject());
-				groundObjectQueue.remove(event.getTile());
-				groundObjectQueue.put(event.getTile(), event.getGroundObject());
+				onTileObject(tile, groundObjectQueue.get(tile), groundObject);
+				groundObjectQueue.remove(tile);
+				groundObjectQueue.put(tile, groundObject);
 			}
 		}
 	}

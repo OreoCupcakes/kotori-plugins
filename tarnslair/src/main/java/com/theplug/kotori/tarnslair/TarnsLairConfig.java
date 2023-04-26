@@ -29,12 +29,14 @@ import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
 import net.runelite.client.config.ConfigSection;
 
+import java.awt.*;
+
 @ConfigGroup("tarnslair")
 
 public interface TarnsLairConfig extends Config
 {
 	@ConfigSection(
-			name = "<html>Tarn's Lair<br>Version 1.2.2</html>",
+			name = "<html>Tarn's Lair<br>Version 1.2.3</html>",
 			description = "",
 			position = -1,
 			closedByDefault = true
@@ -42,13 +44,66 @@ public interface TarnsLairConfig extends Config
 	String versionInfo = "Version";
 	
 	@ConfigItem(
-			keyName = "toadBattaFastestPath",
-			name = "Show Path to the Toad Batta?",
-			description = "Overlay the path to the toad batta elite clue step.",
+			keyName = "line",
+			name = "Paths to the Toad Batta Clue Step",
+			description = "There is three known paths to the toad batta clue step.<br>" +
+					"   - The most fastest path from the Haunted Mine entrance.<br>" +
+					"   - The fast and no trap damage path from the Haunted Mine entrance.<br>" +
+					"   - The slow path from the Slayer ring teleport.",
 			position = 0
 	)
-	default boolean toadBattaFastestPath()
+	default Boolean statementLine() { return false; }
+	
+	@ConfigItem(
+			keyName = "fastestPath",
+			name = "Show the Fastest Path?",
+			description = "This is the fastest path to the clue step. It starts at the Haunted Mine entrance and requires taking damage from a wall trap.",
+			position = 1
+	)
+	default boolean fastestPath()
 	{
 		return true;
 	}
+	
+	@ConfigItem(
+			keyName = "fastestPathColor",
+			name = "Fastest Path Color",
+			description = "Select the color to display the fastest path as.",
+			position = 2
+	)
+	default Color fastestPathColor() { return Color.MAGENTA; }
+	
+	@ConfigItem(
+			keyName = "slayerRingPath",
+			name = "Show the Slayer Ring Path?",
+			description = "This is the slowest path to the clue step. It starts at the Tarn's Lair teleport spot via the Slayer ring.<br>" +
+					"This path requires you to take damage from multiple traps.",
+			position = 3
+	)
+	default boolean slayerRingPath() { return true; }
+	
+	@ConfigItem(
+			keyName = "slayerRingPathColor",
+			name = "Slayer Ring Path Color",
+			description = "Select the color to display the slow Slayer ring path as.",
+			position = 4
+	)
+	default Color slayerRingPathColor() { return Color.RED; }
+	
+	@ConfigItem(
+			keyName = "avoidableDamagePath",
+			name = "Show the Avoidable Damage Path?",
+			description = "This is a ok speed path to the clue step. It starts at the Haunted Mine entrance.<br>" +
+					"The main benefit to this path is there isn't any forced trap damage.",
+			position = 5
+	)
+	default boolean avoidablePath() { return false; }
+	
+	@ConfigItem(
+			keyName = "avoidableDamagePathColor",
+			name = "Avoidable Damage Path Color",
+			description = "Select the color to display the avoidable damage path as.",
+			position = 6
+	)
+	default Color avoidablePathColor() { return Color.YELLOW; }
 }
