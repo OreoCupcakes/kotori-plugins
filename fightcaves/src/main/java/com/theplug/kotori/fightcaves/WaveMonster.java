@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Owain van Brakel <https:github.com/Owain94>
+ * Copyright (c) 2018, Jordan Atwood <jordan.atwood423@gmail.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -22,45 +22,26 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package com.theplug.kotori.fightcaves;
 
-rootProject.name = "kotori-ported-plugins"
+import lombok.AllArgsConstructor;
 
-include(":alchemicalhydra")
-include(":alchemicalhydrarlpl")
-include(":cerberushelper")
-include(":dagannothkings")
-include(":demonicgorillas")
-include(":effecttimers")
-include(":gauntletextended")
-include(":gwdticktimers")
-include(":hallowedhelper")
-include(":hallowedsepulchre")
-include(":houseoverlay")
-include(":javaexample")
-include(":kotoripluginloader")
-include(":kotoriutils")
-include(":multiindicators")
-include(":nex")
-include(":vorkathoverlay")
-include(":vorkathoverlayrlpl")
-include(":zulrahoverlay")
-include(":grotesqueguardians")
-include(":specbar")
-include(":templetrekking")
-include(":tarnslair")
-include(":reorderprayers")
-include(":nightmare")
-include(":gwdhelper")
-include(":gauntletextended2")
-include(":kotoritest")
-include(":fightcaves")
+@AllArgsConstructor
+enum WaveMonster
+{
+	TZ_KIH("Drainer", 22),
+	TZ_KEK("Blob", 45),
+	TOK_XIL("Range", 90),
+	YT_MEJKOT("Melee", 180),
+	KET_ZEK("Mage", 360),
+	TZKOK_JAD("Jad", 702);
 
-for (project in rootProject.children) {
-    project.apply {
-        projectDir = file(name)
-        buildFileName = "$name.gradle.kts"
+	private final String name;
+	private final int level;
 
-        require(projectDir.isDirectory) { "Project '${project.path} must have a $projectDir directory" }
-        require(buildFile.isFile) { "Project '${project.path} must have a $buildFile build script" }
-    }
+	@Override
+	public String toString()
+	{
+		return String.format("%s - Level %s", name, level);
+	}
 }

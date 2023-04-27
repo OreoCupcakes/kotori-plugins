@@ -34,6 +34,7 @@ import com.theplug.kotori.cerberushelper.CerberusConfig;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.runelite.client.ui.FontManager;
+import com.theplug.kotori.kotoriutils.rlapi.PrayerExtended;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Utility

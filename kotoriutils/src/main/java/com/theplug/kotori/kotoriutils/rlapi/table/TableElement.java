@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Owain van Brakel <https:github.com/Owain94>
+ * Copyright (c) 2019, TheStonedTurtle <https://github.com/TheStonedTurtle>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -23,44 +23,18 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-rootProject.name = "kotori-ported-plugins"
+package com.theplug.kotori.kotoriutils.rlapi.table;
 
-include(":alchemicalhydra")
-include(":alchemicalhydrarlpl")
-include(":cerberushelper")
-include(":dagannothkings")
-include(":demonicgorillas")
-include(":effecttimers")
-include(":gauntletextended")
-include(":gwdticktimers")
-include(":hallowedhelper")
-include(":hallowedsepulchre")
-include(":houseoverlay")
-include(":javaexample")
-include(":kotoripluginloader")
-include(":kotoriutils")
-include(":multiindicators")
-include(":nex")
-include(":vorkathoverlay")
-include(":vorkathoverlayrlpl")
-include(":zulrahoverlay")
-include(":grotesqueguardians")
-include(":specbar")
-include(":templetrekking")
-include(":tarnslair")
-include(":reorderprayers")
-include(":nightmare")
-include(":gwdhelper")
-include(":gauntletextended2")
-include(":kotoritest")
-include(":fightcaves")
+import lombok.Builder;
+import lombok.Data;
 
-for (project in rootProject.children) {
-    project.apply {
-        projectDir = file(name)
-        buildFileName = "$name.gradle.kts"
+import java.awt.*;
 
-        require(projectDir.isDirectory) { "Project '${project.path} must have a $projectDir directory" }
-        require(buildFile.isFile) { "Project '${project.path} must have a $buildFile build script" }
-    }
+@Data
+@Builder
+public class TableElement
+{
+    TableAlignment alignment;
+    Color color;
+    String content;
 }
