@@ -26,6 +26,7 @@ package com.theplug.kotori.gwdhelper;
 import com.google.inject.Provides;
 import com.theplug.kotori.kotoriutils.KotoriUtils;
 import com.theplug.kotori.kotoriutils.interactionapi.InventoryInteraction;
+import com.theplug.kotori.kotoriutils.rlapi.VarUtilities;
 import com.theplug.kotori.kotoriutils.rlapi.WidgetIDPlus;
 import com.theplug.kotori.kotoriutils.rlapi.WidgetInfoPlus;
 import lombok.AccessLevel;
@@ -197,7 +198,6 @@ public class GodWarsHelperPlugin extends Plugin
 	private boolean isFlockleaderGearHotkeyPressed;
 	private boolean isFlightGearHotkeyPressed;
 	private boolean isArmadylGearHotkeyPressed;
-	private int spellbookSpriteId;
 
 	@Getter(AccessLevel.PACKAGE)
 	private long lastTickTime;
@@ -226,7 +226,6 @@ public class GodWarsHelperPlugin extends Plugin
 			addNpc(npc);
 		}
 		validRegion = true;
-		spellbookSpriteId = determineSpellbookActive();
 		overlayManager.add(timersOverlay);
 		keyManager.registerKeyListener(bandosPrayerHotkey);
 		keyManager.registerKeyListener(zamorakPrayerHotkey);
@@ -260,7 +259,6 @@ public class GodWarsHelperPlugin extends Plugin
 		set3EquippedOnce = false;
 		set4EquippedOnce = false;
 		set5EquippedOnce = false;
-		spellbookSpriteId = -1;
 	}
 
 	@Subscribe
@@ -440,14 +438,14 @@ public class GodWarsHelperPlugin extends Plugin
 		
 		if (entryOption.equals(spell1Option))
 		{
-			if (!checkSpellExistInActiveSpellbook(config.spellChoice1().getWidgetInfo()) || event.getMenuTarget().equals(" "))
+			if (!VarUtilities.isSpellInActiveSpellbook(client, config.spellChoice1().getWidgetInfo()) || event.getMenuTarget().equals(" "))
 			{
 				event.consume();
 			}
 		}
 		else if (entryOption.equals(spell2Option))
 		{
-			if (!checkSpellExistInActiveSpellbook(config.spellChoice2().getWidgetInfo()) || event.getMenuTarget().equals(" "))
+			if (!VarUtilities.isSpellInActiveSpellbook(client, config.spellChoice2().getWidgetInfo()) || event.getMenuTarget().equals(" "))
 			{
 				event.consume();
 			}
@@ -635,66 +633,6 @@ public class GodWarsHelperPlugin extends Plugin
 			default:
 				break;
 		}
-	}
-	
-	private int determineSpellbookActive()
-	{
-		int spriteId = -1;
-		
-		Widget fixedMagicIcon = client.getWidget(WidgetInfo.FIXED_VIEWPORT_MAGIC_ICON);
-		Widget resizableMagicIcon = client.getWidget(WidgetInfo.RESIZABLE_VIEWPORT_MAGIC_ICON);
-		Widget resizableBottomMagicIcon = client.getWidget(WidgetInfo.RESIZABLE_VIEWPORT_BOTTOM_LINE_MAGIC_ICON);
-		
-		if (fixedMagicIcon != null)
-		{
-			spriteId = fixedMagicIcon.getSpriteId();
-		}
-		else if (resizableMagicIcon != null)
-		{
-			spriteId = resizableMagicIcon.getSpriteId();
-		}
-		else if (resizableBottomMagicIcon != null)
-		{
-			spriteId = resizableBottomMagicIcon.getSpriteId();
-		}
-		
-		return spriteId;
-	}
-	
-	private boolean checkSpellExistInActiveSpellbook(WidgetInfoPlus widgetInfoPlus)
-	{
-		boolean correctSpellbook = false;
-		int spellSpriteType = 0;
-		
-		if (widgetInfoPlus.getGroupId() != WidgetIDPlus.SPELLBOOK_GROUP_ID)
-		{
-			return false;
-		}
-		
-		int spellChildId = widgetInfoPlus.getChildId();
-		
-		if (spellChildId < 76 && spellChildId > 5)
-		{
-			spellSpriteType = 780;
-		}
-		else if (spellChildId < 101)
-		{
-			spellSpriteType = 1583;
-		}
-		else if (spellChildId < 145)
-		{
-			spellSpriteType = 1584;
-		}
-		else if (spellChildId < 190)
-		{
-			spellSpriteType = 1711;
-		}
-		
-		if (spellbookSpriteId == spellSpriteType)
-		{
-			correctSpellbook = true;
-		}
-		return correctSpellbook;
 	}
 
 	private void addNpc(NPC npc)

@@ -34,7 +34,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import net.runelite.api.NPC;
-import com.theplug.kotori.cerberushelper.util.PrayerExtended;
+import com.theplug.kotori.kotoriutils.rlapi.PrayerExtended;
 
 @Getter
 public class Cerberus
@@ -97,6 +97,11 @@ public class Cerberus
 		}
 
 		return hp;
+	}
+	
+	public int getHpPercentage()
+	{
+		return (getHp() * 100) / TOTAL_HP;
 	}
 
 	//https://pastebin.com/hWCvantS

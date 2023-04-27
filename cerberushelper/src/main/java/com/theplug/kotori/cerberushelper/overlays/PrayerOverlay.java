@@ -45,7 +45,7 @@ import net.runelite.api.Point;
 import net.runelite.api.widgets.Widget;
 import com.theplug.kotori.cerberushelper.util.OverlayUtil;
 import com.theplug.kotori.cerberushelper.util.Utility;
-import com.theplug.kotori.cerberushelper.util.PrayerExtended;
+import com.theplug.kotori.kotoriutils.rlapi.PrayerExtended;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
@@ -121,7 +121,7 @@ public class PrayerOverlay extends Overlay
 
 	private void renderDescendingBoxes(final Graphics2D graphics2D, final PrayerExtended prayerExtended, final int tick)
 	{
-		final int prayerWidgetInfoPackedID = prayerExtended.getPrayerWidgetInfo().getPackedId();
+		final int prayerWidgetInfoPackedID = prayerExtended.getWidgetInfoPlus().getPackedId();
 		final Widget prayerWidget = client.getWidget(prayerWidgetInfoPackedID);
 
 		if (prayerWidget == null || prayerWidget.isHidden())

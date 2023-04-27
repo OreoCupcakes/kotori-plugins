@@ -39,7 +39,7 @@ public interface CerberusConfig extends Config
 {
 	// Sections
 	@ConfigSection(
-			name = "<html>Cerberus Helper<br>Version 1.1.6</html>",
+			name = "<html>Cerberus Helper<br>Version 1.1.7</html>",
 			description = "",
 			position = -1,
 			closedByDefault = true
@@ -304,6 +304,28 @@ public interface CerberusConfig extends Config
 			section = autoSection
 	)
 	default int prayerPointsToDrinkAt() { return 60; }
+	
+	@ConfigItem(
+			keyName = "castDeathCharge",
+			name = "Autocast Death Charge",
+			description = "Autocast the spell Death Charge based on Cerberus' current HP percentage, indicated below, and if its off cooldown.",
+			position = 6,
+			section = autoSection
+	)
+	default boolean autocastDeathCharge() { return false; }
+	
+	@Units(Units.PERCENT)
+	@Range(min = 0, max = 100)
+	@ConfigItem(
+			keyName = "deathChargeHpPercentage",
+			name = "Cast When HP <=",
+			description = "The HP percentage threshold, of Cerberus, to autocast the Death Charge spell.<br>" +
+					"The default 66% is slightly under 400 HP, the ghost spawn threshold.<br>" +
+					"If it's below this threshold, Death Charge will be cast if it's not on cooldown.",
+			position = 7,
+			section = autoSection
+	)
+	default int deathChargeHpPercentage() { return 66; }
 
 	// Constants
 

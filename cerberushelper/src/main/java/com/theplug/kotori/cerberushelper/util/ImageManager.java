@@ -31,6 +31,7 @@ import java.awt.image.BufferedImage;
 import com.theplug.kotori.cerberushelper.domain.Phase;
 import com.theplug.kotori.cerberushelper.CerberusConfig;
 import com.theplug.kotori.cerberushelper.CerberusPlugin;
+import com.theplug.kotori.kotoriutils.rlapi.PrayerExtended;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.runelite.client.util.ImageUtil;

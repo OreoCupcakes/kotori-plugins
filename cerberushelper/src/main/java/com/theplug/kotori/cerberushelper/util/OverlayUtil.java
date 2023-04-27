@@ -16,6 +16,8 @@ import net.runelite.api.VarClientInt;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.widgets.Widget;
+import com.theplug.kotori.kotoriutils.rlapi.PrayerExtended;
+import com.theplug.kotori.kotoriutils.rlapi.InterfaceTab;
 
 import static net.runelite.client.ui.overlay.OverlayUtil.renderPolygon;
 
@@ -23,7 +25,7 @@ public class OverlayUtil
 {
 	public static Rectangle renderPrayerOverlay(Graphics2D graphics, Client client, PrayerExtended prayerExtended, Color color)
 	{
-		int prayerWidgetInfoPackedID = prayerExtended.getPrayerWidgetInfo().getPackedId();
+		int prayerWidgetInfoPackedID = prayerExtended.getWidgetInfoPlus().getPackedId();
 		Widget widget = client.getWidget(prayerWidgetInfoPackedID);
 
 		if (widget == null || client.getVarcIntValue(VarClientInt.INVENTORY_TAB) != InterfaceTab.PRAYER.getId())

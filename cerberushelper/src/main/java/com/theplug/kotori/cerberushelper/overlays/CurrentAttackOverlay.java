@@ -44,7 +44,7 @@ import com.theplug.kotori.cerberushelper.CerberusPlugin;
 import com.theplug.kotori.cerberushelper.domain.Cerberus;
 import com.theplug.kotori.cerberushelper.util.ImageManager;
 import com.theplug.kotori.cerberushelper.util.InfoBoxComponent;
-import com.theplug.kotori.cerberushelper.util.PrayerExtended;
+import com.theplug.kotori.kotoriutils.rlapi.PrayerExtended;
 import com.theplug.kotori.cerberushelper.util.Utility;
 import net.runelite.api.Client;
 import net.runelite.api.Prayer;

@@ -31,7 +31,6 @@ import com.theplug.kotori.cerberushelper.overlays.CurrentAttackOverlay;
 import com.theplug.kotori.cerberushelper.overlays.PrayerOverlay;
 import com.theplug.kotori.cerberushelper.overlays.SceneOverlay;
 import com.theplug.kotori.cerberushelper.overlays.UpcomingAttackOverlay;
-import com.theplug.kotori.cerberushelper.util.PrayerExtended;
 import com.google.common.collect.ComparisonChain;
 import com.google.inject.Provides;
 import java.util.ArrayList;
@@ -42,7 +41,9 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import com.theplug.kotori.kotoriutils.KotoriUtils;
-import com.theplug.kotori.kotoriutils.libs.InvokesLibrary;
+import com.theplug.kotori.kotoriutils.rlapi.PrayerExtended;
+import com.theplug.kotori.kotoriutils.rlapi.VarUtilities;
+import com.theplug.kotori.kotoriutils.rlapi.WidgetInfoPlus;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
@@ -329,6 +330,11 @@ public class CerberusPlugin extends Plugin
 			{
 				handlePrayerPotionDrinking();
 			}
+		}
+		
+		if (config.autocastDeathCharge())
+		{
+			autoDeathCharge();
 		}
 
 		/*
@@ -860,5 +866,26 @@ public class CerberusPlugin extends Plugin
 		}
 
 		return false;
+	}
+	
+	private void autoDeathCharge()
+	{
+		if (cerberus == null)
+		{
+			return;
+		}
+		
+		if (!VarUtilities.onArceuusSpellbook(client))
+		{
+			return;
+		}
+		
+		if (!VarUtilities.isSpellDeathChargeOnCooldown(client))
+		{
+			if (cerberus.getHpPercentage() <= config.deathChargeHpPercentage())
+			{
+				kotoriUtils.getInvokesLibrary().invoke(-1, WidgetInfoPlus.SPELL_DEATH_CHARGE.getId(), MenuAction.CC_OP.getId(), 1, -1, "", "", 0, 0);
+			}
+		}
 	}
 }
