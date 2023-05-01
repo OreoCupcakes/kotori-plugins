@@ -167,6 +167,7 @@ public class GodWarsHelperPlugin extends Plugin
 	private boolean meleeMinionAlive;
 	private boolean magicMinionAlive;
 	private boolean rangedMinionAlive;
+	private boolean allPrayersDeactivated;
 	private boolean set1EquippedOnce;
 	private boolean set2EquippedOnce;
 	private boolean set3EquippedOnce;
@@ -654,6 +655,7 @@ public class GodWarsHelperPlugin extends Plugin
 				set3EquippedOnce = false;
 				set4EquippedOnce = false;
 				set5EquippedOnce = false;
+				allPrayersDeactivated = false;
 				npcContainers.add(new NPCContainer(npc));
 				break;
 			case NpcID.SERGEANT_STEELWILL:
@@ -716,7 +718,7 @@ public class GodWarsHelperPlugin extends Plugin
 	
 	private void autoDeactivatePrayers()
 	{
-		if (!bossAlive && !rangedMinionAlive && !magicMinionAlive && !meleeMinionAlive && inBossRoom)
+		if (!bossAlive && !rangedMinionAlive && !magicMinionAlive && !meleeMinionAlive && inBossRoom && !allPrayersDeactivated)
 		{
 			Prayer[] prayers = Prayer.values();
 			int actionsTaken = 0;
@@ -732,13 +734,14 @@ public class GodWarsHelperPlugin extends Plugin
 					{
 						if (config.keepPreservePrayerOn())
 						{
-							return;
+							continue;
 						}
 					}
 					kotoriUtils.getInvokesLibrary().deactivatePrayer(p);
 					actionsTaken++;
 				}
 			}
+			allPrayersDeactivated = true;
 		}
 	}
 	
