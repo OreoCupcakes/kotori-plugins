@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Adam <Adam@sigterm.info>
+ * Copyright (c) 2019 Owain van Brakel <https://github.com/Owain94>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -23,18 +23,27 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.theplug.kotori.gauntletextended.utils;
+version = "1.3.0"
 
-import com.google.common.base.CharMatcher;
+project.extra["PluginName"] = "Inferno" // This is the name that is used in the external plugin manager panel
+project.extra["PluginDescription"] = "Java example plugin" // This is the description that is used in the external plugin manager panel
+project.extra["PluginPackageId"] = "inferno" // This is the plugin package folder after the default group package.
+project.extra["PluginMainClassName"] = "InfernoPlugin" // This is the plugin's main class which extends Plugin
 
-class JagexPrintableCharMatcher extends CharMatcher
-{
-    @Override
-    public boolean matches(char c)
-    {
-        // Characters which are printable
-        return (c >= 32 && c <= 126)
-                || c == 128
-                || (c >= 160 && c <= 255);
+dependencies {
+    compileOnly(project(":kotoriutils"))
+}
+
+tasks {
+    jar {
+        manifest {
+            attributes(mapOf(
+                "Plugin-Version" to project.version,
+                "Plugin-Id" to nameToId(project.extra["PluginName"] as String),
+                "Plugin-Provider" to project.extra["PluginProvider"],
+                "Plugin-Description" to project.extra["PluginDescription"],
+                "Plugin-License" to project.extra["PluginLicense"]
+            ))
+        }
     }
 }

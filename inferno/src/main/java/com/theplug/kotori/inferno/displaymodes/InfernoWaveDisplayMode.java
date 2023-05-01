@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, TheStonedTurtle <https://github.com/TheStonedTurtle>
+ * Copyright (c) 2018, Jordan Atwood <jordan.atwood423@gmail.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -22,18 +22,23 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package com.theplug.kotori.inferno.displaymodes;
 
-package com.theplug.kotori.gauntletextended.utils;
+import lombok.RequiredArgsConstructor;
 
-import java.awt.Color;
-import lombok.Builder;
-import lombok.Data;
-
-@Data
-@Builder
-public class TableElement
+@RequiredArgsConstructor
+public enum InfernoWaveDisplayMode
 {
-    TableAlignment alignment;
-    Color color;
-    String content;
+	CURRENT("Current wave"),
+	NEXT("Next wave"),
+	BOTH("Both"),
+	NONE("None");
+
+	private final String name;
+
+	@Override
+	public String toString()
+	{
+		return name;
+	}
 }
