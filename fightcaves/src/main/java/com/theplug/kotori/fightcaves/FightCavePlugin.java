@@ -62,7 +62,7 @@ import org.apache.commons.lang3.ArrayUtils;
 	name = "Fight Cave",
 	enabledByDefault = false,
 	description = "Displays current and upcoming wave monsters in the Fight Caves and what to pray at TzTok-Jad",
-	tags = {"bosses", "combat", "minigame", "overlay", "pve", "pvm", "jad", "fire", "cape", "wave"}
+	tags = {"bosses", "combat", "minigame", "overlay", "pve", "pvm", "jad", "fire", "cape", "wave", "ported", "kotori"}
 )
 public class FightCavePlugin extends Plugin
 {
