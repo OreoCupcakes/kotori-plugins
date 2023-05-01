@@ -33,7 +33,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.runelite.api.Client;
 import net.runelite.api.Player;
-import com.theplug.kotori.gauntletextended.utils.Text;
+import net.runelite.client.util.Text;
 import net.runelite.client.game.ItemManager;
 import com.theplug.kotori.gauntletextended.GauntletExtendedConfig;
 import com.theplug.kotori.gauntletextended.GauntletExtendedConfig.ResourceFilter;
