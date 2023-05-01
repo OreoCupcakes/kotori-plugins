@@ -47,6 +47,7 @@ import com.theplug.kotori.kotoriutils.rlapi.WidgetInfoPlus;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
+import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.AnimationChanged;
 import net.runelite.api.events.GameStateChanged;
@@ -96,6 +97,10 @@ public class CerberusPlugin extends Plugin
 	private static final int PROJECTILE_ID_LAVA = 1247;
 
 	private static final Set<Integer> REGION_IDS = Set.of(4883, 5140, 5395);
+	private static final WorldArea region4883 = new WorldArea(1230, 1243, 21, 15, 0);
+	private static final WorldArea region5140 = new WorldArea(1294, 1307, 21, 15, 0);
+	private static final WorldArea region5395 = new WorldArea(1358, 1243, 21, 15, 0);
+	private static final Set<WorldArea> worldAreasPastFlames = Set.of(region4883, region5140, region5395);
 
 	@Inject
 	private Client client;
@@ -151,6 +156,7 @@ public class CerberusPlugin extends Plugin
 	private long lastTick;
 
 	private boolean inArena;
+	private boolean inAreaPastFlames;
 
 	public CerberusPlugin()
 	{
@@ -188,6 +194,7 @@ public class CerberusPlugin extends Plugin
 	protected void shutDown()
 	{
 		inArena = false;
+		inAreaPastFlames = false;
 
 		overlayManager.remove(sceneOverlay);
 		overlayManager.remove(prayerOverlay);
@@ -249,6 +256,8 @@ public class CerberusPlugin extends Plugin
 		{
 			return;
 		}
+		
+		inAreaPastFlames();
 
 		if (tickTimestamps.size() <= tickTimestampIndex)
 		{
@@ -764,7 +773,7 @@ public class CerberusPlugin extends Plugin
 
 	private void prayAgainstCerberus()
 	{
-		if (upcomingAttacks.isEmpty() || cerberus == null)
+		if (cerberus == null || upcomingAttacks.isEmpty() || !inAreaPastFlames || !isCerberusInteractingWithYou())
 		{
 			return;
 		}
@@ -799,7 +808,7 @@ public class CerberusPlugin extends Plugin
 
 	private void prayOffensively()
 	{
-		if (cerberus == null)
+		if (cerberus == null || !inAreaPastFlames)
 		{
 			return;
 		}
@@ -847,6 +856,10 @@ public class CerberusPlugin extends Plugin
 
 	private void handlePrayerPotionDrinking()
 	{
+		if (!inAreaPastFlames)
+		{
+			return;
+		}
 		final int valueToDrinkAt = config.prayerPointsToDrinkAt();
 
 		if (client.getBoostedSkillLevel(Skill.PRAYER) <= valueToDrinkAt)
@@ -857,20 +870,53 @@ public class CerberusPlugin extends Plugin
 
 	private boolean inCerberusRegion()
 	{
-		for (final int regionId : client.getMapRegions())
+		int regionId = client.getLocalPlayer().getWorldLocation().getRegionID();
+		return REGION_IDS.contains(regionId);
+	}
+	
+	private void inAreaPastFlames()
+	{
+		if (!inArena)
 		{
-			if (REGION_IDS.contains(regionId))
-			{
-				return true;
-			}
+			return;
 		}
-
+		
+		WorldPoint wp = client.getLocalPlayer().getWorldLocation();
+		switch(client.getLocalPlayer().getWorldLocation().getRegionID())
+		{
+			case 4883:
+				inAreaPastFlames = region4883.contains(wp);
+				break;
+			case 5140:
+				inAreaPastFlames = region5140.contains(wp);
+				break;
+			case 5395:
+				inAreaPastFlames = region5395.contains(wp);
+				break;
+			default:
+				inAreaPastFlames = false;
+				break;
+		}
+	}
+	
+	private boolean isCerberusInteractingWithYou()
+	{
+		if (cerberus == null)
+		{
+			return false;
+		}
+		
+		Actor interact = cerberus.getNpc().getInteracting();
+		if (interact instanceof Player)
+		{
+			return interact.equals(client.getLocalPlayer());
+		}
 		return false;
 	}
 	
 	private void autoDeathCharge()
 	{
-		if (cerberus == null)
+		if (cerberus == null || !inAreaPastFlames || !isCerberusInteractingWithYou())
 		{
 			return;
 		}
