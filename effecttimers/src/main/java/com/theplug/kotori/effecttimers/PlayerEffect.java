@@ -27,26 +27,29 @@ package com.theplug.kotori.effecttimers;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import net.runelite.api.ActorSpotAnim;
+import net.runelite.api.IterableHashTable;
 
 @AllArgsConstructor
 public enum PlayerEffect
 {
-	BIND("Bind", 181, 8, false, TimerType.FREEZE, true),
-	SNARE("Snare", 180, 16, false, TimerType.FREEZE, true),
-	ENTANGLE("Entangle", 179, 24, false, TimerType.FREEZE, true),
-	RUSH("Ice Rush", 361, 8, false, TimerType.FREEZE, true),
-	BURST("Ice Burst", 363, 16, false, TimerType.FREEZE, true),
-	BLITZ("Ice Blitz", 367, 24, false, TimerType.FREEZE, true),
-	BARRAGE("Ice Barrage", 369, 32, false, TimerType.FREEZE, true),
-	TELEBLOCK("Teleblock", 345, 500, true, TimerType.TELEBLOCK, false),
-	VENG("Vengeance", 726, 50, false, TimerType.VENG, false),
-	VENG_OTHER("Vengeance Other", 725, 50, false, TimerType.VENG, false),
-	STAFF_OF_THE_DEAD("Staff of the Dead", 1228, 100, false, TimerType.SOTD, false),
-	STAFF_OF_LIGHT("Staff of Light", 1516, 100, false, TimerType.SOTD, false),
-	STAFF_OF_BALANCE("Staff of Balance", 1733, 100, false, TimerType.SOTD, false),
-	IMBUED_HEART("Imbued Heart", 1316, 700, false, TimerType.IMBUEDHEART, false),
-	DFS("Dragon Fire Shield", 1165, 192, false, TimerType.DFS, false),
-	ANCIENT_WYVERN("Ancient Wyvern Shield", 1402, 192, false, TimerType.ANCWYVERN, false);
+	BIND("Bind", 181, 8, false, TimerType.FREEZE),
+	SNARE("Snare", 180, 16, false, TimerType.FREEZE),
+	ENTANGLE("Entangle", 179, 24, false, TimerType.FREEZE),
+	RUSH("Ice Rush", 361, 8, false, TimerType.FREEZE),
+	BURST("Ice Burst", 363, 16, false, TimerType.FREEZE),
+	BLITZ("Ice Blitz", 367, 24, false, TimerType.FREEZE),
+	BARRAGE("Ice Barrage", 369, 32, false, TimerType.FREEZE),
+	TELEBLOCK("Teleblock", 345, 500, true, TimerType.TELEBLOCK),
+	VENG("Vengeance", 726, 50, false, TimerType.VENG),
+	VENG_OTHER("Vengeance Other", 725, 50, false, TimerType.VENG),
+	STAFF_OF_THE_DEAD("Staff of the Dead", 1228, 100, false, TimerType.SOTD),
+	STAFF_OF_LIGHT("Staff of Light", 1516, 100, false, TimerType.SOTD),
+	STAFF_OF_BALANCE("Staff of Balance", 1733, 100, false, TimerType.SOTD),
+	IMBUED_HEART("Imbued Heart", 1316, 700, false, TimerType.IMBUEDHEART),
+	SATURATED_HEART("Saturated Heart", 2287, 500, false, TimerType.SATURATEDHEART),
+	DFS("Dragon Fire Shield", 1165, 192, false, TimerType.DFS),
+	ANCIENT_WYVERN("Ancient Wyvern Shield", 1402, 192, false, TimerType.ANCWYVERN);
 
 	@Getter(AccessLevel.PACKAGE)
 	private final String name;
@@ -58,8 +61,6 @@ public enum PlayerEffect
 	private boolean halvable;
 	@Getter(AccessLevel.PACKAGE)
 	private final TimerType type;
-	@Getter(AccessLevel.PACKAGE)
-	private boolean resistance;
 
 	static PlayerEffect getFromSpotAnim(int spotAnim)
 	{

@@ -27,8 +27,7 @@ package com.theplug.kotori.effecttimers;
 import com.google.inject.Provides;
 import com.theplug.kotori.effecttimers.utils.PvPUtil;
 import com.theplug.kotori.effecttimers.utils.WorldTypeExtended;
-import com.theplug.kotori.multiindicators.MapLocations;
-import com.theplug.kotori.multiindicators.MultiIndicatorsPlugin;
+import com.theplug.kotori.effecttimers.MapLocations;
 import lombok.Getter;
 import net.runelite.api.*;
 import net.runelite.api.coords.WorldPoint;
@@ -37,7 +36,6 @@ import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.input.KeyManager;
 import net.runelite.client.plugins.Plugin;
-import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.util.HotkeyListener;
@@ -45,8 +43,9 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import javax.inject.Inject;
 import java.util.EnumSet;
+import java.util.Set;
 
-@PluginDependency(MultiIndicatorsPlugin.class)
+
 @PluginDescriptor(
 	name = "Effect Timers",
 	description = "Effect timer overlay on players",
@@ -80,7 +79,7 @@ public class EffectTimersPlugin extends Plugin
 
 	private int fakeSpotAnim = -1;
 	
-	private HotkeyListener hotkeyListener = new HotkeyListener(() -> config.debugKeybind())
+	private final HotkeyListener hotkeyListener = new HotkeyListener(() -> config.debugKeybind())
 	{
 		public void hotkeyPressed()
 		{
@@ -157,28 +156,42 @@ public class EffectTimersPlugin extends Plugin
 	public void onGraphicChanged(GraphicChanged event)
 	{
 		Actor actor = event.getActor();
-		int spotAnim = fakeSpotAnim == -1 ? actor.getGraphic() : fakeSpotAnim;
-		fakeSpotAnim = -1;
-		if (spotAnim == prayerTracker.getSpotanimLastTick(event.getActor()))
+		//	actor.getGraphic() deprecated, actor can have multiple spot anims.
+		//	int spotAnim = fakeSpotAnim == -1 ? actor.getGraphic() : fakeSpotAnim;
+		IterableHashTable<ActorSpotAnim> actorSpotAnimsTable = actor.getSpotAnims();
+		for (ActorSpotAnim actorSpotAnim : actorSpotAnimsTable)
 		{
-			return;
+			int spotAnim;
+			if (fakeSpotAnim == -1)
+			{
+				spotAnim = actorSpotAnim.getId();
+			}
+			else
+			{
+				spotAnim = fakeSpotAnim;
+			}
+			fakeSpotAnim = -1;
+			
+			if (spotAnim == prayerTracker.getSpotanimLastTick(event.getActor()))
+			{
+				return;
+			}
+			
+			PlayerEffect effect = PlayerEffect.getFromSpotAnim(spotAnim);
+			
+			if (effect == null)
+			{
+				return;
+			}
+			
+			if (timerManager.hasTimerActive(actor, effect.getType()))
+			{
+				return;
+			}
+			
+			timerManager.setTimerFor(actor, effect.getType(), new Timer(this, effect,
+					effect.isHalvable() && prayerTracker.getPrayerIconLastTick(actor) == HeadIcons.MAGIC, actor));
 		}
-
-		PlayerEffect effect = PlayerEffect.getFromSpotAnim(spotAnim);
-
-		if (effect == null)
-		{
-			return;
-		}
-
-		if (timerManager.hasTimerActive(actor, effect.getType()))
-		{
-			return;
-		}
-
-		timerManager.setTimerFor(actor, effect.getType(), new Timer(this, effect,
-				effect.isHalvable() && prayerTracker.getPrayerIconLastTick(actor) == HeadIcons.MAGIC,
-				effect.isResistance() && (actor.getName() != null && actor.getName().contains("Phantom Muspah"))));
 	}
 
 	@Subscribe

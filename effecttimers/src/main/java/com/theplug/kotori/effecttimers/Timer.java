@@ -29,8 +29,7 @@ import java.awt.image.BufferedImage;
 import lombok.EqualsAndHashCode;
 import lombok.Setter;
 import lombok.ToString;
-import net.runelite.api.Client;
-import net.runelite.api.InventoryID;
+import net.runelite.api.*;
 
 @ToString
 @EqualsAndHashCode
@@ -50,10 +49,10 @@ public class Timer
 
 	public Timer(EffectTimersPlugin plugin, PlayerEffect effect)
 	{
-		this(plugin, effect, false, false);
+		this(plugin, effect, false, null);
 	}
 
-	public Timer(EffectTimersPlugin plugin, PlayerEffect effect, boolean half, boolean resist)
+	public Timer(EffectTimersPlugin plugin, PlayerEffect effect, boolean half, Actor actor)
 	{
 		this.plugin = plugin;
 		this.client = plugin.getClient();
@@ -65,16 +64,37 @@ public class Timer
 		if (type == TimerType.FREEZE)
 		{
 			//Ancient Sceptre ID = 27624
-			if (client.getItemContainer(InventoryID.EQUIPMENT).getItem(3).getId() == 27624)
+			ItemContainer itemContainer = client.getItemContainer(InventoryID.EQUIPMENT);
+			if (itemContainer != null)
 			{
-				if (effect == PlayerEffect.RUSH || effect == PlayerEffect.BURST || effect == PlayerEffect.BLITZ || effect == PlayerEffect.BARRAGE)
+				Item weapon = itemContainer.getItem(EquipmentInventorySlot.WEAPON.getSlotIdx());
+				if (weapon != null)
 				{
-					length = length + (length / 10);
+					int weaponId = weapon.getId();
+					boolean isIceSpell = effect == PlayerEffect.RUSH || effect == PlayerEffect.BURST || effect == PlayerEffect.BLITZ || effect == PlayerEffect.BARRAGE;
+					if (weaponId == ItemID.ANCIENT_SCEPTRE)
+					{
+						if (isIceSpell)
+						{
+							length = length + (length * 10 / 100);
+						}
+					}
+					if (weaponId == ItemID.ICE_ANCIENT_SCEPTRE)
+					{
+						if (isIceSpell)
+						{
+							length = length + (length * 35 / 100);
+						}
+					}
 				}
 			}
-			if (resist)
+			if (actor instanceof NPC)
 			{
-				length = length * 2 / 3;
+				NPC npc = (NPC) actor;
+				if (npc.getId() == NpcID.PHANTOM_MUSPAH || npc.getId() == NpcID.PHANTOM_MUSPAH_12078 || npc.getId() == NpcID.PHANTOM_MUSPAH_12079)
+				{
+					length = length * 2 / 3;
+				}
 			}
 		}
 		// if effect is null, then length is 0, else if half is true, then length is halved, else if resist is true, then length is 2/3, else normal length

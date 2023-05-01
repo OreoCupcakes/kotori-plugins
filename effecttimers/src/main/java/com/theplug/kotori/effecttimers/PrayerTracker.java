@@ -29,10 +29,7 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
-import net.runelite.api.Actor;
-import net.runelite.api.Client;
-import net.runelite.api.NPC;
-import net.runelite.api.Player;
+import net.runelite.api.*;
 
 @Slf4j
 @Singleton
@@ -69,7 +66,11 @@ class PrayerTracker
 			newTick.get(actor).put("PrayerIcon",
 				((Player) actor).getOverheadIcon() == null ? -1 : ((Player) actor).getOverheadIcon().ordinal());
 		}
-		newTick.get(actor).put("SpotAnim", actor.getGraphic());
+		IterableHashTable<ActorSpotAnim> actorSpotAnims = actor.getSpotAnims();
+		for (ActorSpotAnim a: actorSpotAnims)
+		{
+			newTick.get(actor).put("SpotAnim", a.getId());
+		}
 	}
 
 	int getPrayerIconLastTick(Actor p)

@@ -40,6 +40,7 @@ public enum TimerType
 	VENG(0, loadImage("veng"), null, "vengTimers", Color.RED.brighter()),
 	SOTD(0, loadImage("sotd"), null, "sotdTimers", Color.YELLOW),
 	IMBUEDHEART(0, loadImage("imbheart"), null, "imbHeartTimers", Color.BLACK),
+	SATURATEDHEART(0, loadImage("satheart"),null,"imbHeartTimers",Color.BLACK),
 	DFS(0, loadImage("dfs"), null, "dfsTimers", Color.WHITE),
 	ANCWYVERN(0, loadImage("ancwyvern"), null, "ancWyvernTimers", Color.WHITE);
 

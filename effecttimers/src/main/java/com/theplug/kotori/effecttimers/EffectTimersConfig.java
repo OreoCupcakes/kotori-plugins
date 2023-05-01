@@ -32,7 +32,7 @@ import net.runelite.client.config.*;
 public interface EffectTimersConfig extends Config
 {
 	@ConfigSection(
-			name = "<html>Effect Timers<br>Version 1.1.3</html>",
+			name = "<html>Effect Timers<br>Version 1.1.4</html>",
 			description = "",
 			position = -1,
 			closedByDefault = true
@@ -150,9 +150,9 @@ public interface EffectTimersConfig extends Config
 	}
 
 	@ConfigItem(
-		name = "Imbued Heart Timers",
+		name = "Imbued/Saturated Heart Timers",
 		keyName = "imbHeartTimers",
-		description = "Should we render staff of the imbued heart timers?",
+		description = "Should we render imbued/saturated heart timers?",
 		position = 11
 	)
 	default boolean imbHeartTimers()
