@@ -705,8 +705,8 @@ public class DemonicGorillaPlugin extends Plugin
 			case LOGIN_SCREEN:
 				if (atGorillas)
 				{
-					shutDown();
 					reset();
+					shutDown();
 				}
 				break;
 			default:

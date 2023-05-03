@@ -24,7 +24,9 @@
  */
 package com.theplug.kotori.effecttimers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
@@ -81,4 +83,46 @@ public class TimerManager
 		timer.setTicksLength(0);
 	}
 
+	public void clearExpiredTimers()
+	{
+		//Store the keys of timerMap in an ArrayList for future removal of entry after iteration of the map.
+		ArrayList<Actor> timerMapKeys = new ArrayList<>();
+		for (Map.Entry<Actor, HashMap<TimerType, Timer>> actorEntry : timerMap.entrySet())
+		{
+			Actor keyActor = actorEntry.getKey();
+			HashMap<TimerType, Timer> valueTimerMap = actorEntry.getValue();
+			//Store the keys of valueTimerMap in an ArrayList for future removal of inactive timers after iteration of the map.
+			ArrayList<TimerType> timerHashMapKeys = new ArrayList<>();
+			for (Map.Entry<TimerType, Timer> timerEntry : valueTimerMap.entrySet())
+			{
+				TimerType keyTimerType = timerEntry.getKey();
+				Timer valueTimer = timerEntry.getValue();
+				//Find inactive timers and mark down their key values.
+				if (valueTimer.getTimerState().equals(Timer.TimerState.INACTIVE))
+				{
+					timerHashMapKeys.add(keyTimerType);
+				}
+			}
+			//Remove the timer entries from valueTimerMap now that we're done searching for inactive timers.
+			for (TimerType key : timerHashMapKeys)
+			{
+				valueTimerMap.remove(key);
+			}
+			//Now check if the TimerType, Timer hashmap is empty after removal of inactive timers. If empty, then mark down the TimerMap entry for future removal.
+			if (valueTimerMap.isEmpty())
+			{
+				timerMapKeys.add(keyActor);
+			}
+		}
+		//Remove the timerMap entry
+		for (Actor key : timerMapKeys)
+		{
+			timerMap.remove(key);
+		}
+	}
+	
+	public void shutDown()
+	{
+		timerMap.clear();
+	}
 }

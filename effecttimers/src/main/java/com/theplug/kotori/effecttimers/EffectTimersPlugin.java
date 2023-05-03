@@ -27,7 +27,6 @@ package com.theplug.kotori.effecttimers;
 import com.google.inject.Provides;
 import com.theplug.kotori.effecttimers.utils.PvPUtil;
 import com.theplug.kotori.effecttimers.utils.WorldTypeExtended;
-import com.theplug.kotori.effecttimers.MapLocations;
 import lombok.Getter;
 import net.runelite.api.*;
 import net.runelite.api.coords.WorldPoint;
@@ -43,7 +42,6 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import javax.inject.Inject;
 import java.util.EnumSet;
-import java.util.Set;
 
 
 @PluginDescriptor(
@@ -110,6 +108,7 @@ public class EffectTimersPlugin extends Plugin
 	{
 		keyManager.unregisterKeyListener(hotkeyListener);
 		overlayManager.remove(overlay);
+		timerManager.shutDown();
 	}
 
 	@Subscribe
@@ -150,6 +149,9 @@ public class EffectTimersPlugin extends Plugin
 				timerManager.setTimerFor(actor, TimerType.TELEBLOCK, new Timer(this, null));
 			}
 		}
+		
+		//Clear TimerManager's hashmap of inactive timers
+		timerManager.clearExpiredTimers();
 	}
 
 	@Subscribe
@@ -239,6 +241,21 @@ public class EffectTimersPlugin extends Plugin
 		for (TimerType type : TimerType.values())
 		{
 			timerManager.setTimerFor(event.getActor(), type, new Timer(this, null));
+		}
+	}
+	
+	@Subscribe
+	public void onGameStateChanged(GameStateChanged event)
+	{
+		GameState gameState = event.getGameState();
+		
+		switch (gameState)
+		{
+			case LOGIN_SCREEN:
+			case HOPPING:
+			case CONNECTION_LOST:
+				timerManager.shutDown();
+				break;
 		}
 	}
 }
