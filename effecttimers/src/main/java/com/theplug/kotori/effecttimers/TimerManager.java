@@ -44,47 +44,109 @@ public class TimerManager
 	{
 		if (!timerMap.containsKey(actor) || timerMap.get(actor) == null)
 		{
-			timerMap.put(actor, new HashMap<>());
+			return null;
 		}
 		return timerMap.get(actor);
 	}
 
 	public boolean isTimerValid(Actor actor, TimerType type)
 	{
-		return getTimerFor(actor, type).isValid();
+		Timer timer = getTimerFor(actor, type);
+		if (timer == null)
+		{
+			return false;
+		}
+		return timer.isValid();
 	}
 
 	public boolean hasTimerActive(Actor actor, TimerType type)
 	{
-		return getTimerFor(actor, type).getTimerState() != Timer.TimerState.INACTIVE;
+		Timer timer = getTimerFor(actor, type);
+		if (timer == null)
+		{
+			return false;
+		}
+		return timer.getTimerState() != Timer.TimerState.INACTIVE;
 	}
 
 	public Timer getTimerFor(Actor actor, TimerType type)
 	{
-		if (getTimersFor(actor).get(type) == null)
+		HashMap<TimerType, Timer> mapping = getTimersFor(actor);
+		if (mapping == null)
 		{
-			getTimersFor(actor).put(type, new Timer(plugin, null));
+			return null;
 		}
-		return getTimersFor(actor).get(type);
+		if (mapping.get(type) == null)
+		{
+			mapping.put(type, new Timer(plugin, null));
+		}
+		return mapping.get(type);
+	}
+	
+	public void removeTimerFor(Actor actor, TimerType type)
+	{
+		HashMap<TimerType, Timer> mapping = getTimersFor(actor);
+		if (mapping == null)
+		{
+			return;
+		}
+		if (mapping.get(type) == null)
+		{
+			return;
+		}
+		mapping.remove(type);
+		
+		if (mapping.isEmpty())
+		{
+			timerMap.remove(actor);
+		}
 	}
 
 	public void setTimerFor(Actor actor, TimerType type, Timer timer)
 	{
 		timer.setTimerTypeIfNull(type);
-		getTimersFor(actor).put(type, timer);
+		HashMap<TimerType, Timer> mapping = getTimersFor(actor);
+		if (mapping == null)
+		{
+			return;
+		}
+		mapping.put(type, timer);
+	}
+	
+	public void addTimerFor(Actor actor, TimerType type, Timer timer)
+	{
+		timer.setTimerTypeIfNull(type);
+		if (!timerMap.containsKey(actor) || timerMap.get(actor) == null)
+		{
+			timerMap.put(actor, new HashMap<>());
+		}
+		timerMap.get(actor).put(type, timer);
 	}
 
 	// TODO: test me
 	public void jumpToCooldown(Actor actor, TimerType type)
 	{
 		Timer timer = getTimerFor(actor, type);
+		if (timer == null)
+		{
+			return;
+		}
 		timer.setStartMillis(System.currentTimeMillis());
 		timer.setTicksStart(plugin.getClient().getTickCount());
 		timer.setTicksLength(0);
 	}
+	
+	public boolean timerMapContainsActor(Actor actor)
+	{
+		return timerMap.containsKey(actor);
+	}
 
 	public void clearExpiredTimers()
 	{
+		if (timerMap.isEmpty())
+		{
+			return;
+		}
 		//Store the keys of timerMap in an ArrayList for future removal of entry after iteration of the map.
 		ArrayList<Actor> timerMapKeys = new ArrayList<>();
 		for (Map.Entry<Actor, HashMap<TimerType, Timer>> actorEntry : timerMap.entrySet())

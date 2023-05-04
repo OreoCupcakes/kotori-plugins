@@ -136,22 +136,19 @@ public class EffectTimersPlugin extends Plugin
 
 			if (!WorldTypeExtended.isAllPvpWorld(worldTypes) && PvPUtil.getWildernessLevelFrom(actorLoc) <= 0)
 			{
-				timerManager.setTimerFor(actor, TimerType.TELEBLOCK, new Timer(this, null));
+				timerManager.removeTimerFor(actor, TimerType.TELEBLOCK);
 			}
 			else if (WorldType.isPvpWorld(worldTypes) &&
 				MapLocations.getPvpSafeZones(actorLoc.getPlane()).contains(actorLoc.getX(), actorLoc.getY()))
 			{
-				timerManager.setTimerFor(actor, TimerType.TELEBLOCK, new Timer(this, null));
+				timerManager.removeTimerFor(actor, TimerType.TELEBLOCK);
 			}
 			else if (WorldTypeExtended.isDeadmanWorld(worldTypes) &&
 				MapLocations.getDeadmanSafeZones(actorLoc.getPlane()).contains(actorLoc.getX(), actorLoc.getY()))
 			{
-				timerManager.setTimerFor(actor, TimerType.TELEBLOCK, new Timer(this, null));
+				timerManager.removeTimerFor(actor, TimerType.TELEBLOCK);
 			}
 		}
-		
-		//Clear TimerManager's hashmap of inactive timers
-		timerManager.clearExpiredTimers();
 	}
 
 	@Subscribe
@@ -191,7 +188,7 @@ public class EffectTimersPlugin extends Plugin
 				return;
 			}
 			
-			timerManager.setTimerFor(actor, effect.getType(), new Timer(this, effect,
+			timerManager.addTimerFor(actor, effect.getType(), new Timer(this, effect,
 					effect.isHalvable() && prayerTracker.getPrayerIconLastTick(actor) == HeadIcons.MAGIC, actor));
 		}
 	}
@@ -231,7 +228,7 @@ public class EffectTimersPlugin extends Plugin
 		if (npc.getName().contains("Zombified Spawn"))
 		{
 			// TODO: not sure if we're meant to jump to cooldown here or just remove the timer completely, doesn't mechanically make a difference though
-			timerManager.setTimerFor(client.getLocalPlayer(), TimerType.FREEZE, new Timer(this, null)); // empty timer
+			timerManager.removeTimerFor(client.getLocalPlayer(), TimerType.FREEZE);
 		}
 	}
 
@@ -240,7 +237,7 @@ public class EffectTimersPlugin extends Plugin
 	{
 		for (TimerType type : TimerType.values())
 		{
-			timerManager.setTimerFor(event.getActor(), type, new Timer(this, null));
+			timerManager.removeTimerFor(event.getActor(), type);
 		}
 	}
 	
@@ -255,6 +252,9 @@ public class EffectTimersPlugin extends Plugin
 			case HOPPING:
 			case CONNECTION_LOST:
 				timerManager.shutDown();
+				break;
+			case LOADING:
+				timerManager.clearExpiredTimers();
 				break;
 		}
 	}
