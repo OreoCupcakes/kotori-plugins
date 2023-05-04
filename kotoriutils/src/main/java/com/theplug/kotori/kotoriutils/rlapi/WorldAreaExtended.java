@@ -13,30 +13,28 @@ public class WorldAreaExtended
 {
 	public static Point getComparisonPoint(WorldArea area1, WorldArea area2)
 	{
+		int x1 = area1.getX();
+		int y1 = area1.getY();
+		int x2 = area2.getX();
+		int y2 = area2.getY();
+		int w1 = area1.getWidth();
+		int h1 = area1.getHeight();
 		int x, y;
-		if (area2.getX() <= area1.getX())
+		if (x2 <= x1)
 		{
-			x = area1.getX();
-		}
-		else if (area2.getX() >= area1.getX() + area1.getWidth() - 1)
-		{
-			x = area1.getX() + area1.getWidth() - 1;
+			x = x1;
 		}
 		else
 		{
-			x = area2.getX();
+			x = Math.min(x2, x1 + w1 - 1);
 		}
-		if (area2.getY() <= area1.getY())
+		if (y2 <= y1)
 		{
-			y = area1.getY();
-		}
-		else if (area2.getY() >= area1.getY() + area1.getHeight() - 1)
-		{
-			y = area1.getY() + area1.getHeight() - 1;
+			y = y1;
 		}
 		else
 		{
-			y = area2.getY();
+			y = Math.min(y2, y1 + h1 - 1);
 		}
 		return new Point(x, y);
 	}
@@ -51,7 +49,10 @@ public class WorldAreaExtended
 	public static WorldArea calculateNextTravellingPoint(Client client, WorldArea original, WorldArea target, boolean stopAtMeleeDistance,
 												   Predicate<? super WorldPoint> extraCondition)
 	{
-		if (original.getPlane() != target.getPlane())
+		int z1 = original.getPlane();
+		int z2 = target.getPlane();
+		
+		if (z1 != z2)
 		{
 			return null;
 		}
@@ -69,50 +70,68 @@ public class WorldAreaExtended
 			}
 		}
 		
-		int dx = target.getX() - original.getX();
-		int dy = target.getY() - original.getY();
+		int x1 = original.getX();
+		int y1 = original.getY();
+		int x2 = target.getX();
+		int y2 = target.getY();
+		
+		int dx = x2 - x1;
+		int dy = y2 - y1;
+		
 		Point axisDistances = getAxisDistances(original, target);
-		if (stopAtMeleeDistance && axisDistances.getX() + axisDistances.getY() == 1)
+		int axisX = axisDistances.getX();
+		int axisY = axisDistances.getY();
+		
+		if (stopAtMeleeDistance && axisX + axisY == 1)
 		{
 			// NPC is in melee distance of target, so no movement is done
 			return original;
 		}
 		
-		LocalPoint lp = LocalPoint.fromWorld(client, original.getX(), original.getY());
-		if (lp == null || lp.getSceneX() + dx < 0 || lp.getSceneX() + dy >= Constants.SCENE_SIZE
-				|| lp.getSceneY() + dx < 0 || lp.getSceneY() + dy >= Constants.SCENE_SIZE)
+		LocalPoint lp = LocalPoint.fromWorld(client, x1, y1);
+		if (lp == null)
+		{
+			return null;
+		}
+		int lpSceneX = lp.getSceneX();
+		int lpSceneY = lp.getSceneY();
+		if (lpSceneX + dx < 0 || lpSceneX + dy >= Constants.SCENE_SIZE
+				|| lpSceneY + dx < 0 || lpSceneY + dy >= Constants.SCENE_SIZE)
 		{
 			// NPC is travelling out of the scene, so collision data isn't available
 			return null;
 		}
 		
+		int w1 = original.getWidth();
+		int h1 = original.getHeight();
+		
 		int dxSig = Integer.signum(dx);
 		int dySig = Integer.signum(dy);
-		if (stopAtMeleeDistance && axisDistances.getX() == 1 && axisDistances.getY() == 1)
+		if (stopAtMeleeDistance && axisX == 1 && axisY == 1)
 		{
 			// When it needs to stop at melee distance, it will only attempt
-			// to travel along the x axis when it is standing diagonally
+			// to travel along the x-axis when it is standing diagonally
 			// from the target
 			if (original.canTravelInDirection(client, dxSig, 0, extraCondition))
 			{
-				return new WorldArea(original.getX() + dxSig, original.getY(), original.getWidth(), original.getHeight(), original.getPlane());
+				return new WorldArea(x1 + dxSig, y1, w1, h1, z1);
 			}
 		}
 		else
 		{
 			if (original.canTravelInDirection(client, dxSig, dySig, extraCondition))
 			{
-				return new WorldArea(original.getX() + dxSig, original.getY() + dySig, original.getWidth(), original.getHeight(), original.getPlane());
+				return new WorldArea(x1 + dxSig, y1 + dySig, w1, h1, z1);
 			}
 			else if (dx != 0 && original.canTravelInDirection(client, dxSig, 0, extraCondition))
 			{
-				return new WorldArea(original.getX() + dxSig, original.getY(), original.getWidth(), original.getHeight(), original.getPlane());
+				return new WorldArea(x1 + dxSig, y1, w1, h1, z1);
 			}
 			else if (dy != 0 && Math.max(Math.abs(dx), Math.abs(dy)) > 1 && original.canTravelInDirection(client, 0, dy, extraCondition))
 			{
-				// Note that NPCs don't attempts to travel along the y-axis
+				// Note that NPCs don't attempt to travel along the y-axis
 				// if the target is <= 1 tile distance away
-				return new WorldArea(original.getX(), original.getY() + dySig, original.getWidth(), original.getHeight(), original.getPlane());
+				return new WorldArea(x1, y1 + dySig, w1, h1, z1);
 			}
 		}
 		

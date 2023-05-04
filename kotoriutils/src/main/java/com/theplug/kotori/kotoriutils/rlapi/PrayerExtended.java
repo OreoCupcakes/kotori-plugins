@@ -277,10 +277,7 @@ public enum PrayerExtended {
     }
     
     public Prayer getPrayer() {
-        String prayerName = widgetInfoPlus.name();
-        //Modify WidgetInfo name to remove the PRAYER_ part from the start
-        prayerName = prayerName.substring(7,prayerName.length());
-        return Prayer.valueOf(prayerName);
+        return Prayer.valueOf(this.name());
     }
     
     public static int getPrayerWidgetId(Prayer prayer)

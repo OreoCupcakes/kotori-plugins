@@ -6,6 +6,7 @@ import com.theplug.kotori.kotoritest.kotoriutils.KotoriUtilsConfig;
 import com.theplug.kotori.kotoritest.kotoriutils.rlapi.WidgetInfoPlus;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
+import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.*;
 import net.runelite.client.config.ConfigManager;
@@ -21,6 +22,7 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 @PluginDependency(KotoriUtils.class)
@@ -40,11 +42,6 @@ public class KotoriTestPlugin extends Plugin
 	private KeyManager keyManager;
 	@Inject
 	private KotoriTestConfig config;
-	private boolean valid;
-	
-	private boolean hotkeyOn;
-	private boolean fakeClick;
-	private int activationNum = 0;
 	
 
 	@Provides
@@ -73,33 +70,16 @@ public class KotoriTestPlugin extends Plugin
 	@Subscribe
 	private void onGameStateChanged(GameStateChanged event)
 	{
-		GameState gameState = event.getGameState();
-		
-		switch (gameState)
-		{
-			case LOGGED_IN:
-				if (!valid)
-				{
-					init();
-				}
-				break;
-			case LOGIN_SCREEN:
-			case HOPPING:
-			case CONNECTION_LOST:
-				if (valid)
-				{
-					shutDown();
-				}
-				break;
-			default:
-				break;
-		}
+		final GameState gameState = event.getGameState();
 	}
 
 	@Subscribe
 	private void onGameTick(GameTick gameTick)
 	{
-	
+		if (jad != null)
+		{
+			System.out.println("GameTick - Jad Animation ID: " + jad.getAnimation());
+		}
 	}
 	
 	@Subscribe
@@ -131,4 +111,38 @@ public class KotoriTestPlugin extends Plugin
 	{
 	
 	}
+	
+	@Subscribe
+	private void onNpcSpawned(NpcSpawned event)
+	{
+		NPC npc = event.getNpc();
+		
+		if (jadIds.contains(npc.getId()))
+		{
+			jad = npc;
+		}
+	}
+	
+	private static final Set<Integer> cerberusIds = Set.of(NpcID.CERBERUS, NpcID.CERBERUS_5863, NpcID.CERBERUS_5866);
+	
+	@Subscribe
+	private void onAnimationChanged(AnimationChanged event)
+	{
+		Actor actor = event.getActor();
+		
+		if (!(actor instanceof NPC))
+		{
+			return;
+		}
+		
+		NPC npc = (NPC) actor;
+		if (jadIds.contains(npc.getId()))
+		{
+			System.out.println("AnimationChanged Actor Animation ID: " + actor.getAnimation());
+			System.out.println("AnimationChanged NPC Animation ID: " + npc.getAnimation());
+		}
+	}
+	
+	private final Set<Integer> jadIds = Set.of(NpcID.JALTOKJAD, NpcID.JALTOKJAD_7704, NpcID.JALTOKJAD_10623, NpcID.TZTOKJAD, NpcID.TZTOKJAD_6506);
+	NPC jad;
 }
