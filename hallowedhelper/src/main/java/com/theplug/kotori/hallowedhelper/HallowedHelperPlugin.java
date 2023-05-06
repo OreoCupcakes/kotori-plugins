@@ -311,7 +311,11 @@ public class HallowedHelperPlugin extends Plugin {
 
     private static final Set<Integer> CHEST_IDS = Set.of(
             39544,
-            39545
+            39545,
+            39536,
+            39537,
+            39538,
+            39539
     );
 
 

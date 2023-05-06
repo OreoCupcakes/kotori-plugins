@@ -831,7 +831,13 @@ class HallowedHelperOverlay extends Overlay
             8691
     );
 
-    private int chest_closed = 38830;
+    private static final Set<Integer> CHEST_CLOSED_IDS = Set.of(
+            38830,
+            38832,
+            38834,
+            38836,
+            38838
+    );
     public void render_chest(Graphics2D graphics)
     {
         for(GameObject chest : plugin.getChests())
@@ -855,8 +861,7 @@ class HallowedHelperOverlay extends Overlay
                     definition = definition.getImpostor();
                 }
                 int varBit = definition.getId();
-                if (varBit == chest_closed) {
-
+                if (CHEST_CLOSED_IDS.contains(varBit)) {
                     //OverlayUtil.renderTileOverlay(graphics, chest, "CHEST[1]", Color.GREEN);
                     if(plugin.getGraphic() == 267)
                     {
