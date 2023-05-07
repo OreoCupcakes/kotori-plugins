@@ -278,8 +278,8 @@ public class HouseOverlayPlugin extends Plugin
     private void checkWeaponSlot()
     {
         ItemContainer itemContainer = client.getItemContainer(InventoryID.EQUIPMENT);
-        
-        int currentweapon = itemContainer.getItem(EquipmentInventorySlot.WEAPON.getSlotIdx()).getId();
-        fairy_ring_has_staff = currentweapon == 772 || currentweapon == 9084;
+        Item weaponItem = itemContainer == null ? null : itemContainer.getItem(EquipmentInventorySlot.WEAPON.getSlotIdx());
+        int currentWeapon = weaponItem == null ? -1 : weaponItem.getId();
+        fairy_ring_has_staff = currentWeapon == 772 || currentWeapon == 9084;
     }
 }
