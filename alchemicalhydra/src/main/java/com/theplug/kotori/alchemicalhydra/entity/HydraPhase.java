@@ -32,8 +32,7 @@ import com.theplug.kotori.alchemicalhydra.overlay.AttackOverlay;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import com.theplug.kotori.alchemicalhydra.utils.GraphicIDPlus;
-import com.theplug.kotori.alchemicalhydra.utils.SpriteIDPlus;
+import com.theplug.kotori.kotoriutils.rlapi.GraphicIDPlus;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.game.SpriteManager;
 import net.runelite.client.util.ImageUtil;
@@ -43,13 +42,13 @@ import net.runelite.client.util.ImageUtil;
 public enum HydraPhase
 {
 	POISON(3, AlchemicalHydraPlugin.HYDRA_1_1, AlchemicalHydraPlugin.HYDRA_1_2, GraphicIDPlus.HYDRA_POISON, 0,
-		825, SpriteIDPlus.BIG_ASS_GUTHIX_SPELL, new WorldPoint(1371, 10263, 0), Color.GREEN, Color.RED),
+		825, AlchemicalHydraPlugin.BIG_ASS_GUTHIX_SPELL, new WorldPoint(1371, 10263, 0), Color.GREEN, Color.RED),
 	LIGHTNING(3, AlchemicalHydraPlugin.HYDRA_2_1, AlchemicalHydraPlugin.HYDRA_2_2, 0, AlchemicalHydraPlugin.HYDRA_LIGHTNING,
-		550, SpriteIDPlus.BIG_SPEC_TRANSFER, new WorldPoint(1371, 10272, 0), Color.CYAN, Color.GREEN),
+		550, AlchemicalHydraPlugin.BIG_SPEC_TRANSFER, new WorldPoint(1371, 10272, 0), Color.CYAN, Color.GREEN),
 	FLAME(3, AlchemicalHydraPlugin.HYDRA_3_1, AlchemicalHydraPlugin.HYDRA_3_2, 0, AlchemicalHydraPlugin.HYDRA_FIRE,
-		275, SpriteIDPlus.BIG_SUPERHEAT, new WorldPoint(1362, 10272, 0), Color.RED, Color.CYAN),
+		275, AlchemicalHydraPlugin.BIG_SUPERHEAT, new WorldPoint(1362, 10272, 0), Color.RED, Color.CYAN),
 	ENRAGED(1, AlchemicalHydraPlugin.HYDRA_4_1, AlchemicalHydraPlugin.HYDRA_4_2, GraphicIDPlus.HYDRA_POISON, 0,
-		0, SpriteIDPlus.BIG_ASS_GUTHIX_SPELL, null, null, null);
+		0, AlchemicalHydraPlugin.BIG_ASS_GUTHIX_SPELL, null, null, null);
 
 	private final int attacksPerSwitch;
 	private final int deathAnimation1;

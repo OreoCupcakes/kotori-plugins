@@ -81,6 +81,11 @@ public class AlchemicalHydraPlugin extends Plugin
 	private static final String MESSAGE_STUN = "The Alchemical Hydra temporarily stuns you.";
 
 	private static final int[] HYDRA_REGIONS = {5279, 5280, 5535, 5536};
+	public static final int BIG_ASS_GUTHIX_SPELL = 1774;
+	public static final int BIG_ASS_GREY_ENTANGLE = 1788;
+	public static final int BIG_ASS_WHITE_ENTANGLE = 1789;
+	public static final int BIG_SUPERHEAT = 1800;
+	public static final int BIG_SPEC_TRANSFER = 1959;
 
 	@Inject
 	private Client client;
@@ -174,6 +179,7 @@ public class AlchemicalHydraPlugin extends Plugin
 		fountainTicks = -1;
 		vents.clear();
 		lastFountainAnim = -1;
+		lastNPCAnim = -1;
 	}
 
 	@Subscribe

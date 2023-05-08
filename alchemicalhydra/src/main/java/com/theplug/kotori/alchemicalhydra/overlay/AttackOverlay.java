@@ -34,8 +34,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import com.theplug.kotori.alchemicalhydra.utils.PrayerExtended;
-import com.theplug.kotori.alchemicalhydra.utils.SpriteIDPlus;
 import com.theplug.kotori.alchemicalhydra.AlchemicalHydraConfig;
 import com.theplug.kotori.alchemicalhydra.AlchemicalHydraPlugin;
 import com.theplug.kotori.alchemicalhydra.entity.Hydra;
@@ -52,7 +50,6 @@ import net.runelite.client.ui.overlay.components.ComponentOrientation;
 import net.runelite.client.ui.overlay.components.InfoBoxComponent;
 import net.runelite.client.ui.overlay.components.LayoutableRenderableEntity;
 import net.runelite.client.ui.overlay.components.PanelComponent;
-import com.theplug.kotori.alchemicalhydra.utils.ImageUtil;
 
 @Singleton
 public class AttackOverlay extends Overlay
@@ -203,7 +200,7 @@ public class AttackOverlay extends Overlay
 
 	private void updatePrayerComponent()
 	{
-		final Prayer nextPrayer = hydra.getNextAttack().getPrayerExtended().getPrayer();
+		final Prayer nextPrayer = hydra.getNextAttack().getPrayer();
 		final int nextSwitch = hydra.getNextSwitch();
 
 		if (nextSwitch == 1)
@@ -223,9 +220,9 @@ public class AttackOverlay extends Overlay
 
 	private void renderPrayerWidget(final Graphics2D graphics2D)
 	{
-		final PrayerExtended prayer = hydra.getNextAttack().getPrayerExtended();
+		final Prayer prayer = hydra.getNextAttack().getPrayer();
 
-		OverlayUtil.renderPrayerOverlay(graphics2D, client, prayer, prayer == PrayerExtended.PROTECT_FROM_MAGIC ? Color.CYAN : Color.GREEN);
+		OverlayUtil.renderPrayerOverlay(graphics2D, client, prayer, prayer == Prayer.PROTECT_FROM_MAGIC ? Color.CYAN : Color.GREEN);
 	}
 
 	private boolean isSpecialAttack()
@@ -248,8 +245,8 @@ public class AttackOverlay extends Overlay
 
 	private BufferedImage createStunImage()
 	{
-		final SpritePixels root = getSprite(SpriteIDPlus.BIG_ASS_GREY_ENTANGLE);
-		final SpritePixels mark = getSprite(SpriteIDPlus.TRADE_EXCLAMATION_MARK_ITEM_REMOVAL_WARNING);
+		final SpritePixels root = getSprite(AlchemicalHydraPlugin.BIG_ASS_GREY_ENTANGLE);
+		final SpritePixels mark = getSprite(SpriteID.TRADE_EXCLAMATION_MARK_ITEM_REMOVAL_WARNING);
 
 		if (mark == null || root == null)
 		{

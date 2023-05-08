@@ -36,7 +36,7 @@ import com.theplug.kotori.alchemicalhydra.AlchemicalHydraConfig;
 import com.theplug.kotori.alchemicalhydra.AlchemicalHydraPlugin;
 import com.theplug.kotori.alchemicalhydra.entity.Hydra;
 import net.runelite.api.Client;
-import com.theplug.kotori.alchemicalhydra.utils.PrayerExtended;
+import net.runelite.api.Prayer;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
@@ -80,9 +80,9 @@ public class PrayerOverlay extends Overlay
 
 	private void renderPrayerWidget(final Graphics2D graphics2D)
 	{
-		final PrayerExtended prayerExtended = hydra.getNextAttack().getPrayerExtended();
+		final Prayer prayer = hydra.getNextAttack().getPrayer();
 
-		OverlayUtil.renderPrayerOverlay(graphics2D, client, prayerExtended, prayerExtended == PrayerExtended.AUGURY.PROTECT_FROM_MAGIC ? Color.CYAN : Color.GREEN);
+		OverlayUtil.renderPrayerOverlay(graphics2D, client, prayer, prayer == Prayer.PROTECT_FROM_MAGIC ? Color.CYAN : Color.GREEN);
 	}
 
 }

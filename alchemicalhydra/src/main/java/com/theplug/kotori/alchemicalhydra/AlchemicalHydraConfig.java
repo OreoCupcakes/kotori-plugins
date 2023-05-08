@@ -28,13 +28,7 @@ import java.awt.Color;
 import java.awt.Font;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import net.runelite.client.config.Alpha;
-import net.runelite.client.config.Config;
-import net.runelite.client.config.ConfigGroup;
-import net.runelite.client.config.ConfigItem;
-import net.runelite.client.config.ConfigSection;
-import net.runelite.client.config.Range;
-import com.theplug.kotori.alchemicalhydra.utils.Units;
+import net.runelite.client.config.*;
 
 @ConfigGroup("alchemicalhydra")
 public interface AlchemicalHydraConfig extends Config
@@ -42,7 +36,7 @@ public interface AlchemicalHydraConfig extends Config
 	// Sections
 
 	@ConfigSection(
-			name = "<html>Alchemical Hydra<br>Version 1.1.5</html>",
+			name = "<html>Alchemical Hydra<br>Version 1.2.0</html>",
 			description = "",
 			position = -1,
 			closedByDefault = true
@@ -143,7 +137,7 @@ public interface AlchemicalHydraConfig extends Config
 		keyName = "fountainTicksFontSize",
 		section = general
 	)
-	@Units(Units.POINTS)
+	@Units(Units.PIXELS)
 	default int fountainTicksFontSize()
 	{
 		return 16;
@@ -173,7 +167,7 @@ public interface AlchemicalHydraConfig extends Config
 		keyName = "fountainTicksFontZOffset",
 		section = general
 	)
-	@Units(Units.POINTS)
+	@Units(Units.PIXELS)
 	default int fountainTicksFontZOffset()
 	{
 		return 0;
@@ -239,7 +233,7 @@ public interface AlchemicalHydraConfig extends Config
 		keyName = "fontSize",
 		section = general
 	)
-	@Units(Units.POINTS)
+	@Units(Units.PIXELS)
 	default int fontSize()
 	{
 		return 16;
@@ -269,7 +263,7 @@ public interface AlchemicalHydraConfig extends Config
 		keyName = "fontZOffset",
 		section = general
 	)
-	@Units(Units.POINTS)
+	@Units(Units.PIXELS)
 	default int fontZOffset()
 	{
 		return 0;
@@ -300,7 +294,7 @@ public interface AlchemicalHydraConfig extends Config
 		keyName = "lightningStroke",
 		section = specialAttacks
 	)
-	@Units(Units.POINTS)
+	@Units(Units.PIXELS)
 	default int lightningStroke()
 	{
 		return 1;
@@ -355,7 +349,7 @@ public interface AlchemicalHydraConfig extends Config
 		keyName = "poisonStroke",
 		section = specialAttacks
 	)
-	@Units(Units.POINTS)
+	@Units(Units.PIXELS)
 	default int poisonStroke()
 	{
 		return 1;

@@ -34,9 +34,9 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import net.runelite.api.NPC;
-import com.theplug.kotori.alchemicalhydra.utils.PrayerExtended;
-import com.theplug.kotori.alchemicalhydra.utils.GraphicIDPlus;
-import com.theplug.kotori.alchemicalhydra.utils.SpriteIDPlus;
+import net.runelite.api.Prayer;
+import com.theplug.kotori.kotoriutils.rlapi.GraphicIDPlus;
+import net.runelite.api.SpriteID;
 import net.runelite.client.game.SpriteManager;
 import net.runelite.client.util.ImageUtil;
 
@@ -178,11 +178,11 @@ public class Hydra
 	@RequiredArgsConstructor
 	public enum AttackStyle
 	{
-		MAGIC(GraphicIDPlus.HYDRA_MAGIC, PrayerExtended.PROTECT_FROM_MAGIC, SpriteIDPlus.PRAYER_PROTECT_FROM_MAGIC),
-		RANGED(GraphicIDPlus.HYDRA_RANGED, PrayerExtended.PROTECT_FROM_MISSILES, SpriteIDPlus.PRAYER_PROTECT_FROM_MISSILES);
+		MAGIC(GraphicIDPlus.HYDRA_MAGIC, Prayer.PROTECT_FROM_MAGIC, SpriteID.PRAYER_PROTECT_FROM_MAGIC),
+		RANGED(GraphicIDPlus.HYDRA_RANGED, Prayer.PROTECT_FROM_MISSILES, SpriteID.PRAYER_PROTECT_FROM_MISSILES);
 
 		private final int projectileID;
-		private final PrayerExtended prayerExtended;
+		private final Prayer prayer;
 		private final int spriteID;
 
 		@Getter(AccessLevel.NONE)
