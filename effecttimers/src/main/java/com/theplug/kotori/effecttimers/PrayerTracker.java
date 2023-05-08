@@ -82,5 +82,11 @@ class PrayerTracker
 	{
 		return lastTick.getOrDefault(p, new HashMap<>()).getOrDefault("SpotAnim", -1337);
 	}
+	
+	public void shutDown()
+	{
+		lastTick.clear();
+		newTick.clear();
+	}
 
 }

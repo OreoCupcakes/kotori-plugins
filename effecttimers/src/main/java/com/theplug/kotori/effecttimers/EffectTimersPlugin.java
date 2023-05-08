@@ -109,6 +109,7 @@ public class EffectTimersPlugin extends Plugin
 		keyManager.unregisterKeyListener(hotkeyListener);
 		overlayManager.remove(overlay);
 		timerManager.shutDown();
+		prayerTracker.shutDown();
 	}
 
 	@Subscribe

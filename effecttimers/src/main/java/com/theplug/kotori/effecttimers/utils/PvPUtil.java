@@ -15,7 +15,6 @@ import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.util.QuantityFormatter;
 import org.apache.commons.lang3.ArrayUtils;
-import org.checkerframework.checker.units.qual.C;
 
 public class PvPUtil
 {
