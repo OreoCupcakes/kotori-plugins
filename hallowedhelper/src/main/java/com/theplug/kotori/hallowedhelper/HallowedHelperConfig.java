@@ -30,7 +30,7 @@ public interface HallowedHelperConfig extends Config {
     }
 
     @ConfigSection(
-            name = "<html>Hallowed Helper by ImNo<br>Version 1.1.6</html>",
+            name = "<html>Hallowed Helper by ImNo<br>Version 1.2.0</html>",
             description = "",
             position = 0
     )
