@@ -39,12 +39,9 @@ import java.awt.Shape;
 import java.awt.Stroke;
 import javax.inject.Inject;
 
-import com.theplug.kotori.grotesqueguardians.utils.PrayerExtended;
-import net.runelite.api.Client;
-import net.runelite.api.NPC;
-import net.runelite.api.Point;
-import net.runelite.api.VarClientInt;
-import com.theplug.kotori.grotesqueguardians.utils.InterfaceTab;
+import com.theplug.kotori.kotoriutils.rlapi.PrayerExtended;
+import net.runelite.api.*;
+import com.theplug.kotori.kotoriutils.rlapi.InterfaceTab;
 import net.runelite.api.widgets.Widget;
 import com.theplug.kotori.grotesqueguardians.GrotesqueGuardiansConfig;
 import com.theplug.kotori.grotesqueguardians.GrotesqueGuardiansPlugin;
@@ -104,7 +101,7 @@ public class PrayerOverlay extends Overlay
 			return;
 		}
 
-		final PrayerExtended prayer = dusk.isLastPhase() ? dusk.getLastAttackPrayer() : PrayerExtended.PROTECT_FROM_MELEE;
+		final Prayer prayer = dusk.isLastPhase() ? dusk.getLastAttackPrayer() : Prayer.PROTECT_FROM_MELEE;
 
 		if (config.prayerTickCounter())
 		{
@@ -119,7 +116,7 @@ public class PrayerOverlay extends Overlay
 		}
 	}
 
-	private void renderPrayerWidget(final Graphics2D graphics2D, final PrayerExtended prayer, final Color color, final int ticksUntilNextAttack)
+	private void renderPrayerWidget(final Graphics2D graphics2D, final Prayer prayer, final Color color, final int ticksUntilNextAttack)
 	{
 		final Rectangle rectangle = renderPrayerOverlay(graphics2D, client, prayer, color);
 
@@ -145,11 +142,11 @@ public class PrayerOverlay extends Overlay
 		renderTextLocation(graphics2D, text, fontSize, fontStyle, fontColor, canvasPoint, true, 0);
 	}
 
-	private void renderDescendingBoxes(final Graphics2D graphics2D, final PrayerExtended prayer, final int tick)
+	private void renderDescendingBoxes(final Graphics2D graphics2D, final Prayer prayer, final int tick)
 	{
 		final Color color = tick == 1 ? Color.RED : Color.ORANGE;
 
-		final Widget prayerWidget = client.getWidget(prayer.getPrayerWidgetInfo().getGroupId());
+		final Widget prayerWidget = client.getWidget(PrayerExtended.getPrayerWidgetId(prayer));
 
 		if (prayerWidget == null || prayerWidget.isHidden())
 		{
@@ -169,15 +166,15 @@ public class PrayerOverlay extends Overlay
 		renderFilledPolygon(graphics2D, boxRectangle, color);
 	}
 
-	private static Color getColorFromPrayer(final PrayerExtended prayer)
+	private static Color getColorFromPrayer(final Prayer prayer)
 	{
 		final Color color;
 
-		if (prayer == PrayerExtended.PROTECT_FROM_MELEE)
+		if (prayer == Prayer.PROTECT_FROM_MELEE)
 		{
 			color = Color.RED;
 		}
-		else if (prayer == PrayerExtended.PROTECT_FROM_MISSILES)
+		else if (prayer == Prayer.PROTECT_FROM_MISSILES)
 		{
 			color = Color.GREEN;
 		}
@@ -190,11 +187,11 @@ public class PrayerOverlay extends Overlay
 	}
 
 
-	public static Rectangle renderPrayerOverlay(Graphics2D graphics, Client client, PrayerExtended prayer, Color color)
+	public static Rectangle renderPrayerOverlay(Graphics2D graphics, Client client, Prayer prayer, Color color)
 	{
-		Widget widget = client.getWidget(prayer.getPrayerWidgetInfo().getGroupId());
+		Widget widget = client.getWidget(PrayerExtended.getPrayerWidgetId(prayer));
 
-		if (widget == null || client.getVar(VarClientInt.INVENTORY_TAB) != InterfaceTab.PRAYER.getId())
+		if (widget == null || client.getVarcIntValue(VarClientInt.INVENTORY_TAB) != InterfaceTab.PRAYER.getId())
 		{
 			return null;
 		}

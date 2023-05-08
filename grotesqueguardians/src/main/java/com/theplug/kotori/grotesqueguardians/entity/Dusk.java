@@ -31,12 +31,12 @@ import com.google.common.collect.ImmutableMap;
 import java.util.Map;
 import java.util.Set;
 
-import com.theplug.kotori.grotesqueguardians.utils.PrayerExtended;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import net.runelite.api.NPC;
 import net.runelite.api.NpcID;
+import net.runelite.api.Prayer;
 
 public class Dusk extends Gargoyle
 {
@@ -54,7 +54,7 @@ public class Dusk extends Gargoyle
 	private static final int ATTACK_TICK_SPEED = 6;
 
 	@Getter
-	private PrayerExtended lastAttackPrayer;
+	private Prayer lastAttackPrayer;
 
 	public Dusk(@NonNull final NPC npc)
 	{
@@ -65,11 +65,11 @@ public class Dusk extends Gargoyle
 	{
 		if (animationId == PHASE_4_ANIMATION_MELEE)
 		{
-			lastAttackPrayer = PrayerExtended.PROTECT_FROM_MELEE;
+			lastAttackPrayer = Prayer.PROTECT_FROM_MELEE;
 		}
 		else if (animationId == PHASE_4_ANIMATION_RANGE)
 		{
-			lastAttackPrayer = PrayerExtended.PROTECT_FROM_MISSILES;
+			lastAttackPrayer = Prayer.PROTECT_FROM_MISSILES;
 		}
 	}
 

@@ -31,6 +31,8 @@ package com.theplug.kotori.grotesqueguardians;
 import com.google.inject.Provides;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
+
+import com.theplug.kotori.kotoriutils.KotoriUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -50,6 +52,7 @@ import net.runelite.api.events.NpcSpawned;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
+import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
 import com.theplug.kotori.grotesqueguardians.entity.Dawn;
 import com.theplug.kotori.grotesqueguardians.entity.Dusk;
@@ -58,6 +61,7 @@ import com.theplug.kotori.grotesqueguardians.overlay.SceneOverlay;
 import net.runelite.client.ui.overlay.OverlayManager;
 
 @Slf4j
+@PluginDependency(KotoriUtils.class)
 @PluginDescriptor(
 	name = "Grotesque Guardians",
 	enabledByDefault = false,
