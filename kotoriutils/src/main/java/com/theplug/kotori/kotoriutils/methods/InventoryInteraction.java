@@ -1,9 +1,9 @@
-package com.theplug.kotori.kotoriutils.interactionapi;
+package com.theplug.kotori.kotoriutils.methods;
 
 import com.theplug.kotori.kotoriutils.KotoriUtils;
-import com.theplug.kotori.kotoriutils.rlapi.WidgetInfoPlus;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
+import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.RuneLite;
 
 import java.util.concurrent.ExecutorService;
@@ -83,7 +83,7 @@ public class InventoryInteraction
 				{
 					if (items[slot].getId() == itemId)
 					{
-						kotoriUtils.getInvokesLibrary().invoke(slot, WidgetInfoPlus.INVENTORY.getId(), MenuAction.CC_OP.getId(), 3, itemId, "","", 0, 0);
+						kotoriUtils.getInvokesLibrary().invoke(slot, WidgetInfo.INVENTORY.getId(), MenuAction.CC_OP.getId(), 3, itemId, "","", 0, 0);
 						numItemEquippedAtOnce++;
 						if (numItemEquippedAtOnce > 2)
 						{

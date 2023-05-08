@@ -276,8 +276,8 @@ public enum PrayerExtended {
         return widgetInfoPlus;
     }
     
-    public Prayer getPrayer() {
-        return Prayer.valueOf(this.name());
+    public static Prayer getPrayer(PrayerExtended prayer) {
+        return Prayer.valueOf(prayer.name());
     }
     
     public static int getPrayerWidgetId(Prayer prayer)

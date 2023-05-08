@@ -1,5 +1,7 @@
-package com.theplug.kotori.kotoriutils.rlapi;
+package com.theplug.kotori.kotoriutils.methods;
 
+import com.theplug.kotori.kotoriutils.rlapi.WidgetIDPlus;
+import com.theplug.kotori.kotoriutils.rlapi.WidgetInfoPlus;
 import net.runelite.api.Client;
 
 public class VarUtilities
