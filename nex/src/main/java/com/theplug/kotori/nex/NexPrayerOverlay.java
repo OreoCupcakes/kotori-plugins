@@ -10,13 +10,12 @@ import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.Prayer;
 import net.runelite.api.widgets.Widget;
-import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.OverlayPriority;
 import net.runelite.client.ui.overlay.OverlayUtil;
-import com.theplug.kotori.nex.utils.PrayerExtended;
+import com.theplug.kotori.kotoriutils.rlapi.PrayerExtended;
 
 @Singleton
 @Slf4j
@@ -58,9 +57,9 @@ class NexPrayerOverlay extends Overlay
 			return null;
 		}
 
-		final Widget meleePrayerWidget = client.getWidget(PrayerExtended.PROTECT_FROM_MELEE.getPrayerWidgetInfo().getId());
-		final Widget rangePrayerWidget = client.getWidget(PrayerExtended.PROTECT_FROM_MISSILES.getPrayerWidgetInfo().getId());
-		final Widget magicPrayerWidget = client.getWidget(PrayerExtended.PROTECT_FROM_MAGIC.getPrayerWidgetInfo().getId());
+		final Widget meleePrayerWidget = client.getWidget(PrayerExtended.getPrayerWidgetId(Prayer.PROTECT_FROM_MELEE));
+		final Widget rangePrayerWidget = client.getWidget(PrayerExtended.getPrayerWidgetId(Prayer.PROTECT_FROM_MISSILES));
+		final Widget magicPrayerWidget = client.getWidget(PrayerExtended.getPrayerWidgetId(Prayer.PROTECT_FROM_MAGIC));
 
 
 		var prayerWidgetHidden = meleePrayerWidget == null

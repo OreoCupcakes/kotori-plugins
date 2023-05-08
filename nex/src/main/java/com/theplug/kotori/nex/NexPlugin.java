@@ -13,6 +13,8 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import com.theplug.kotori.kotoriutils.KotoriUtils;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -39,6 +41,7 @@ import net.runelite.client.callback.Hooks;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
+import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
 import com.theplug.kotori.nex.maths.MathUtil;
 import com.theplug.kotori.nex.movement.MovementUtil;
@@ -51,7 +54,7 @@ import net.runelite.client.ui.overlay.OverlayManager;
 	description = "Show what prayer to use and which tiles to avoid",
 	tags = {"bosses", "combat", "nex", "gwd", "pvm","ported","kotori"}
 )
-
+@PluginDependency(KotoriUtils.class)
 @Slf4j
 @Singleton
 public class NexPlugin extends Plugin
@@ -273,6 +276,15 @@ public class NexPlugin extends Plugin
 		iceTrapTicks.reset();
 		teamSize = 0;
 		coughingPlayersChanged = false;
+		
+		nexRangeTiles.clear();
+		dashLaneTiles.clear();
+		wingTiles.clear();
+		shadows.clear();
+		bloodSacrificeSafeTiles.clear();
+		currentSpecial = null;
+		nexDeathTile = null;
+		centerTile = null;
 	}
 	
 	@Subscribe
