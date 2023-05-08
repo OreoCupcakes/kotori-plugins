@@ -31,6 +31,7 @@ import com.theplug.kotori.dagannothkings.entity.DagannothKing;
 import com.theplug.kotori.dagannothkings.overlay.InfoboxOverlay;
 import com.theplug.kotori.dagannothkings.overlay.PrayerOverlay;
 import com.theplug.kotori.dagannothkings.overlay.SceneOverlay;
+import com.theplug.kotori.kotoriutils.KotoriUtils;
 import lombok.Getter;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
@@ -43,6 +44,7 @@ import net.runelite.api.events.NpcSpawned;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
+import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
 
@@ -53,6 +55,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Singleton
+@PluginDependency(KotoriUtils.class)
 @PluginDescriptor(
 	name = "Dagannoth Kings",
 	enabledByDefault = false,

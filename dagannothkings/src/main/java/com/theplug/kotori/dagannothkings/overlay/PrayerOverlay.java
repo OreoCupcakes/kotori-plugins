@@ -31,10 +31,8 @@ package com.theplug.kotori.dagannothkings.overlay;
 import com.theplug.kotori.dagannothkings.DagannothKingsConfig;
 import com.theplug.kotori.dagannothkings.DagannothKingsPlugin;
 import com.theplug.kotori.dagannothkings.entity.DagannothKing;
-import com.theplug.kotori.dagannothkings.utils.PrayerExtended;
-import net.runelite.api.Actor;
-import net.runelite.api.Client;
-import net.runelite.api.NPC;
+import com.theplug.kotori.kotoriutils.rlapi.PrayerExtended;
+import net.runelite.api.*;
 import net.runelite.api.Point;
 import net.runelite.api.widgets.Widget;
 import net.runelite.client.ui.overlay.Overlay;
@@ -95,7 +93,7 @@ public class PrayerOverlay extends Overlay
 	{
 		final Actor player = client.getLocalPlayer();
 
-		final Map<PrayerExtended, Integer> tickMap = new HashMap<>();
+		final Map<Prayer, Integer> tickMap = new HashMap<>();
 
 		for (final DagannothKing dagannothKing : dagannothKings)
 		{
@@ -144,18 +142,18 @@ public class PrayerOverlay extends Overlay
 
 		if (!tickMap.isEmpty())
 		{
-			for (final Map.Entry<PrayerExtended, Integer> entry : tickMap.entrySet())
+			for (final Map.Entry<Prayer, Integer> entry : tickMap.entrySet())
 			{
 				renderDescendingBoxes(graphics2D, entry.getKey(), entry.getValue());
 			}
 		}
 	}
 
-	private void renderDescendingBoxes(final Graphics2D graphics2D, final PrayerExtended prayer, final int tick)
+	private void renderDescendingBoxes(final Graphics2D graphics2D, final Prayer prayer, final int tick)
 	{
 		final Color color = tick == 1 ? Color.RED : Color.ORANGE;
 
-		final Widget prayerWidget = client.getWidget(prayer.getPrayerWidgetInfo().getId());
+		final Widget prayerWidget = client.getWidget(PrayerExtended.getPrayerWidgetId(prayer));
 
 		if (prayerWidget == null || prayerWidget.isHidden())
 		{

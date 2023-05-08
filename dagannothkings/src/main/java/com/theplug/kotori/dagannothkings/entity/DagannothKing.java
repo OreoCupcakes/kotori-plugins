@@ -30,13 +30,13 @@
 package com.theplug.kotori.dagannothkings.entity;
 
 import com.theplug.kotori.dagannothkings.DagannothKingsPlugin;
-import com.theplug.kotori.dagannothkings.utils.PrayerExtended;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.runelite.api.Actor;
 import net.runelite.api.NPC;
 import net.runelite.api.NpcID;
+import net.runelite.api.Prayer;
 
 import java.awt.*;
 
@@ -135,11 +135,11 @@ public class DagannothKing implements Comparable<DagannothKing>
 	@RequiredArgsConstructor
 	public enum AttackStyle
 	{
-		MAGE(PrayerExtended.PROTECT_FROM_MAGIC, Color.CYAN),
-		RANGE(PrayerExtended.PROTECT_FROM_MISSILES, Color.GREEN),
-		MELEE(PrayerExtended.PROTECT_FROM_MELEE, Color.RED);
+		MAGE(Prayer.PROTECT_FROM_MAGIC, Color.CYAN),
+		RANGE(Prayer.PROTECT_FROM_MISSILES, Color.GREEN),
+		MELEE(Prayer.PROTECT_FROM_MELEE, Color.RED);
 
-		private final PrayerExtended prayer;
+		private final Prayer prayer;
 		private final Color color;
 	}
 }

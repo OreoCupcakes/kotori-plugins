@@ -30,8 +30,8 @@ package com.theplug.kotori.dagannothkings.overlay;
 import com.theplug.kotori.dagannothkings.DagannothKingsConfig;
 import com.theplug.kotori.dagannothkings.DagannothKingsPlugin;
 import com.theplug.kotori.dagannothkings.entity.DagannothKing;
-import com.theplug.kotori.dagannothkings.utils.PrayerExtended;
 import net.runelite.api.Client;
+import net.runelite.api.Prayer;
 import net.runelite.api.SpriteID;
 import net.runelite.client.game.SpriteManager;
 import net.runelite.client.ui.overlay.Overlay;
@@ -108,16 +108,16 @@ public class InfoboxOverlay extends Overlay
 		return PANEL_COMPONENT.render(graphics2D);
 	}
 
-	private void updatePrayerComponent(final PrayerExtended prayer)
+	private void updatePrayerComponent(final Prayer prayer)
 	{
-		PRAYER_COMPONENT.setBackgroundColor(client.isPrayerActive(prayer.getPrayer())
+		PRAYER_COMPONENT.setBackgroundColor(client.isPrayerActive(prayer)
 			? ComponentConstants.STANDARD_BACKGROUND_COLOR
 			: NOT_ACTIVATED_BACKGROUND_COLOR);
 
 		PRAYER_COMPONENT.setImage(getPrayerSprite(prayer));
 	}
 
-	private BufferedImage getPrayerSprite(final PrayerExtended prayer)
+	private BufferedImage getPrayerSprite(final Prayer prayer)
 	{
 		switch (prayer)
 		{

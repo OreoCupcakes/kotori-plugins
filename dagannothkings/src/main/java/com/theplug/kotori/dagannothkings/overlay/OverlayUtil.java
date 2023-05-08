@@ -1,10 +1,11 @@
 package com.theplug.kotori.dagannothkings.overlay;
 
 import com.google.common.base.Strings;
-import com.theplug.kotori.dagannothkings.utils.InterfaceTab;
-import com.theplug.kotori.dagannothkings.utils.PrayerExtended;
+import com.theplug.kotori.kotoriutils.rlapi.InterfaceTab;
+import com.theplug.kotori.kotoriutils.rlapi.PrayerExtended;
 import net.runelite.api.Client;
 import net.runelite.api.Point;
+import net.runelite.api.Prayer;
 import net.runelite.api.VarClientInt;
 import net.runelite.api.widgets.Widget;
 
@@ -14,9 +15,9 @@ import static net.runelite.client.ui.overlay.OverlayUtil.renderPolygon;
 
 public class OverlayUtil
 {
-	public static Rectangle renderPrayerOverlay(Graphics2D graphics, Client client, PrayerExtended prayer, Color color)
+	public static Rectangle renderPrayerOverlay(Graphics2D graphics, Client client, Prayer prayer, Color color)
 	{
-		Widget widget = client.getWidget(prayer.getPrayerWidgetInfo().getId());
+		Widget widget = client.getWidget(PrayerExtended.getPrayerWidgetId(prayer));
 
 		if (widget == null || client.getVarcIntValue(VarClientInt.INVENTORY_TAB) != InterfaceTab.PRAYER.getId())
 		{
