@@ -165,20 +165,33 @@ public class FightCavePlugin extends Plugin
 	@Override
 	public void startUp()
 	{
-		if (client.getGameState() == GameState.LOGGED_IN && regionCheck())
+		if (client.getGameState() != GameState.LOGGED_IN || regionCheck())
 		{
-			validRegion = true;
-			overlayManager.add(waveOverlay);
-			overlayManager.add(fightCaveOverlay);
+			return;
 		}
+		
+		init();
 	}
 
 	@Override
 	public void shutDown()
 	{
+		validRegion = false;
 		overlayManager.remove(waveOverlay);
 		overlayManager.remove(fightCaveOverlay);
 		currentWave = -1;
+		mageTicks.clear();
+		rangedTicks.clear();
+		meleeTicks.clear();
+		fightCaveContainer.clear();
+		WAVES.clear();
+	}
+	
+	private void init()
+	{
+		validRegion = true;
+		overlayManager.add(waveOverlay);
+		overlayManager.add(fightCaveOverlay);
 	}
 
 	@Subscribe
@@ -202,24 +215,27 @@ public class FightCavePlugin extends Plugin
 	@Subscribe
 	private void onGameStateChanged(GameStateChanged event)
 	{
-		if (event.getGameState() != GameState.LOGGED_IN)
+		final GameState gameState = event.getGameState();
+		
+		if (gameState != GameState.LOGGED_IN)
 		{
 			return;
 		}
-
+		
 		if (regionCheck())
 		{
-			validRegion = true;
-			overlayManager.add(waveOverlay);
-			overlayManager.add(fightCaveOverlay);
+			if (!validRegion)
+			{
+				init();
+			}
 		}
 		else
 		{
-			validRegion = false;
-			overlayManager.remove(fightCaveOverlay);
-			overlayManager.remove(fightCaveOverlay);
+			if (validRegion)
+			{
+				shutDown();
+			}
 		}
-
 		fightCaveContainer.clear();
 	}
 
