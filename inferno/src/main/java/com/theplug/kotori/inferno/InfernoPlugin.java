@@ -198,18 +198,12 @@ public class InfernoPlugin extends Plugin
 		waveOverlay.setWaveHeaderColor(config.getWaveOverlayHeaderColor());
 		waveOverlay.setWaveTextColor(config.getWaveTextColor());
 
-		if (isInInferno())
+		if (client.getGameState() != GameState.LOGGED_IN || !isInInferno())
 		{
-			overlayManager.add(infernoOverlay);
-
-			if (config.waveDisplay() != InfernoWaveDisplayMode.NONE)
-			{
-				overlayManager.add(waveOverlay);
-			}
-
-			overlayManager.add(jadOverlay);
-			overlayManager.add(prayerOverlay);
+			return;
 		}
+		
+		init();
 	}
 
 	@Override
@@ -220,9 +214,38 @@ public class InfernoPlugin extends Plugin
 		overlayManager.remove(jadOverlay);
 		overlayManager.remove(prayerOverlay);
 
-		infoBoxManager.removeInfoBox(spawnTimerInfoBox);
+		if (spawnTimerInfoBox != null)
+		{
+			infoBoxManager.removeInfoBox(spawnTimerInfoBox);
+		}
+		spawnTimerInfoBox = null;
+		
+		infernoNpcs.clear();
+		upcomingAttacks.clear();
+		obstacles.clear();
+		safeSpotMap.clear();
+		safeSpotAreas.clear();
+		blobDeathSpots.clear();
 
 		currentWaveNumber = -1;
+		zuk = null;
+		zukShield = null;
+		centralNibbler = null;
+		zukShieldLastPosition = null;
+		zukShieldBase = null;
+		closestAttack = null;
+	}
+	
+	private void init()
+	{
+		overlayManager.add(infernoOverlay);
+		overlayManager.add(jadOverlay);
+		overlayManager.add(prayerOverlay);
+		
+		if (config.waveDisplay() != InfernoWaveDisplayMode.NONE)
+		{
+			overlayManager.add(waveOverlay);
+		}
 	}
 
 	@Subscribe
@@ -442,39 +465,13 @@ public class InfernoPlugin extends Plugin
 
 		if (!isInInferno())
 		{
-			infernoNpcs.clear();
-
-			currentWaveNumber = -1;
-
-			overlayManager.remove(infernoOverlay);
-			overlayManager.remove(waveOverlay);
-			overlayManager.remove(jadOverlay);
-			overlayManager.remove(prayerOverlay);
-
-			zukShield = null;
-			zuk = null;
-
-			if (spawnTimerInfoBox != null)
-			{
-				infoBoxManager.removeInfoBox(spawnTimerInfoBox);
-			}
-
-			spawnTimerInfoBox = null;
+			shutDown();
 		}
 		else if (currentWaveNumber == -1)
 		{
+			init();
 			infernoNpcs.clear();
-
 			currentWaveNumber = 1;
-
-			overlayManager.add(infernoOverlay);
-			overlayManager.add(jadOverlay);
-			overlayManager.add(prayerOverlay);
-
-			if (config.waveDisplay() != InfernoWaveDisplayMode.NONE)
-			{
-				overlayManager.add(waveOverlay);
-			}
 		}
 	}
 
@@ -998,7 +995,12 @@ public class InfernoPlugin extends Plugin
 		final int pauseHp = 600;
 		final int resumeHp = 480;
 
-		int hp = calculateNpcHp(zuk.getHealthRatio(), zuk.getHealthScale(), npcManager.getHealth(zuk.getId()));
+		Integer zulHealth = npcManager.getHealth(zuk.getId());
+		if (zulHealth == null)
+		{
+			return;
+		}
+		int hp = calculateNpcHp(zuk.getHealthRatio(), zuk.getHealthScale(), zulHealth);
 
 		if (hp <= 0)
 		{

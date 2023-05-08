@@ -26,7 +26,7 @@
 version = "1.3.0"
 
 project.extra["PluginName"] = "Inferno" // This is the name that is used in the external plugin manager panel
-project.extra["PluginDescription"] = "Java example plugin" // This is the description that is used in the external plugin manager panel
+project.extra["PluginDescription"] = "Inferno helper" // This is the description that is used in the external plugin manager panel
 project.extra["PluginPackageId"] = "inferno" // This is the plugin package folder after the default group package.
 project.extra["PluginMainClassName"] = "InfernoPlugin" // This is the plugin's main class which extends Plugin
 

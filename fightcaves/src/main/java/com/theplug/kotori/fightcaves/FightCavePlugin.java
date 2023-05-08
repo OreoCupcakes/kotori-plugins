@@ -165,7 +165,7 @@ public class FightCavePlugin extends Plugin
 	@Override
 	public void startUp()
 	{
-		if (client.getGameState() != GameState.LOGGED_IN || regionCheck())
+		if (client.getGameState() != GameState.LOGGED_IN || !regionCheck())
 		{
 			return;
 		}

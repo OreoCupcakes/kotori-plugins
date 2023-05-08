@@ -43,6 +43,14 @@ import com.theplug.kotori.inferno.displaymodes.InfernoZukShieldDisplayMode;
 public interface InfernoConfig extends Config
 {
 	@ConfigSection(
+			name = "<html>Inferno<br>Version 1.3.0</html>",
+			description = "",
+			position = -1,
+			closedByDefault = true
+	)
+	String versionInfo = "Version";
+	
+	@ConfigSection(
 		name = "Prayer",
 		description = "Configuration options for prayer",
 		position = 0
