@@ -23,7 +23,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "1.1.6"
+version = "1.2.0"
 
 project.extra["PluginName"] = "Gauntlet Extended" // This is the name that is used in the external plugin manager panel
 project.extra["PluginDescription"] = "All-in-one plugin for the Gauntlet." // This is the description that is used in the external plugin manager panel
