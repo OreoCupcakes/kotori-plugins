@@ -33,8 +33,8 @@ import com.theplug.kotori.cerberushelper.domain.Phase;
 import com.theplug.kotori.cerberushelper.CerberusConfig;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import net.runelite.api.Prayer;
 import net.runelite.client.ui.FontManager;
-import com.theplug.kotori.kotoriutils.rlapi.PrayerExtended;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Utility
@@ -130,9 +130,9 @@ public final class Utility
 		return color;
 	}
 
-	public static Color getColorFromPrayer(final PrayerExtended prayerExtended)
+	public static Color getColorFromPrayer(final Prayer prayer)
 	{
-		switch (prayerExtended)
+		switch (prayer)
 		{
 			case PROTECT_FROM_MAGIC:
 				return Color.BLUE;

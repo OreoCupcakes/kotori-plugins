@@ -44,7 +44,6 @@ import com.theplug.kotori.cerberushelper.CerberusPlugin;
 import com.theplug.kotori.cerberushelper.domain.Cerberus;
 import com.theplug.kotori.cerberushelper.util.ImageManager;
 import com.theplug.kotori.cerberushelper.util.InfoBoxComponent;
-import com.theplug.kotori.kotoriutils.rlapi.PrayerExtended;
 import com.theplug.kotori.cerberushelper.util.Utility;
 import net.runelite.api.Client;
 import net.runelite.api.Prayer;
@@ -105,18 +104,18 @@ public final class CurrentAttackOverlay extends Overlay
 			return null;
 		}
 
-		final PrayerExtended prayerExtended;
+		final Prayer prayer;
 
 		if (cerberusAttack.getAttack() == Cerberus.Attack.AUTO)
 		{
-			prayerExtended = plugin.getPrayerExtended();
+			prayer = plugin.getDefaultPrayer();
 		}
 		else
 		{
-			prayerExtended = cerberusAttack.getAttack().getPrayerExtended();
+			prayer = cerberusAttack.getAttack().getPrayer();
 		}
 
-		if (prayerExtended == null)
+		if (prayer == null)
 		{
 			return null;
 		}
@@ -127,12 +126,9 @@ public final class CurrentAttackOverlay extends Overlay
 
 		infoBoxComponent.setPreferredSize(new Dimension(size, size));
 
-		final BufferedImage image = ImageManager.getCerberusBufferedImage(Phase.AUTO, prayerExtended, infoBoxComponentSize);
+		final BufferedImage image = ImageManager.getCerberusBufferedImage(Phase.AUTO, prayer, infoBoxComponentSize);
 
 		infoBoxComponent.setImage(image);
-
-		//Get the RuneLite Prayer enum constant from PrayerExtended name (Basically creating a compatible copy from PrayerExtended)
-		final Prayer prayer = Prayer.valueOf(prayerExtended.name());
 
 		final Color backgroundColor = client.isPrayerActive(prayer) ? COLOR_PRAYER_ENABLED : COLOR_PRAYER_DISABLED;
 

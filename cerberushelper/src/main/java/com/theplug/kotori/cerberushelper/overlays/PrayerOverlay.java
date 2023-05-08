@@ -40,12 +40,13 @@ import javax.inject.Singleton;
 import com.theplug.kotori.cerberushelper.CerberusConfig;
 import com.theplug.kotori.cerberushelper.CerberusPlugin;
 import com.theplug.kotori.cerberushelper.domain.CerberusAttack;
+import com.theplug.kotori.kotoriutils.rlapi.PrayerExtended;
 import net.runelite.api.Client;
 import net.runelite.api.Point;
+import net.runelite.api.Prayer;
 import net.runelite.api.widgets.Widget;
 import com.theplug.kotori.cerberushelper.util.OverlayUtil;
 import com.theplug.kotori.cerberushelper.util.Utility;
-import com.theplug.kotori.kotoriutils.rlapi.PrayerExtended;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
@@ -106,23 +107,22 @@ public class PrayerOverlay extends Overlay
 				continue;
 			}
 
-			final PrayerExtended prayerExtended = attack.getAttack().getPrayerExtended();
+			final Prayer prayer = attack.getAttack().getPrayer();
 
-			renderDescendingBoxes(graphics2D, prayerExtended, tick);
+			renderDescendingBoxes(graphics2D, prayer, tick);
 
 			if (first)
 			{
-				renderPrayerWidget(graphics2D, prayerExtended, tick);
+				renderPrayerWidget(graphics2D, prayer, tick);
 
 				first = false;
 			}
 		}
 	}
 
-	private void renderDescendingBoxes(final Graphics2D graphics2D, final PrayerExtended prayerExtended, final int tick)
+	private void renderDescendingBoxes(final Graphics2D graphics2D, final Prayer prayer, final int tick)
 	{
-		final int prayerWidgetInfoPackedID = prayerExtended.getWidgetInfoPlus().getPackedId();
-		final Widget prayerWidget = client.getWidget(prayerWidgetInfoPackedID);
+		final Widget prayerWidget = client.getWidget(PrayerExtended.getPrayerWidgetId(prayer));
 
 		if (prayerWidget == null || prayerWidget.isHidden())
 		{
@@ -166,9 +166,9 @@ public class PrayerOverlay extends Overlay
 		OverlayUtil.renderFilledPolygon(graphics2D, boxRectangle, Color.ORANGE);
 	}
 
-	private void renderPrayerWidget(final Graphics2D graphics2D, final PrayerExtended prayerExtended, final int tick)
+	private void renderPrayerWidget(final Graphics2D graphics2D, final Prayer prayer, final int tick)
 	{
-		final Rectangle rectangle = OverlayUtil.renderPrayerOverlay(graphics2D, client, prayerExtended, Utility.getColorFromPrayer(prayerExtended));
+		final Rectangle rectangle = OverlayUtil.renderPrayerOverlay(graphics2D, client, prayer, Utility.getColorFromPrayer(prayer));
 
 		if (rectangle == null)
 		{

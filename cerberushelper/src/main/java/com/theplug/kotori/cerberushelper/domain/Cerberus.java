@@ -34,7 +34,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import net.runelite.api.NPC;
-import com.theplug.kotori.kotoriutils.rlapi.PrayerExtended;
+import net.runelite.api.Prayer;
 
 @Getter
 public class Cerberus
@@ -138,16 +138,16 @@ public class Cerberus
 	{
 		SPAWN(null, 0),
 		AUTO(null, 1),
-		MELEE(PrayerExtended.PROTECT_FROM_MELEE, 1),
-		RANGED(PrayerExtended.PROTECT_FROM_MISSILES, 1),
-		MAGIC(PrayerExtended.PROTECT_FROM_MAGIC, 1),
+		MELEE(Prayer.PROTECT_FROM_MELEE, 1),
+		RANGED(Prayer.PROTECT_FROM_MISSILES, 1),
+		MAGIC(Prayer.PROTECT_FROM_MAGIC, 1),
 		LAVA(null, 0),
 		GHOSTS(null, 0),
-		GHOST_MELEE(PrayerExtended.PROTECT_FROM_MELEE, 2),
-		GHOST_RANGED(PrayerExtended.PROTECT_FROM_MISSILES, 2),
-		GHOST_MAGIC(PrayerExtended.PROTECT_FROM_MAGIC, 2);
+		GHOST_MELEE(Prayer.PROTECT_FROM_MELEE, 2),
+		GHOST_RANGED(Prayer.PROTECT_FROM_MISSILES, 2),
+		GHOST_MAGIC(Prayer.PROTECT_FROM_MAGIC, 2);
 
-		private final PrayerExtended prayerExtended;
+		private final Prayer prayer;
 
 		private final int priority;
 	}

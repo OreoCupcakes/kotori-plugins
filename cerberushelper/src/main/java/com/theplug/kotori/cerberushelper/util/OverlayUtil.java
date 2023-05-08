@@ -9,24 +9,21 @@ import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.Stroke;
-import net.runelite.api.Client;
-import net.runelite.api.Perspective;
-import net.runelite.api.Point;
-import net.runelite.api.VarClientInt;
+
+import com.theplug.kotori.kotoriutils.rlapi.PrayerExtended;
+import net.runelite.api.*;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.widgets.Widget;
-import com.theplug.kotori.kotoriutils.rlapi.PrayerExtended;
 import com.theplug.kotori.kotoriutils.rlapi.InterfaceTab;
 
 import static net.runelite.client.ui.overlay.OverlayUtil.renderPolygon;
 
 public class OverlayUtil
 {
-	public static Rectangle renderPrayerOverlay(Graphics2D graphics, Client client, PrayerExtended prayerExtended, Color color)
+	public static Rectangle renderPrayerOverlay(Graphics2D graphics, Client client, Prayer prayer, Color color)
 	{
-		int prayerWidgetInfoPackedID = prayerExtended.getWidgetInfoPlus().getPackedId();
-		Widget widget = client.getWidget(prayerWidgetInfoPackedID);
+		Widget widget = client.getWidget(PrayerExtended.getPrayerWidgetId(prayer));
 
 		if (widget == null || client.getVarcIntValue(VarClientInt.INVENTORY_TAB) != InterfaceTab.PRAYER.getId())
 		{

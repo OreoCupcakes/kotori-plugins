@@ -41,8 +41,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import com.theplug.kotori.kotoriutils.KotoriUtils;
-import com.theplug.kotori.kotoriutils.rlapi.PrayerExtended;
-import com.theplug.kotori.kotoriutils.rlapi.VarUtilities;
+import com.theplug.kotori.kotoriutils.methods.VarUtilities;
 import com.theplug.kotori.kotoriutils.rlapi.WidgetInfoPlus;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -100,7 +99,6 @@ public class CerberusPlugin extends Plugin
 	private static final WorldArea region4883 = new WorldArea(1230, 1243, 21, 15, 0);
 	private static final WorldArea region5140 = new WorldArea(1294, 1307, 21, 15, 0);
 	private static final WorldArea region5395 = new WorldArea(1358, 1243, 21, 15, 0);
-	private static final Set<WorldArea> worldAreasPastFlames = Set.of(region4883, region5140, region5395);
 
 	@Inject
 	private Client client;
@@ -139,13 +137,13 @@ public class CerberusPlugin extends Plugin
 
 	@Getter
 	@Nullable
-	private PrayerExtended prayerExtended = PrayerExtended.PROTECT_FROM_MAGIC;
+	private Prayer defaultPrayer = Prayer.PROTECT_FROM_MAGIC;
 
 	@Getter
 	@Nullable
 	private Cerberus cerberus;
 
-	private ArrayList<Projectile> cerberusProjectiles = new ArrayList<>();
+	private final ArrayList<Projectile> cerberusProjectiles = new ArrayList<>();
 
 	@Getter
 	private int gameTick;
@@ -157,11 +155,6 @@ public class CerberusPlugin extends Plugin
 
 	private boolean inArena;
 	private boolean inAreaPastFlames;
-
-	public CerberusPlugin()
-	{
-
-	}
 
 	@Provides
 	CerberusConfig getConfig(final ConfigManager configManager)
@@ -204,8 +197,9 @@ public class CerberusPlugin extends Plugin
 		ghosts.clear();
 		upcomingAttacks.clear();
 		tickTimestamps.clear();
+		cerberusProjectiles.clear();
 
-		prayerExtended = PrayerExtended.PROTECT_FROM_MAGIC;
+		defaultPrayer = Prayer.PROTECT_FROM_MAGIC;
 
 		cerberus = null;
 
@@ -679,15 +673,15 @@ public class CerberusPlugin extends Plugin
 			{
 				if (lastCerberusAttackTick + tickDelay + 1 == tick)
 				{
-					if (prayerExtended == PrayerExtended.PROTECT_FROM_MAGIC)
+					if (defaultPrayer == Prayer.PROTECT_FROM_MAGIC)
 					{
 						upcomingAttacks.add(new CerberusAttack(tick, Cerberus.Attack.MAGIC));
 					}
-					else if (prayerExtended == PrayerExtended.PROTECT_FROM_MISSILES)
+					else if (defaultPrayer == Prayer.PROTECT_FROM_MISSILES)
 					{
 						upcomingAttacks.add(new CerberusAttack(tick, Cerberus.Attack.RANGED));
 					}
-					else if (prayerExtended == PrayerExtended.PROTECT_FROM_MELEE)
+					else if (defaultPrayer == Prayer.PROTECT_FROM_MELEE)
 					{
 						upcomingAttacks.add(new CerberusAttack(tick, Cerberus.Attack.MELEE));
 					}
@@ -759,15 +753,15 @@ public class CerberusPlugin extends Plugin
 
 		if (magicDefenseTotal <= rangeDefenseTotal && magicDefenseTotal <= meleeDefenseTotal)
 		{
-			prayerExtended = PrayerExtended.PROTECT_FROM_MAGIC;
+			defaultPrayer = Prayer.PROTECT_FROM_MAGIC;
 		}
 		else if (rangeDefenseTotal <= meleeDefenseTotal)
 		{
-			prayerExtended = PrayerExtended.PROTECT_FROM_MISSILES;
+			defaultPrayer = Prayer.PROTECT_FROM_MISSILES;
 		}
 		else
 		{
-			prayerExtended = PrayerExtended.PROTECT_FROM_MELEE;
+			defaultPrayer = Prayer.PROTECT_FROM_MELEE;
 		}
 	}
 
@@ -785,15 +779,15 @@ public class CerberusPlugin extends Plugin
 			return;
 		}
 
-		final PrayerExtended prayerToInvoke;
+		final Prayer prayerToInvoke;
 
 		if (cerberusAttack.getAttack() == Cerberus.Attack.AUTO)
 		{
-			prayerToInvoke = getPrayerExtended();
+			prayerToInvoke = getDefaultPrayer();
 		}
 		else
 		{
-			prayerToInvoke = cerberusAttack.getAttack().getPrayerExtended();
+			prayerToInvoke = cerberusAttack.getAttack().getPrayer();
 		}
 
 		if (prayerToInvoke == null)
@@ -801,9 +795,7 @@ public class CerberusPlugin extends Plugin
 			return;
 		}
 
-		final Prayer prayer = Prayer.valueOf(prayerToInvoke.name());
-
-		kotoriUtils.getInvokesLibrary().invokePrayer(prayer);
+		kotoriUtils.getInvokesLibrary().invokePrayer(prayerToInvoke);
 	}
 
 	private void prayOffensively()

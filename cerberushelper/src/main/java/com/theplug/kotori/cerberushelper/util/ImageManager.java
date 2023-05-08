@@ -31,9 +31,9 @@ import java.awt.image.BufferedImage;
 import com.theplug.kotori.cerberushelper.domain.Phase;
 import com.theplug.kotori.cerberushelper.CerberusConfig;
 import com.theplug.kotori.cerberushelper.CerberusPlugin;
-import com.theplug.kotori.kotoriutils.rlapi.PrayerExtended;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import net.runelite.api.Prayer;
 import net.runelite.client.util.ImageUtil;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -43,22 +43,22 @@ public final class ImageManager
 
 	private static final BufferedImage[][] images = new BufferedImage[3][6];
 
-	public static BufferedImage getCerberusBufferedImage(final Phase phase, final PrayerExtended prayerExtended, final CerberusConfig.InfoBoxComponentSize size)
+	public static BufferedImage getCerberusBufferedImage(final Phase phase, final Prayer prayer, final CerberusConfig.InfoBoxComponentSize size)
 	{
 		if (phase == Phase.AUTO)
 		{
-			return getCerberusPrayerBufferedImage(prayerExtended, size);
+			return getCerberusPrayerBufferedImage(prayer, size);
 		}
 
 		return getCerberusPhaseBufferedImage(phase, size);
 	}
 
-	private static BufferedImage getCerberusPrayerBufferedImage(final PrayerExtended prayerExtended, final CerberusConfig.InfoBoxComponentSize size)
+	private static BufferedImage getCerberusPrayerBufferedImage(final Prayer prayer, final CerberusConfig.InfoBoxComponentSize size)
 	{
 		final String path;
 		final int imgIdx;
 
-		switch (prayerExtended)
+		switch (prayer)
 		{
 			default:
 			case PROTECT_FROM_MAGIC:

@@ -129,7 +129,7 @@ public final class UpcomingAttackOverlay extends Overlay
 			// Get the image for the infobox
 			final int cerberusHp = cerberus.getHp();
 			final Phase phase = cerberus.getNextAttackPhase(attack, cerberusHp);
-			final BufferedImage image = ImageManager.getCerberusBufferedImage(phase, plugin.getPrayerExtended(), infoBoxComponentSize);
+			final BufferedImage image = ImageManager.getCerberusBufferedImage(phase, plugin.getDefaultPrayer(), infoBoxComponentSize);
 
 			if (image == null)
 			{
