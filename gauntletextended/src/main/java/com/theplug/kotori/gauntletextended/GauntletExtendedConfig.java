@@ -31,13 +31,7 @@ import java.awt.Color;
 import java.awt.Font;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import net.runelite.client.config.Alpha;
-import net.runelite.client.config.Config;
-import net.runelite.client.config.ConfigGroup;
-import net.runelite.client.config.ConfigItem;
-import net.runelite.client.config.ConfigSection;
-import net.runelite.client.config.Range;
-import com.theplug.kotori.gauntletextended.utils.Units;
+import net.runelite.client.config.*;
 
 @ConfigGroup("gauntlet")
 public interface GauntletExtendedConfig extends Config
@@ -139,7 +133,7 @@ public interface GauntletExtendedConfig extends Config
 		keyName = "resourceIconSize",
 		section = resourcesSection
 	)
-	@Units(Units.POINTS)
+	@Units(Units.PIXELS)
 	default int resourceIconSize()
 	{
 		return 18;
@@ -156,7 +150,7 @@ public interface GauntletExtendedConfig extends Config
 		keyName = "resourceTileOutlineWidth",
 		section = resourcesSection
 	)
-	@Units(Units.POINTS)
+	@Units(Units.PIXELS)
 	default int resourceTileOutlineWidth()
 	{
 		return 1;
@@ -211,7 +205,7 @@ public interface GauntletExtendedConfig extends Config
 		keyName = "resourceOutlineWidth",
 		section = resourcesSection
 	)
-	@Units(Units.POINTS)
+	@Units(Units.PIXELS)
 	default int resourceOutlineWidth()
 	{
 		return 1;
@@ -387,7 +381,7 @@ public interface GauntletExtendedConfig extends Config
 		keyName = "utilitiesOutlineWidth",
 		section = utilitiesSection
 	)
-	@Units(Units.POINTS)
+	@Units(Units.PIXELS)
 	default int utilitiesOutlineWidth()
 	{
 		return 4;
@@ -431,7 +425,7 @@ public interface GauntletExtendedConfig extends Config
 		keyName = "demibossOutlineWidth",
 		section = npcSection
 	)
-	@Units(Units.POINTS)
+	@Units(Units.PIXELS)
 	default int demibossOutlineWidth()
 	{
 		return 4;
@@ -460,7 +454,7 @@ public interface GauntletExtendedConfig extends Config
 		keyName = "strongNpcOutlineWidth",
 		section = npcSection
 	)
-	@Units(Units.POINTS)
+	@Units(Units.PIXELS)
 	default int strongNpcOutlineWidth()
 	{
 		return 2;
@@ -502,7 +496,7 @@ public interface GauntletExtendedConfig extends Config
 		keyName = "weakNpcOutlineWidth",
 		section = npcSection
 	)
-	@Units(Units.POINTS)
+	@Units(Units.PIXELS)
 	default int weakNpcOutlineWidth()
 	{
 		return 2;
@@ -558,7 +552,7 @@ public interface GauntletExtendedConfig extends Config
 		keyName = "hunllefAttackCounterFontSize",
 		section = hunllefSection
 	)
-	@Units(Units.POINTS)
+	@Units(Units.PIXELS)
 	default int hunllefAttackCounterFontSize()
 	{
 		return 22;
@@ -587,7 +581,7 @@ public interface GauntletExtendedConfig extends Config
 		keyName = "hunllefWrongPrayerOutlineWidth",
 		section = hunllefSection
 	)
-	@Units(Units.POINTS)
+	@Units(Units.PIXELS)
 	default int hunllefWrongPrayerOutlineWidth()
 	{
 		return 4;
@@ -616,7 +610,7 @@ public interface GauntletExtendedConfig extends Config
 		keyName = "hunllefTileOutlineWidth",
 		section = hunllefSection
 	)
-	@Units(Units.POINTS)
+	@Units(Units.PIXELS)
 	default int hunllefTileOutlineWidth()
 	{
 		return 1;
@@ -671,7 +665,7 @@ public interface GauntletExtendedConfig extends Config
 		keyName = "hunllefAttackStyleIconSize",
 		section = hunllefSection
 	)
-	@Units(Units.POINTS)
+	@Units(Units.PIXELS)
 	default int hunllefAttackStyleIconSize()
 	{
 		return 18;
@@ -726,7 +720,7 @@ public interface GauntletExtendedConfig extends Config
 		keyName = "projectileIconSize",
 		section = projectilesSection
 	)
-	@Units(Units.POINTS)
+	@Units(Units.PIXELS)
 	default int projectileIconSize()
 	{
 		return 18;
@@ -781,7 +775,7 @@ public interface GauntletExtendedConfig extends Config
 		keyName = "tornadoFontSize",
 		section = tornadoesSection
 	)
-	@Units(Units.POINTS)
+	@Units(Units.PIXELS)
 	default int tornadoFontSize()
 	{
 		return 16;
@@ -823,7 +817,7 @@ public interface GauntletExtendedConfig extends Config
 		keyName = "tornadoTileOutlineWidth",
 		section = tornadoesSection
 	)
-	@Units(Units.POINTS)
+	@Units(Units.PIXELS)
 	default int tornadoTileOutlineWidth()
 	{
 		return 1;

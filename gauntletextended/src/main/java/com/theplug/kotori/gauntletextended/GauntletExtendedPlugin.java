@@ -39,7 +39,7 @@ import javax.inject.Singleton;
 
 import com.theplug.kotori.gauntletextended.resource.ResourceManager;
 import com.theplug.kotori.gauntletextended.utils.GameObjectQuery;
-import com.theplug.kotori.gauntletextended.utils.GraphicIDPlus;
+import com.theplug.kotori.kotoriutils.rlapi.GraphicIDPlus;
 import com.theplug.kotori.kotoriutils.KotoriUtils;
 import lombok.Getter;
 import lombok.Setter;

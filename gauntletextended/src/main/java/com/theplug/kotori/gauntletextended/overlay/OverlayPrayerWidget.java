@@ -36,13 +36,13 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import com.theplug.kotori.gauntletextended.entity.Hunllef;
-import com.theplug.kotori.gauntletextended.utils.PrayerExtended;
 import net.runelite.api.Client;
 import net.runelite.api.NPC;
 import net.runelite.api.Point;
 import com.theplug.kotori.gauntletextended.GauntletExtendedConfig;
 import static com.theplug.kotori.gauntletextended.GauntletExtendedConfig.PrayerHighlightMode;
 import com.theplug.kotori.gauntletextended.GauntletExtendedPlugin;
+import net.runelite.api.Prayer;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.OverlayPriority;
@@ -96,7 +96,7 @@ public class OverlayPrayerWidget extends Overlay
 
 		final Hunllef.AttackPhase phase = hunllef.getAttackPhase();
 
-		final PrayerExtended prayer = PrayerExtended.valueOf(phase.getPrayer().name());
+		final Prayer prayer = phase.getPrayer();
 
 		final Color phaseColor = phase.getColor();
 

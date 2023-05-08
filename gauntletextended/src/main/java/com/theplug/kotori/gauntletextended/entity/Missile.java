@@ -29,7 +29,7 @@ package com.theplug.kotori.gauntletextended.entity;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
-import com.theplug.kotori.gauntletextended.utils.GraphicIDPlus;
+import com.theplug.kotori.kotoriutils.rlapi.GraphicIDPlus;
 import lombok.Getter;
 import net.runelite.api.Projectile;
 import net.runelite.api.Skill;
