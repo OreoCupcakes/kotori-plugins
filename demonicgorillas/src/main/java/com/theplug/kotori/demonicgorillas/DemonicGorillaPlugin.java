@@ -28,13 +28,12 @@ package com.theplug.kotori.demonicgorillas;
 import com.google.common.collect.ImmutableSet;
 
 import java.util.*;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
 
 import com.google.inject.Provides;
-import com.theplug.kotori.demonicgorillas.utils.GraphicIDPlus;
-import com.theplug.kotori.demonicgorillas.utils.WorldAreaExtended;
+import com.theplug.kotori.kotoriutils.rlapi.GraphicIDPlus;
+import com.theplug.kotori.kotoriutils.rlapi.WorldAreaExtended;
 import com.theplug.kotori.kotoriutils.KotoriUtils;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -94,9 +93,9 @@ public class DemonicGorillaPlugin extends Plugin
 	private List<PendingGorillaAttack> pendingAttacks;
 
 	private Map<Player, MemorizedPlayer> memorizedPlayers;
+	private ArrayList<Projectile> gorillaProjectiles;
 	private static final Set<Integer> REGION_IDS = Set.of(8280, 8536);
 	private boolean atGorillas;
-	private ArrayList<Projectile> gorillaProjectiles;
 
 	@Provides
 	DemonicGorillaConfig provideConfig(ConfigManager configManager)
@@ -125,6 +124,7 @@ public class DemonicGorillaPlugin extends Plugin
 		recentBoulders = null;
 		pendingAttacks = null;
 		memorizedPlayers = null;
+		gorillaProjectiles = null;
 	}
 	
 	private void init()
@@ -705,7 +705,6 @@ public class DemonicGorillaPlugin extends Plugin
 			case LOGIN_SCREEN:
 				if (atGorillas)
 				{
-					reset();
 					shutDown();
 				}
 				break;
