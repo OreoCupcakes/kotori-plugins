@@ -34,7 +34,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.theplug.kotori.kotoriutils.KotoriUtils;
-import com.theplug.kotori.vorkathoverlay.utils.GraphicIDPlus;
+import com.theplug.kotori.kotoriutils.rlapi.GraphicIDPlus;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -625,6 +625,7 @@ public class VorkathPlugin extends Plugin
 		vorkath = null;
 		acidSpots.clear();
 		acidFreePath.clear();
+		vorkathProjectiles.clear();
 		Arrays.fill(wooxWalkPath, null);
 		wooxWalkTimer = -1;
 		zombifiedSpawn = null;

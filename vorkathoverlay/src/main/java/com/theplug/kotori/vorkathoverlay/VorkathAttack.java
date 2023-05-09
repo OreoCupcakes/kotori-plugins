@@ -25,7 +25,7 @@
  */
 package com.theplug.kotori.vorkathoverlay;
 
-import com.theplug.kotori.vorkathoverlay.utils.GraphicIDPlus;
+import com.theplug.kotori.kotoriutils.rlapi.GraphicIDPlus;
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
 import lombok.AccessLevel;
