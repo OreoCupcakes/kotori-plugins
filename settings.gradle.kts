@@ -55,6 +55,7 @@ include(":gauntletextended2")
 include(":kotoritest")
 include(":fightcaves")
 include(":inferno")
+include(":aoewarnings")
 
 for (project in rootProject.children) {
     project.apply {
