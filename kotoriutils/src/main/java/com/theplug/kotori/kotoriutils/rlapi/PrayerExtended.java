@@ -284,4 +284,12 @@ public enum PrayerExtended {
     {
         return PrayerExtended.valueOf(prayer.name()).getWidgetInfoPlus().getId();
     }
+    public static int getPrayerChildId(Prayer prayer)
+    {
+        return PrayerExtended.valueOf(prayer.name()).getWidgetInfoPlus().getChildId();
+    }
+    public static int getPrayerGroupId(Prayer prayer)
+    {
+        return PrayerExtended.valueOf(prayer.name()).getWidgetInfoPlus().getGroupId();
+    }
 }
