@@ -23,12 +23,16 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "1.1.5"
+version = "1.2.0"
 
 project.extra["PluginName"] = "Zulrah" // This is the name that is used in the external plugin manager panel
 project.extra["PluginDescription"] = "An overlay for the Zulrah fight." // This is the description that is used in the external plugin manager panel
 project.extra["PluginPackageId"] = "zulrahoverlay" // This is the plugin package folder after the default group package.
 project.extra["PluginMainClassName"] = "ZulrahPlugin" // This is the plugin's main class which extends Plugin
+
+dependencies {
+    compileOnly(project(":kotoriutils"))
+}
 
 tasks {
     jar {

@@ -8,7 +8,7 @@ import java.awt.*;
 public interface ZulrahConfig extends Config
 {
 	@ConfigSection(
-			name = "<html>Zulrah<br>Version 1.1.5</html>",
+			name = "<html>Zulrah<br>Version 1.2.0</html>",
 			description = "",
 			position = -1,
 			closedByDefault = true

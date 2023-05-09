@@ -2,6 +2,7 @@ package com.theplug.kotori.zulrahoverlay;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Provides;
+import com.theplug.kotori.kotoriutils.KotoriUtils;
 import com.theplug.kotori.zulrahoverlay.overlays.*;
 import com.theplug.kotori.zulrahoverlay.rotationutils.RotationType;
 import com.theplug.kotori.zulrahoverlay.rotationutils.ZulrahData;
@@ -16,6 +17,7 @@ import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.input.KeyListener;
 import net.runelite.client.input.KeyManager;
 import net.runelite.client.plugins.Plugin;
+import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.infobox.Counter;
@@ -41,7 +43,7 @@ import java.util.stream.Collectors;
 		tags = {"zulrah", "zul", "andra", "snakeling", "ported", "snake", "solomission", "kotori"},
 		enabledByDefault = false
 )
-
+@PluginDependency(KotoriUtils.class)
 public class ZulrahPlugin extends Plugin implements KeyListener
 {
 	@Inject

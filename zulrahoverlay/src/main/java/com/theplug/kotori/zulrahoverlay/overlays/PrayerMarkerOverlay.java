@@ -3,7 +3,7 @@ package com.theplug.kotori.zulrahoverlay.overlays;
 import com.theplug.kotori.zulrahoverlay.ZulrahConfig;
 import com.theplug.kotori.zulrahoverlay.ZulrahPlugin;
 import com.theplug.kotori.zulrahoverlay.util.OverlayUtils;
-import com.theplug.kotori.zulrahoverlay.util.PrayerExtended;
+import com.theplug.kotori.kotoriutils.rlapi.PrayerExtended;
 import net.runelite.api.Client;
 import net.runelite.api.Prayer;
 import net.runelite.api.VarClientInt;
@@ -64,7 +64,7 @@ public class PrayerMarkerOverlay extends Overlay
 			case PROTECT_FROM_MELEE:
 			case PROTECT_FROM_MISSILES:
 			case PROTECT_FROM_MAGIC:
-				return PrayerExtended.valueOf(prayer.name()).getPrayerWidgetInfo().getChildId();
+				return PrayerExtended.getPrayerChildId(prayer);
 			default:
 				return -1;
 		}
