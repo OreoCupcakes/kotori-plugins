@@ -23,12 +23,16 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "1.1.3"
+version = "1.2.0"
 
 project.extra["PluginName"] = "Reorder Prayers" // This is the name that is used in the external plugin manager panel
 project.extra["PluginDescription"] = "Reorder the prayers displayed on the Prayer panel." // This is the description that is used in the external plugin manager panel
 project.extra["PluginPackageId"] = "reorderprayers" // This is the plugin package folder after the default group package.
 project.extra["PluginMainClassName"] = "ReorderPrayersPlugin" // This is the plugin's main class which extends Plugin
+
+dependencies {
+    compileOnly(project(":kotoriutils"))
+}
 
 tasks {
     jar {
