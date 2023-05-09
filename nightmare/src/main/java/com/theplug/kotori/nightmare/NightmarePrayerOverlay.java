@@ -8,12 +8,12 @@ import java.awt.Rectangle;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import com.theplug.kotori.nightmare.utils.PrayerExtended;
+import com.theplug.kotori.kotoriutils.rlapi.PrayerExtended;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.Prayer;
 import net.runelite.api.VarClientInt;
-import com.theplug.kotori.nightmare.utils.InterfaceTab;
+import com.theplug.kotori.kotoriutils.rlapi.InterfaceTab;
 import net.runelite.api.widgets.Widget;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;

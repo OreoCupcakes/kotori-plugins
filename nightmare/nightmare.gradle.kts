@@ -23,12 +23,16 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "1.1.2"
+version = "1.2.0"
 
 project.extra["PluginName"] = "Nightmare of Ashihama" // This is the name that is used in the external plugin manager panel
 project.extra["PluginDescription"] = "Show what prayer to use and which tiles to avoid." // This is the description that is used in the external plugin manager panel
 project.extra["PluginPackageId"] = "nightmare" // This is the plugin package folder after the default group package.
 project.extra["PluginMainClassName"] = "NightmarePlugin" // This is the plugin's main class which extends Plugin
+
+dependencies {
+    compileOnly(project(":kotoriutils"))
+}
 
 tasks {
     jar {
