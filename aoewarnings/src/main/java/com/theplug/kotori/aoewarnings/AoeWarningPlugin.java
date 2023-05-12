@@ -58,10 +58,8 @@ import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
 import org.apache.commons.lang3.ArrayUtils;
-import org.pf4j.Extension;
 import static com.theplug.kotori.aoewarnings.AoeWarningConfig.*;
 
-@Extension
 @PluginDependency(KotoriUtils.class)
 @PluginDescriptor(
 	name = "AoE Warnings",
