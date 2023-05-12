@@ -42,6 +42,7 @@ import javax.inject.Singleton;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Set;
 
 @Slf4j
@@ -113,6 +114,8 @@ class HallowedHelperOverlay extends Overlay
         render_servertile(graphics);
         render_sword_statues(graphics);
         render_lightning(graphics);
+        render_teleport_portals(graphics, plugin.getBluePortals(), Color.CYAN);
+        render_teleport_portals(graphics, plugin.getYellowPortals(), Color.YELLOW);
         if(config.ShowStairs()) {
             render_stairs(graphics);
         }
@@ -1365,6 +1368,34 @@ class HallowedHelperOverlay extends Overlay
                 OverlayText(graphics, l, "" + countdown, c, 0, 0);
             }
             //OverlayUtil.renderTileOverlay(graphics);
+        }
+    }
+    
+    public void render_teleport_portals(Graphics2D graphics, Map<LocalPoint, HallowedSepulchreTeleportPortal> portalMap, Color color)
+    {
+        for (Map.Entry<LocalPoint, HallowedSepulchreTeleportPortal> portalEntry : portalMap.entrySet())
+        {
+            LocalPoint l = portalEntry.getKey();
+            if (isOutsideRenderDistance(l))
+            {
+                continue;
+            }
+            
+            WorldPoint w = WorldPoint.fromLocal(client, l);
+            if(w.getPlane() != client.getPlane())
+            {
+                continue;
+            }
+            int countdown = portalEntry.getValue().getTicksUntilDespawn() + 1;
+            
+            if (config.showTeleporterTiles())
+            {
+                render_object_server_tile(graphics, w, color, 0, 0);
+            }
+            if (config.showTeleporterTimer())
+            {
+                OverlayText(graphics, l, "" + countdown, color, 0, 0);
+            }
         }
     }
 

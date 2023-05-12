@@ -208,6 +208,12 @@ public class HallowedHelperPlugin extends Plugin {
 
     @Getter(AccessLevel.PACKAGE)
     private final Set<LocalPoint> lightningboltlocations = new HashSet<>();
+    
+    
+    @Getter(AccessLevel.PACKAGE)
+    private final Map<LocalPoint, HallowedSepulchreTeleportPortal> bluePortals = new HashMap<>();
+    @Getter(AccessLevel.PACKAGE)
+    private final Map<LocalPoint, HallowedSepulchreTeleportPortal> yellowPortals = new HashMap<>();
 
     @Getter(AccessLevel.PACKAGE)
     private int tickssincelightning = 0;
@@ -318,7 +324,11 @@ public class HallowedHelperPlugin extends Plugin {
             39539
     );
 
-
+    private static final int BLUE_PORTAL_START_ID = 1815;
+    private static final int YELLOW_PORTAL_START_ID = 1816;
+    
+    private static final Set<Integer> GRAPHIC_OBJECT_IDS = Set.of(LIGHTNING_ID, BLUE_PORTAL_START_ID, YELLOW_PORTAL_START_ID);
+    
     @Subscribe
     private void onNpcSpawned(final NpcSpawned event)
     {
@@ -373,6 +383,48 @@ public class HallowedHelperPlugin extends Plugin {
                     break;
                 }
             }
+        }
+    }
+    
+    private void removeTeleportPortals()
+    {
+        List<LocalPoint> blueKeysToRemove = new ArrayList<>();
+        List<LocalPoint> yellowKeysToRemove = new ArrayList<>();
+        
+        // Look for portals that have despawned and note them down
+        for (Map.Entry<LocalPoint, HallowedSepulchreTeleportPortal> bluePortal : bluePortals.entrySet())
+        {
+            HallowedSepulchreTeleportPortal blueValue = bluePortal.getValue();
+            if (blueValue.getTicksUntilDespawn() <= 0)
+            {
+                blueKeysToRemove.add(bluePortal.getKey());
+            }
+            else
+            {
+                blueValue.decrementTicksUntilDespawn();
+            }
+        }
+        for (Map.Entry<LocalPoint, HallowedSepulchreTeleportPortal> yellowPortal : yellowPortals.entrySet())
+        {
+            HallowedSepulchreTeleportPortal yellowValue = yellowPortal.getValue();
+            if (yellowValue.getTicksUntilDespawn() <= 0)
+            {
+                yellowKeysToRemove.add(yellowPortal.getKey());
+            }
+            else
+            {
+                yellowValue.decrementTicksUntilDespawn();
+            }
+        }
+        
+        // Remove the portals that were noted down
+        for (LocalPoint blueLp : blueKeysToRemove)
+        {
+            bluePortals.remove(blueLp);
+        }
+        for (LocalPoint yellowLp : yellowKeysToRemove)
+        {
+            yellowPortals.remove(yellowLp);
         }
     }
 
@@ -520,13 +572,33 @@ public class HallowedHelperPlugin extends Plugin {
 
     private void addgraphicsobject(GraphicsObject object)
     {
-        if(object.getId() == LIGHTNING_ID) {
-            tickssincelightning = 0;
-            LocalPoint current = object.getLocation();
-            if(!lightningboltlocations.contains(current))
-            {
+        int graphicId = object.getId();
+        LocalPoint current = object.getLocation();
+        
+        switch (graphicId)
+        {
+            case LIGHTNING_ID:
+                tickssincelightning = 0;
+                if(lightningboltlocations.contains(current))
+                {
+                    break;
+                }
                 lightningboltlocations.add(current);
-            }
+                break;
+            case BLUE_PORTAL_START_ID:
+                if (bluePortals.containsKey(current))
+                {
+                    break;
+                }
+                bluePortals.put(current, new HallowedSepulchreTeleportPortal(object));
+                break;
+            case YELLOW_PORTAL_START_ID:
+                if (yellowPortals.containsKey(current))
+                {
+                    break;
+                }
+                yellowPortals.put(current, new HallowedSepulchreTeleportPortal(object));
+                break;
         }
     }
 
@@ -537,7 +609,8 @@ public class HallowedHelperPlugin extends Plugin {
         {
             return;
         }
-        if (g.getGraphicsObject().getId() == LIGHTNING_ID)
+        int graphicId = g.getGraphicsObject().getId();
+        if (GRAPHIC_OBJECT_IDS.contains(graphicId))
         {
             addgraphicsobject(g.getGraphicsObject());
         }
@@ -611,6 +684,8 @@ public class HallowedHelperPlugin extends Plugin {
         swordStatues.clear();
         stairs.clear();
         lightningboltlocations.clear();
+        yellowPortals.clear();
+        bluePortals.clear();
         lastplane = 2;
         reload_next_tick = false;
         delayed_reload_wait = 3;
@@ -787,6 +862,8 @@ public class HallowedHelperPlugin extends Plugin {
             }
         }
         tickssincelightning++;
+        //removeTeleportPortals removes despawned portals and countdowns ticks until despawn.
+        removeTeleportPortals();
         ticksleft = client.getVarbitValue(ticksleftvar);
         doorOpen = (ticksleft != 1);
 

@@ -448,11 +448,36 @@ public interface HallowedHelperConfig extends Config {
     {
         return true;
     }
+    
+    @ConfigSection(
+            name = "Teleporters",
+            description = "",
+            position = 8
+    )
+    String TeleporterSection = "TeleportersSection";
+    
+    @ConfigItem(
+            position = 1,
+            keyName = "showTeleporterTiles",
+            name = "Highlight Teleporter Tiles",
+            description = "Highlight the tiles of the teleporters",
+            section = TeleporterSection
+    )
+    default boolean showTeleporterTiles() { return true; }
+    
+    @ConfigItem(
+            position = 2,
+            keyName = "showTeleporterCooldown",
+            name = "Show Teleporter Despawn Timer",
+            description = "",
+            section = TeleporterSection
+    )
+    default boolean showTeleporterTimer() { return true; }
 
     @ConfigSection(
             name = "Server Tile",
             description = "",
-            position = 8
+            position = 9
     )
 	String ServerTileSection = "ServerTileSection";
 
@@ -498,7 +523,7 @@ public interface HallowedHelperConfig extends Config {
     @ConfigSection(
             name = "Other",
             description = "",
-            position = 9
+            position = 10
     )
 	String otherSection = "otherSection";
 
