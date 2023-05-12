@@ -32,7 +32,7 @@ import net.runelite.client.config.*;
 public interface EffectTimersConfig extends Config
 {
 	@ConfigSection(
-			name = "<html>Effect Timers<br>Version 1.1.5</html>",
+			name = "<html>Effect Timers<br>Version 1.2.0</html>",
 			description = "",
 			position = -1,
 			closedByDefault = true
