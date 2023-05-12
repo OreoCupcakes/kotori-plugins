@@ -76,16 +76,16 @@ public class Resource
 			case ObjectID.CORRUPT_DEPOSIT:
 				return skillIconManager.getSkillImage(Skill.MINING);
 			case ObjectID.PHREN_ROOTS:
-			case ObjectID.PHREN_ROOTS_36066:
+			case ObjectID.CORRUPT_PHREN_ROOTS:
 				return skillIconManager.getSkillImage(Skill.WOODCUTTING);
 			case ObjectID.FISHING_SPOT_36068:
-			case ObjectID.FISHING_SPOT_35971:
+			case ObjectID.CORRUPT_FISHING_SPOT:
 				return skillIconManager.getSkillImage(Skill.FISHING);
 			case ObjectID.GRYM_ROOT:
-			case ObjectID.GRYM_ROOT_36070:
+			case ObjectID.CORRUPT_GRYM_ROOT:
 				return skillIconManager.getSkillImage(Skill.HERBLORE);
 			case ObjectID.LINUM_TIRINUM:
-			case ObjectID.LINUM_TIRINUM_36072:
+			case ObjectID.CORRUPT_LINUM_TIRINUM:
 				return skillIconManager.getSkillImage(Skill.FARMING);
 			default:
 				throw new IllegalArgumentException("Unsupported gauntlet resource gameobject id: " + objectId);

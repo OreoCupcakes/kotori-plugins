@@ -159,10 +159,10 @@ public class GauntletExtendedPlugin extends Plugin
 
 	private static final Set<Integer> RESOURCE_IDS = Set.of(
 		ObjectID.CRYSTAL_DEPOSIT, ObjectID.CORRUPT_DEPOSIT,
-		ObjectID.PHREN_ROOTS, ObjectID.PHREN_ROOTS_36066,
-		ObjectID.FISHING_SPOT_36068, ObjectID.FISHING_SPOT_35971,
-		ObjectID.GRYM_ROOT, ObjectID.GRYM_ROOT_36070,
-		ObjectID.LINUM_TIRINUM, ObjectID.LINUM_TIRINUM_36072
+		ObjectID.PHREN_ROOTS, ObjectID.CORRUPT_PHREN_ROOTS,
+		ObjectID.FISHING_SPOT_36068, ObjectID.CORRUPT_FISHING_SPOT,
+		ObjectID.GRYM_ROOT, ObjectID.CORRUPT_GRYM_ROOT,
+		ObjectID.LINUM_TIRINUM, ObjectID.CORRUPT_LINUM_TIRINUM
 	);
 
 	private static final Set<Integer> UTILITY_IDS = Set.of(
