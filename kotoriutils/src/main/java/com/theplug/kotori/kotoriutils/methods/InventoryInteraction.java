@@ -16,7 +16,6 @@ public class InventoryInteraction
 	static Client client = RuneLite.getInjector().getInstance(Client.class);
 	
 	private static ItemContainer inventory;
-	private static final ExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 	
 	public static int[] parseStringToItemIds(String listOfItemIds)
 	{
@@ -61,52 +60,41 @@ public class InventoryInteraction
 		return -1;
 	}
 	
-	public static void equipItems(KotoriUtils kotoriUtils, int[] itemIds)
+	public static boolean equipItems(KotoriUtils kotoriUtils, int[] itemIds, int numEquips)
 	{
-		executorService.submit(() ->
+		if (itemIds == null)
 		{
-			if (itemIds == null)
-			{
-				return;
-			}
+			return false;
+		}
 			
-			int numItemEquippedAtOnce = 0;
-			inventory = client.getItemContainer(InventoryID.INVENTORY);
-			if (inventory == null)
+		int numItemEquippedAtOnce = 0;
+		inventory = client.getItemContainer(InventoryID.INVENTORY);
+		if (inventory == null)
+		{
+			return false;
+		}
+		Item[] items = inventory.getItems();
+		for (int slot = 0; slot < items.length; slot++)
+		{
+			for (int itemId : itemIds)
 			{
-				return;
-			}
-			Item[] items = inventory.getItems();
-			for (int slot = 0; slot < items.length; slot++)
-			{
-				for (int itemId : itemIds)
+				if (items[slot].getId() == itemId)
 				{
-					if (items[slot].getId() == itemId)
+					kotoriUtils.getInvokesLibrary().invoke(slot, WidgetInfo.INVENTORY.getId(), MenuAction.CC_OP.getId(), 3, itemId, "", "", 0, 0);
+					numItemEquippedAtOnce++;
+					if (numItemEquippedAtOnce >= numEquips)
 					{
-						kotoriUtils.getInvokesLibrary().invoke(slot, WidgetInfo.INVENTORY.getId(), MenuAction.CC_OP.getId(), 3, itemId, "","", 0, 0);
-						numItemEquippedAtOnce++;
-						if (numItemEquippedAtOnce > 2)
-						{
-							try
-							{
-								long start = System.currentTimeMillis();
-								long timeToSleep = ThreadLocalRandom.current().nextLong(600, 1000);
-								Thread.sleep(timeToSleep);
-								long now;
-								while (start + timeToSleep > (now = System.currentTimeMillis()))
-								{
-									Thread.sleep(start + timeToSleep - now);
-								}
-								numItemEquippedAtOnce = 0;
-							}
-							catch (Exception e)
-							{
-								log.error("Unable to sleep the anon thread.", e);
-							}
-						}
+						return false;
 					}
 				}
 			}
-		});
+		}
+		//Return true because it went through the entire inventory once
+		return true;
+	}
+	
+	public static boolean equipItems(KotoriUtils kotoriUtils, int[] itemIds)
+	{
+		return equipItems(kotoriUtils, itemIds, 3);
 	}
 }

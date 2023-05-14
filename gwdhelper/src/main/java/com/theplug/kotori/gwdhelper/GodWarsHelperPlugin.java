@@ -1053,44 +1053,38 @@ public class GodWarsHelperPlugin extends Plugin
 		{
 			if (bossBoolean && !set1EquippedOnce)
 			{
-				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(bossGear));
-				set1EquippedOnce = true;
+				set1EquippedOnce = InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(bossGear));
 				return;
 			}
 			
 			if (!magicMinionAlive && magicBoolean && !set2EquippedOnce)
 			{
-				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(magicGear));
-				set2EquippedOnce = true;
+				set2EquippedOnce = InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(magicGear));
 				return;
 			}
 			
 			if (!rangedMinionAlive && rangedBoolean && !set3EquippedOnce)
 			{
-				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(rangedGear));
-				set3EquippedOnce = true;
+				set3EquippedOnce = InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(rangedGear));
 				return;
 			}
 			
 			if (!meleeMinionAlive && meleeBoolean && !set4EquippedOnce)
 			{
-				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(meleeGear));
-				set4EquippedOnce = true;
+				set4EquippedOnce = InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(meleeGear));
 				return;
 			}
 			
 			if (!magicMinionAlive && !rangedMinionAlive && !meleeMinionAlive && allBoolean && !set5EquippedOnce)
 			{
-				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(allGear));
-				set5EquippedOnce = true;
+				set5EquippedOnce = InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(allGear));
 			}
 		}
 		else
 		{
 			if (allBoolean && !set5EquippedOnce)
 			{
-				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(allGear));
-				set5EquippedOnce = true;
+				set5EquippedOnce = InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(allGear));
 			}
 		}
 	}
