@@ -312,7 +312,8 @@ public class HallowedHelperPlugin extends Plugin {
     private static final Set<Integer> FLOOR_GATE_IDS = Set.of(
             39622,
             39623,
-            39624
+            39624,
+            39625
     );
 
     private static final Set<Integer> CHEST_IDS = Set.of(
@@ -586,17 +587,11 @@ public class HallowedHelperPlugin extends Plugin {
                 lightningboltlocations.add(current);
                 break;
             case BLUE_PORTAL_START_ID:
-                if (bluePortals.containsKey(current))
-                {
-                    break;
-                }
+                bluePortals.remove(current);
                 bluePortals.put(current, new HallowedSepulchreTeleportPortal(object));
                 break;
             case YELLOW_PORTAL_START_ID:
-                if (yellowPortals.containsKey(current))
-                {
-                    break;
-                }
+                yellowPortals.remove(current);
                 yellowPortals.put(current, new HallowedSepulchreTeleportPortal(object));
                 break;
         }

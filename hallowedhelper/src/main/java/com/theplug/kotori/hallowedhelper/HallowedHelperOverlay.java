@@ -531,6 +531,7 @@ class HallowedHelperOverlay extends Overlay
             }
             int or = (sword.getOrientation() / 512);
             LocalPoint l = sword.getLocalLocation();
+            WorldPoint w = WorldPoint.fromLocalInstance(client, l);
             GameObject thrower = SWORDCLASS.getThrower();
             if(thrower == null)
             {
@@ -626,7 +627,21 @@ class HallowedHelperOverlay extends Overlay
             {
                 movementpertick = 3;
                 if(offset > 0) {
-                    offset_text += "/4";
+                    //The two swords on floor 3 and 4 that have a 4 tick cycle
+                    if (w.equals(new WorldPoint(2504,5886,2)) || w.equals(new WorldPoint(2391, 5837, 2)))
+                    {
+                        offset_text += "/4";
+                    }
+                    //The remaining floor 4 swords (2 of them) with this ID have a 8 tick cycle
+                    else if (plugin.getCurrentfloor() == 4)
+                    {
+                        offset_text += "/8";
+                    }
+                    //Every other sword with this ID has a 5 tick cycle (the rest of floor 3 swords)
+                    else
+                    {
+                        offset_text += "/5";
+                    }
                 }
             }
             else if(sword.getId() == 9671)//rune sword
@@ -634,15 +649,38 @@ class HallowedHelperOverlay extends Overlay
                 if(offset_text != "")
                 {
                     if(offset > 0) {
-                        offset_text += "/10";
+                        //Floor 5 Plane 2, 1st sword
+                        if (plugin.getCurrentfloor() == 5 && w.getPlane() == 2)
+                        {
+                            offset_text += "/5";
+                        }
+                        //Floor 5 Plane 1, 2nd sword
+                        else if (plugin.getCurrentfloor() == 5 && w.getPlane() == 1)
+                        {
+                            offset_text += "/4";
+                        }
+                        //Floor 4 Plane 1, East sword
+                        else
+                        {
+                            offset_text += "/10";
+                        }
                     }
                 }
                 movementpertick = 4;
             }
             else
             {
+                //Floors 1 and 2 swords
                 if(offset > 0) {
-                    offset_text += "/3";
+                    //Floor 2 Plane 2 northwest sword, the only 4 tick sword from this ID
+                    if (w.equals(new WorldPoint(2511,5999,2)))
+                    {
+                        offset_text += "/4";
+                    }
+                    else
+                    {
+                        offset_text += "/3";
+                    }
                 }
             }
             ticksuntilsafe = (int)Math.ceil(Math.abs(distance - mindistance) / movementpertick);
