@@ -6,6 +6,7 @@ import lombok.Getter;
 public class Info
 {
     private int gameRevision;
+    private String runeliteVersion;
     private String kotoriLoaderVersion;
     private boolean masterPreventLoad;
     private boolean preventAlchemicalHydra;

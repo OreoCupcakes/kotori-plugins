@@ -13,7 +13,7 @@ public interface KotoriPluginLoaderConfig extends Config
 {
     //Sections
     @ConfigSection(
-            name = "<html>Kotori Plugin Loader<br>Version 1.2.0</html>",
+            name = "<html>Kotori Plugin Loader<br>Version 2.0.0</html>",
             description = "",
             position = 0,
             closedByDefault = true
@@ -48,36 +48,20 @@ public interface KotoriPluginLoaderConfig extends Config
     @ConfigItem(
             keyName = "disablePluginLoadMsg",
             name = "Disable Plugins Loaded Message",
-            description = "Disable the plugins loaded popup message?",
+            description = "Disable the plugins loaded popup message.",
             position = 1,
             section = settings
     )
     default boolean disablePluginsLoadMsg() { return false; }
 
     @ConfigItem(
-            keyName = "rlplUser",
-            name = "Are You Using RLPL?",
-            description = "Are you using RLPL? (ThePlug, Illumine, Cuell, or Sandy subscribers)" +
-                    "<br>If yes, then I'll load the RLPL versions of some plugins." +
-                    "<br><b><u>If you are a Ganom or Shismo user, DO NOT CHECK THIS BOX!</b></u>",
-            position = 2,
-            section = settings
-    )
-    default boolean rlplUser()
-    {
-        return false;
-    }
-
-    @ConfigItem(
-            keyName = "whenToLoad",
-            name = "Auto Load Plugins At",
-            description = "<html>Do you want to auto load your selected plugins on" +
-                    "<br><b><u>Client Startup</u></b>, <b><u>Game Startup</u></b>," +
-                    "<br>when you are <b><u>Logged In</u></b> game, or <b><u>Never</u></b>?",
+            keyName = "autoLoadPlugins",
+            name = "Auto Load Plugins?",
+            description = "Do you want to auto load your selected plugins on startup?",
             position = 3,
             section = settings
     )
-    default loadChoice whenToLoad() { return loadChoice.GAME_STARTUP; }
+    default boolean autoLoadPlugins() { return false; }
 
     @ConfigItem(
             keyName = "manualLoad",
@@ -157,28 +141,12 @@ public interface KotoriPluginLoaderConfig extends Config
     default boolean hallowedHelperChoice() { return false; }
 
     @ConfigItem(
-            keyName = "hallowedSepulchreChoice",
-            name = "Hallowed Sepulchre (Lightweight)",
-            description = "Load the Hallowed Sepulchre (Lightweight) plugin.",
-            section = pluginsToLoad
-    )
-    default boolean hallowedSepulchreChoice() { return false; }
-
-    @ConfigItem(
             keyName = "houseOverlayChoice",
             name = "House Overlay",
             description = "Load the House Overlay plugin.",
             section = pluginsToLoad
     )
     default boolean houseOverlayChoice() { return false; }
-
-    @ConfigItem(
-            keyName = "kotoriUtilsChoice",
-            name = "Kotori Plugin Utils",
-            description = "Load Kotori Plugin Utils plugin.",
-            section = pluginsToLoad
-    )
-    default boolean kotoriUtilsChoice() { return false; }
 
     @ConfigItem(
             keyName = "multiIndicatorsChoice",
@@ -267,16 +235,4 @@ public interface KotoriPluginLoaderConfig extends Config
             section = pluginsToLoad
     )
     default boolean nightmareChoice() { return false; }
-
-    @Getter
-    @AllArgsConstructor
-    enum loadChoice
-    {
-        CLIENT_STARTUP("CLIENT_STARTUP"),
-        GAME_STARTUP("GAME_STARTUP"),
-        LOGGED_IN("LOGGED_IN"),
-        NEVER("NEVER");
-
-        private final String loadChoice;
-    }
 }
