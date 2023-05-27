@@ -50,6 +50,7 @@ import net.runelite.client.util.HotkeyListener;
 
 import javax.inject.Inject;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Slf4j
@@ -858,27 +859,32 @@ public class GodWarsHelperPlugin extends Plugin
 	{
 		NPCContainer npcAboutToAttack = null;
 		int highestPriorityConfig = -1;
+		NPCContainer bossContainer = null;
 		
 		for (NPCContainer npc : npcContainers)
 		{
-			if (npc.getTicksUntilAttack() == 1)
+			switch (npc.getMonsterType())
 			{
-				switch (npc.getMonsterType())
-				{
-					case GENERAL_GRAARDOR:
-					case KRIL_TSUTSAROTH:
-					case COMMANDER_ZILYANA:
-					case KREEARRA:
+				case GENERAL_GRAARDOR:
+				case KRIL_TSUTSAROTH:
+				case COMMANDER_ZILYANA:
+				case KREEARRA:
+					bossContainer = npc;
+					if (npc.getTicksUntilAttack() == 1)
+					{
 						if (bossPriorityConfig >= highestPriorityConfig)
 						{
 							highestPriorityConfig = bossPriorityConfig;
 							npcAboutToAttack = npc;
 						}
-						break;
-					case SERGEANT_STEELWILL:
-					case BALFRUG_KREEYATH:
-					case GROWLER:
-					case WINGMAN_SKREE:
+					}
+					break;
+				case SERGEANT_STEELWILL:
+				case BALFRUG_KREEYATH:
+				case GROWLER:
+				case WINGMAN_SKREE:
+					if (npc.getTicksUntilAttack() == 1)
+					{
 						if (magicMinionPriorityConfig > highestPriorityConfig)
 						{
 							if (npc.getNpcInteracting() == client.getLocalPlayer())
@@ -887,11 +893,14 @@ public class GodWarsHelperPlugin extends Plugin
 								npcAboutToAttack = npc;
 							}
 						}
-						break;
-					case SERGEANT_GRIMSPIKE:
-					case ZAKLN_GRITCH:
-					case BREE:
-					case FLOCKLEADER_GEERIN:
+					}
+					break;
+				case SERGEANT_GRIMSPIKE:
+				case ZAKLN_GRITCH:
+				case BREE:
+				case FLOCKLEADER_GEERIN:
+					if (npc.getTicksUntilAttack() == 1)
+					{
 						if (rangedMinionPriorityConfig > highestPriorityConfig)
 						{
 							if (npc.getNpcInteracting() == client.getLocalPlayer())
@@ -900,11 +909,14 @@ public class GodWarsHelperPlugin extends Plugin
 								npcAboutToAttack = npc;
 							}
 						}
-						break;
-					case SERGEANT_STRONGSTACK:
-					case TSTANON_KARLAK:
-					case STARLIGHT:
-					case FLIGHT_KILISA:
+					}
+					break;
+				case SERGEANT_STRONGSTACK:
+				case TSTANON_KARLAK:
+				case STARLIGHT:
+				case FLIGHT_KILISA:
+					if (npc.getTicksUntilAttack() == 1)
+					{
 						if (meleeMinionPriorityConfig > highestPriorityConfig)
 						{
 							if (npc.getNpcInteracting() == client.getLocalPlayer())
@@ -913,12 +925,18 @@ public class GodWarsHelperPlugin extends Plugin
 								npcAboutToAttack = npc;
 							}
 						}
-						break;
-					default:
-						break;
-				}
+					}
+					break;
+				default:
+					break;
 			}
 		}
+		
+		if (npcAboutToAttack == null)
+		{
+			npcAboutToAttack = bossContainer;
+		}
+		
 		return npcAboutToAttack;
 	}
 	
