@@ -235,4 +235,28 @@ public interface KotoriPluginLoaderConfig extends Config
             section = pluginsToLoad
     )
     default boolean nightmareChoice() { return false; }
+    
+    @ConfigItem(
+            keyName = "aoeWarningsChoice",
+            name = "AoE Warnings",
+            description = "Load the AoE Warnings plugin.",
+            section = pluginsToLoad
+    )
+    default boolean aoeWarningsChoice() { return false; }
+    
+    @ConfigItem(
+            keyName = "fightCavesChoice",
+            name = "Fight Cave",
+            description = "Load the Fight Caves plugin.",
+            section = pluginsToLoad
+    )
+    default boolean fightCavesChoice() { return false; }
+    
+    @ConfigItem(
+            keyName = "infernoChoice",
+            name = "Inferno",
+            description = "Load the Inferno plugin.",
+            section = pluginsToLoad
+    )
+    default boolean infernoChoice() { return false; }
 }

@@ -160,6 +160,9 @@ public class KotoriPluginLoader extends Plugin
 			keys.add("templeTrekkingChoice");
 			keys.add("vorkathOverlayChoice");
 			keys.add("zulrahOverlayChoice");
+			keys.add("aoeWarningsChoice");
+			keys.add("fightCavesChoice");
+			keys.add("infernoChoice");
 			
 			if (config.selectAllPluginsChoice())
 			{
@@ -369,9 +372,10 @@ public class KotoriPluginLoader extends Plugin
 		eventBus.post(new ExternalPluginsChanged(new ArrayList<>()));
 	}
 	
+	//Load Plugins
 	private ArrayList<String> buildPluginsToLoadList()
 	{
-		if (infoJsonObject == null || infoJsonObject.isMasterPreventLoad())
+		if (infoJsonObject == null || infoJsonObject.isPreventMasterLoad())
 		{
 			log.error("Plugins stopped loading due to master stop flag being true.");
 			return null;
@@ -391,7 +395,7 @@ public class KotoriPluginLoader extends Plugin
 		ArrayList<String> pluginClassPathsToLoad = new ArrayList<>();
 		
 		//Load Kotori Plugin Utils always
-		pluginClassPathsToLoad.add(getPluginClassPath("Kotori Plugin Utils"));
+		addToPluginToLoadList(pluginClassPathsToLoad, true, infoJsonObject.isPreventKotoriUtils(), "Kotori Plugin Utils");
 		//Load Alch Hydra
 		addToPluginToLoadList(pluginClassPathsToLoad, config.alchemicalHydraChoice(), infoJsonObject.isPreventAlchemicalHydra(), "Alchemical Hydra");
 		//Load Cerberus Helper
@@ -430,6 +434,12 @@ public class KotoriPluginLoader extends Plugin
 		addToPluginToLoadList(pluginClassPathsToLoad, config.vorkathOverlayChoice(), infoJsonObject.isPreventVorkath(), "Vorkath");
 		//Load Zulrah
 		addToPluginToLoadList(pluginClassPathsToLoad, config.zulrahOverlayChoice(), infoJsonObject.isPreventZulrah(), "Zulrah");
+		//Load AoE Warnings
+		addToPluginToLoadList(pluginClassPathsToLoad, config.aoeWarningsChoice(), infoJsonObject.isPreventAoeWarnings(), "AoE Warnings");
+		//Load Fight Caves
+		addToPluginToLoadList(pluginClassPathsToLoad, config.fightCavesChoice(), infoJsonObject.isPreventFightCaves(), "Fight Caves");
+		//Load Inferno
+		addToPluginToLoadList(pluginClassPathsToLoad, config.infernoChoice(), infoJsonObject.isPreventInferno(), "Inferno");
 		
 		return pluginClassPathsToLoad;
 	}

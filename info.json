@@ -1,18 +1,16 @@
 {
   "gameRevision": "213",
+  "runeliteVersion": "1.10.0.7",
   "kotoriLoaderVersion": "1.1.2",
-  "masterPreventLoad": "false",
+  "preventMasterLoad": "false",
   "preventAlchemicalHydra": "false",
-  "preventAlchemicalHydraRLPL": "false",
   "preventCerberusHelper": "false",
   "preventDagannothKings": "false",
   "preventDemonicGorillas": "false",
   "preventEffectTimers": "false",
   "preventGauntletExtended": "false",
   "preventGrotesqueGuardians": "false",
-  "preventGwdTickTimers": "false",
   "preventHallowedHelper": "false",
-  "preventHallowedSepulchre": "false",
   "preventHouseOverlay": "false",
   "preventKotoriUtils": "false",
   "preventMultiIndicators": "false",
@@ -23,7 +21,9 @@
   "preventTarnsLair": "false",
   "preventTempleTrekking": "false",
   "preventVorkath": "false",
-  "preventVorkathRLPL": "false",
   "preventZulrah": "false",
-  "preventGwdHelper": "false"
+  "preventGwdHelper": "false",
+  "preventAoeWarnings": "false",
+  "preventFightCaves": "false",
+  "preventInferno": "false"
 }
