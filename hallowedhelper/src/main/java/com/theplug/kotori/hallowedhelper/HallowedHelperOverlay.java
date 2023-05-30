@@ -128,7 +128,7 @@ class HallowedHelperOverlay extends Overlay
             }
             else
             {
-                if (plugin.gameticksOnFloor4Plane2SouthSide <= 20)
+                if (plugin.gameticksOnFloor4Plane2SouthSide <= 25)
                 {
                     render_floor4_southA_statues(graphics);
                     render_floor4_southB_statues(graphics);

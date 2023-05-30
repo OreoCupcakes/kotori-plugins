@@ -37,6 +37,7 @@ import java.util.regex.Pattern;
 import javax.inject.Inject;
 
 import com.theplug.kotori.kotoriutils.KotoriUtils;
+import com.theplug.kotori.kotoriutils.reflection.NPCsLibrary;
 import lombok.AccessLevel;
 import lombok.Getter;
 import net.runelite.api.ChatMessageType;
@@ -59,7 +60,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 @PluginDependency(KotoriUtils.class)
 @PluginDescriptor(
-	name = "Fight Cave",
+	name = "Fight Caves",
 	enabledByDefault = false,
 	description = "Displays current and upcoming wave monsters in the Fight Caves and what to pray at TzTok-Jad",
 	tags = {"bosses", "combat", "minigame", "overlay", "pve", "pvm", "jad", "fire", "cape", "wave", "ported", "kotori"}
@@ -115,9 +116,6 @@ public class FightCavePlugin extends Plugin
 
 	@Inject
 	private Client client;
-	
-	@Inject
-	private KotoriUtils kotoriUtils;
 
 	@Inject
 	private OverlayManager overlayManager;
@@ -310,7 +308,7 @@ public class FightCavePlugin extends Plugin
 
 			for (int anims : npc.getAnimations())
 			{
-				if (anims == kotoriUtils.getNpcsLibrary().getNPCAnimationID(npc.getNpc()))
+				if (anims == NPCsLibrary.getNPCAnimationID(npc.getNpc()))
 				{
 					if (npc.getTicksUntilAttack() < 1)
 					{

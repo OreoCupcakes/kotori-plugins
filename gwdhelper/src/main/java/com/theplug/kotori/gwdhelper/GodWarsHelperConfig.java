@@ -36,7 +36,7 @@ import java.awt.*;
 public interface GodWarsHelperConfig extends Config
 {
 	@ConfigSection(
-			name = "<html>God Wars Helper<br>Version 2.0.5</html>",
+			name = "<html>God Wars Helper<br>Version 2.1.0</html>",
 			description = "",
 			position = -1,
 			closedByDefault = true
@@ -292,6 +292,18 @@ public interface GodWarsHelperConfig extends Config
 	
 	@ConfigItem(
 			position = 9,
+			keyName = "bandosBetaLagProtection",
+			name = "[BETA] {#}:0 \"Lag\" Protection",
+			description = 	"[BETA] This feature is for people doing 6:0 and other {#}:0 methods." +
+							"<br>It attempts to preemptively pray against Graardor if you miss a" +
+							"<br>tick on the {#}:0 methods and Graardor gets close to attacking you." +
+							"<br>It works by calculating if you are within two tiles of Graardor's model.",
+			section = bandosHelper
+	)
+	default boolean bandosBetaLagProtection() { return false; }
+	
+	@ConfigItem(
+			position = 10,
 			keyName = "bandosLine3",
 			name = "-------------------------------------",
 			description = "",
@@ -300,7 +312,7 @@ public interface GodWarsHelperConfig extends Config
 	default Boolean bandosLine3() { return false; }
 	
 	@ConfigItem(
-			position = 10,
+			position = 11,
 			keyName = "bandosLine4",
 			name = "Assign NPC Protection Priority",
 			description = "If multiple NPCs attack on the same game cycle, then the script will pray against<br>" +
@@ -317,7 +329,7 @@ public interface GodWarsHelperConfig extends Config
 	
 	@Range(max = 3)
 	@ConfigItem(
-			position = 11,
+			position = 12,
 			keyName = "generalGraardorPriority",
 			name = "General Graardor",
 			description = "General Graardor protection priority.<br>" +
@@ -330,7 +342,7 @@ public interface GodWarsHelperConfig extends Config
 	
 	@Range(max = 3)
 	@ConfigItem(
-			position = 12,
+			position = 13,
 			keyName = "sergeantSteelwillPriority",
 			name = "Sergeant Steelwill",
 			description = "Sergeant Steelwill (Magic) protection priority.<br>" +
@@ -343,7 +355,7 @@ public interface GodWarsHelperConfig extends Config
 	
 	@Range(max = 3)
 	@ConfigItem(
-			position = 13,
+			position = 14,
 			keyName = "sergeantGrimspikePriority",
 			name = "Sergeant Grimspike",
 			description = "Sergeant Grimspike (Ranged) protection priority.<br>" +
@@ -356,7 +368,7 @@ public interface GodWarsHelperConfig extends Config
 	
 	@Range(max = 3)
 	@ConfigItem(
-			position = 14,
+			position = 15,
 			keyName = "sergeantStrongstackPriority",
 			name = "Sergeant Strongstack",
 			description = "Sergeant Strongstack (Melee) protection priority.<br>" +
@@ -368,7 +380,7 @@ public interface GodWarsHelperConfig extends Config
 	default int sergeantStrongstackPriority() { return 0; }
 	
 	@ConfigItem(
-			position = 15,
+			position = 16,
 			keyName = "bandosLine5",
 			name = "-------------------------------------",
 			description = "",
@@ -377,7 +389,7 @@ public interface GodWarsHelperConfig extends Config
 	default Boolean bandosLine5() { return false; }
 	
 	@ConfigItem(
-			position = 16,
+			position = 17,
 			keyName = "bandosLine6",
 			name = "Automate Gear Switching On:",
 			description = "Underneath are settings to switch gear within Bandos' Stronghold. You can configure to <br>" +
@@ -387,7 +399,7 @@ public interface GodWarsHelperConfig extends Config
 	default Boolean bandosLine6() { return false; }
 	
 	@ConfigItem(
-			position = 17,
+			position = 18,
 			keyName = "generalGraardorDeathGearBoolean",
 			name = "General Graardor's Death?",
 			description = "<b><u>Gear IDs Set 1 - Event:</u></b><br>" +
@@ -398,7 +410,7 @@ public interface GodWarsHelperConfig extends Config
 	default boolean generalGraardorDeathGearBoolean() { return false; }
 	
 	@ConfigItem(
-			position = 18,
+			position = 19,
 			keyName = "generalGraardorDeathGearHotkey",
 			name = "Hotkey Trigger",
 			description = "<b><u>Gear IDs Set 1 - Hotkey:</u></b><br>" +
@@ -409,7 +421,7 @@ public interface GodWarsHelperConfig extends Config
 	default Keybind generalGraardorDeathGearHotkey() { return Keybind.NOT_SET; }
 	
 	@ConfigItem(
-			position = 19,
+			position = 20,
 			keyName = "generalGraardorGearIds",
 			name = "Enter Gear IDs Here:",
 			description = "<b><u>Gear IDs Set 1:</u></b><br>" +
@@ -420,7 +432,7 @@ public interface GodWarsHelperConfig extends Config
 	default String generalGraardorGearIds() { return "0,0"; }
 	
 	@ConfigItem(
-			position = 20,
+			position = 21,
 			keyName = "sergeantSteelwillDeathGearBoolean",
 			name = "Sergeant Steelwill's Death?",
 			description = "<b><u>Gear IDs Set 2 - Event:</u></b><br>" +
@@ -431,7 +443,7 @@ public interface GodWarsHelperConfig extends Config
 	default boolean sergeantSteelwillDeathGearBoolean() { return false; }
 	
 	@ConfigItem(
-			position = 21,
+			position = 22,
 			keyName = "sergeantSteelwillDeathGearHotkey",
 			name = "Hotkey Trigger",
 			description = "<b><u>Gear IDs Set 2 - Hotkey:</u></b><br>" +
@@ -442,7 +454,7 @@ public interface GodWarsHelperConfig extends Config
 	default Keybind sergeantSteelwillDeathGearHotkey() { return Keybind.NOT_SET; }
 	
 	@ConfigItem(
-			position = 22,
+			position = 23,
 			keyName = "sergeantSteelwillGearIds",
 			name = "Enter Gear IDs Here:",
 			description = "<b><u>Gear IDs Set 2:</u></b><br>" +
@@ -453,7 +465,7 @@ public interface GodWarsHelperConfig extends Config
 	default String sergeantSteelwillGearIds() { return "0,0"; }
 	
 	@ConfigItem(
-			position = 23,
+			position = 24,
 			keyName = "sergeantGrimspikeDeathGearBoolean",
 			name = "Sergeant Grimspike's Death?",
 			description = "<b><u>Gear IDs Set 3 - Event:</u></b><br>" +
@@ -464,7 +476,7 @@ public interface GodWarsHelperConfig extends Config
 	default boolean sergeantGrimspikeDeathGearBoolean() { return false; }
 	
 	@ConfigItem(
-			position = 24,
+			position = 25,
 			keyName = "sergeantGrimspikeDeathGearHotkey",
 			name = "Hotkey Trigger",
 			description = "<b><u>Gear IDs Set 3 - Hotkey:</u></b><br>" +
@@ -475,7 +487,7 @@ public interface GodWarsHelperConfig extends Config
 	default Keybind sergeantGrimspikeGearHotkey() { return Keybind.NOT_SET; }
 	
 	@ConfigItem(
-			position = 25,
+			position = 26,
 			keyName = "sergeantGrimspikeGearIds",
 			name = "Enter Gear IDs Here:",
 			description = "<b><u>Gear IDs Set 3:</u></b><br>" +
@@ -486,7 +498,7 @@ public interface GodWarsHelperConfig extends Config
 	default String sergeantGrimspikeGearIds() { return "0,0"; }
 	
 	@ConfigItem(
-			position = 26,
+			position = 27,
 			keyName = "sergeantStrongstackDeathGearBoolean",
 			name = "Sergeant Strongstack's Death?",
 			description = "<b><u>Gear IDs Set 4 - Event:</u></b><br>" +
@@ -497,7 +509,7 @@ public interface GodWarsHelperConfig extends Config
 	default boolean sergeantStrongstackDeathGearBoolean() { return false; }
 	
 	@ConfigItem(
-			position = 27,
+			position = 28,
 			keyName = "sergeantStrongstackDeathGearHotkey",
 			name = "Hotkey Trigger",
 			description = "<b><u>Gear IDs Set 4 - Hotkey:</u></b><br>" +
@@ -508,7 +520,7 @@ public interface GodWarsHelperConfig extends Config
 	default Keybind sergeantStrongstackGearHotkey() { return Keybind.NOT_SET; }
 	
 	@ConfigItem(
-			position = 28,
+			position = 29,
 			keyName = "sergeantStrongstackGearIds",
 			name = "Enter Gear IDs Here:",
 			description = "<b><u>Gear IDs Set 4:</u></b><br>" +
@@ -519,7 +531,7 @@ public interface GodWarsHelperConfig extends Config
 	default String sergeantStrongstackGearIds() { return "0,0"; }
 	
 	@ConfigItem(
-			position = 29,
+			position = 30,
 			keyName = "bandosDeathSpawnGearBoolean",
 			name = "All Dead or Graardor's Spawn?",
 			description = "<b><u>Gear IDs Set 5 - Event:</u></b><br>" +
@@ -530,7 +542,7 @@ public interface GodWarsHelperConfig extends Config
 	default boolean bandosDeathSpawnGearBoolean() { return false; }
 	
 	@ConfigItem(
-			position = 30,
+			position = 31,
 			keyName = "bandosDeathSpawnGearHotkey",
 			name = "Hotkey Trigger",
 			description = "<b><u>Gear IDs Set 5 - Hotkey:</u></b><br>" +
@@ -541,7 +553,7 @@ public interface GodWarsHelperConfig extends Config
 	default Keybind bandosDeathSpawnGearHotkey() { return Keybind.NOT_SET; }
 	
 	@ConfigItem(
-			position = 31,
+			position = 32,
 			keyName = "bandosDeathSpawnGearIds",
 			name = "Enter Gear IDs Here:",
 			description = "<b><u>Gear IDs Set 5:</u></b><br>" +
@@ -701,6 +713,18 @@ public interface GodWarsHelperConfig extends Config
 	
 	@ConfigItem(
 			position = 11,
+			keyName = "zamorakBetaLagProtection",
+			name = "[BETA] {#}:0 \"Lag\" Protection",
+			description = 	"[BETA] This feature is for people doing 6:0 and other {#}:0 methods." +
+					"<br>It attempts to preemptively pray against K'ril if you miss a" +
+					"<br>tick on the {#}:0 methods and K'ril gets close to attacking you." +
+					"<br>It works by calculating if you are within two tiles of K'ril's model.",
+			section = bandosHelper
+	)
+	default boolean zamorakBetaLagProtection() { return false; }
+	
+	@ConfigItem(
+			position = 12,
 			keyName = "zamorakLine4",
 			name = "-------------------------------------",
 			description = "",
@@ -709,7 +733,7 @@ public interface GodWarsHelperConfig extends Config
 	default Boolean zamorakLine4() { return false; }
 	
 	@ConfigItem(
-			position = 12,
+			position = 13,
 			keyName = "zamorakLine5",
 			name = "Assign NPC Protection Priority",
 			description = "If multiple NPCs attack on the same game cycle, then the script will pray against<br>" +
@@ -726,7 +750,7 @@ public interface GodWarsHelperConfig extends Config
 	
 	@Range(max = 3)
 	@ConfigItem(
-			position = 13,
+			position = 14,
 			keyName = "krilTsutsarothPriority",
 			name = "K'ril Tsutsaroth",
 			description = "K'ril Tsutsaroth protection priority.<br>" +
@@ -739,7 +763,7 @@ public interface GodWarsHelperConfig extends Config
 	
 	@Range(max = 3)
 	@ConfigItem(
-			position = 14,
+			position = 15,
 			keyName = "balfrugKreeyathPriority",
 			name = "Balfrug Kreeyath",
 			description = "Balfrug Kreeyath (Magic) protection priority.<br>" +
@@ -752,7 +776,7 @@ public interface GodWarsHelperConfig extends Config
 	
 	@Range(max = 3)
 	@ConfigItem(
-			position = 15,
+			position = 16,
 			keyName = "zaklnGritchPriority",
 			name = "Zakl'n Gritch",
 			description = "Zakl'n Gritch (Ranged) protection priority.<br>" +
@@ -765,7 +789,7 @@ public interface GodWarsHelperConfig extends Config
 	
 	@Range(max = 3)
 	@ConfigItem(
-			position = 16,
+			position = 17,
 			keyName = "tstanonKarlakPriority",
 			name = "Tstanon Karlak",
 			description = "Tstanon Karlak (Melee) protection priority.<br>" +
@@ -777,7 +801,7 @@ public interface GodWarsHelperConfig extends Config
 	default int tstanonKarlakPriority() { return 0; }
 	
 	@ConfigItem(
-			position = 17,
+			position = 18,
 			keyName = "zamorakLine6",
 			name = "-------------------------------------",
 			description = "",
@@ -786,7 +810,7 @@ public interface GodWarsHelperConfig extends Config
 	default Boolean zamorakLine6() { return false; }
 	
 	@ConfigItem(
-			position = 18,
+			position = 19,
 			keyName = "zamorakLine7",
 			name = "Automate Gear Switching On:",
 			description = "Underneath are settings to switch gear within Zamorak's Fortress. You can configure to <br>" +
@@ -796,7 +820,7 @@ public interface GodWarsHelperConfig extends Config
 	default Boolean zamorakLine7() { return false; }
 	
 	@ConfigItem(
-			position = 19,
+			position = 20,
 			keyName = "krilTsutsarothDeathGearBoolean",
 			name = "K'ril Tsutsaroth's Death?",
 			description = "<b><u>Gear IDs Set 1 - Event:</u></b><br>" +
@@ -807,7 +831,7 @@ public interface GodWarsHelperConfig extends Config
 	default boolean krilTsutsarothDeathGearBoolean() { return false; }
 	
 	@ConfigItem(
-			position = 20,
+			position = 21,
 			keyName = "krilTsutsarothDeathGearHotkey",
 			name = "Hotkey Trigger",
 			description = "<b><u>Gear IDs Set 1 - Hotkey:</u></b><br>" +
@@ -818,7 +842,7 @@ public interface GodWarsHelperConfig extends Config
 	default Keybind krilTsutsarothDeathGearHotkey() { return Keybind.NOT_SET; }
 	
 	@ConfigItem(
-			position = 21,
+			position = 22,
 			keyName = "krilTsutsarothGearIds",
 			name = "Enter Gear IDs Here:",
 			description = "<b><u>Gear IDs Set 1:</u></b><br>" +
@@ -829,7 +853,7 @@ public interface GodWarsHelperConfig extends Config
 	default String krilTsutsarothGearIds() { return "0,0"; }
 	
 	@ConfigItem(
-			position = 22,
+			position = 23,
 			keyName = "balfrugKreeyathDeathGearBoolean",
 			name = "Balfrug Kreeyath's Death?",
 			description = "<b><u>Gear IDs Set 2 - Event:</u></b><br>" +
@@ -840,7 +864,7 @@ public interface GodWarsHelperConfig extends Config
 	default boolean balfrugKreeyathDeathGearBoolean() { return false; }
 	
 	@ConfigItem(
-			position = 23,
+			position = 24,
 			keyName = "balfrugKreeyathDeathGearHotkey",
 			name = "Hotkey Trigger",
 			description = "<b><u>Gear IDs Set 2 - Hotkey:</u></b><br>" +
@@ -851,7 +875,7 @@ public interface GodWarsHelperConfig extends Config
 	default Keybind balfrugKreeyathDeathGearHotkey() { return Keybind.NOT_SET; }
 	
 	@ConfigItem(
-			position = 24,
+			position = 25,
 			keyName = "balfrugKreeyathGearIds",
 			name = "Enter Gear IDs Here:",
 			description = "<b><u>Gear IDs Set 2:</u></b><br>" +
@@ -862,7 +886,7 @@ public interface GodWarsHelperConfig extends Config
 	default String balfrugKreeyathGearIds() { return "0,0"; }
 	
 	@ConfigItem(
-			position = 25,
+			position = 26,
 			keyName = "zaklnGritchDeathGearBoolean",
 			name = "Zakl'n Gritch's Death?",
 			description = "<b><u>Gear IDs Set 3 - Event:</u></b><br>" +
@@ -873,7 +897,7 @@ public interface GodWarsHelperConfig extends Config
 	default boolean zaklnGritchDeathGearBoolean() { return false; }
 	
 	@ConfigItem(
-			position = 26,
+			position = 27,
 			keyName = "zaklnGritchGearHotkey",
 			name = "Hotkey Trigger",
 			description = "<b><u>Gear IDs Set 3 - Hotkey:</u></b><br>" +
@@ -884,7 +908,7 @@ public interface GodWarsHelperConfig extends Config
 	default Keybind zaklnGritchDeathGearHotkey() { return Keybind.NOT_SET; }
 	
 	@ConfigItem(
-			position = 27,
+			position = 28,
 			keyName = "zaklnGritchGearIds",
 			name = "Enter Gear IDs Here:",
 			description = "<b><u>Gear IDs Set 3:</u></b><br>" +
@@ -895,7 +919,7 @@ public interface GodWarsHelperConfig extends Config
 	default String zaklnGritchGearIds() { return "0,0"; }
 	
 	@ConfigItem(
-			position = 28,
+			position = 29,
 			keyName = "tstanonKarlakDeathGearBoolean",
 			name = "Tstanon Karlak's Death?'",
 			description = "<b><u>Gear IDs Set 4 - Event:</u></b><br>" +
@@ -906,7 +930,7 @@ public interface GodWarsHelperConfig extends Config
 	default boolean tstanonKarlakDeathGearBoolean() { return false; }
 	
 	@ConfigItem(
-			position = 29,
+			position = 30,
 			keyName = "tstanonKarlakDeathGearHotkey",
 			name = "Hotkey Trigger",
 			description = "<b><u>Gear IDs Set 4 - Hotkey:</u></b><br>" +
@@ -917,7 +941,7 @@ public interface GodWarsHelperConfig extends Config
 	default Keybind tstanonKarlakDeathGearHotkey() { return Keybind.NOT_SET; }
 	
 	@ConfigItem(
-			position = 30,
+			position = 31,
 			keyName = "tstanonKarlakGearIds",
 			name = "Enter Gear IDs Here:",
 			description = "<b><u>Gear IDs Set 4:</u></b><br>" +
@@ -928,7 +952,7 @@ public interface GodWarsHelperConfig extends Config
 	default String tstanonKarlakGearIds() { return "0,0"; }
 	
 	@ConfigItem(
-			position = 31,
+			position = 32,
 			keyName = "zamorakDeathSpawnGearBoolean",
 			name = "All Dead or K'ril's Spawn?",
 			description = "<b><u>Gear IDs Set 5 - Event:</u></b><br>" +
@@ -939,7 +963,7 @@ public interface GodWarsHelperConfig extends Config
 	default boolean zamorakDeathSpawnGearBoolean() { return false; }
 	
 	@ConfigItem(
-			position = 32,
+			position = 33,
 			keyName = "zamorakDeathSpawnGearHotkey",
 			name = "Hotkey Trigger",
 			description = "<b><u>Gear IDs Set 5 - Hotkey:</u></b><br>" +
@@ -950,7 +974,7 @@ public interface GodWarsHelperConfig extends Config
 	default Keybind zamorakDeathSpawnGearHotkey() { return Keybind.NOT_SET; }
 	
 	@ConfigItem(
-			position = 33,
+			position = 34,
 			keyName = "zamorakDeathSpawnGearIds",
 			name = "Enter Gear IDs Here:",
 			description = "<b><u>Gear IDs Set 5:</u></b><br>" +

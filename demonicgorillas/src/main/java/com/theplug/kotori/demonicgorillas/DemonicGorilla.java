@@ -29,6 +29,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.theplug.kotori.kotoriutils.KotoriUtils;
+import com.theplug.kotori.kotoriutils.reflection.NPCsLibrary;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -64,7 +65,6 @@ class DemonicGorilla
 	}
 
 	private Client client;
-	private KotoriUtils kotoriUtils;
 	@Getter(AccessLevel.PACKAGE)
 	private NPC npc;
 
@@ -124,10 +124,9 @@ class DemonicGorilla
 	@Setter(AccessLevel.PACKAGE)
 	private int disabledMeleeMovementForTicks;
 
-	DemonicGorilla(NPC npc, Client client, KotoriUtils kotoriUtils)
+	DemonicGorilla(NPC npc, Client client)
 	{
 		this.client = client;
-		this.kotoriUtils = kotoriUtils;
 		this.npc = npc;
 		this.nextPosibleAttackStyles = Arrays.asList(ALL_REGULAR_ATTACK_STYLES);
 		this.nextAttackTick = -100;
@@ -140,7 +139,7 @@ class DemonicGorilla
 		NPCComposition composition = npc.getComposition();
 		if (composition != null)
 		{
-			return kotoriUtils.getNpcsLibrary().getNPCHeadIcon(composition);
+			return NPCsLibrary.getNPCHeadIcon(composition);
 		}
 		return null;
 	}

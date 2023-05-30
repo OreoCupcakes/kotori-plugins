@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.theplug.kotori.kotoriutils.KotoriUtils;
+import com.theplug.kotori.kotoriutils.reflection.NPCsLibrary;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -193,9 +194,9 @@ class InfernoNPC
 		return new WorldArea(lastPlayerLocation, 1, 1).hasLineOfSightTo(client, this.getNpc().getWorldArea());
 	}
 
-	void gameTick(KotoriUtils kotoriUtils, Client client, WorldPoint lastPlayerLocation, boolean finalPhase, int ticksSinceFinalPhase)
+	void gameTick(Client client, WorldPoint lastPlayerLocation, boolean finalPhase, int ticksSinceFinalPhase)
 	{
-		int npcAnimationId = kotoriUtils.getNpcsLibrary().getNPCAnimationID(this.getNpc());
+		int npcAnimationId = NPCsLibrary.getNPCAnimationID(this.getNpc());
 		safeSpotCache.clear();
 		this.idleTicks += 1;
 

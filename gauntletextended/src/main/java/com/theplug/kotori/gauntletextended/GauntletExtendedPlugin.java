@@ -39,6 +39,7 @@ import javax.inject.Singleton;
 
 import com.theplug.kotori.gauntletextended.resource.ResourceManager;
 import com.theplug.kotori.gauntletextended.utils.GameObjectQuery;
+import com.theplug.kotori.kotoriutils.reflection.NPCsLibrary;
 import com.theplug.kotori.kotoriutils.rlapi.GraphicIDPlus;
 import com.theplug.kotori.kotoriutils.KotoriUtils;
 import lombok.Getter;
@@ -187,9 +188,6 @@ public class GauntletExtendedPlugin extends Plugin
 
 	@Inject
 	private ClientThread clientThread;
-
-	@Inject
-	private KotoriUtils kotoriUtils;
 
 	@Inject
 	private GauntletExtendedConfig config;
@@ -658,7 +656,7 @@ public class GauntletExtendedPlugin extends Plugin
 		HeadIcon headIcon = null;
 
 		NPCComposition hunllefComposition = hunllef.getNpc().getComposition();
-		headIcon = kotoriUtils.getNpcsLibrary().getNPCHeadIcon(hunllefComposition);
+		headIcon = NPCsLibrary.getNPCHeadIcon(hunllefComposition);
 		/*
 			Old API code
 			final HeadIcon headIcon = hunllef.getNpc().getComposition().getOverheadIcon();

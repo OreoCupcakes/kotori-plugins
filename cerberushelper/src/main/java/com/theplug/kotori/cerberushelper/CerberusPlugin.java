@@ -41,7 +41,11 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import com.theplug.kotori.kotoriutils.KotoriUtils;
+import com.theplug.kotori.kotoriutils.methods.InventoryInteractions;
+import com.theplug.kotori.kotoriutils.methods.PrayerInteractions;
+import com.theplug.kotori.kotoriutils.methods.SpellInteractions;
 import com.theplug.kotori.kotoriutils.methods.VarUtilities;
+import com.theplug.kotori.kotoriutils.reflection.InvokesLibrary;
 import com.theplug.kotori.kotoriutils.rlapi.WidgetInfoPlus;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -124,9 +128,6 @@ public class CerberusPlugin extends Plugin
 	@Inject
 	private UpcomingAttackOverlay upcomingAttackOverlay;
 
-	@Inject
-	private KotoriUtils kotoriUtils;
-
 	@Getter
 	private final List<NPC> ghosts = new ArrayList<>();
 
@@ -155,6 +156,7 @@ public class CerberusPlugin extends Plugin
 
 	private boolean inArena;
 	private boolean inAreaPastFlames;
+	private boolean allPrayersDeactivated;
 
 	@Provides
 	CerberusConfig getConfig(final ConfigManager configManager)
@@ -528,6 +530,8 @@ public class CerberusPlugin extends Plugin
 
 			upcomingAttacks.clear();
 			tickTimestamps.clear();
+			
+			allPrayersDeactivated = false;
 		}
 
 		if (cerberus == null)
@@ -795,7 +799,7 @@ public class CerberusPlugin extends Plugin
 			return;
 		}
 
-		kotoriUtils.getInvokesLibrary().invokePrayer(prayerToInvoke);
+		PrayerInteractions.activatePrayer(prayerToInvoke);
 	}
 
 	private void prayOffensively()
@@ -812,38 +816,17 @@ public class CerberusPlugin extends Plugin
 			return;
 		}
 
-		kotoriUtils.getInvokesLibrary().invokePrayer(prayer);
+		PrayerInteractions.activatePrayer(prayer);
 	}
 
 	private void deactivatePrayers()
 	{
-		if (cerberus != null)
+		if (cerberus != null || allPrayersDeactivated)
 		{
 			return;
 		}
 
-		if (config.autoDefensivePrayers())
-		{
-			if (client.isPrayerActive(Prayer.PROTECT_FROM_MAGIC))
-			{
-				kotoriUtils.getInvokesLibrary().deactivatePrayer(Prayer.PROTECT_FROM_MAGIC);
-			}
-			else if (client.isPrayerActive(Prayer.PROTECT_FROM_MISSILES))
-			{
-				kotoriUtils.getInvokesLibrary().deactivatePrayer(Prayer.PROTECT_FROM_MISSILES);
-			}
-			else if (client.isPrayerActive(Prayer.PROTECT_FROM_MELEE))
-			{
-				kotoriUtils.getInvokesLibrary().deactivatePrayer(Prayer.PROTECT_FROM_MELEE);
-			}
-		}
-
-		if (config.autoOffensivePrayers())
-		{
-			final Prayer prayer = config.offensivePrayerChoice().getPrayer();
-
-			kotoriUtils.getInvokesLibrary().deactivatePrayer(prayer);
-		}
+		allPrayersDeactivated = PrayerInteractions.deactivatePrayers(config.keepPreservePrayerOn());
 	}
 
 	private void handlePrayerPotionDrinking()
@@ -856,7 +839,7 @@ public class CerberusPlugin extends Plugin
 
 		if (client.getBoostedSkillLevel(Skill.PRAYER) <= valueToDrinkAt)
 		{
-			kotoriUtils.getInvokesLibrary().invokePPotDrinking();
+			InventoryInteractions.drinkPrayerRestoreDose(true, true, true);
 		}
 	}
 
@@ -913,17 +896,9 @@ public class CerberusPlugin extends Plugin
 			return;
 		}
 		
-		if (!VarUtilities.onArceuusSpellbook(client))
+		if (cerberus.getHpPercentage() <= config.deathChargeHpPercentage())
 		{
-			return;
-		}
-		
-		if (!VarUtilities.isSpellDeathChargeOnCooldown(client))
-		{
-			if (cerberus.getHpPercentage() <= config.deathChargeHpPercentage())
-			{
-				kotoriUtils.getInvokesLibrary().invoke(-1, WidgetInfoPlus.SPELL_DEATH_CHARGE.getId(), MenuAction.CC_OP.getId(), 1, -1, "", "", 0, 0);
-			}
+			SpellInteractions.castSpellDeathCharge();
 		}
 	}
 }

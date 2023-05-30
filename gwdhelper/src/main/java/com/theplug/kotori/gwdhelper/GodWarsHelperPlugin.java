@@ -25,8 +25,11 @@ package com.theplug.kotori.gwdhelper;
 
 import com.google.inject.Provides;
 import com.theplug.kotori.kotoriutils.KotoriUtils;
-import com.theplug.kotori.kotoriutils.methods.InventoryInteraction;
+import com.theplug.kotori.kotoriutils.methods.InventoryInteractions;
+import com.theplug.kotori.kotoriutils.methods.PrayerInteractions;
+import com.theplug.kotori.kotoriutils.methods.SpellInteractions;
 import com.theplug.kotori.kotoriutils.methods.VarUtilities;
+import com.theplug.kotori.kotoriutils.reflection.SpellsLibrary;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -135,9 +138,6 @@ public class GodWarsHelperPlugin extends Plugin
 	
 	@Inject
 	private ClientThread clientThread;
-	
-	@Inject
-	private KotoriUtils kotoriUtils;
 
 	@Inject
 	private OverlayManager overlayManager;
@@ -436,14 +436,14 @@ public class GodWarsHelperPlugin extends Plugin
 		
 		if (entryOption.equals(spell1Option))
 		{
-			if (!VarUtilities.isSpellInActiveSpellbook(client, config.spellChoice1().getWidgetInfo()) || event.getMenuTarget().equals(" "))
+			if (!VarUtilities.isSpellInActiveSpellbook(config.spellChoice1().getWidgetInfo()) || event.getMenuTarget().equals(" "))
 			{
 				event.consume();
 			}
 		}
 		else if (entryOption.equals(spell2Option))
 		{
-			if (!VarUtilities.isSpellInActiveSpellbook(client, config.spellChoice2().getWidgetInfo()) || event.getMenuTarget().equals(" "))
+			if (!VarUtilities.isSpellInActiveSpellbook(config.spellChoice2().getWidgetInfo()) || event.getMenuTarget().equals(" "))
 			{
 				event.consume();
 			}
@@ -717,28 +717,7 @@ public class GodWarsHelperPlugin extends Plugin
 	{
 		if (!bossAlive && !rangedMinionAlive && !magicMinionAlive && !meleeMinionAlive && inBossRoom && !allPrayersDeactivated)
 		{
-			Prayer[] prayers = Prayer.values();
-			int actionsTaken = 0;
-			for (Prayer p : prayers)
-			{
-				if (actionsTaken > 3)
-				{
-					return;
-				}
-				if (client.isPrayerActive(p))
-				{
-					if (p.equals(Prayer.PRESERVE))
-					{
-						if (config.keepPreservePrayerOn())
-						{
-							continue;
-						}
-					}
-					kotoriUtils.getInvokesLibrary().deactivatePrayer(p);
-					actionsTaken++;
-				}
-			}
-			allPrayersDeactivated = true;
+			allPrayersDeactivated = PrayerInteractions.deactivatePrayers(config.keepPreservePrayerOn());
 		}
 	}
 	
@@ -751,7 +730,7 @@ public class GodWarsHelperPlugin extends Plugin
 		
 		if (config.keepPreservePrayerOn())
 		{
-			kotoriUtils.getInvokesLibrary().invokePrayer(Prayer.PRESERVE);
+			PrayerInteractions.activatePrayer(Prayer.PRESERVE);
 		}
 	}
 	
@@ -796,25 +775,25 @@ public class GodWarsHelperPlugin extends Plugin
 			case GENERAL_REGION:
 			{
 				chooseDefensiveConfigStyle(config.autoBandosDefensePrayers(), config.generalGraadorPriority(), config.sergeantSteelwillPriority(), config.sergeantGrimspikePriority(),
-						config.sergeantStrongstackPriority(), isBandosPrayerHotkeyOn);
+						config.sergeantStrongstackPriority(), isBandosPrayerHotkeyOn, config.bandosBetaLagProtection());
 				break;
 			}
 			case ZAMMY_REGION:
 			{
 				chooseDefensiveConfigStyle(config.autoZamorakDefensePrayers(), config.krilTsutsarothPriority(), config.balfrugKreeyathPriority(), config.zaklnGritchPriority(),
-						config.tstanonKarlakPriority(), isZammyPrayerHotkeyOn);
+						config.tstanonKarlakPriority(), isZammyPrayerHotkeyOn, config.zamorakBetaLagProtection());
 				break;
 			}
 			case SARA_REGION:
 			{
 				chooseDefensiveConfigStyle(config.autoSaradominDefensePrayers(), config.commanderZilyanaPriority(), config.growlerPriority(), config.breePriority(),
-						config.starlightPriority(), isSaraPrayerHotkeyOn);
+						config.starlightPriority(), isSaraPrayerHotkeyOn, false);
 				break;
 			}
 			case ARMA_REGION:
 			{
 				chooseDefensiveConfigStyle(config.autoArmadylDefensePrayers(), config.kreearraPriority(), config.wingmanSkreePriority(), config.flockleaderGeerinPriority(),
-						config.flightKilisaPriority(), isArmaPrayerHotkeyOn);
+						config.flightKilisaPriority(), isArmaPrayerHotkeyOn, false);
 				break;
 			}
 			default:
@@ -823,7 +802,7 @@ public class GodWarsHelperPlugin extends Plugin
 	}
 	
 	private void chooseDefensiveConfigStyle(GodWarsHelperConfig.PrayerSwitchChoice style, int bossPriority, int magePriority, int rangedPriority,
-											int meleePriority, boolean hotkey)
+											int meleePriority, boolean hotkey, boolean betaLagProtection)
 	{
 		NPCContainer npcToPrayAgainst = null;
 		switch (style)
@@ -833,11 +812,11 @@ public class GodWarsHelperPlugin extends Plugin
 				{
 					return;
 				}
-				npcToPrayAgainst = identifyNpcToPrayAgainst(bossPriority, magePriority, rangedPriority, meleePriority);
+				npcToPrayAgainst = identifyNpcToPrayAgainst(bossPriority, magePriority, rangedPriority, meleePriority, betaLagProtection);
 				identifyAndInvokeProtectionPrayer(npcToPrayAgainst);
 				break;
 			case ALL_KILL_LONG:
-				npcToPrayAgainst = identifyNpcToPrayAgainst(bossPriority, magePriority, rangedPriority, meleePriority);
+				npcToPrayAgainst = identifyNpcToPrayAgainst(bossPriority, magePriority, rangedPriority, meleePriority, betaLagProtection);
 				identifyAndInvokeProtectionPrayer(npcToPrayAgainst);
 				break;
 			case HOTKEY:
@@ -845,7 +824,7 @@ public class GodWarsHelperPlugin extends Plugin
 				{
 					return;
 				}
-				npcToPrayAgainst = identifyNpcToPrayAgainst(bossPriority, magePriority, rangedPriority, meleePriority);
+				npcToPrayAgainst = identifyNpcToPrayAgainst(bossPriority, magePriority, rangedPriority, meleePriority, betaLagProtection);
 				identifyAndInvokeProtectionPrayer(npcToPrayAgainst);
 				break;
 			case OFF:
@@ -855,7 +834,7 @@ public class GodWarsHelperPlugin extends Plugin
 		}
 	}
 	
-	private NPCContainer identifyNpcToPrayAgainst(int bossPriorityConfig, int magicMinionPriorityConfig, int rangedMinionPriorityConfig, int meleeMinionPriorityConfig)
+	private NPCContainer identifyNpcToPrayAgainst(int bossPriorityConfig, int magicMinionPriorityConfig, int rangedMinionPriorityConfig, int meleeMinionPriorityConfig, boolean betaLagProtection)
 	{
 		NPCContainer npcAboutToAttack = null;
 		int highestPriorityConfig = -1;
@@ -932,6 +911,34 @@ public class GodWarsHelperPlugin extends Plugin
 			}
 		}
 		
+		if (betaLagProtection)
+		{
+			if (bossContainer != null)
+			{
+				if (bossContainer.getTicksUntilAttack() == -1)
+				{
+					NPCContainer.BossMonsters type = bossContainer.getMonsterType();
+					switch (type)
+					{
+						case GENERAL_GRAARDOR:
+						case KRIL_TSUTSAROTH:
+							Player you = client.getLocalPlayer();
+							if (bossContainer.getNpcInteracting().equals(you))
+							{
+								List<WorldPoint> hitSquares = OverlayUtil.getHitSquares(bossContainer.getNpc().getWorldLocation(), bossContainer.getNpcSize(), 2, false);
+								if (hitSquares.contains(you.getWorldLocation()))
+								{
+									npcAboutToAttack = bossContainer;
+								}
+							}
+							break;
+						default:
+							break;
+					}
+				}
+			}
+		}
+		
 		if (npcAboutToAttack == null)
 		{
 			npcAboutToAttack = bossContainer;
@@ -948,7 +955,7 @@ public class GodWarsHelperPlugin extends Plugin
 			{
 				return;
 			}
-			kotoriUtils.getInvokesLibrary().invokePrayer(bossConfig);
+			PrayerInteractions.activatePrayer(bossConfig);
 		}
 		else
 		{
@@ -968,7 +975,7 @@ public class GodWarsHelperPlugin extends Plugin
 				case NpcID.WINGMAN_SKREE:
 					if (magicConfig != null && magicMinionAlive)
 					{
-						kotoriUtils.getInvokesLibrary().invokePrayer(magicConfig);
+						PrayerInteractions.activatePrayer(magicConfig);
 					}
 					break;
 				case NpcID.SERGEANT_GRIMSPIKE:
@@ -977,7 +984,7 @@ public class GodWarsHelperPlugin extends Plugin
 				case NpcID.FLOCKLEADER_GEERIN:
 					if (rangedConfig != null && rangedMinionAlive)
 					{
-						kotoriUtils.getInvokesLibrary().invokePrayer(rangedConfig);
+						PrayerInteractions.activatePrayer(rangedConfig);
 					}
 					break;
 				case NpcID.SERGEANT_STRONGSTACK:
@@ -986,7 +993,7 @@ public class GodWarsHelperPlugin extends Plugin
 				case NpcID.FLIGHT_KILISA:
 					if (meleeConfig != null && meleeMinionAlive)
 					{
-						kotoriUtils.getInvokesLibrary().invokePrayer(meleeConfig);
+						PrayerInteractions.activatePrayer(meleeConfig);
 					}
 					break;
 				default:
@@ -1032,7 +1039,7 @@ public class GodWarsHelperPlugin extends Plugin
 			return;
 		}
 		
-		kotoriUtils.getInvokesLibrary().invokePrayer(prayerToUse);
+		PrayerInteractions.activatePrayer(prayerToUse);
 	}
 	
 	private void gearSwitch()
@@ -1071,38 +1078,38 @@ public class GodWarsHelperPlugin extends Plugin
 		{
 			if (bossBoolean && !set1EquippedOnce)
 			{
-				set1EquippedOnce = InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(bossGear));
+				set1EquippedOnce = InventoryInteractions.equipItems(InventoryInteractions.parseStringToItemIds(bossGear));
 				return;
 			}
 			
 			if (!magicMinionAlive && magicBoolean && !set2EquippedOnce)
 			{
-				set2EquippedOnce = InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(magicGear));
+				set2EquippedOnce = InventoryInteractions.equipItems(InventoryInteractions.parseStringToItemIds(magicGear));
 				return;
 			}
 			
 			if (!rangedMinionAlive && rangedBoolean && !set3EquippedOnce)
 			{
-				set3EquippedOnce = InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(rangedGear));
+				set3EquippedOnce = InventoryInteractions.equipItems(InventoryInteractions.parseStringToItemIds(rangedGear));
 				return;
 			}
 			
 			if (!meleeMinionAlive && meleeBoolean && !set4EquippedOnce)
 			{
-				set4EquippedOnce = InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(meleeGear));
+				set4EquippedOnce = InventoryInteractions.equipItems(InventoryInteractions.parseStringToItemIds(meleeGear));
 				return;
 			}
 			
 			if (!magicMinionAlive && !rangedMinionAlive && !meleeMinionAlive && allBoolean && !set5EquippedOnce)
 			{
-				set5EquippedOnce = InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(allGear));
+				set5EquippedOnce = InventoryInteractions.equipItems(InventoryInteractions.parseStringToItemIds(allGear));
 			}
 		}
 		else
 		{
 			if (allBoolean && !set5EquippedOnce)
 			{
-				set5EquippedOnce = InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(allGear));
+				set5EquippedOnce = InventoryInteractions.equipItems(InventoryInteractions.parseStringToItemIds(allGear));
 			}
 		}
 	}
@@ -1124,7 +1131,7 @@ public class GodWarsHelperPlugin extends Plugin
 				break;
 			}
 		}
-		kotoriUtils.getSpellsLibrary().setSelectedSpell(spellChoice.getWidgetInfo().getId(), -1, -1);
+		SpellInteractions.setSelectedSpell(spellChoice.getWidgetInfo().getId(), -1, -1);
 		String menuOptionText = "<col=39ff14>Cast " + spellChoice.getSpellString() + "</col> -> ";
 		MenuEntry hotkeyEntry = client.createMenuEntry(-1).setForceLeftClick(true).setParam0(0).setParam1(0).setType(MenuAction.WIDGET_TARGET_ON_NPC)
 				.setOption(menuOptionText);
@@ -1267,7 +1274,7 @@ public class GodWarsHelperPlugin extends Plugin
 		{
 			if (!isGraardorGearHotkeyPressed)
 			{
-				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(config.generalGraardorGearIds()));
+				InventoryInteractions.equipItems(InventoryInteractions.parseStringToItemIds(config.generalGraardorGearIds()));
 			}
 			isGraardorGearHotkeyPressed = true;
 		}
@@ -1286,7 +1293,7 @@ public class GodWarsHelperPlugin extends Plugin
 		{
 			if (!isSteelwillGearHotkeyPressed)
 			{
-				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(config.sergeantSteelwillGearIds()));
+				InventoryInteractions.equipItems(InventoryInteractions.parseStringToItemIds(config.sergeantSteelwillGearIds()));
 			}
 			isSteelwillGearHotkeyPressed = true;
 		}
@@ -1305,7 +1312,7 @@ public class GodWarsHelperPlugin extends Plugin
 		{
 			if (!isGrimspikeGearHotkeyPressed)
 			{
-				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(config.sergeantGrimspikeGearIds()));
+				InventoryInteractions.equipItems(InventoryInteractions.parseStringToItemIds(config.sergeantGrimspikeGearIds()));
 			}
 			isGrimspikeGearHotkeyPressed = true;
 		}
@@ -1324,7 +1331,7 @@ public class GodWarsHelperPlugin extends Plugin
 		{
 			if (!isStrongstackGearHotkeyPressed)
 			{
-				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(config.sergeantStrongstackGearIds()));
+				InventoryInteractions.equipItems(InventoryInteractions.parseStringToItemIds(config.sergeantStrongstackGearIds()));
 			}
 			isStrongstackGearHotkeyPressed = true;
 		}
@@ -1343,7 +1350,7 @@ public class GodWarsHelperPlugin extends Plugin
 		{
 			if (!isBandosGearHotkeyPressed)
 			{
-				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(config.bandosDeathSpawnGearIds()));
+				InventoryInteractions.equipItems(InventoryInteractions.parseStringToItemIds(config.bandosDeathSpawnGearIds()));
 			}
 			isBandosGearHotkeyPressed = true;
 		}
@@ -1362,7 +1369,7 @@ public class GodWarsHelperPlugin extends Plugin
 		{
 			if (!isKrilGearHotkeyPressed)
 			{
-				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(config.krilTsutsarothGearIds()));
+				InventoryInteractions.equipItems(InventoryInteractions.parseStringToItemIds(config.krilTsutsarothGearIds()));
 			}
 			isKrilGearHotkeyPressed = true;
 		}
@@ -1381,7 +1388,7 @@ public class GodWarsHelperPlugin extends Plugin
 		{
 			if (!isBalfrugGearHotkeyPressed)
 			{
-				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(config.balfrugKreeyathGearIds()));
+				InventoryInteractions.equipItems(InventoryInteractions.parseStringToItemIds(config.balfrugKreeyathGearIds()));
 			}
 			isBalfrugGearHotkeyPressed = true;
 		}
@@ -1400,7 +1407,7 @@ public class GodWarsHelperPlugin extends Plugin
 		{
 			if (!isZalknGearHotkeyPressed)
 			{
-				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(config.zaklnGritchGearIds()));
+				InventoryInteractions.equipItems(InventoryInteractions.parseStringToItemIds(config.zaklnGritchGearIds()));
 			}
 			isZalknGearHotkeyPressed = true;
 		}
@@ -1419,7 +1426,7 @@ public class GodWarsHelperPlugin extends Plugin
 		{
 			if (!isTstanonGearHotkeyPressed)
 			{
-				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(config.tstanonKarlakGearIds()));
+				InventoryInteractions.equipItems(InventoryInteractions.parseStringToItemIds(config.tstanonKarlakGearIds()));
 			}
 			isTstanonGearHotkeyPressed = true;
 		}
@@ -1438,7 +1445,7 @@ public class GodWarsHelperPlugin extends Plugin
 		{
 			if (!isZamorakGearHotkeyPressed)
 			{
-				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(config.zamorakDeathSpawnGearIds()));
+				InventoryInteractions.equipItems(InventoryInteractions.parseStringToItemIds(config.zamorakDeathSpawnGearIds()));
 			}
 			isZamorakGearHotkeyPressed = true;
 		}
@@ -1457,7 +1464,7 @@ public class GodWarsHelperPlugin extends Plugin
 		{
 			if (!isZilyanaGearHotkeyPressed)
 			{
-				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(config.commanderZilyanaGearIds()));
+				InventoryInteractions.equipItems(InventoryInteractions.parseStringToItemIds(config.commanderZilyanaGearIds()));
 			}
 			isZilyanaGearHotkeyPressed = true;
 		}
@@ -1476,7 +1483,7 @@ public class GodWarsHelperPlugin extends Plugin
 		{
 			if (!isGrowlerGearHotkeyPressed)
 			{
-				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(config.growlerGearIds()));
+				InventoryInteractions.equipItems(InventoryInteractions.parseStringToItemIds(config.growlerGearIds()));
 			}
 			isGrowlerGearHotkeyPressed = true;
 		}
@@ -1495,7 +1502,7 @@ public class GodWarsHelperPlugin extends Plugin
 		{
 			if (!isBreeGearHotkeyPressed)
 			{
-				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(config.breeGearIds()));
+				InventoryInteractions.equipItems(InventoryInteractions.parseStringToItemIds(config.breeGearIds()));
 			}
 			isBreeGearHotkeyPressed = true;
 		}
@@ -1514,7 +1521,7 @@ public class GodWarsHelperPlugin extends Plugin
 		{
 			if (!isStarlightGearHotkeyPressed)
 			{
-				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(config.starlightGearIds()));
+				InventoryInteractions.equipItems(InventoryInteractions.parseStringToItemIds(config.starlightGearIds()));
 			}
 			isStarlightGearHotkeyPressed = true;
 		}
@@ -1533,7 +1540,7 @@ public class GodWarsHelperPlugin extends Plugin
 		{
 			if (!isSaradominGearHotkeyPressed)
 			{
-				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(config.saradominDeathSpawnGearIds()));
+				InventoryInteractions.equipItems(InventoryInteractions.parseStringToItemIds(config.saradominDeathSpawnGearIds()));
 			}
 			isSaradominGearHotkeyPressed = true;
 		}
@@ -1552,7 +1559,7 @@ public class GodWarsHelperPlugin extends Plugin
 		{
 			if (!isKreearraGearHotkeyPressed)
 			{
-				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(config.kreearraGearIds()));
+				InventoryInteractions.equipItems(InventoryInteractions.parseStringToItemIds(config.kreearraGearIds()));
 			}
 			isKreearraGearHotkeyPressed = true;
 		}
@@ -1571,7 +1578,7 @@ public class GodWarsHelperPlugin extends Plugin
 		{
 			if (!isWingmanGearHotkeyPressed)
 			{
-				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(config.wingmanSkreeGearIds()));
+				InventoryInteractions.equipItems(InventoryInteractions.parseStringToItemIds(config.wingmanSkreeGearIds()));
 			}
 			isWingmanGearHotkeyPressed = true;
 		}
@@ -1590,7 +1597,7 @@ public class GodWarsHelperPlugin extends Plugin
 		{
 			if (!isFlockleaderGearHotkeyPressed)
 			{
-				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(config.flockleaderGeerinGearIds()));
+				InventoryInteractions.equipItems(InventoryInteractions.parseStringToItemIds(config.flockleaderGeerinGearIds()));
 			}
 			isFlockleaderGearHotkeyPressed = true;
 		}
@@ -1609,7 +1616,7 @@ public class GodWarsHelperPlugin extends Plugin
 		{
 			if (!isFlightGearHotkeyPressed)
 			{
-				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(config.flightKilisaGearIds()));
+				InventoryInteractions.equipItems(InventoryInteractions.parseStringToItemIds(config.flightKilisaGearIds()));
 			}
 			isFlightGearHotkeyPressed = true;
 		}
@@ -1628,7 +1635,7 @@ public class GodWarsHelperPlugin extends Plugin
 		{
 			if (!isArmadylGearHotkeyPressed)
 			{
-				InventoryInteraction.equipItems(kotoriUtils, InventoryInteraction.parseStringToItemIds(config.armadylDeathSpawnGearIds()));
+				InventoryInteractions.equipItems(InventoryInteractions.parseStringToItemIds(config.armadylDeathSpawnGearIds()));
 			}
 			isArmadylGearHotkeyPressed = true;
 		}

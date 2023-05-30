@@ -26,6 +26,7 @@ package com.theplug.kotori.inferno;
 
 import com.google.inject.Provides;
 import com.theplug.kotori.kotoriutils.KotoriUtils;
+import com.theplug.kotori.kotoriutils.reflection.NPCsLibrary;
 import net.runelite.client.game.NPCManager;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -77,9 +78,6 @@ public class InfernoPlugin extends Plugin
 
 	@Inject
 	private Client client;
-	
-	@Inject
-	private KotoriUtils kotoriUtils;
 
 	@Inject
 	private OverlayManager overlayManager;
@@ -435,7 +433,7 @@ public class InfernoPlugin extends Plugin
 		if (event.getActor() instanceof NPC)
 		{
 			final NPC npc = (NPC) event.getActor();
-			int animationId = kotoriUtils.getNpcsLibrary().getNPCAnimationID(npc);
+			int animationId = NPCsLibrary.getNPCAnimationID(npc);
 
 			if (ArrayUtils.contains(InfernoNPC.Type.NIBBLER.getNpcIds(), npc.getId())
 				&& animationId == 7576)
@@ -506,7 +504,7 @@ public class InfernoPlugin extends Plugin
 	{
 		for (InfernoNPC infernoNPC : infernoNpcs)
 		{
-			infernoNPC.gameTick(kotoriUtils, client, lastLocation, finalPhase, ticksSinceFinalPhase);
+			infernoNPC.gameTick(client, lastLocation, finalPhase, ticksSinceFinalPhase);
 
 			if (infernoNPC.getType() == InfernoNPC.Type.ZUK && zukShieldCornerTicks == -1)
 			{
