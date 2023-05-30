@@ -3,18 +3,14 @@ package com.theplug.kotori.kotoriutils;
 import com.google.gson.*;
 import com.google.inject.Provides;
 import com.theplug.kotori.kotoriutils.gson.Hooks;
-import com.theplug.kotori.kotoriutils.libs.*;
-import lombok.Getter;
+import com.theplug.kotori.kotoriutils.reflection.*;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.client.config.ConfigManager;
-import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
-import net.runelite.client.events.ProfileChanged;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
-import net.runelite.client.plugins.PluginManager;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -33,42 +29,16 @@ import java.net.URL;
 )
 public class KotoriUtils extends Plugin {
 
-    private final String hooksFileURL = "https://github.com/OreoCupcakes/kotori-ported-plugins-hosting/blob/master/hooks.json?raw=true";
+    private final String hooksFileURL = "https://github.com/OreoCupcakes/kotori-plugins-releases/blob/master/hooks.json?raw=true";
     @Inject
     private Client client;
-
     @Inject
     private KotoriUtilsConfig config;
-
     @Inject
     private ConfigManager configManager;
 
-    @Inject
-    private PluginManager pluginManager;
-
-    @Inject
-    private EventBus eventBus;
-
-    private Gson gson = new Gson();
-
-    @Inject
-    @Getter
-    private NPCsLibrary npcsLibrary;
-    @Inject
-    @Getter
-    private InvokesLibrary invokesLibrary;
-    @Inject
-    @Getter
-    private SpellsLibrary spellsLibrary;
-    @Inject
-    @Getter
-    private MenusLibrary menusLibrary;
-    @Inject
-    @Getter
-    private WalkingLibrary walkingLibrary;
-
+    private Gson gson;
     private Hooks rsHooks;
-
     private boolean hooksLoaded;
 
     @Provides
@@ -80,14 +50,20 @@ public class KotoriUtils extends Plugin {
     @Override
     protected void startUp()
     {
-        getHooksJson();
-        parseHooksJson();
+        gson = new Gson();
+        new Thread(() ->
+        {
+            getHooksJson();
+            parseHooksJson();
+        }).start();
     }
 
     @Override
     protected void shutDown()
     {
-
+        gson = null;
+        rsHooks = null;
+        hooksLoaded = false;
     }
 
     private void getHooksJson()
@@ -96,101 +72,120 @@ public class KotoriUtils extends Plugin {
         {
             return;
         }
-
-        for (int i = 0; i < 16; i++)
+    
+        BufferedReader reader = null;
+        for (int i = 1; i <= 15; i++)
         {
             try
             {
                 URL url = new URL(hooksFileURL);
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
-                rsHooks = gson.fromJson(bufferedReader, Hooks.class);
+                reader = new BufferedReader(new InputStreamReader(url.openStream()));
                 break;
             }
-            catch (Exception e)
+            catch (Exception e1)
             {
-                log.error("Attempt #" + i + ". Unable to get Hooks.json from URL and parse it. Retrying...", e);
-
-                if (i == 15)
-                {
-                    SwingUtilities.invokeLater(() ->
-                            JOptionPane.showMessageDialog(client.getCanvas(),
-                                    "<html>Connection error. Unable to download necessary game hooks information from the Internet." +
-                                            "<br>Make sure you are connected to the Internet. Go to Kotori Plugin Utils's configuration and retry" +
-                                            "<br>establishing a connection by clicking the \"Click to Load Hooks\" button until hooks loads." +
-                                            "<br><div style='color:yellow'><b><u>If you do not load the hooks, the client will crash when using plugins dependent on Kotori Plugin Utils!</u></b></div></html>"
-                                    , "Kotori Plugin Utils",JOptionPane.WARNING_MESSAGE));
-                    return;
-                }
+                log.error("Attempt #" + i + ". Unable to establish a connection and download the hooks from the URL.", e1);
             }
+        }
+        
+        if (reader == null)
+        {
+            SwingUtilities.invokeLater(() ->
+                JOptionPane.showMessageDialog(client.getCanvas(),
+                        "<html>Connection error. Unable to download necessary game hooks information from the Internet." +
+                                "<br>Make sure you are connected to the Internet and your proxy or VPN isn't being flagged as suspicious." +
+                                "<br>You can re-establish a connection by clicking the \"Click to Load Hooks\" button within Kotori Plugin Utils." +
+                                "<br><div style='color:yellow'><b><u>If you are unable load the hooks, the client will crash when using plugins dependent on Kotori Plugin Utils!</u></b></div></html>"
+                        , "Kotori Plugin Utils",JOptionPane.WARNING_MESSAGE));
+            return;
+        }
+            
+        try
+        {
+            rsHooks = gson.fromJson(reader, Hooks.class);
+            reader.close();
+        }
+        catch (Exception e)
+        {
+            log.error("Unable to parse Hooks.json into a Hooks object.", e);
+            SwingUtilities.invokeLater(() ->
+                    JOptionPane.showMessageDialog(client.getCanvas(),
+                            "Error in parsing Hooks.json. Yell at Kotori for forgetting a comma.","Kotori Plugin Utils", JOptionPane.WARNING_MESSAGE));
         }
     }
 
     private void parseHooksJson()
     {
-        if (rsHooks == null || hooksLoaded == true)
+        if (rsHooks == null || hooksLoaded)
         {
             return;
         }
         //Set the game hooks
         //invokeMenuAction Hooks
-        invokesLibrary.setWorldMapData_0_ClassName(getClassName(rsHooks.getInvokeMenuActionHook()));
-        invokesLibrary.setInvokeMenuActionMethodName(getFieldOrMethodName(rsHooks.getInvokeMenuActionHook()));
-        invokesLibrary.setInvokeMenuActionGarbageValue(rsHooks.getInvokeMenuActionHookJunkValue());
+        InvokesLibrary.setInvokeMenuActionClassName(getClassName(rsHooks.getInvokeMenuActionHook()));
+        InvokesLibrary.setInvokeMenuActionMethodName(getFieldOrMethodName(rsHooks.getInvokeMenuActionHook()));
+        InvokesLibrary.setInvokeMenuActionJunkValue(rsHooks.getInvokeMenuActionHookJunkValue());
         //NPC Overhead Icons Hook
-        npcsLibrary.setNpcCompositionClassName(getClassName(rsHooks.getGetNpcCompositionOverheadIcon()));
-        npcsLibrary.setOverheadIconFieldName(getFieldOrMethodName(rsHooks.getGetNpcCompositionOverheadIcon()));
+        NPCsLibrary.setNpcCompositionClassName(getClassName(rsHooks.getGetNpcCompositionOverheadIcon()));
+        NPCsLibrary.setOverheadIconFieldName(getFieldOrMethodName(rsHooks.getGetNpcCompositionOverheadIcon()));
         //NPC Animation IDs Hook
-        npcsLibrary.setActorClassName(getClassName(rsHooks.getGetActorAnimationIdFieldHook()));
-        npcsLibrary.setSequenceFieldName(getFieldOrMethodName(rsHooks.getGetActorAnimationIdFieldHook()));
-        npcsLibrary.setSequenceGetterMultiplier(rsHooks.getGetActorAnimationIdMultiplier());
+        NPCsLibrary.setActorClassName(getClassName(rsHooks.getActorAnimationIdFieldHook()));
+        NPCsLibrary.setActorAnimationIdFieldName(getFieldOrMethodName(rsHooks.getActorAnimationIdFieldHook()));
+        NPCsLibrary.setActorAnimationIdMultiplierValue(rsHooks.getActorAnimationIdMultiplier());
         //Scene Walking Set X and Y Hook
-        walkingLibrary.setSetXandYClassName(getClassName(rsHooks.getSetXandYHook()));
-        walkingLibrary.setSetXandYMethodName(getFieldOrMethodName(rsHooks.getSetXandYHook()));
+    //    WalkingLibrary.setXAndYClassName(getClassName(rsHooks.getSetXandYHook()));
+    //    WalkingLibrary.setXAndYMethodName(getFieldOrMethodName(rsHooks.getSetXandYHook()));
+        //Scene Walking X Gamepack Hook
+        WalkingLibrary.setSceneSelectedXClassName(getClassName(rsHooks.getSceneSelectedXFieldHook()));
+        WalkingLibrary.setSceneSelectedXFieldName(getFieldOrMethodName(rsHooks.getSceneSelectedXFieldHook()));
+        //Scene Walking Y Gamepack Hook
+        WalkingLibrary.setSceneSelectedYClassName(getClassName(rsHooks.getSceneSelectedYFieldHook()));
+        WalkingLibrary.setSceneSelectedYFieldName(getFieldOrMethodName(rsHooks.getSceneSelectedYFieldHook()));
         //Scene Walking Set Viewport Walking Hook
-        walkingLibrary.setSetViewportWalkingClassName(getClassName(rsHooks.getSetViewportWalkingFieldHook()));
-        walkingLibrary.setSetViewportWalkingFieldName(getFieldOrMethodName(rsHooks.getSetViewportWalkingFieldHook()));
+        WalkingLibrary.setViewportWalkingClassName(getClassName(rsHooks.getSetViewportWalkingFieldHook()));
+        WalkingLibrary.setViewportWalkingFieldName(getFieldOrMethodName(rsHooks.getSetViewportWalkingFieldHook()));
         //Scene Walking Check Click Field Hook
-        walkingLibrary.setCheckClickClassName(getClassName(rsHooks.getCheckClickFieldHook()));
-        walkingLibrary.setCheckClickFieldName(getFieldOrMethodName(rsHooks.getCheckClickFieldHook()));
+        WalkingLibrary.setCheckClickClassName(getClassName(rsHooks.getCheckClickFieldHook()));
+        WalkingLibrary.setCheckClickFieldName(getFieldOrMethodName(rsHooks.getCheckClickFieldHook()));
         //Selected Spell Widget Hook
-        spellsLibrary.setSelectedSpellWidgetClassName(getClassName(rsHooks.getSetSelectedSpellWidgetHook()));
-        spellsLibrary.setSelectedSpellWidgetFieldName(getFieldOrMethodName(rsHooks.getSetSelectedSpellWidgetHook()));
-        spellsLibrary.setSelectedSpellWidgetMultiplier(rsHooks.getSetSelectedSpellWidgetMultiplier());
+        SpellsLibrary.setSelectedSpellWidgetClassName(getClassName(rsHooks.getSetSelectedSpellWidgetHook()));
+        SpellsLibrary.setSelectedSpellWidgetFieldName(getFieldOrMethodName(rsHooks.getSetSelectedSpellWidgetHook()));
+        SpellsLibrary.setSelectedSpellWidgetMultiplier(rsHooks.getSetSelectedSpellWidgetMultiplier());
         //Selected Spell Child Hook
-        spellsLibrary.setSelectedSpellChildIndexClassName(getClassName(rsHooks.getSetSelectedSpellChildIndexHook()));
-        spellsLibrary.setSelectedSpellChildIndexFieldName(getFieldOrMethodName(rsHooks.getSetSelectedSpellChildIndexHook()));
-        spellsLibrary.setSelectedSpellChildIndexMultiplier(rsHooks.getSetSelectedSpellChildIndexMultiplier());
+        SpellsLibrary.setSelectedSpellChildIndexClassName(getClassName(rsHooks.getSetSelectedSpellChildIndexHook()));
+        SpellsLibrary.setSelectedSpellChildIndexFieldName(getFieldOrMethodName(rsHooks.getSetSelectedSpellChildIndexHook()));
+        SpellsLibrary.setSelectedSpellChildIndexMultiplier(rsHooks.getSetSelectedSpellChildIndexMultiplier());
         //Selected Spell Item Hook
-        spellsLibrary.setSelectedSpellItemIDClassName(getClassName(rsHooks.getSetSelectedSpellItemIDHook()));
-        spellsLibrary.setSelectedSpellItemIDFieldName(getFieldOrMethodName(rsHooks.getSetSelectedSpellItemIDHook()));
-        spellsLibrary.setSelectedSpellItemIDMultiplier(rsHooks.getSetSelectedSpellItemIDMultiplier());
+        SpellsLibrary.setSelectedSpellItemIDClassName(getClassName(rsHooks.getSetSelectedSpellItemIDHook()));
+        SpellsLibrary.setSelectedSpellItemIDFieldName(getFieldOrMethodName(rsHooks.getSetSelectedSpellItemIDHook()));
+        SpellsLibrary.setSelectedSpellItemIDMultiplier(rsHooks.getSetSelectedSpellItemIDMultiplier());
         //MenuEntry Index Hook
-        menusLibrary.setMenuEntryIndexClassName(getClassName(rsHooks.getMenuEntryIndexFieldHook()));
-        menusLibrary.setMenuEntryIndexFieldName(getFieldOrMethodName(rsHooks.getMenuEntryIndexFieldHook()));
+        MenusLibrary.setMenuEntryIndexClassName(getClassName(rsHooks.getMenuEntryIndexFieldHook()));
+        MenusLibrary.setMenuEntryIndexFieldName(getFieldOrMethodName(rsHooks.getMenuEntryIndexFieldHook()));
         //MenuEntry Identifiers Hook
-        menusLibrary.setMenuEntryIdentifiersArrayClassName(getClassName(rsHooks.getMenuEntryIdentifiersArrayFieldHook()));
-        menusLibrary.setMenuEntryIdentifiersArrayFieldName(getFieldOrMethodName(rsHooks.getMenuEntryIdentifiersArrayFieldHook()));
+        MenusLibrary.setMenuEntryIdentifiersArrayClassName(getClassName(rsHooks.getMenuEntryIdentifiersArrayFieldHook()));
+        MenusLibrary.setMenuEntryIdentifiersArrayFieldName(getFieldOrMethodName(rsHooks.getMenuEntryIdentifiersArrayFieldHook()));
         //MenuEntry Item Ids Hook
-        menusLibrary.setMenuEntryItemIdsArrayClassName(getClassName(rsHooks.getMenuEntryItemIdsArrayFieldHook()));
-        menusLibrary.setMenuEntryItemIdsArrayFieldName(getFieldOrMethodName(rsHooks.getMenuEntryItemIdsArrayFieldHook()));
+        MenusLibrary.setMenuEntryItemIdsArrayClassName(getClassName(rsHooks.getMenuEntryItemIdsArrayFieldHook()));
+        MenusLibrary.setMenuEntryItemIdsArrayFieldName(getFieldOrMethodName(rsHooks.getMenuEntryItemIdsArrayFieldHook()));
         //MenuEntry Options Hook
-        menusLibrary.setMenuEntryOptionsArrayClassName(getClassName(rsHooks.getMenuEntryOptionsArrayFieldHook()));
-        menusLibrary.setMenuEntryOptionsArrayFieldName(getFieldOrMethodName(rsHooks.getMenuEntryOptionsArrayFieldHook()));
+        MenusLibrary.setMenuEntryOptionsArrayClassName(getClassName(rsHooks.getMenuEntryOptionsArrayFieldHook()));
+        MenusLibrary.setMenuEntryOptionsArrayFieldName(getFieldOrMethodName(rsHooks.getMenuEntryOptionsArrayFieldHook()));
         //MenuEntry Param0 Hook
-        menusLibrary.setMenuEntryParam0ArrayClassName(getClassName(rsHooks.getMenuEntryParam0ArrayFieldHook()));
-        menusLibrary.setMenuEntryParam0ArrayFieldName(getFieldOrMethodName(rsHooks.getMenuEntryParam0ArrayFieldHook()));
+        MenusLibrary.setMenuEntryParam0ArrayClassName(getClassName(rsHooks.getMenuEntryParam0ArrayFieldHook()));
+        MenusLibrary.setMenuEntryParam0ArrayFieldName(getFieldOrMethodName(rsHooks.getMenuEntryParam0ArrayFieldHook()));
         //MenuEntry Param1 Hook
-        menusLibrary.setMenuEntryParam1ArrayClassName(getClassName(rsHooks.getMenuEntryParam1ArrayFieldHook()));
-        menusLibrary.setMenuEntryParam1ArrayFieldName(getFieldOrMethodName(rsHooks.getMenuEntryParam1ArrayFieldHook()));
+        MenusLibrary.setMenuEntryParam1ArrayClassName(getClassName(rsHooks.getMenuEntryParam1ArrayFieldHook()));
+        MenusLibrary.setMenuEntryParam1ArrayFieldName(getFieldOrMethodName(rsHooks.getMenuEntryParam1ArrayFieldHook()));
         //MenuEntry Targets Hook
-        menusLibrary.setMenuEntryTargetsArrayClassName(getClassName(rsHooks.getMenuEntryTargetsArrayFieldHook()));
-        menusLibrary.setMenuEntryTargetsArrayFieldName(getFieldOrMethodName(rsHooks.getMenuEntryTargetsArrayFieldHook()));
+        MenusLibrary.setMenuEntryTargetsArrayClassName(getClassName(rsHooks.getMenuEntryTargetsArrayFieldHook()));
+        MenusLibrary.setMenuEntryTargetsArrayFieldName(getFieldOrMethodName(rsHooks.getMenuEntryTargetsArrayFieldHook()));
         //MenuEntry Types Hook
-        menusLibrary.setMenuEntryTypesArrayClassName(getClassName(rsHooks.getMenuEntryTypesArrayFieldHook()));
-        menusLibrary.setMenuEntryTypesArrayFieldName(getFieldOrMethodName(rsHooks.getMenuEntryTypesArrayFieldHook()));
+        MenusLibrary.setMenuEntryTypesArrayClassName(getClassName(rsHooks.getMenuEntryTypesArrayFieldHook()));
+        MenusLibrary.setMenuEntryTypesArrayFieldName(getFieldOrMethodName(rsHooks.getMenuEntryTypesArrayFieldHook()));
 
         hooksLoaded = true;
-
+        
         if (config.clickToLoadHooks())
         {
             SwingUtilities.invokeLater(() ->
@@ -216,22 +211,8 @@ public class KotoriUtils extends Plugin {
     {
         if (event.getKey().equals("clickToLoadHooks"))
         {
-            if (config.clickToLoadHooks())
-            {
-                getHooksJson();
-                parseHooksJson();
-
-                //Reset check box
-                configManager.setConfiguration("kotoriutils","clickToLoadHooks","false");
-                try
-                {
-                    new Thread(() -> eventBus.post(new ProfileChanged())).start();
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }
+            getHooksJson();
+            parseHooksJson();
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.theplug.kotori.kotoriutils.libs;
+package com.theplug.kotori.kotoriutils.reflection;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -6,53 +6,58 @@ import net.runelite.api.Client;
 import net.runelite.api.HeadIcon;
 import net.runelite.api.NPC;
 import net.runelite.api.NPCComposition;
+import net.runelite.client.RuneLite;
 
-import javax.inject.Inject;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 
 @Slf4j
-public class NPCsLibrary {
+public class NPCsLibrary
+{
+    private static final Client client = RuneLite.getInjector().getInstance(Client.class);
 
-    @Inject
-    private Client client;
+    @Setter
+    private static String actorClassName;
+    @Setter
+    private static String actorAnimationIdFieldName;
+    @Setter
+    private static int actorAnimationIdMultiplierValue;
+    
+    @Setter
+    private static String npcCompositionClassName;
+    @Setter
+    private static String overheadIconFieldName;
 
-    @Setter
-    private String actorClassName;
-    @Setter
-    private String sequenceFieldName;
-    @Setter
-    private int sequenceGetterMultiplier;
-    @Setter
-    private String npcCompositionClassName;
-    @Setter
-    private String overheadIconFieldName;
-
-    private int animationId;
-    private HeadIcon headIcon;
-
-    public int getNPCAnimationID(NPC npc) {
-        try {
-            Field sequence = client.getClass().getClassLoader().loadClass(actorClassName).getDeclaredField(sequenceFieldName);
+    public static int getNPCAnimationID(NPC npc)
+    {
+        int animationId = -1;
+        try
+        {
+            Field sequence = client.getClass().getClassLoader().loadClass(actorClassName).getDeclaredField(actorAnimationIdFieldName);
             sequence.setAccessible(true);
             int obfuscatedSequenceValue = sequence.getInt(npc);
             sequence.setAccessible(false);
-            animationId = obfuscatedSequenceValue * sequenceGetterMultiplier;
-        } catch (Exception e) {
+            animationId = obfuscatedSequenceValue * actorAnimationIdMultiplierValue;
+        }
+        catch (Exception e)
+        {
             log.error("Failed to get NPC animation id.", e);
         }
-
         return animationId;
     }
 
-    public HeadIcon getNPCHeadIcon(NPCComposition npcComposition) {
-        try {
+    public static HeadIcon getNPCHeadIcon(NPCComposition npcComposition)
+    {
+        HeadIcon headIcon = null;
+        try
+        {
             Field headIconSpriteIndexes = client.getClass().getClassLoader().loadClass(npcCompositionClassName).getDeclaredField(overheadIconFieldName);
             headIconSpriteIndexes.setAccessible(true);
             Object headIconShortArray = headIconSpriteIndexes.get(npcComposition);
             short headIconShortValue = Array.getShort(headIconShortArray,0);
             headIconSpriteIndexes.setAccessible(false);
-            switch (headIconShortValue) {
+            switch (headIconShortValue)
+            {
                 case 0:
                     headIcon = HeadIcon.MELEE;
                     break;
@@ -98,13 +103,12 @@ public class NPCsLibrary {
                 case 14:
                     headIcon = HeadIcon.DEFLECT_MAGE;
                     break;
-                default:
-                    headIcon = null;
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             log.error("Failed to get NPC overhead icon.", e);
         }
-
         return headIcon;
     }
 }
