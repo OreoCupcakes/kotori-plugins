@@ -8,18 +8,15 @@ public class Info
     private int gameRevision;
     private String runeliteVersion;
     private String kotoriLoaderVersion;
-    private boolean masterPreventLoad;
+    private boolean preventMasterLoad;
     private boolean preventAlchemicalHydra;
-    private boolean preventAlchemicalHydraRLPL;
     private boolean preventCerberusHelper;
     private boolean preventDagannothKings;
     private boolean preventDemonicGorillas;
     private boolean preventEffectTimers;
     private boolean preventGauntletExtended;
     private boolean preventGrotesqueGuardians;
-    private boolean preventGwdTickTimers;
     private boolean preventHallowedHelper;
-    private boolean preventHallowedSepulchre;
     private boolean preventHouseOverlay;
     private boolean preventKotoriUtils;
     private boolean preventMultiIndicators;
@@ -30,7 +27,9 @@ public class Info
     private boolean preventTarnsLair;
     private boolean preventTempleTrekking;
     private boolean preventVorkath;
-    private boolean preventVorkathRLPL;
     private boolean preventZulrah;
     private boolean preventGwdHelper;
+    private boolean preventAoeWarnings;
+    private boolean preventFightCaves;
+    private boolean preventInferno;
 }

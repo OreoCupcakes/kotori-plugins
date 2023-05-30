@@ -39,7 +39,7 @@ public interface CerberusConfig extends Config
 {
 	// Sections
 	@ConfigSection(
-			name = "<html>Cerberus Helper<br>Version 1.2.0</html>",
+			name = "<html>Cerberus Helper<br>Version 1.3.0</html>",
 			description = "",
 			position = -1,
 			closedByDefault = true
@@ -269,13 +269,22 @@ public interface CerberusConfig extends Config
 			section = autoSection
 	)
 	default OffensivePrayers offensivePrayerChoice() { return OffensivePrayers.PIETY; }
+	
+	@ConfigItem(
+			keyName = "keepPreservePrayerOn",
+			name = "Keep Preserve Prayer On",
+			description = "Keep the Preserve prayer on after a kill?",
+			position = 3,
+			section = autoSection
+	)
+	default boolean keepPreservePrayerOn() { return false; }
 
 	@ConfigItem(
 			keyName = "conservePrayerGhostSkip",
 			name = "Ghost Skip? No Offensive Prayer",
 			description = "Are you ghost skipping? Conserve prayer by not using an offensive<br>" +
 					"prayer until the 15th attack from Cerberus or when ghosts spawn.",
-			position = 3,
+			position = 4,
 			section = autoSection
 	)
 	default boolean conservePrayerGhostSkip() { return false; }
@@ -287,7 +296,7 @@ public interface CerberusConfig extends Config
 					"<br>when below the threshold you set? This will only" +
 					"<br>drink prayer potions when the ghosts aren't spawned," +
 					"<br>before and after Ghost phase.",
-			position = 4,
+			position = 5,
 			section = autoSection
 	)
 	default boolean drinkPrayerPotions() { return false; }
@@ -300,7 +309,7 @@ public interface CerberusConfig extends Config
 			keyName = "prayerPointsToDrinkAt",
 			name = "Drink At",
 			description = "Prayer point threshold to drink prayer potions.",
-			position = 5,
+			position = 6,
 			section = autoSection
 	)
 	default int prayerPointsToDrinkAt() { return 60; }
@@ -309,7 +318,7 @@ public interface CerberusConfig extends Config
 			keyName = "castDeathCharge",
 			name = "Autocast Death Charge",
 			description = "Autocast the spell Death Charge based on Cerberus' current HP percentage, indicated below, and if its off cooldown.",
-			position = 6,
+			position = 7,
 			section = autoSection
 	)
 	default boolean autocastDeathCharge() { return false; }
@@ -322,7 +331,7 @@ public interface CerberusConfig extends Config
 			description = "The HP percentage threshold, of Cerberus, to autocast the Death Charge spell.<br>" +
 					"The default 66% is slightly under 400 HP, the ghost spawn threshold.<br>" +
 					"If it's below this threshold, Death Charge will be cast if it's not on cooldown.",
-			position = 7,
+			position = 8,
 			section = autoSection
 	)
 	default int deathChargeHpPercentage() { return 66; }
