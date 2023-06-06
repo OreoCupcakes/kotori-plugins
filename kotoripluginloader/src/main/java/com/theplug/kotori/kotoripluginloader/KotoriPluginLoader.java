@@ -337,7 +337,7 @@ public class KotoriPluginLoader extends Plugin
 					}
 				}
 			});
-			eventBus.post(new ExternalPluginsChanged(new ArrayList<>()));
+			eventBus.post(new ExternalPluginsChanged());
 			
 			if (!config.disablePluginsLoadMsg())
 			{
@@ -369,7 +369,7 @@ public class KotoriPluginLoader extends Plugin
 				log.error("Unable to stop and uninstall plugin: " + p.getName());
 			}
 		}
-		eventBus.post(new ExternalPluginsChanged(new ArrayList<>()));
+		eventBus.post(new ExternalPluginsChanged());
 	}
 	
 	//Load Plugins
