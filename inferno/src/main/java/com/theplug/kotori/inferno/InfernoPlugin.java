@@ -26,7 +26,7 @@ package com.theplug.kotori.inferno;
 
 import com.google.inject.Provides;
 import com.theplug.kotori.kotoriutils.KotoriUtils;
-import com.theplug.kotori.kotoriutils.reflection.NPCsLibrary;
+import com.theplug.kotori.kotoriutils.ReflectionLibrary;
 import net.runelite.client.game.NPCManager;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -433,7 +433,7 @@ public class InfernoPlugin extends Plugin
 		if (event.getActor() instanceof NPC)
 		{
 			final NPC npc = (NPC) event.getActor();
-			int animationId = NPCsLibrary.getNPCAnimationID(npc);
+			int animationId = ReflectionLibrary.getNpcAnimationId(npc);
 
 			if (ArrayUtils.contains(InfernoNPC.Type.NIBBLER.getNpcIds(), npc.getId())
 				&& animationId == 7576)

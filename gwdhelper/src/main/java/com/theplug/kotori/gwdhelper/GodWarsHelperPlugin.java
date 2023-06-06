@@ -25,11 +25,8 @@ package com.theplug.kotori.gwdhelper;
 
 import com.google.inject.Provides;
 import com.theplug.kotori.kotoriutils.KotoriUtils;
-import com.theplug.kotori.kotoriutils.methods.InventoryInteractions;
-import com.theplug.kotori.kotoriutils.methods.PrayerInteractions;
-import com.theplug.kotori.kotoriutils.methods.SpellInteractions;
-import com.theplug.kotori.kotoriutils.methods.VarUtilities;
-import com.theplug.kotori.kotoriutils.reflection.SpellsLibrary;
+import com.theplug.kotori.kotoriutils.ReflectionLibrary;
+import com.theplug.kotori.kotoriutils.methods.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -147,9 +144,6 @@ public class GodWarsHelperPlugin extends Plugin
 	
 	@Inject
 	private KeyManager keyManager;
-	
-	@Inject
-	private ChatMessageManager chatMessageManager;
 
 	@Inject
 	private GodWarsHelperConfig config;
@@ -539,23 +533,23 @@ public class GodWarsHelperPlugin extends Plugin
 		if (isBandosPrayerHotkeyOn)
 		{
 			isBandosPrayerHotkeyOn = false;
-			sendChatMessage("Bandos God Wars Dungeon automatic protection prayers turned off.");
+			ChatUtilities.sendGameMessage("Bandos God Wars Dungeon automatic protection prayers turned off.");
 		}
 		
 		if (isZammyPrayerHotkeyOn)
 		{
 			isZammyPrayerHotkeyOn = false;
-			sendChatMessage("Zamorak God Wars Dungeon automatic protection prayers turned off.");
+			ChatUtilities.sendGameMessage("Zamorak God Wars Dungeon automatic protection prayers turned off.");
 		}
 		if (isSaraPrayerHotkeyOn)
 		{
 			isSaraPrayerHotkeyOn = false;
-			sendChatMessage("Saradomin God Wars Dungeon automatic protection prayers turned off.");
+			ChatUtilities.sendGameMessage("Saradomin God Wars Dungeon automatic protection prayers turned off.");
 		}
 		if (isArmaPrayerHotkeyOn)
 		{
 			isArmaPrayerHotkeyOn = false;
-			sendChatMessage("Armadyl God Wars Dungeon automatic protection prayers turned off.");
+			ChatUtilities.sendGameMessage("Armadyl God Wars Dungeon automatic protection prayers turned off.");
 		}
 	}
 	
@@ -1131,7 +1125,7 @@ public class GodWarsHelperPlugin extends Plugin
 				break;
 			}
 		}
-		SpellInteractions.setSelectedSpell(spellChoice.getWidgetInfo().getId(), -1, -1);
+		ReflectionLibrary.setSelectedSpell(spellChoice.getWidgetInfo().getId(), -1, -1);
 		String menuOptionText = "<col=39ff14>Cast " + spellChoice.getSpellString() + "</col> -> ";
 		MenuEntry hotkeyEntry = client.createMenuEntry(-1).setForceLeftClick(true).setParam0(0).setParam1(0).setType(MenuAction.WIDGET_TARGET_ON_NPC)
 				.setOption(menuOptionText);
@@ -1145,20 +1139,6 @@ public class GodWarsHelperPlugin extends Plugin
 		}
 	}
 	
-	private void sendChatMessage(String chatMessage)
-	{
-		final String message = new ChatMessageBuilder()
-				.append(ChatColorType.HIGHLIGHT)
-				.append(chatMessage)
-				.build();
-		
-		chatMessageManager.queue(
-				QueuedMessage.builder()
-						.type(ChatMessageType.CONSOLE)
-						.runeLiteFormattedMessage(message)
-						.build());
-	}
-	
 	
 	// Defensive Prayer Hotkeys
 	private final HotkeyListener bandosPrayerHotkey = new HotkeyListener(() -> config.bandosAutoPrayerHotkey())
@@ -1169,12 +1149,12 @@ public class GodWarsHelperPlugin extends Plugin
 			if (!isBandosPrayerHotkeyOn)
 			{
 				isBandosPrayerHotkeyOn = true;
-				sendChatMessage("Bandos God Wars Dungeon automatic protection prayers turned on.");
+				ChatUtilities.sendGameMessage("Bandos God Wars Dungeon automatic protection prayers turned on.");
 			}
 			else
 			{
 				isBandosPrayerHotkeyOn = false;
-				sendChatMessage("Bandos God Wars Dungeon automatic protection prayers turned off.");
+				ChatUtilities.sendGameMessage("Bandos God Wars Dungeon automatic protection prayers turned off.");
 			}
 		}
 	};
@@ -1187,12 +1167,12 @@ public class GodWarsHelperPlugin extends Plugin
 			if (!isZammyPrayerHotkeyOn)
 			{
 				isZammyPrayerHotkeyOn = true;
-				sendChatMessage("Zamorak God Wars Dungeon automatic protection prayers turned on.");
+				ChatUtilities.sendGameMessage("Zamorak God Wars Dungeon automatic protection prayers turned on.");
 			}
 			else
 			{
 				isZammyPrayerHotkeyOn = false;
-				sendChatMessage("Zamorak God Wars Dungeon automatic protection prayers turned off.");
+				ChatUtilities.sendGameMessage("Zamorak God Wars Dungeon automatic protection prayers turned off.");
 			}
 		}
 	};
@@ -1205,12 +1185,12 @@ public class GodWarsHelperPlugin extends Plugin
 			if (!isSaraPrayerHotkeyOn)
 			{
 				isSaraPrayerHotkeyOn = true;
-				sendChatMessage("Saradomin God Wars Dungeon automatic protection prayers turned on.");
+				ChatUtilities.sendGameMessage("Saradomin God Wars Dungeon automatic protection prayers turned on.");
 			}
 			else
 			{
 				isSaraPrayerHotkeyOn = false;
-				sendChatMessage("Saradomin God Wars Dungeon automatic protection prayers turned off.");
+				ChatUtilities.sendGameMessage("Saradomin God Wars Dungeon automatic protection prayers turned off.");
 			}
 		}
 	};
@@ -1223,12 +1203,12 @@ public class GodWarsHelperPlugin extends Plugin
 			if (!isArmaPrayerHotkeyOn)
 			{
 				isArmaPrayerHotkeyOn = true;
-				sendChatMessage("Armadyl God Wars Dungeon automatic protection prayers turned on.");
+				ChatUtilities.sendGameMessage("Armadyl God Wars Dungeon automatic protection prayers turned on.");
 			}
 			else
 			{
 				isArmaPrayerHotkeyOn = false;
-				sendChatMessage("Armadyl God Wars Dungeon automatic protection prayers turned off.");
+				ChatUtilities.sendGameMessage("Armadyl God Wars Dungeon automatic protection prayers turned off.");
 			}
 		}
 	};

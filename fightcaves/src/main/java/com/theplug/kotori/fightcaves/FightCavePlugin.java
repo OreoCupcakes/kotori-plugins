@@ -37,7 +37,7 @@ import java.util.regex.Pattern;
 import javax.inject.Inject;
 
 import com.theplug.kotori.kotoriutils.KotoriUtils;
-import com.theplug.kotori.kotoriutils.reflection.NPCsLibrary;
+import com.theplug.kotori.kotoriutils.ReflectionLibrary;
 import lombok.AccessLevel;
 import lombok.Getter;
 import net.runelite.api.ChatMessageType;
@@ -308,7 +308,7 @@ public class FightCavePlugin extends Plugin
 
 			for (int anims : npc.getAnimations())
 			{
-				if (anims == NPCsLibrary.getNPCAnimationID(npc.getNpc()))
+				if (anims == ReflectionLibrary.getNpcAnimationId(npc.getNpc()))
 				{
 					if (npc.getTicksUntilAttack() < 1)
 					{

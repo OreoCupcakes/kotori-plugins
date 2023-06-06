@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.theplug.kotori.kotoriutils.KotoriUtils;
-import com.theplug.kotori.kotoriutils.reflection.NPCsLibrary;
+import com.theplug.kotori.kotoriutils.ReflectionLibrary;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -196,7 +196,7 @@ class InfernoNPC
 
 	void gameTick(Client client, WorldPoint lastPlayerLocation, boolean finalPhase, int ticksSinceFinalPhase)
 	{
-		int npcAnimationId = NPCsLibrary.getNPCAnimationID(this.getNpc());
+		int npcAnimationId = ReflectionLibrary.getNpcAnimationId(this.getNpc());
 		safeSpotCache.clear();
 		this.idleTicks += 1;
 

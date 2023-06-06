@@ -28,15 +28,12 @@ package com.theplug.kotori.demonicgorillas;
 import java.util.Arrays;
 import java.util.List;
 
-import com.theplug.kotori.kotoriutils.KotoriUtils;
-import com.theplug.kotori.kotoriutils.reflection.NPCsLibrary;
+import com.theplug.kotori.kotoriutils.ReflectionLibrary;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import net.runelite.api.*;
 import net.runelite.api.coords.WorldArea;
-
-import javax.inject.Inject;
 
 class DemonicGorilla
 {
@@ -136,11 +133,6 @@ class DemonicGorilla
 
 	HeadIcon getOverheadIcon()
 	{
-		NPCComposition composition = npc.getComposition();
-		if (composition != null)
-		{
-			return NPCsLibrary.getNPCHeadIcon(composition);
-		}
-		return null;
+		return ReflectionLibrary.getNpcOverheadIcon(npc);
 	}
 }

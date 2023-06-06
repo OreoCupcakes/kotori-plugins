@@ -38,8 +38,7 @@ import com.theplug.kotori.alchemicalhydra.entity.Hydra;
 import com.theplug.kotori.alchemicalhydra.entity.HydraPhase;
 import com.theplug.kotori.alchemicalhydra.overlay.SceneOverlay;
 import com.theplug.kotori.kotoriutils.KotoriUtils;
-import com.theplug.kotori.kotoriutils.reflection.NPCsLibrary;
-import com.theplug.kotori.kotoriutils.reflection.WalkingLibrary;
+import com.theplug.kotori.kotoriutils.ReflectionLibrary;
 import lombok.Getter;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
@@ -261,7 +260,7 @@ public class AlchemicalHydraPlugin extends Plugin
 			return;
 		}
 
-		int currentAnimationID = NPCsLibrary.getNPCAnimationID(hydra.getNpc());
+		int currentAnimationID = ReflectionLibrary.getNpcAnimationId(hydra.getNpc());
 
 		//Compare the animation ID of current game tick with previous game tick. Execute function only if the animation changed.
 		if (lastNPCAnim != currentAnimationID)

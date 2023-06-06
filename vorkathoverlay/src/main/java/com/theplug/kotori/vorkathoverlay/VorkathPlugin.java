@@ -34,7 +34,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.theplug.kotori.kotoriutils.KotoriUtils;
-import com.theplug.kotori.kotoriutils.reflection.NPCsLibrary;
+import com.theplug.kotori.kotoriutils.ReflectionLibrary;
 import com.theplug.kotori.kotoriutils.rlapi.GraphicIDPlus;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -299,7 +299,7 @@ public class VorkathPlugin extends Plugin
 			return;
 		}
 
-		int currentAnimationID = NPCsLibrary.getNPCAnimationID(vorkath.getVorkath());
+		int currentAnimationID = ReflectionLibrary.getNpcAnimationId(vorkath.getVorkath());
 
 		if (lastNPCAnim != currentAnimationID)
 		{
