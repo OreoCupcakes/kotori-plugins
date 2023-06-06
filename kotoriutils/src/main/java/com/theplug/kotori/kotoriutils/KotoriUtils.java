@@ -39,7 +39,7 @@ import java.sql.Ref;
 )
 public class KotoriUtils extends Plugin {
 
-    private final String hooksFileURL = "https://github.com/OreoCupcakes/kotori-plugins-releases/blob/master/hooks2.json?raw=true";
+    private final String hooksFileURL = "https://github.com/OreoCupcakes/kotori-plugins-releases/blob/master/hooks.json?raw=true";
     @Inject
     private Client client;
     @Inject
