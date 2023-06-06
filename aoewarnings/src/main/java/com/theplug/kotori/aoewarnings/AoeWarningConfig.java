@@ -83,7 +83,7 @@ public interface AoeWarningConfig extends Config
 	}
 	
 	@ConfigSection(
-			name = "<html>AoE Warnings<br>Version 1.1.0</html>",
+			name = "<html>AoE Warnings<br>Version 1.1.1</html>",
 			description = "",
 			position = -2,
 			closedByDefault = true

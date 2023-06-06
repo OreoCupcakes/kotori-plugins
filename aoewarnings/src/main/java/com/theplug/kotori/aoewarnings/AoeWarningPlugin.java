@@ -65,7 +65,7 @@ import static com.theplug.kotori.aoewarnings.AoeWarningConfig.*;
 	name = "AoE Warnings",
 	enabledByDefault = false,
 	description = "Shows the final destination for AoE Attack projectiles",
-	tags = {"bosses", "combat", "pve", "overlay"}
+	tags = {"bosses", "combat", "pve", "overlay", "kotori", "ported"}
 )
 public class AoeWarningPlugin extends Plugin
 {
