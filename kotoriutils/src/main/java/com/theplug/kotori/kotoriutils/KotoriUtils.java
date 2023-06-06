@@ -2,10 +2,20 @@ package com.theplug.kotori.kotoriutils;
 
 import com.google.gson.*;
 import com.google.inject.Provides;
+import com.theplug.kotori.kotoriutils.gson.HookInfo;
 import com.theplug.kotori.kotoriutils.gson.Hooks;
-import com.theplug.kotori.kotoriutils.reflection.*;
+import com.theplug.kotori.kotoriutils.methods.ChatUtilities;
+import com.theplug.kotori.kotoriutils.methods.PrayerInteractions;
+import com.theplug.kotori.kotoriutils.methods.SpellInteractions;
+import com.theplug.kotori.kotoriutils.rlapi.PrayerExtended;
+import com.theplug.kotori.kotoriutils.rlapi.WidgetInfoPlus;
 import lombok.extern.slf4j.Slf4j;
-import net.runelite.api.Client;
+import net.runelite.api.*;
+import net.runelite.api.coords.WorldPoint;
+import net.runelite.api.events.ClientTick;
+import net.runelite.api.events.GameTick;
+import net.runelite.api.events.MenuOptionClicked;
+import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
@@ -18,6 +28,7 @@ import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.sql.Ref;
 
 @Slf4j
 @Singleton
@@ -36,10 +47,15 @@ public class KotoriUtils extends Plugin {
     private KotoriUtilsConfig config;
     @Inject
     private ConfigManager configManager;
+    @Inject
+    private ClientThread clientThread;
 
     private Gson gson;
     private Hooks rsHooks;
     private boolean hooksLoaded;
+    
+    @Inject
+    private ReflectionLibrary reflectionLibrary;
 
     @Provides
     KotoriUtilsConfig provideConfig(ConfigManager configManager)
@@ -64,6 +80,75 @@ public class KotoriUtils extends Plugin {
         gson = null;
         rsHooks = null;
         hooksLoaded = false;
+    }
+    
+    @Subscribe
+    private void onConfigChanged(ConfigChanged event)
+    {
+        if (event.getKey().equals("clickToLoadHooks"))
+        {
+            getHooksJson();
+            parseHooksJson();
+        }
+        
+        if (event.getKey().equals("walkUtilTest"))
+        {
+            if (config.walkUtilTest())
+            {
+                testWalkHooks();
+            }
+        }
+    }
+    
+    @Subscribe
+    private void onGameTick(GameTick event)
+    {
+        if (config.npcAnimationUtilTest())
+        {
+            testNpcAnimationHook();
+        }
+        
+        if (config.npcOverheadUtilTest())
+        {
+            testNpcOverheadIconHook();
+        }
+        
+        if (config.invokeUtilTest())
+        {
+            clientThread.invokeLater(this::testInvokeHook);
+        }
+        
+        if (config.isMovingUtilTest())
+        {
+            testIsMovingHook();
+        }
+    }
+    
+    @Subscribe
+    private void onClientTick(ClientTick event)
+    {
+        if (config.menuInsertionUtilTest())
+        {
+            testMenuEntryHooks();
+        }
+        
+        if (config.spellSelectionUtilTest())
+        {
+            testSpellSelectionHooks();
+        }
+    }
+    
+    @Subscribe
+    private void onMenuOptionClicked(MenuOptionClicked event)
+    {
+        if (event.getMenuOption().contains("Kotori Utils Test - Activate "))
+        {
+            ChatUtilities.sendGameMessage("Menu Insertion Test is a success. Thick Skin prayer activated.");
+        }
+        if (event.getMenuOption().contains("<col=39ff14>Kotori Utils Test - Cast Fire Bolt</col> -> "))
+        {
+            ChatUtilities.sendGameMessage("Spell Selection Test is a success. Casted Fire Bolt.");
+        }
     }
 
     private void getHooksJson()
@@ -121,68 +206,93 @@ public class KotoriUtils extends Plugin {
             return;
         }
         //Set the game hooks
-        //invokeMenuAction Hooks
-        InvokesLibrary.setInvokeMenuActionClassName(getClassName(rsHooks.getInvokeMenuActionHook()));
-        InvokesLibrary.setInvokeMenuActionMethodName(getFieldOrMethodName(rsHooks.getInvokeMenuActionHook()));
-        InvokesLibrary.setInvokeMenuActionJunkValue(rsHooks.getInvokeMenuActionHookJunkValue());
-        //NPC Overhead Icons Hook
-        NPCsLibrary.setNpcCompositionClassName(getClassName(rsHooks.getGetNpcCompositionOverheadIcon()));
-        NPCsLibrary.setOverheadIconFieldName(getFieldOrMethodName(rsHooks.getGetNpcCompositionOverheadIcon()));
-        //NPC Animation IDs Hook
-        NPCsLibrary.setActorClassName(getClassName(rsHooks.getActorAnimationIdFieldHook()));
-        NPCsLibrary.setActorAnimationIdFieldName(getFieldOrMethodName(rsHooks.getActorAnimationIdFieldHook()));
-        NPCsLibrary.setActorAnimationIdMultiplierValue(rsHooks.getActorAnimationIdMultiplier());
-        //Scene Walking Set X and Y Hook
-    //    WalkingLibrary.setXAndYClassName(getClassName(rsHooks.getSetXandYHook()));
-    //    WalkingLibrary.setXAndYMethodName(getFieldOrMethodName(rsHooks.getSetXandYHook()));
-        //Scene Walking X Gamepack Hook
-        WalkingLibrary.setSceneSelectedXClassName(getClassName(rsHooks.getSceneSelectedXFieldHook()));
-        WalkingLibrary.setSceneSelectedXFieldName(getFieldOrMethodName(rsHooks.getSceneSelectedXFieldHook()));
-        //Scene Walking Y Gamepack Hook
-        WalkingLibrary.setSceneSelectedYClassName(getClassName(rsHooks.getSceneSelectedYFieldHook()));
-        WalkingLibrary.setSceneSelectedYFieldName(getFieldOrMethodName(rsHooks.getSceneSelectedYFieldHook()));
-        //Scene Walking Set Viewport Walking Hook
-        WalkingLibrary.setViewportWalkingClassName(getClassName(rsHooks.getSetViewportWalkingFieldHook()));
-        WalkingLibrary.setViewportWalkingFieldName(getFieldOrMethodName(rsHooks.getSetViewportWalkingFieldHook()));
-        //Scene Walking Check Click Field Hook
-        WalkingLibrary.setCheckClickClassName(getClassName(rsHooks.getCheckClickFieldHook()));
-        WalkingLibrary.setCheckClickFieldName(getFieldOrMethodName(rsHooks.getCheckClickFieldHook()));
-        //Selected Spell Widget Hook
-        SpellsLibrary.setSelectedSpellWidgetClassName(getClassName(rsHooks.getSetSelectedSpellWidgetHook()));
-        SpellsLibrary.setSelectedSpellWidgetFieldName(getFieldOrMethodName(rsHooks.getSetSelectedSpellWidgetHook()));
-        SpellsLibrary.setSelectedSpellWidgetMultiplier(rsHooks.getSetSelectedSpellWidgetMultiplier());
-        //Selected Spell Child Hook
-        SpellsLibrary.setSelectedSpellChildIndexClassName(getClassName(rsHooks.getSetSelectedSpellChildIndexHook()));
-        SpellsLibrary.setSelectedSpellChildIndexFieldName(getFieldOrMethodName(rsHooks.getSetSelectedSpellChildIndexHook()));
-        SpellsLibrary.setSelectedSpellChildIndexMultiplier(rsHooks.getSetSelectedSpellChildIndexMultiplier());
-        //Selected Spell Item Hook
-        SpellsLibrary.setSelectedSpellItemIDClassName(getClassName(rsHooks.getSetSelectedSpellItemIDHook()));
-        SpellsLibrary.setSelectedSpellItemIDFieldName(getFieldOrMethodName(rsHooks.getSetSelectedSpellItemIDHook()));
-        SpellsLibrary.setSelectedSpellItemIDMultiplier(rsHooks.getSetSelectedSpellItemIDMultiplier());
-        //MenuEntry Index Hook
-        MenusLibrary.setMenuEntryIndexClassName(getClassName(rsHooks.getMenuEntryIndexFieldHook()));
-        MenusLibrary.setMenuEntryIndexFieldName(getFieldOrMethodName(rsHooks.getMenuEntryIndexFieldHook()));
-        //MenuEntry Identifiers Hook
-        MenusLibrary.setMenuEntryIdentifiersArrayClassName(getClassName(rsHooks.getMenuEntryIdentifiersArrayFieldHook()));
-        MenusLibrary.setMenuEntryIdentifiersArrayFieldName(getFieldOrMethodName(rsHooks.getMenuEntryIdentifiersArrayFieldHook()));
-        //MenuEntry Item Ids Hook
-        MenusLibrary.setMenuEntryItemIdsArrayClassName(getClassName(rsHooks.getMenuEntryItemIdsArrayFieldHook()));
-        MenusLibrary.setMenuEntryItemIdsArrayFieldName(getFieldOrMethodName(rsHooks.getMenuEntryItemIdsArrayFieldHook()));
-        //MenuEntry Options Hook
-        MenusLibrary.setMenuEntryOptionsArrayClassName(getClassName(rsHooks.getMenuEntryOptionsArrayFieldHook()));
-        MenusLibrary.setMenuEntryOptionsArrayFieldName(getFieldOrMethodName(rsHooks.getMenuEntryOptionsArrayFieldHook()));
-        //MenuEntry Param0 Hook
-        MenusLibrary.setMenuEntryParam0ArrayClassName(getClassName(rsHooks.getMenuEntryParam0ArrayFieldHook()));
-        MenusLibrary.setMenuEntryParam0ArrayFieldName(getFieldOrMethodName(rsHooks.getMenuEntryParam0ArrayFieldHook()));
-        //MenuEntry Param1 Hook
-        MenusLibrary.setMenuEntryParam1ArrayClassName(getClassName(rsHooks.getMenuEntryParam1ArrayFieldHook()));
-        MenusLibrary.setMenuEntryParam1ArrayFieldName(getFieldOrMethodName(rsHooks.getMenuEntryParam1ArrayFieldHook()));
-        //MenuEntry Targets Hook
-        MenusLibrary.setMenuEntryTargetsArrayClassName(getClassName(rsHooks.getMenuEntryTargetsArrayFieldHook()));
-        MenusLibrary.setMenuEntryTargetsArrayFieldName(getFieldOrMethodName(rsHooks.getMenuEntryTargetsArrayFieldHook()));
-        //MenuEntry Types Hook
-        MenusLibrary.setMenuEntryTypesArrayClassName(getClassName(rsHooks.getMenuEntryTypesArrayFieldHook()));
-        MenusLibrary.setMenuEntryTypesArrayFieldName(getFieldOrMethodName(rsHooks.getMenuEntryTypesArrayFieldHook()));
+        for (HookInfo hookInfo : rsHooks.getH())
+        {
+            String hookName = hookInfo.getN();
+            
+            switch (hookName)
+            {
+                case "invokeMenuAction":
+                    ReflectionLibrary.setInvokeMenuActionClassName(hookInfo.getC());
+                    ReflectionLibrary.setInvokeMenuActionMethodName(hookInfo.getP());
+                    ReflectionLibrary.setInvokeMenuActionJunkValue(hookInfo.getM());
+                    break;
+                case "setViewportWalking":
+                    ReflectionLibrary.setViewportWalkingClassName(hookInfo.getC());
+                    ReflectionLibrary.setViewportWalkingFieldName(hookInfo.getP());
+                    break;
+                case "setSelectedSpellWidget":
+                    ReflectionLibrary.setSelectedSpellWidgetClassName(hookInfo.getC());
+                    ReflectionLibrary.setSelectedSpellWidgetFieldName(hookInfo.getP());
+                    ReflectionLibrary.setSelectedSpellWidgetMultiplier(hookInfo.getM());
+                    break;
+                case "setSelectedSpellChildIndex":
+                    ReflectionLibrary.setSelectedSpellChildIndexClassName(hookInfo.getC());
+                    ReflectionLibrary.setSelectedSpellChildIndexFieldName(hookInfo.getP());
+                    ReflectionLibrary.setSelectedSpellChildIndexMultiplier(hookInfo.getM());
+                    break;
+                case "setSelectedSpellItemId":
+                    ReflectionLibrary.setSelectedSpellItemIDClassName(hookInfo.getC());
+                    ReflectionLibrary.setSelectedSpellItemIDFieldName(hookInfo.getP());
+                    ReflectionLibrary.setSelectedSpellItemIDMultiplier(hookInfo.getM());
+                    break;
+                case "getNpcOverheadIcon":
+                    ReflectionLibrary.setNpcOverheadIconClassName(hookInfo.getC());
+                    ReflectionLibrary.setNpcOverheadIconFieldName(hookInfo.getP());
+                    break;
+                case "menuOptionsCount":
+                    ReflectionLibrary.setMenuOptionsCountClassName(hookInfo.getC());
+                    ReflectionLibrary.setMenuOptionsCountFieldName(hookInfo.getP());
+                    ReflectionLibrary.setMenuOptionsCountMultiplier(hookInfo.getM());
+                    break;
+                case "menuIdentifiersArray":
+                    ReflectionLibrary.setMenuIdentifiersClassName(hookInfo.getC());
+                    ReflectionLibrary.setMenuIdentifiersFieldName(hookInfo.getP());
+                    break;
+                case "menuItemIdsArray":
+                    ReflectionLibrary.setMenuItemIdsClassName(hookInfo.getC());
+                    ReflectionLibrary.setMenuItemIdsFieldName(hookInfo.getP());
+                    break;
+                case "menuOptionsArray":
+                    ReflectionLibrary.setMenuOptionsClassName(hookInfo.getC());
+                    ReflectionLibrary.setMenuOptionsFieldName(hookInfo.getP());
+                    break;
+                case "menuParam0Array":
+                    ReflectionLibrary.setMenuParam0ClassName(hookInfo.getC());
+                    ReflectionLibrary.setMenuParam0FieldName(hookInfo.getP());
+                    break;
+                case "menuParam1Array":
+                    ReflectionLibrary.setMenuParam1ClassName(hookInfo.getC());
+                    ReflectionLibrary.setMenuParam1FieldName(hookInfo.getP());
+                    break;
+                case "menuTargetsArray":
+                    ReflectionLibrary.setMenuTargetsClassName(hookInfo.getC());
+                    ReflectionLibrary.setMenuTargetsFieldName(hookInfo.getP());
+                    break;
+                case "menuTypesArray":
+                    ReflectionLibrary.setMenuTypesClassName(hookInfo.getC());
+                    ReflectionLibrary.setMenuTypesFieldName(hookInfo.getP());
+                    break;
+                case "setSelectedSceneTileX":
+                    ReflectionLibrary.setSceneSelectedXClassName(hookInfo.getC());
+                    ReflectionLibrary.setSceneSelectedXFieldName(hookInfo.getP());
+                    break;
+                case "setSelectedSceneTileY":
+                    ReflectionLibrary.setSceneSelectedYClassName(hookInfo.getC());
+                    ReflectionLibrary.setSceneSelectedYFieldName(hookInfo.getP());
+                    break;
+                case "isMoving":
+                    ReflectionLibrary.setActorPathLengthClassName(hookInfo.getC());
+                    ReflectionLibrary.setActorPathLengthFieldName(hookInfo.getP());
+                    ReflectionLibrary.setActorPathLengthMultiplier(hookInfo.getM());
+                    break;
+                case "getActorAnimationId":
+                    ReflectionLibrary.setActorAnimationIdClassName(hookInfo.getC());
+                    ReflectionLibrary.setActorAnimationIdFieldName(hookInfo.getP());
+                    ReflectionLibrary.setActorAnimationIdMultiplier(hookInfo.getM());
+                    break;
+            }
+        }
 
         hooksLoaded = true;
         
@@ -193,26 +303,125 @@ public class KotoriUtils extends Plugin {
                             "Hooks successfully loaded into the client.", "Kotori Plugin Utils", JOptionPane.INFORMATION_MESSAGE));
         }
     }
-
-    private String getClassName(String jsonString)
+    
+    private void testWalkHooks()
     {
-        String[] jsonSplit = jsonString.split("\\.");
-        return jsonSplit[0];
+        WorldPoint currentPlayerLocation = client.getLocalPlayer().getWorldLocation();
+        WorldPoint walkingPoint = new WorldPoint(currentPlayerLocation.getX() - 1, currentPlayerLocation.getY(), currentPlayerLocation.getPlane());
+        reflectionLibrary.sceneWalk(walkingPoint);
+        ChatUtilities.sendGameMessage("Kotori Utils Test - Current Location" + currentPlayerLocation.toString());
+        ChatUtilities.sendGameMessage("Kotori Utils Test - Walking to: " + walkingPoint.toString());
     }
-
-    private String getFieldOrMethodName(String jsonString)
+    
+    private void testInvokeHook()
     {
-        String[] jsonSplit = jsonString.split("\\.");
-        return jsonSplit[1];
-    }
-
-    @Subscribe
-    private void onConfigChanged(ConfigChanged event)
-    {
-        if (event.getKey().equals("clickToLoadHooks"))
+        Prayer prayer = Prayer.THICK_SKIN;
+        if (client.isPrayerActive(prayer))
         {
-            getHooksJson();
-            parseHooksJson();
+            PrayerInteractions.deactivatePrayer(prayer);
+            ChatUtilities.sendGameMessage("Kotori Utils Test - Deactivating Thick Skin prayer");
         }
+        else
+        {
+            PrayerInteractions.activatePrayer(prayer);
+            ChatUtilities.sendGameMessage("Kotori Utils Test - Activating Thick Skin prayer");
+        }
+    }
+    
+    private void testNpcAnimationHook()
+    {
+        Actor actor = client.getLocalPlayer().getInteracting();
+        
+        if (actor instanceof NPC)
+        {
+            int animationId = reflectionLibrary.getNpcAnimationId(actor);
+            String npcName = actor.getName();
+            if (npcName == null)
+            {
+                npcName = "null";
+            }
+            ChatUtilities.sendGameMessage("Kotori Utils Test - NPC Name: " + npcName + ", Animation ID: " + animationId);
+        }
+    }
+    
+    private void testNpcOverheadIconHook()
+    {
+        Actor actor = client.getLocalPlayer().getInteracting();
+        
+        if (actor instanceof NPC)
+        {
+            HeadIcon headIcon = reflectionLibrary.getNpcOverheadIcon((NPC) actor);
+            
+            String npcName = actor.getName();
+            if (npcName == null)
+            {
+                npcName = "null";
+            }
+            if (headIcon == null)
+            {
+                ChatUtilities.sendGameMessage("Kotori Utils Test - NPC Name: " + npcName + " has no overhead icon.");
+            }
+            else
+            {
+                ChatUtilities.sendGameMessage("Kotori Utils Test - NPC Name: " + npcName + ", Overhead Icon: " + headIcon.name());
+            }
+        }
+    }
+    
+    private void testMenuEntryHooks()
+    {
+        if (client.isMenuOpen())
+        {
+            return;
+        }
+        int index = reflectionLibrary.getMenuOptionsCount();
+        if (index == -1)
+        {
+            return;
+        }
+        client.createMenuEntry(index).setForceLeftClick(true);
+        reflectionLibrary.insertMenuEntry(index, "Kotori Utils Test - Activate ", "Thick Skin Prayer", MenuAction.CC_OP.getId(), 1, -1,
+                PrayerExtended.getPrayerWidgetId(Prayer.THICK_SKIN), -1);
+    }
+    
+    private void testSpellSelectionHooks()
+    {
+        if (client.isMenuOpen())
+        {
+            return;
+        }
+        
+        MenuEntry[] entries = client.getMenuEntries();
+        MenuEntry npcEntry = null;
+        for (MenuEntry e: entries)
+        {
+            if (e.getType() == MenuAction.NPC_SECOND_OPTION)
+            {
+                npcEntry = e;
+                break;
+            }
+        }
+        reflectionLibrary.setSelectedSpell(WidgetInfoPlus.SPELL_FIRE_STRIKE.getId(), -1, -1);
+        String menuOptionText = "<col=39ff14>Kotori Utils Test - Cast Fire Strike</col> -> ";
+        MenuEntry hotkeyEntry = client.createMenuEntry(-1).setForceLeftClick(true).setParam0(0).setParam1(0).setType(MenuAction.WIDGET_TARGET_ON_NPC)
+                .setOption(menuOptionText);
+        if (npcEntry == null)
+        {
+            hotkeyEntry.setTarget(" ").setIdentifier(0);
+        }
+        else
+        {
+            hotkeyEntry.setTarget(npcEntry.getTarget()).setIdentifier(npcEntry.getIdentifier());
+        }
+    }
+    
+    private void testIsMovingHook()
+    {
+        Player you = client.getLocalPlayer();
+        int pathLength = reflectionLibrary.getActorPathLength(you);
+        int poseAnimation = you.getPoseAnimation();
+        int idleAnimation = you.getIdlePoseAnimation();
+        ChatUtilities.sendGameMessage("Kotori Utils Test - isMoving? " + reflectionLibrary.isMoving() + ", pathLength: " + pathLength +
+                ", poseAnimation: " + poseAnimation + ", idleAnimation: " + idleAnimation);
     }
 }

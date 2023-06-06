@@ -1,26 +1,113 @@
 {
-  "invokeMenuActionHook": "ar.ke",
-  "invokeMenuActionHookJunkValue": "-1745540313",
-  "setXandYHook": "ie.xc",
-  "setViewportWalkingFieldHook": "ie.bj",
-  "checkClickFieldHook": "ie.bx",
-  "setSelectedSpellWidgetHook": "jg.ou",
-  "setSelectedSpellWidgetMultiplier": "1511366623",
-  "setSelectedSpellChildIndexHook": "client.oa",
-  "setSelectedSpellChildIndexMultiplier": "-1204907975",
-  "setSelectedSpellItemIDHook": "client.op",
-  "setSelectedSpellItemIDMultiplier": "35668549",
-  "getNpcCompositionOverheadIcon": "hs.ba",
-  "menuEntryIndexFieldHook": "rl3.ap",
-  "menuEntryIdentifiersArrayFieldHook": "client.nq",
-  "menuEntryItemIdsArrayFieldHook": "client.oi",
-  "menuEntryOptionsArrayFieldHook": "client.og",
-  "menuEntryParam0ArrayFieldHook": "client.nk",
-  "menuEntryParam1ArrayFieldHook": "client.ni",
-  "menuEntryTargetsArrayFieldHook": "client.ok",
-  "menuEntryTypesArrayFieldHook": "client.nh",
-  "actorAnimationIdFieldHook": "de.ct",
-  "actorAnimationIdMultiplier": "-1372355773",
-  "sceneSelectedXFieldHook": "ie.bd",
-  "sceneSelectedYFieldHook": "ie.bt"
+  "h":
+  [
+    {
+      "n": "invokeMenuAction",
+      "c": "kq",
+      "p": "kj",
+      "m": -755698376
+    },
+    {
+      "n": "setViewportWalking",
+      "c": "iz",
+      "p": "bx",
+      "m": 1
+    },
+    {
+      "n": "setSelectedSpellWidget",
+      "c": "cm",
+      "p": "oq",
+      "m": -1926356467
+    },
+    {
+      "n": "setSelectedSpellChildIndex",
+      "c": "client",
+      "p": "ov",
+      "m": 577729693
+    },
+    {
+      "n": "setSelectedSpellItemId",
+      "c": "client",
+      "p": "oh",
+      "m": -1060981963
+    },
+    {
+      "n": "getNpcOverheadIcon",
+      "c": "hd",
+      "p": "bz",
+      "m": 1
+    },
+    {
+      "n": "menuOptionsCount",
+      "c": "client",
+      "p": "ns",
+      "m": -54831947
+    },
+    {
+      "n": "menuIdentifiersArray",
+      "c": "client",
+      "p": "od",
+      "m": 1
+    },
+    {
+      "n": "menuItemIdsArray",
+      "c": "client",
+      "p": "oe",
+      "m": 1
+    },
+    {
+      "n": "menuOptionsArray",
+      "c": "client",
+      "p": "ow",
+      "m": 1
+    },
+    {
+      "n": "menuParam0Array",
+      "c": "client",
+      "p": "nh",
+      "m": 1
+    },
+    {
+      "n": "menuParam1Array",
+      "c": "client",
+      "p": "nj",
+      "m": 1
+    },
+    {
+      "n": "menuTargetsArray",
+      "c": "client",
+      "p": "oc",
+      "m": 1
+    },
+    {
+      "n": "menuTypesArray",
+      "c": "client",
+      "p": "nk",
+      "m": 1
+    },
+    {
+      "n": "setSelectedSceneTileX",
+      "c": "iz",
+      "p": "bn",
+      "m": 1
+    },
+    {
+      "n": "setSelectedSceneTileY",
+      "c": "iz",
+      "p": "bb",
+      "m": 1
+    },
+    {
+      "n": "isMoving",
+      "c": "di",
+      "p": "de",
+      "m": 1557847499
+    },
+    {
+      "n": "getActorAnimationId",
+      "c": "di",
+      "p": "be",
+      "m": -254610587
+    }
+  ]
 }
