@@ -1,14 +1,16 @@
 package com.theplug.kotori.kotoritest;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.inject.Provides;
-import com.theplug.kotori.kotoritest.kotoriutils.KotoriUtils;
-import com.theplug.kotori.kotoritest.kotoriutils.KotoriUtilsConfig;
-import com.theplug.kotori.kotoritest.kotoriutils.rlapi.WidgetInfoPlus;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
+import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.*;
+import net.runelite.client.RuneLiteProperties;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
@@ -20,12 +22,19 @@ import net.runelite.client.util.HotkeyListener;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
-@PluginDependency(KotoriUtils.class)
 @PluginDescriptor(
 	name = "Kotori Test",
 	description = "Kotori Test plugin for experimental features.",
@@ -37,12 +46,9 @@ public class KotoriTestPlugin extends Plugin
 	@Inject
 	private Client client;
 	@Inject
-	private KotoriUtils kotoriUtils;
-	@Inject
 	private KeyManager keyManager;
 	@Inject
 	private KotoriTestConfig config;
-	
 
 	@Provides
 	KotoriTestConfig provideConfig(ConfigManager configManager)
@@ -53,13 +59,13 @@ public class KotoriTestPlugin extends Plugin
 	@Override
 	protected void startUp()
 	{
-	
+		keyManager.registerKeyListener(hotkey);
 	}
 
 	@Override
 	protected void shutDown()
 	{
-	
+		keyManager.unregisterKeyListener(hotkey);
 	}
 	
 	public void init()
@@ -76,9 +82,18 @@ public class KotoriTestPlugin extends Plugin
 	@Subscribe
 	private void onGameTick(GameTick gameTick)
 	{
-		if (jad != null)
+		try
 		{
-			System.out.println("GameTick - Jad Animation ID: " + jad.getAnimation());
+			Class<?> clazz = client.getClass().getClassLoader().loadClass("client");
+			Field field = clazz.getDeclaredField("ns");
+			field.setAccessible(true);
+			int option = field.getInt(clazz) * -54831947;
+			field.setAccessible(false);
+			System.out.println("Menu Options Count: " + option);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
 		}
 	}
 	
@@ -115,34 +130,59 @@ public class KotoriTestPlugin extends Plugin
 	@Subscribe
 	private void onNpcSpawned(NpcSpawned event)
 	{
-		NPC npc = event.getNpc();
-		
-		if (jadIds.contains(npc.getId()))
-		{
-			jad = npc;
-		}
-	}
 	
-	private static final Set<Integer> cerberusIds = Set.of(NpcID.CERBERUS, NpcID.CERBERUS_5863, NpcID.CERBERUS_5866);
+	}
 	
 	@Subscribe
 	private void onAnimationChanged(AnimationChanged event)
 	{
-		Actor actor = event.getActor();
-		
-		if (!(actor instanceof NPC))
-		{
-			return;
-		}
-		
-		NPC npc = (NPC) actor;
-		if (jadIds.contains(npc.getId()))
-		{
-			System.out.println("AnimationChanged Actor Animation ID: " + actor.getAnimation());
-			System.out.println("AnimationChanged NPC Animation ID: " + npc.getAnimation());
-		}
+	
 	}
 	
-	private final Set<Integer> jadIds = Set.of(NpcID.JALTOKJAD, NpcID.JALTOKJAD_7704, NpcID.JALTOKJAD_10623, NpcID.TZTOKJAD, NpcID.TZTOKJAD_6506);
-	NPC jad;
+	private final HotkeyListener hotkey = new HotkeyListener(() -> config.keybind())
+	{
+		@Override
+		public void hotkeyPressed()
+		{
+		
+		}
+		
+		@Override
+		public void hotkeyReleased()
+		{
+		
+		}
+	};
+	
+		static  public void gcdExtended(long a, long b)
+		{
+			long x = 0, y = 1, lastx = 1, lasty = 0, temp;
+			while (b != 0)
+			{
+				long q = a / b;
+				long r = a % b;
+				
+				a = b;
+				b = r;
+				
+				temp = x;
+				x = lastx - q * x;
+				lastx = temp;
+				
+				temp = y;
+				y = lasty - q * y;
+				lasty = temp;
+			}
+			System.out.println("GCD "+a+" and its Roots  x : "+ (int) lastx +" y :"+ (int )lasty);
+		}
+	public static long[] egcd(long a, long b) {
+		if (b == 0) return new long[] {a, 1, 0};
+		else {
+			long[] ret = egcd(b, a % b);
+			long tmp = ret[1] - ret[2] * (a / b);
+			ret[1] = ret[2];
+			ret[2] = tmp;
+			return ret;
+		}
+	}
 }
