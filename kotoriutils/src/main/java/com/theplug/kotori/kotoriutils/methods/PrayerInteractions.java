@@ -16,7 +16,6 @@ import java.util.concurrent.TimeUnit;
 
 public class PrayerInteractions
 {
-	static final ReflectionLibrary reflectionLibrary = new ReflectionLibrary();
 	static Client client = RuneLite.getInjector().getInstance(Client.class);
 	static ClientThread clientThread = RuneLite.getInjector().getInstance(ClientThread.class);
 	static ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
@@ -66,7 +65,7 @@ public class PrayerInteractions
 			
 			int param1 = prayerExtended.getWidgetInfoPlus().getId();
 			
-			reflectionLibrary.invokeMenuAction(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "", "", 0, 0);
+			ReflectionLibrary.invokeMenuAction(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "", "", 0, 0);
 			return true;
 	}
 	
@@ -110,7 +109,7 @@ public class PrayerInteractions
 			
 			int param1 = prayerExtended.getWidgetInfoPlus().getId();
 			
-			reflectionLibrary.invokeMenuAction(-1, param1, MenuAction.CC_OP.getId(), 1, -1);
+			ReflectionLibrary.invokeMenuAction(-1, param1, MenuAction.CC_OP.getId(), 1, -1);
 			return true;
 	}
 	
@@ -142,15 +141,9 @@ public class PrayerInteractions
 	public static void oneTickFlickPrayer(Prayer prayer)
 	{
 		executor.schedule(() ->
-		{
-			clientThread.invokeLater(() -> activatePrayer(prayer));
-			System.out.println("Activating");
-		}, randomDelay(150, 250), TimeUnit.MILLISECONDS);
+			clientThread.invokeLater(() -> activatePrayer(prayer)), randomDelay(150, 250), TimeUnit.MILLISECONDS);
 		executor.schedule(() ->
-		{
-			clientThread.invokeLater(() -> deactivatePrayer(prayer));
-			System.out.println("Deactivating");
-		}, randomDelay(150, 250), TimeUnit.MILLISECONDS);
+			clientThread.invokeLater(() -> deactivatePrayer(prayer)), randomDelay(150, 250), TimeUnit.MILLISECONDS);
 	}
 	
 	private static int randomDelay(int min, int max)

@@ -25,6 +25,15 @@ public interface KotoriUtilsConfig extends Config
     )
     default boolean clickToLoadHooks() { return false; }
     
+    @ConfigItem(
+            keyName = "disableHooksLoadedMsg",
+            name = "Disable Hooks Loaded Pop Up",
+            description = "Disable the \"Hooks successfully loaded into the client.\" pop up message.",
+            position = 1,
+            section = versionInfo
+    )
+    default boolean disableHooksLoadedPopup() { return true; }
+    
     @ConfigSection(
             name = "Utils Test Functions",
             description = "Test if the plugin hooked into the game properly",

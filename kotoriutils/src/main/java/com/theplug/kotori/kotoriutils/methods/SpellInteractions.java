@@ -8,14 +8,13 @@ import net.runelite.client.RuneLite;
 
 public class SpellInteractions
 {
-	static final ReflectionLibrary reflectionLibrary = new ReflectionLibrary();
 	private static final Client client = RuneLite.getInjector().getInstance(Client.class);
 	
 	public static void castSpellDeathCharge()
 	{
 		if (VarUtilities.onArceuusSpellbook() && VarUtilities.isSpellDeathChargeOffCooldown())
 		{
-			reflectionLibrary.invokeMenuAction(-1, WidgetInfoPlus.SPELL_DEATH_CHARGE.getId(), MenuAction.CC_OP.getId(), 1, -1);
+			ReflectionLibrary.invokeMenuAction(-1, WidgetInfoPlus.SPELL_DEATH_CHARGE.getId(), MenuAction.CC_OP.getId(), 1, -1);
 		}
 	}
 }

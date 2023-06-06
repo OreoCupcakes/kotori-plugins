@@ -6,7 +6,6 @@ import com.theplug.kotori.kotoriutils.gson.HookInfo;
 import com.theplug.kotori.kotoriutils.gson.Hooks;
 import com.theplug.kotori.kotoriutils.methods.ChatUtilities;
 import com.theplug.kotori.kotoriutils.methods.PrayerInteractions;
-import com.theplug.kotori.kotoriutils.methods.SpellInteractions;
 import com.theplug.kotori.kotoriutils.rlapi.PrayerExtended;
 import com.theplug.kotori.kotoriutils.rlapi.WidgetInfoPlus;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +39,7 @@ import java.sql.Ref;
 )
 public class KotoriUtils extends Plugin {
 
-    private final String hooksFileURL = "https://github.com/OreoCupcakes/kotori-plugins-releases/blob/master/hooks.json?raw=true";
+    private final String hooksFileURL = "https://github.com/OreoCupcakes/kotori-plugins-releases/blob/master/hooks2.json?raw=true";
     @Inject
     private Client client;
     @Inject
@@ -53,9 +52,6 @@ public class KotoriUtils extends Plugin {
     private Gson gson;
     private Hooks rsHooks;
     private boolean hooksLoaded;
-    
-    @Inject
-    private ReflectionLibrary reflectionLibrary;
 
     @Provides
     KotoriUtilsConfig provideConfig(ConfigManager configManager)
@@ -87,8 +83,11 @@ public class KotoriUtils extends Plugin {
     {
         if (event.getKey().equals("clickToLoadHooks"))
         {
-            getHooksJson();
-            parseHooksJson();
+            new Thread(() ->
+            {
+                getHooksJson();
+                parseHooksJson();
+            }).start();
         }
         
         if (event.getKey().equals("walkUtilTest"))
@@ -296,7 +295,7 @@ public class KotoriUtils extends Plugin {
 
         hooksLoaded = true;
         
-        if (config.clickToLoadHooks())
+        if (!config.disableHooksLoadedPopup())
         {
             SwingUtilities.invokeLater(() ->
                     JOptionPane.showMessageDialog(client.getCanvas(),
@@ -308,7 +307,7 @@ public class KotoriUtils extends Plugin {
     {
         WorldPoint currentPlayerLocation = client.getLocalPlayer().getWorldLocation();
         WorldPoint walkingPoint = new WorldPoint(currentPlayerLocation.getX() - 1, currentPlayerLocation.getY(), currentPlayerLocation.getPlane());
-        reflectionLibrary.sceneWalk(walkingPoint);
+        ReflectionLibrary.sceneWalk(walkingPoint);
         ChatUtilities.sendGameMessage("Kotori Utils Test - Current Location" + currentPlayerLocation.toString());
         ChatUtilities.sendGameMessage("Kotori Utils Test - Walking to: " + walkingPoint.toString());
     }
@@ -334,7 +333,7 @@ public class KotoriUtils extends Plugin {
         
         if (actor instanceof NPC)
         {
-            int animationId = reflectionLibrary.getNpcAnimationId(actor);
+            int animationId = ReflectionLibrary.getNpcAnimationId(actor);
             String npcName = actor.getName();
             if (npcName == null)
             {
@@ -350,7 +349,7 @@ public class KotoriUtils extends Plugin {
         
         if (actor instanceof NPC)
         {
-            HeadIcon headIcon = reflectionLibrary.getNpcOverheadIcon((NPC) actor);
+            HeadIcon headIcon = ReflectionLibrary.getNpcOverheadIcon((NPC) actor);
             
             String npcName = actor.getName();
             if (npcName == null)
@@ -374,13 +373,13 @@ public class KotoriUtils extends Plugin {
         {
             return;
         }
-        int index = reflectionLibrary.getMenuOptionsCount();
+        int index = ReflectionLibrary.getMenuOptionsCount();
         if (index == -1)
         {
             return;
         }
         client.createMenuEntry(index).setForceLeftClick(true);
-        reflectionLibrary.insertMenuEntry(index, "Kotori Utils Test - Activate ", "Thick Skin Prayer", MenuAction.CC_OP.getId(), 1, -1,
+        ReflectionLibrary.insertMenuEntry(index, "Kotori Utils Test - Activate ", "Thick Skin Prayer", MenuAction.CC_OP.getId(), 1, -1,
                 PrayerExtended.getPrayerWidgetId(Prayer.THICK_SKIN), -1);
     }
     
@@ -401,7 +400,7 @@ public class KotoriUtils extends Plugin {
                 break;
             }
         }
-        reflectionLibrary.setSelectedSpell(WidgetInfoPlus.SPELL_FIRE_STRIKE.getId(), -1, -1);
+        ReflectionLibrary.setSelectedSpell(WidgetInfoPlus.SPELL_FIRE_STRIKE.getId(), -1, -1);
         String menuOptionText = "<col=39ff14>Kotori Utils Test - Cast Fire Strike</col> -> ";
         MenuEntry hotkeyEntry = client.createMenuEntry(-1).setForceLeftClick(true).setParam0(0).setParam1(0).setType(MenuAction.WIDGET_TARGET_ON_NPC)
                 .setOption(menuOptionText);
@@ -418,10 +417,10 @@ public class KotoriUtils extends Plugin {
     private void testIsMovingHook()
     {
         Player you = client.getLocalPlayer();
-        int pathLength = reflectionLibrary.getActorPathLength(you);
+        int pathLength = ReflectionLibrary.getActorPathLength(you);
         int poseAnimation = you.getPoseAnimation();
         int idleAnimation = you.getIdlePoseAnimation();
-        ChatUtilities.sendGameMessage("Kotori Utils Test - isMoving? " + reflectionLibrary.isMoving() + ", pathLength: " + pathLength +
+        ChatUtilities.sendGameMessage("Kotori Utils Test - isMoving? " + ReflectionLibrary.isMoving() + ", pathLength: " + pathLength +
                 ", poseAnimation: " + poseAnimation + ", idleAnimation: " + idleAnimation);
     }
 }

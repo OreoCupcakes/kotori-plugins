@@ -127,7 +127,7 @@ public class ReflectionLibrary
 	private static String menuTypesFieldName;
 	
 	//Reflection methods
-	private Class<?> getClass(String className)
+	private static Class<?> getClass(String className)
 	{
 		Class<?> clazz;
 		
@@ -144,7 +144,7 @@ public class ReflectionLibrary
 		return clazz;
 	}
 	
-	private Field getField(Class<?> clazz, String fieldName)
+	private static Field getField(Class<?> clazz, String fieldName)
 	{
 		Field field;
 		
@@ -166,13 +166,13 @@ public class ReflectionLibrary
 		return field;
 	}
 	
-	private Field getField(String className, String fieldName)
+	private static Field getField(String className, String fieldName)
 	{
 		Class<?> clazz = getClass(className);
 		return getField(clazz, fieldName);
 	}
 	
-	private int getFieldIntValue(Field field, Object objectWithField, int multiplier, String errorMsg)
+	private static int getFieldIntValue(Field field, Object objectWithField, int multiplier, String errorMsg)
 	{
 		if (field == null || objectWithField == null)
 		{
@@ -193,7 +193,7 @@ public class ReflectionLibrary
 		}
 	}
 	
-	private void setFieldIntValue(Field field, Object objectWithField, int valueToSet, int multiplier, String errorMsg)
+	private static void setFieldIntValue(Field field, Object objectWithField, int valueToSet, int multiplier, String errorMsg)
 	{
 		if (field == null || objectWithField == null)
 		{
@@ -212,7 +212,7 @@ public class ReflectionLibrary
 		}
 	}
 	
-	private void setFieldBooleanValue(Field field, Object objectWithField, boolean valueToSet, String errorMsg)
+	private static void setFieldBooleanValue(Field field, Object objectWithField, boolean valueToSet, String errorMsg)
 	{
 		if (field == null)
 		{
@@ -231,7 +231,7 @@ public class ReflectionLibrary
 		}
 	}
 	
-	private void setFieldIntArrayValue(Field field, Object objectWithField, int index, int valueToSet, String errorMsg)
+	private static void setFieldIntArrayValue(Field field, Object objectWithField, int index, int valueToSet, String errorMsg)
 	{
 		if (field == null)
 		{
@@ -252,7 +252,7 @@ public class ReflectionLibrary
 		}
 	}
 	
-	private void setFieldObjectArrayValue(Field field, Object objectWithField, int index, Object valueToSet, String errorMsg)
+	private static void setFieldObjectArrayValue(Field field, Object objectWithField, int index, Object valueToSet, String errorMsg)
 	{
 		if (field == null)
 		{
@@ -274,7 +274,7 @@ public class ReflectionLibrary
 	}
 	
 	//Invoke Menu Action Method
-	public void invokeMenuAction(int param0, int param1, int opcode, int identifier, int itemId, String option, String target, int x, int y)
+	public static void invokeMenuAction(int param0, int param1, int opcode, int identifier, int itemId, String option, String target, int x, int y)
 	{
 		Class<?> clazz = getClass(invokeMenuActionClassName);
 		Method method;
@@ -324,34 +324,34 @@ public class ReflectionLibrary
 		}
 	}
 	
-	public void invokeMenuAction(int param0, int param1, int opcode, int identifier, int itemId)
+	public static void invokeMenuAction(int param0, int param1, int opcode, int identifier, int itemId)
 	{
 		invokeMenuAction(param0, param1, opcode, identifier, itemId, "", "", 0, 0);
 	}
 	
 	//Walking Methods
-	private void setXCoordinate(int x)
+	private static void setXCoordinate(int x)
 	{
 		Field xField = getField(sceneSelectedXClassName, sceneSelectedXFieldName);
 		String errorMsg = "Kotori Plugin Utils - Failed to set scene selected X coordinate.";
 		setFieldIntValue(xField, client.getScene(), x, 1, errorMsg);
 	}
 	
-	private void setYCoordinate(int y)
+	private static void setYCoordinate(int y)
 	{
 		Field yField = getField(sceneSelectedYClassName, sceneSelectedYFieldName);
 		String errorMsg = "Kotori Plugin Utils - Failed to set scene selected Y coordinate.";
 		setFieldIntValue(yField, client.getScene(), y, 1, errorMsg);
 	}
 	
-	private void setViewportWalking()
+	private static void setViewportWalking()
 	{
 		Field viewport = getField(viewportWalkingClassName, viewportWalkingFieldName);
 		String errorMsg = "Kotori Plugin Utils - Failed to set scene viewport walking boolean.";
 		setFieldBooleanValue(viewport, client.getScene(), true, errorMsg);
 	}
 	
-	public void sceneWalk(WorldPoint point)
+	public static void sceneWalk(WorldPoint point)
 	{
 		Collection<WorldPoint> localInstanceWorldPoints = WorldPoint.toLocalInstance(client, point);
 		WorldPoint walkingPoint = null;
@@ -374,20 +374,20 @@ public class ReflectionLibrary
 		setViewportWalking();
 	}
 	
-	public void sceneWalk(LocalPoint localPoint)
+	public static void sceneWalk(LocalPoint localPoint)
 	{
 		WorldPoint worldPoint = WorldPoint.fromLocalInstance(client, localPoint);
 		sceneWalk(worldPoint);
 	}
 	
-	public void sceneWalk(int worldPointX, int worldPointY, int plane)
+	public static void sceneWalk(int worldPointX, int worldPointY, int plane)
 	{
 		WorldPoint point = new WorldPoint(worldPointX, worldPointY, plane);
 		sceneWalk(point);
 	}
 	
 	//Spell Insertion Methods
-	private void setSelectedSpellWidget(int widgetPackedId)
+	private static void setSelectedSpellWidget(int widgetPackedId)
 	{
 		Class<?> clazz = getClass(selectedSpellWidgetClassName);
 		Field spellWidget = getField(clazz, selectedSpellWidgetFieldName);
@@ -395,21 +395,21 @@ public class ReflectionLibrary
 		setFieldIntValue(spellWidget, clazz, widgetPackedId, selectedSpellWidgetMultiplier, errorMsg);
 	}
 	
-	private void setSelectedSpellChildIndex(int index)
+	private static void setSelectedSpellChildIndex(int index)
 	{
 		Field spellChild = getField(selectedSpellChildIndexClassName, selectedSpellChildIndexFieldName);
 		String errorMsg = "Kotori Plugin Utils - Unable to set selected spell child index.";
 		setFieldIntValue(spellChild, client, index, selectedSpellChildIndexMultiplier, errorMsg);
 	}
 	
-	private void setSelectedSpellItemId(int itemId)
+	private static void setSelectedSpellItemId(int itemId)
 	{
 		Field spellItem = getField(selectedSpellItemIDClassName, selectedSpellItemIDFieldName);
 		String errorMsg = "Kotori Plugin Utils - Unable to set selected spell item id.";
 		setFieldIntValue(spellItem, client, itemId, selectedSpellItemIDMultiplier, errorMsg);
 	}
 	
-	public void setSelectedSpell(int spellWidgetId, int spellChildIndex, int spellItemId)
+	public static void setSelectedSpell(int spellWidgetId, int spellChildIndex, int spellItemId)
 	{
 		setSelectedSpellWidget(spellWidgetId);
 		setSelectedSpellChildIndex(spellChildIndex);
@@ -417,14 +417,14 @@ public class ReflectionLibrary
 	}
 	
 	//Actor Hook Methods
-	public int getNpcAnimationId(Actor npc)
+	public static int getNpcAnimationId(Actor npc)
 	{
 		Field animation = getField(actorAnimationIdClassName, actorAnimationIdFieldName);
 		String errorMsg = "Kotori Plugin Utils - Failed to get NPC animation id.";
 		return getFieldIntValue(animation, npc, actorAnimationIdMultiplier, errorMsg);
 	}
 	
-	public HeadIcon getNpcOverheadIcon(NPC npc)
+	public static HeadIcon getNpcOverheadIcon(NPC npc)
 	{
 		if (npc == null)
 		{
@@ -462,77 +462,77 @@ public class ReflectionLibrary
 		}
 	}
 	
-	public int getActorPathLength(Actor actor)
+	public static int getActorPathLength(Actor actor)
 	{
 		Field pathLength = getField(actorPathLengthClassName, actorPathLengthFieldName);
 		String errorMsg = "Kotori Plugin Utils - Failed to get Actor \"" + (actor.getName() != null ? actor.getName() : "null") + "\" path length.";
 		return getFieldIntValue(pathLength, actor, actorPathLengthMultiplier, errorMsg);
 	}
 	
-	public boolean isMoving()
+	public static boolean isMoving()
 	{
 		Player you = client.getLocalPlayer();
 		return getActorPathLength(you) != 0 || you.getPoseAnimation() != you.getIdlePoseAnimation();
 	}
 	
 	//Menus Hook Methods
-	public int getMenuOptionsCount()
+	public static int getMenuOptionsCount()
 	{
 		Field optionsCount = getField(menuOptionsCountClassName, menuOptionsCountFieldName);
 		String errorMsg = "Kotori Plugin Utils - Failed to get menu options count.";
 		return getFieldIntValue(optionsCount, client, menuOptionsCountMultiplier, errorMsg);
 	}
 	
-	private void setMenuIdentifier(int index, int value)
+	private static void setMenuIdentifier(int index, int value)
 	{
 		Field menuIdentifiers = getField(menuIdentifiersClassName, menuIdentifiersFieldName);
 		String errorMsg = "Kotori Plugin Utils - Failed to set menu identifier \"" + value + "\" in menu index \"" + index + "\".";
 		setFieldIntArrayValue(menuIdentifiers, client, index, value, errorMsg);
 	}
 	
-	private void setMenuItemId(int index, int value)
+	private static void setMenuItemId(int index, int value)
 	{
 		Field menuItemIds = getField(menuItemIdsClassName, menuItemIdsFieldName);
 		String errorMsg = "Kotori Plugin Utils - Failed to set menu item id \"" + value + "\" in menu index \"" + index + "\".";
 		setFieldIntArrayValue(menuItemIds, client, index, value, errorMsg);
 	}
 	
-	private void setMenuOption(int index, String value)
+	private static void setMenuOption(int index, String value)
 	{
 		Field menuOptions = getField(menuOptionsClassName, menuOptionsFieldName);
 		String errorMsg = "Kotori Plugin Utils - Failed to set menu option \"" + value + "\" in menu index \"" + index + "\".";
 		setFieldObjectArrayValue(menuOptions, client, index, value, errorMsg);
 	}
 	
-	private void setMenuParam0(int index, int value)
+	private static void setMenuParam0(int index, int value)
 	{
 		Field menuParam0s = getField(menuParam0ClassName, menuParam0FieldName);
 		String errorMsg = "Kotori Plugin Utils - Failed to set menu param0 \"" + value + "\" in menu index \"" + index + "\".";
 		setFieldIntArrayValue(menuParam0s, client, index, value, errorMsg);
 	}
 	
-	private void setMenuParam1(int index, int value)
+	private static void setMenuParam1(int index, int value)
 	{
 		Field menuParam1s = getField(menuParam1ClassName, menuParam1FieldName);
 		String errorMsg = "Kotori Plugin Utils - Failed to set menu param1 \"" + value + "\" in menu index \"" + index + "\".";
 		setFieldIntArrayValue(menuParam1s, client, index, value, errorMsg);
 	}
 	
-	private void setMenuTarget(int index, String value)
+	private static void setMenuTarget(int index, String value)
 	{
 		Field menuTargets = getField(menuTargetsClassName, menuTargetsFieldName);
 		String errorMsg = "Kotori Plugin Utils - Failed to set menu target \"" + value + "\" in menu index \"" + index + "\".";
 		setFieldObjectArrayValue(menuTargets, client, index, value, errorMsg);
 	}
 	
-	private void setMenuOpcode(int index, int value)
+	private static void setMenuOpcode(int index, int value)
 	{
 		Field menuOpcodes = getField(menuTypesClassName, menuTypesFieldName);
 		String errorMsg = "Kotori Plugin Utils - Failed to set menu option \"" + value + "\" in menu index \"" + index + "\".";
 		setFieldIntArrayValue(menuOpcodes, client, index, value, errorMsg);
 	}
 	
-	public void insertMenuEntry(int index, String option, String target, int opcode, int id, int param0, int param1, int itemId)
+	public static void insertMenuEntry(int index, String option, String target, int opcode, int id, int param0, int param1, int itemId)
 	{
 		setMenuOption(index, option);
 		setMenuTarget(index, target);

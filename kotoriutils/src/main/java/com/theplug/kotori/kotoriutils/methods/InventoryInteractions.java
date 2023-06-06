@@ -11,7 +11,6 @@ import java.util.Set;
 @Slf4j
 public class InventoryInteractions
 {
-	static final ReflectionLibrary reflectionLibrary = new ReflectionLibrary();
 	static Client client = RuneLite.getInjector().getInstance(Client.class);
 	private static final Set<Integer> prayerPotions = Set.of(ItemID.PRAYER_POTION1, ItemID.PRAYER_POTION2, ItemID.PRAYER_POTION3, ItemID.PRAYER_POTION4);
 	private static final Set<Integer> superRestores = Set.of(ItemID.SUPER_RESTORE1, ItemID.SUPER_RESTORE2, ItemID.SUPER_RESTORE3, ItemID.SUPER_RESTORE4);
@@ -82,7 +81,7 @@ public class InventoryInteractions
 			{
 				if (items[slot].getId() == itemId)
 				{
-					reflectionLibrary.invokeMenuAction(slot, WidgetInfo.INVENTORY.getId(), MenuAction.CC_OP.getId(), 3, itemId);
+					ReflectionLibrary.invokeMenuAction(slot, WidgetInfo.INVENTORY.getId(), MenuAction.CC_OP.getId(), 3, itemId);
 					numItemEquippedAtOnce++;
 					if (numItemEquippedAtOnce >= numEquips)
 					{
@@ -107,7 +106,7 @@ public class InventoryInteractions
 		{
 			return false;
 		}
-		reflectionLibrary.invokeMenuAction(slot, WidgetInfo.INVENTORY.getId(), MenuAction.CC_OP.getId(), 2, itemID);
+		ReflectionLibrary.invokeMenuAction(slot, WidgetInfo.INVENTORY.getId(), MenuAction.CC_OP.getId(), 2, itemID);
 		return true;
 	}
 	
