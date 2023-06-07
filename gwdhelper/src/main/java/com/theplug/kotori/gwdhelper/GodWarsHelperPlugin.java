@@ -468,7 +468,12 @@ public class GodWarsHelperPlugin extends Plugin
 	private boolean regionCheck()
 	{
 		lastRegion = currentRegion;
-		currentRegion = WorldPoint.fromLocalInstance(client, client.getLocalPlayer().getLocalLocation()).getRegionID();
+		Player you = client.getLocalPlayer();
+		if (you == null)
+		{
+			return false;
+		}
+		currentRegion = WorldPoint.fromLocalInstance(client, you.getLocalLocation()).getRegionID();
 		
 		return GWD_REGION_IDS.contains(currentRegion);
 	}

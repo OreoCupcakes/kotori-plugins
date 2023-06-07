@@ -36,7 +36,7 @@ import java.awt.*;
 public interface GodWarsHelperConfig extends Config
 {
 	@ConfigSection(
-			name = "<html>God Wars Helper<br>Version 2.1.0</html>",
+			name = "<html>God Wars Helper<br>Version 2.1.1</html>",
 			description = "",
 			position = -1,
 			closedByDefault = true
@@ -719,7 +719,7 @@ public interface GodWarsHelperConfig extends Config
 					"<br>It attempts to preemptively pray against K'ril if you miss a" +
 					"<br>tick on the {#}:0 methods and K'ril gets close to attacking you." +
 					"<br>It works by calculating if you are within two tiles of K'ril's model.",
-			section = bandosHelper
+			section = zamorakHelper
 	)
 	default boolean zamorakBetaLagProtection() { return false; }
 	
