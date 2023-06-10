@@ -32,7 +32,7 @@ import net.runelite.client.config.*;
 public interface EffectTimersConfig extends Config
 {
 	@ConfigSection(
-			name = "<html>Effect Timers<br>Version 1.2.0</html>",
+			name = "<html>Effect Timers<br>Version 1.3.0</html>",
 			description = "",
 			position = -1,
 			closedByDefault = true
@@ -163,7 +163,7 @@ public interface EffectTimersConfig extends Config
 	@ConfigItem(
 		name = "DFS/DFW Timers",
 		keyName = "dfsTimers",
-		description = "Should we render staff of the dragon fire shield and Dragonfire Ward timers?",
+		description = "Should we render the Dragonfire shield and Dragonfire Ward timers?",
 		position = 12
 	)
 	default boolean dfsTimers()
@@ -174,7 +174,7 @@ public interface EffectTimersConfig extends Config
 	@ConfigItem(
 		name = "Ancient Wyvern Shield Timers",
 		keyName = "ancWyvernTimers",
-		description = "Should we render staff of the Ancient Wyvern shield timers?",
+		description = "Should we render the Ancient Wyvern shield timers?",
 		position = 13
 	)
 	default boolean ancWyvernTimers()

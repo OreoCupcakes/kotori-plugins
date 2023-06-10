@@ -26,10 +26,13 @@ package com.theplug.kotori.effecttimers;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.util.Set;
+
 import lombok.EqualsAndHashCode;
 import lombok.Setter;
 import lombok.ToString;
 import net.runelite.api.*;
+import net.runelite.api.kit.KitType;
 
 @ToString
 @EqualsAndHashCode
@@ -46,13 +49,14 @@ public class Timer
 	private int cooldownLength;
 	private TimerType type;
 	private boolean shutdown = false;
+	private final Set<Integer> swampBarkArmorIds = Set.of(ItemID.SWAMPBARK_BODY, ItemID.SWAMPBARK_BOOTS, ItemID.SWAMPBARK_HELM, ItemID.SWAMPBARK_GAUNTLETS, ItemID.SWAMPBARK_LEGS);
 
 	public Timer(EffectTimersPlugin plugin, PlayerEffect effect)
 	{
-		this(plugin, effect, false, null);
+		this(plugin, effect, false, null, null);
 	}
 
-	public Timer(EffectTimersPlugin plugin, PlayerEffect effect, boolean half, Actor actor)
+	public Timer(EffectTimersPlugin plugin, PlayerEffect effect, boolean half, Actor actorWithGraphic, Player yourOpponent)
 	{
 		this.plugin = plugin;
 		this.client = plugin.getClient();
@@ -63,41 +67,8 @@ public class Timer
 		int length = effect == null ? 0 : half ? effect.getTimerLengthTicks() / 2 : effect.getTimerLengthTicks();
 		if (type == TimerType.FREEZE)
 		{
-			//Ancient Sceptre ID = 27624
-			ItemContainer itemContainer = client.getItemContainer(InventoryID.EQUIPMENT);
-			if (itemContainer != null)
-			{
-				Item weapon = itemContainer.getItem(EquipmentInventorySlot.WEAPON.getSlotIdx());
-				if (weapon != null)
-				{
-					int weaponId = weapon.getId();
-					boolean isIceSpell = effect == PlayerEffect.RUSH || effect == PlayerEffect.BURST || effect == PlayerEffect.BLITZ || effect == PlayerEffect.BARRAGE;
-					if (weaponId == ItemID.ANCIENT_SCEPTRE)
-					{
-						if (isIceSpell)
-						{
-							length = length + (length * 10 / 100);
-						}
-					}
-					if (weaponId == ItemID.ICE_ANCIENT_SCEPTRE)
-					{
-						if (isIceSpell)
-						{
-							length = length + (length * 35 / 100);
-						}
-					}
-				}
-			}
-			if (actor instanceof NPC)
-			{
-				NPC npc = (NPC) actor;
-				if (npc.getId() == NpcID.PHANTOM_MUSPAH || npc.getId() == NpcID.PHANTOM_MUSPAH_12078 || npc.getId() == NpcID.PHANTOM_MUSPAH_12079)
-				{
-					length = length * 2 / 3;
-				}
-			}
+			length = determineFreezeLength(effect, actorWithGraphic, yourOpponent);
 		}
-		// if effect is null, then length is 0, else if half is true, then length is halved, else if resist is true, then length is 2/3, else normal length
 		this.ticksLength = length;
 	}
 
@@ -196,7 +167,130 @@ public class Timer
 		{
 			return getTimerState() == TimerState.COOLDOWN ? type.getDefaultColor().darker() : type.getDefaultColor();
 		}
-
+	}
+	
+	private int determineFreezeLength(PlayerEffect effect, Actor actorWithGraphic, Player yourOpponent)
+	{
+		if (effect == null)
+		{
+			return 0;
+		}
+		
+		int lengthOfFreeze = effect.getTimerLengthTicks();
+		
+		if (actorWithGraphic == null)
+		{
+			return lengthOfFreeze;
+		}
+		
+		if (actorWithGraphic.equals(client.getLocalPlayer()))
+		{
+			if (yourOpponent == null)
+			{
+				return lengthOfFreeze;
+			}
+			
+			PlayerComposition opponentInfo = yourOpponent.getPlayerComposition();
+			if (opponentInfo == null)
+			{
+				return lengthOfFreeze;
+			}
+			
+			int[] opponentEquipmentIds = opponentInfo.getEquipmentIds();
+			
+			switch (effect)
+			{
+				case RUSH:
+				case BURST:
+				case BLITZ:
+				case BARRAGE:
+					int weaponItemId = opponentEquipmentIds[KitType.WEAPON.getIndex()] - 512;
+					switch (weaponItemId)
+					{
+						case ItemID.ANCIENT_SCEPTRE:
+							lengthOfFreeze += lengthOfFreeze * 10 / 100;
+							break;
+						case ItemID.ICE_ANCIENT_SCEPTRE:
+							lengthOfFreeze += lengthOfFreeze * 35 / 100;
+							break;
+					}
+					break;
+				case BIND:
+				case SNARE:
+				case ENTANGLE:
+					int numPiecesOfSwampBark = 0;
+					for (int kitId : opponentEquipmentIds)
+					{
+						int itemId = kitId - 512;
+						if (swampBarkArmorIds.contains(itemId))
+						{
+							numPiecesOfSwampBark++;
+						}
+					}
+					lengthOfFreeze += numPiecesOfSwampBark;
+					break;
+			}
+		}
+		else
+		{
+			ItemContainer equipmentContainer = client.getItemContainer(InventoryID.EQUIPMENT);
+			if (equipmentContainer != null)
+			{
+				Item[] equipment = equipmentContainer.getItems();
+				
+				switch (effect)
+				{
+					case RUSH:
+					case BURST:
+					case BLITZ:
+					case BARRAGE:
+						Item weapon = equipment[EquipmentInventorySlot.WEAPON.getSlotIdx()];
+						if (weapon != null)
+						{
+							int weaponId = weapon.getId();
+							switch (weaponId)
+							{
+								case ItemID.ANCIENT_SCEPTRE:
+									lengthOfFreeze += lengthOfFreeze * 10 / 100;
+									break;
+								case ItemID.ICE_ANCIENT_SCEPTRE:
+									lengthOfFreeze += lengthOfFreeze * 35 / 100;
+									break;
+							}
+						}
+						break;
+					case BIND:
+					case SNARE:
+					case ENTANGLE:
+						int numPiecesOfSwampBark = 0;
+						for (Item gear : equipment)
+						{
+							if (swampBarkArmorIds.contains(gear.getId()))
+							{
+								numPiecesOfSwampBark++;
+							}
+						}
+						lengthOfFreeze += numPiecesOfSwampBark;
+						break;
+				}
+				
+			}
+			
+			if (actorWithGraphic instanceof NPC)
+			{
+				NPC npc = (NPC) actorWithGraphic;
+				switch (npc.getId())
+				{
+					case NpcID.PHANTOM_MUSPAH:
+					case NpcID.PHANTOM_MUSPAH_12078:
+					case NpcID.PHANTOM_MUSPAH_12079:
+						lengthOfFreeze = lengthOfFreeze * 2 / 3;
+						break;
+				}
+			}
+		}
+		
+		return lengthOfFreeze;
 	}
 
 	public enum TimerState

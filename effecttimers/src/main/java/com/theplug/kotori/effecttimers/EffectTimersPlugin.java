@@ -42,16 +42,21 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import javax.inject.Inject;
 import java.util.EnumSet;
+import java.util.Set;
 
 
 @PluginDescriptor(
-	name = "Effect Timers",
+	name = "<html><font color=#6b8af6>[P]</font> Effect Timers</html>",
 	description = "Effect timer overlay on players",
 	tags = {"freeze", "timers", "barrage", "teleblock", "pklite", "ported", "kotori"}
 )
 public class EffectTimersPlugin extends Plugin
 {
 	private static final int VORKATH_REGION = 9023;
+	private static final int BIND_SNARE_ENTANGLE_ANIMATION = 710;
+	private static final int ICE_RUSH_BLITZ_ANIMATION = 1978;
+	private static final int ICE_BURST_BARRAGE_ANIMATION = 1979;
+	private static final Set<Integer> FREEZE_SPELLS_ANIMATIONS = Set.of(BIND_SNARE_ENTANGLE_ANIMATION, ICE_BURST_BARRAGE_ANIMATION, ICE_RUSH_BLITZ_ANIMATION);
 
 	@Inject
 	@Getter
@@ -76,6 +81,8 @@ public class EffectTimersPlugin extends Plugin
 	private KeyManager keyManager;
 
 	private int fakeSpotAnim = -1;
+	private boolean initializedPlugin;
+	private Player yourOpponent = null;
 	
 	private final HotkeyListener hotkeyListener = new HotkeyListener(() -> config.debugKeybind())
 	{
@@ -99,8 +106,12 @@ public class EffectTimersPlugin extends Plugin
 	@Override
 	public void startUp()
 	{
-		overlayManager.add(overlay);
-		keyManager.registerKeyListener(hotkeyListener);
+		if (client.getGameState() != GameState.LOGGED_IN)
+		{
+			return;
+		}
+		
+		init();
 	}
 
 	@Override
@@ -110,6 +121,15 @@ public class EffectTimersPlugin extends Plugin
 		overlayManager.remove(overlay);
 		timerManager.shutDown();
 		prayerTracker.shutDown();
+		yourOpponent = null;
+		initializedPlugin = false;
+	}
+	
+	public void init()
+	{
+		overlayManager.add(overlay);
+		keyManager.registerKeyListener(hotkeyListener);
+		initializedPlugin = true;
 	}
 
 	@Subscribe
@@ -151,14 +171,35 @@ public class EffectTimersPlugin extends Plugin
 			}
 		}
 	}
+	
+	@Subscribe
+	public void onAnimationChanged(AnimationChanged event)
+	{
+		Actor actor = event.getActor();
+		int animation = actor.getAnimation();
+		
+		if (!FREEZE_SPELLS_ANIMATIONS.contains(animation))
+		{
+			return;
+		}
+		
+		if (actor instanceof Player && actor.getInteracting().equals(client.getLocalPlayer()))
+		{
+			yourOpponent = (Player) actor;
+		}
+		else
+		{
+			yourOpponent = null;
+		}
+	}
 
 	@Subscribe
 	public void onGraphicChanged(GraphicChanged event)
 	{
-		Actor actor = event.getActor();
+		Actor actorWithGraphic = event.getActor();
 		//	actor.getGraphic() deprecated, actor can have multiple spot anims.
 		//	int spotAnim = fakeSpotAnim == -1 ? actor.getGraphic() : fakeSpotAnim;
-		IterableHashTable<ActorSpotAnim> actorSpotAnimsTable = actor.getSpotAnims();
+		IterableHashTable<ActorSpotAnim> actorSpotAnimsTable = actorWithGraphic.getSpotAnims();
 		for (ActorSpotAnim actorSpotAnim : actorSpotAnimsTable)
 		{
 			int spotAnim;
@@ -184,13 +225,13 @@ public class EffectTimersPlugin extends Plugin
 				return;
 			}
 			
-			if (timerManager.hasTimerActive(actor, effect.getType()))
+			if (timerManager.hasTimerActive(actorWithGraphic, effect.getType()))
 			{
 				return;
 			}
 			
-			timerManager.addTimerFor(actor, effect.getType(), new Timer(this, effect,
-					effect.isHalvable() && prayerTracker.getPrayerIconLastTick(actor) == HeadIcons.MAGIC, actor));
+			timerManager.addTimerFor(actorWithGraphic, effect.getType(), new Timer(this, effect,
+					effect.isHalvable() && prayerTracker.getPrayerIconLastTick(actorWithGraphic) == HeadIcons.MAGIC, actorWithGraphic, yourOpponent));
 		}
 	}
 
@@ -252,9 +293,16 @@ public class EffectTimersPlugin extends Plugin
 			case LOGIN_SCREEN:
 			case HOPPING:
 			case CONNECTION_LOST:
-				timerManager.shutDown();
+				if (initializedPlugin)
+				{
+					shutDown();
+				}
 				break;
-			case LOADING:
+			case LOGGED_IN:
+				if (!initializedPlugin)
+				{
+					init();
+				}
 				timerManager.clearExpiredTimers();
 				break;
 		}

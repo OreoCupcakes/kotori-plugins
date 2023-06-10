@@ -57,6 +57,6 @@ public enum TimerType
 
 	public boolean shouldRender(ConfigManager configManager)
 	{
-		return configManager.getConfiguration("effecttimers", renderConfig, Boolean.class);
+		return configManager.getConfiguration("effecttimers", renderConfig, boolean.class);
 	}
 }
