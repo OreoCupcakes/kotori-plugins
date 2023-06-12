@@ -27,6 +27,7 @@ package com.theplug.kotori.effecttimers;
 import com.google.inject.Provides;
 import com.theplug.kotori.effecttimers.utils.PvPUtil;
 import com.theplug.kotori.effecttimers.utils.WorldTypeExtended;
+import com.theplug.kotori.kotoriutils.KotoriUtils;
 import lombok.Getter;
 import net.runelite.api.*;
 import net.runelite.api.coords.WorldPoint;
@@ -35,6 +36,7 @@ import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.input.KeyManager;
 import net.runelite.client.plugins.Plugin;
+import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.util.HotkeyListener;
@@ -46,6 +48,7 @@ import java.util.List;
 import java.util.Set;
 
 
+@PluginDependency(KotoriUtils.class)
 @PluginDescriptor(
 	name = "<html><font color=#6b8af6>[P]</font> Effect Timers</html>",
 	description = "Effect timer overlay on players",

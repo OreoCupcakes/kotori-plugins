@@ -26,8 +26,10 @@ package com.theplug.kotori.effecttimers;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 import java.util.Set;
 
+import com.theplug.kotori.kotoriutils.methods.InventoryInteractions;
 import lombok.EqualsAndHashCode;
 import lombok.Setter;
 import lombok.ToString;
@@ -183,111 +185,93 @@ public class Timer
 			return lengthOfFreeze;
 		}
 		
+		Player you = client.getLocalPlayer();
+		Actor yourInteraction = you.getInteracting();
+		
+		boolean checkYourGear = false;
+		boolean checkOtherPeopleGear = false;
+		
 		if (plugin.getConfig().adaptiveFreezeTimers())
 		{
-			Player you = client.getLocalPlayer();
-			
-			if (you.getInteracting().equals(actorWithGraphic))
+			if (yourInteraction == null)
 			{
-				ItemContainer equipmentContainer = client.getItemContainer(InventoryID.EQUIPMENT);
-				if (equipmentContainer != null)
+				if (plugin.getConfig().checkOtherPeoplesGearFreezeTimers())
 				{
-					Item[] equipment = equipmentContainer.getItems();
-					
-					switch (effect)
-					{
-						case RUSH:
-						case BURST:
-						case BLITZ:
-						case BARRAGE:
-							Item weapon = equipment[EquipmentInventorySlot.WEAPON.getSlotIdx()];
-							if (weapon != null)
-							{
-								int weaponId = weapon.getId();
-								switch (weaponId)
-								{
-									case ItemID.ANCIENT_SCEPTRE:
-										lengthOfFreeze += lengthOfFreeze * 10 / 100;
-										break;
-									case ItemID.ICE_ANCIENT_SCEPTRE:
-										lengthOfFreeze += lengthOfFreeze * 35 / 100;
-										break;
-								}
-							}
-							break;
-						case BIND:
-						case SNARE:
-						case ENTANGLE:
-							int numPiecesOfSwampBark = 0;
-							for (Item gear : equipment)
-							{
-								if (swampBarkArmorIds.contains(gear.getId()))
-								{
-									numPiecesOfSwampBark++;
-								}
-							}
-							lengthOfFreeze += numPiecesOfSwampBark;
-							break;
-					}
+					checkOtherPeopleGear = true;
 				}
+			}
+			else if (yourInteraction.equals(actorWithGraphic))
+			{
+				checkYourGear = true;
 			}
 			else
 			{
-				Player playerCastingFreeze = null;
 				if (plugin.getConfig().checkOtherPeoplesGearFreezeTimers())
 				{
-					playerCastingFreeze = client.getPlayers().stream().filter(p -> p.getInteracting() != null).
-							filter(p -> p.getInteracting().equals(actorWithGraphic)).
-							filter(p -> EffectTimersPlugin.FREEZE_SPELLS_ANIMATIONS.contains(p.getAnimation())).findFirst().orElse(null);
+					checkOtherPeopleGear = true;
 				}
-				
-				if (playerCastingFreeze == null)
-				{
-					return lengthOfFreeze;
-				}
-				
-				PlayerComposition opponentInfo = playerCastingFreeze.getPlayerComposition();
-				if (opponentInfo == null)
-				{
-					return lengthOfFreeze;
-				}
-				
-				int[] opponentEquipmentIds = opponentInfo.getEquipmentIds();
-				
+			}
+		}
+		
+		if (checkYourGear)
+		{
+			switch (effect)
+			{
+				case RUSH:
+				case BURST:
+				case BLITZ:
+				case BARRAGE:
+					if (InventoryInteractions.yourEquipmentContains(ItemID.ANCIENT_SCEPTRE, EquipmentInventorySlot.WEAPON))
+					{
+						lengthOfFreeze += lengthOfFreeze * 10 / 100;
+					}
+					else if (InventoryInteractions.yourEquipmentContains(ItemID.ICE_ANCIENT_SCEPTRE, EquipmentInventorySlot.WEAPON))
+					{
+						lengthOfFreeze += lengthOfFreeze * 35 / 100;
+					}
+					break;
+				case BIND:
+				case SNARE:
+				case ENTANGLE:
+					lengthOfFreeze += InventoryInteractions.yourEquipmentCount(swampBarkArmorIds.stream().mapToInt(Integer::intValue).toArray());
+					break;
+			}
+		}
+		else if (checkOtherPeopleGear)
+		{
+			Player playerCastingFreeze = client.getPlayers().stream().filter(p -> p.getInteracting() != null).
+					filter(p -> p.getInteracting().equals(actorWithGraphic)).
+					filter(p -> EffectTimersPlugin.FREEZE_SPELLS_ANIMATIONS.contains(p.getAnimation())).findFirst().orElse(null);
+			
+			if (playerCastingFreeze != null)
+			{
 				switch (effect)
 				{
 					case RUSH:
 					case BURST:
 					case BLITZ:
 					case BARRAGE:
-						int weaponItemId = opponentEquipmentIds[KitType.WEAPON.getIndex()] - 512;
-						switch (weaponItemId)
+						if (InventoryInteractions.playerEquipmentContains(playerCastingFreeze, ItemID.ANCIENT_SCEPTRE, KitType.WEAPON))
 						{
-							case ItemID.ANCIENT_SCEPTRE:
-								lengthOfFreeze += lengthOfFreeze * 10 / 100;
-								break;
-							case ItemID.ICE_ANCIENT_SCEPTRE:
-								lengthOfFreeze += lengthOfFreeze * 35 / 100;
-								break;
+							lengthOfFreeze += lengthOfFreeze * 10 / 100;
+						}
+						else if (InventoryInteractions.playerEquipmentContains(playerCastingFreeze, ItemID.ICE_ANCIENT_SCEPTRE, KitType.WEAPON))
+						{
+							lengthOfFreeze += lengthOfFreeze * 35 / 100;
 						}
 						break;
 					case BIND:
 					case SNARE:
 					case ENTANGLE:
-						int numPiecesOfSwampBark = 0;
-						for (int kitId : opponentEquipmentIds)
-						{
-							int itemId = kitId - 512;
-							if (swampBarkArmorIds.contains(itemId))
-							{
-								numPiecesOfSwampBark++;
-							}
-						}
-						lengthOfFreeze += numPiecesOfSwampBark;
+						lengthOfFreeze += InventoryInteractions.playerEquipmentCount(playerCastingFreeze,
+								swampBarkArmorIds.stream().mapToInt(Integer::intValue).toArray());
 						break;
 				}
 			}
-			
+		}
+		
+		if (checkYourGear || checkOtherPeopleGear)
+		{
 			if (actorWithGraphic instanceof NPC)
 			{
 				NPC npc = (NPC) actorWithGraphic;

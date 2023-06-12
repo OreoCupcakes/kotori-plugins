@@ -3,6 +3,7 @@ package com.theplug.kotori.kotoriutils.methods;
 import com.theplug.kotori.kotoriutils.ReflectionLibrary;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
+import net.runelite.api.kit.KitType;
 import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.RuneLite;
 
@@ -176,5 +177,121 @@ public class InventoryInteractions
 			}
 		}
 		*/
+	}
+	
+	// Equipment Methods
+	
+	public static boolean yourEquipmentContains(int itemId)
+	{
+		return yourEquipmentContains(itemId, null);
+	}
+	
+	public static boolean yourEquipmentContains(int itemId, EquipmentInventorySlot slot)
+	{
+		ItemContainer equipmentContainer = client.getItemContainer(InventoryID.EQUIPMENT);
+		if (equipmentContainer == null)
+		{
+			return false;
+		}
+		
+		Item[] equipment = equipmentContainer.getItems();
+		if (slot == null)
+		{
+			for (Item item : equipment)
+			{
+				if (item.getId() == itemId)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+		return equipment[slot.getSlotIdx()].getId() == itemId;
+	}
+	
+	public static boolean yourEquipmentContains(int... itemIds)
+	{
+		for (int itemId : itemIds)
+		{
+			if (!yourEquipmentContains(itemId))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public static int yourEquipmentCount(int... itemIds)
+	{
+		int numberOfItemsEquipped = 0;
+		
+		for (int itemId : itemIds)
+		{
+			if (yourEquipmentContains(itemId))
+			{
+				numberOfItemsEquipped++;
+			}
+		}
+		return numberOfItemsEquipped;
+	}
+	
+	public static boolean playerEquipmentContains(Player player, int itemId, KitType equipmentSlot)
+	{
+		if (player == null)
+		{
+			return false;
+		}
+		
+		PlayerComposition playerComposition = player.getPlayerComposition();
+		if (playerComposition == null)
+		{
+			return false;
+		}
+		
+		int[] equipmentIds = playerComposition.getEquipmentIds();
+		if (equipmentSlot == null)
+		{
+			for (int kitId : equipmentIds)
+			{
+				if (itemId == kitId - 512)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+		return equipmentIds[equipmentSlot.getIndex()] == itemId;
+	}
+	
+	public static boolean playerEquipmentContains(Player player, int itemId)
+	{
+		return playerEquipmentContains(player, itemId, null);
+	}
+	
+	public static boolean playerEquipmentContains(Player player, int... itemIds)
+	{
+		for (int itemId : itemIds)
+		{
+			if (!playerEquipmentContains(player, itemId))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public static int playerEquipmentCount(Player player, int... itemIds)
+	{
+		int numberOfItemsEquipped = 0;
+		
+		for (int itemId : itemIds)
+		{
+			if (playerEquipmentContains(player, itemId))
+			{
+				numberOfItemsEquipped++;
+			}
+		}
+		
+		return numberOfItemsEquipped;
 	}
 }

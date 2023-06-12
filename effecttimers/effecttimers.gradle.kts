@@ -30,6 +30,10 @@ project.extra["PluginDescription"] = "Effect timers overlay on players." // This
 project.extra["PluginPackageId"] = "effecttimers" // This is the plugin package folder after the default group package.
 project.extra["PluginMainClassName"] = "EffectTimersPlugin" // This is the plugin's main class which extends Plugin
 
+dependencies {
+    compileOnly(project(":kotoriutils"))
+}
+
 tasks {
     jar {
         manifest {
