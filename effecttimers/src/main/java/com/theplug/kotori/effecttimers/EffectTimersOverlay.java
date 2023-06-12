@@ -52,9 +52,6 @@ public class EffectTimersOverlay extends Overlay
 	@Inject
 	private EffectTimersConfig config;
 
-	@Inject
-	private ConfigManager configManager;
-
 	private final Font timerFont = FontManager.getRunescapeBoldFont().deriveFont(14.0f);
 
 	@Inject
@@ -94,7 +91,53 @@ public class EffectTimersOverlay extends Overlay
 		int offset = 0;
 		for (TimerType timerType : TimerType.values())
 		{
-			if (timerType.shouldRender(configManager) && !actor.isDead())
+			switch (timerType)
+			{
+				case FREEZE:
+					if (!config.freezeTimers())
+					{
+						continue;
+					}
+					break;
+				case TELEBLOCK:
+					if (!config.teleblockTimers())
+					{
+						continue;
+					}
+					break;
+				case VENG:
+					if (!config.vengTimers())
+					{
+						continue;
+					}
+					break;
+				case SOTD:
+					if (!config.sotdTimers())
+					{
+						continue;
+					}
+					break;
+				case IMBUEDHEART:
+					if (!config.imbHeartTimers())
+					{
+						continue;
+					}
+					break;
+				case DFS:
+					if (!config.dfsTimers())
+					{
+						continue;
+					}
+					break;
+				case ANCWYVERN:
+					if (!config.ancWyvernTimers())
+					{
+						continue;
+					}
+					break;
+			}
+			
+			if (!actor.isDead())
 			{
 				if (timerManager.isTimerValid(actor, timerType) && timerManager.hasTimerActive(actor, timerType))
 				{

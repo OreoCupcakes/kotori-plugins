@@ -47,7 +47,7 @@ public enum PlayerEffect
 	STAFF_OF_LIGHT("Staff of Light", 1516, 100, false, TimerType.SOTD),
 	STAFF_OF_BALANCE("Staff of Balance", 1733, 100, false, TimerType.SOTD),
 	IMBUED_HEART("Imbued Heart", 1316, 700, false, TimerType.IMBUEDHEART),
-	SATURATED_HEART("Saturated Heart", 2287, 500, false, TimerType.SATURATEDHEART),
+	SATURATED_HEART("Saturated Heart", 2287, 500, false, TimerType.IMBUEDHEART),
 	DFS("Dragon Fire Shield", 1165, 192, false, TimerType.DFS),
 	ANCIENT_WYVERN("Ancient Wyvern Shield", 1402, 192, false, TimerType.ANCWYVERN);
 

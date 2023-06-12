@@ -53,10 +53,10 @@ public class Timer
 
 	public Timer(EffectTimersPlugin plugin, PlayerEffect effect)
 	{
-		this(plugin, effect, false, null, null);
+		this(plugin, effect, false, null);
 	}
 
-	public Timer(EffectTimersPlugin plugin, PlayerEffect effect, boolean half, Actor actorWithGraphic, Player yourOpponent)
+	public Timer(EffectTimersPlugin plugin, PlayerEffect effect, boolean half, Actor actorWithGraphic)
 	{
 		this.plugin = plugin;
 		this.client = plugin.getClient();
@@ -67,7 +67,7 @@ public class Timer
 		int length = effect == null ? 0 : half ? effect.getTimerLengthTicks() / 2 : effect.getTimerLengthTicks();
 		if (type == TimerType.FREEZE)
 		{
-			length = determineFreezeLength(effect, actorWithGraphic, yourOpponent);
+			length = determineFreezeLength(effect, actorWithGraphic);
 		}
 		this.ticksLength = length;
 	}
@@ -169,7 +169,7 @@ public class Timer
 		}
 	}
 	
-	private int determineFreezeLength(PlayerEffect effect, Actor actorWithGraphic, Player yourOpponent)
+	private int determineFreezeLength(PlayerEffect effect, Actor actorWithGraphic)
 	{
 		if (effect == null)
 		{
@@ -183,60 +183,76 @@ public class Timer
 			return lengthOfFreeze;
 		}
 		
-		if (actorWithGraphic.equals(client.getLocalPlayer()))
+		if (plugin.getConfig().adaptiveFreezeTimers())
 		{
-			if (yourOpponent == null)
-			{
-				return lengthOfFreeze;
-			}
+			Player you = client.getLocalPlayer();
 			
-			PlayerComposition opponentInfo = yourOpponent.getPlayerComposition();
-			if (opponentInfo == null)
+			if (you.getInteracting().equals(actorWithGraphic))
 			{
-				return lengthOfFreeze;
-			}
-			
-			int[] opponentEquipmentIds = opponentInfo.getEquipmentIds();
-			
-			switch (effect)
-			{
-				case RUSH:
-				case BURST:
-				case BLITZ:
-				case BARRAGE:
-					int weaponItemId = opponentEquipmentIds[KitType.WEAPON.getIndex()] - 512;
-					switch (weaponItemId)
+				ItemContainer equipmentContainer = client.getItemContainer(InventoryID.EQUIPMENT);
+				if (equipmentContainer != null)
+				{
+					Item[] equipment = equipmentContainer.getItems();
+					
+					switch (effect)
 					{
-						case ItemID.ANCIENT_SCEPTRE:
-							lengthOfFreeze += lengthOfFreeze * 10 / 100;
+						case RUSH:
+						case BURST:
+						case BLITZ:
+						case BARRAGE:
+							Item weapon = equipment[EquipmentInventorySlot.WEAPON.getSlotIdx()];
+							if (weapon != null)
+							{
+								int weaponId = weapon.getId();
+								switch (weaponId)
+								{
+									case ItemID.ANCIENT_SCEPTRE:
+										lengthOfFreeze += lengthOfFreeze * 10 / 100;
+										break;
+									case ItemID.ICE_ANCIENT_SCEPTRE:
+										lengthOfFreeze += lengthOfFreeze * 35 / 100;
+										break;
+								}
+							}
 							break;
-						case ItemID.ICE_ANCIENT_SCEPTRE:
-							lengthOfFreeze += lengthOfFreeze * 35 / 100;
+						case BIND:
+						case SNARE:
+						case ENTANGLE:
+							int numPiecesOfSwampBark = 0;
+							for (Item gear : equipment)
+							{
+								if (swampBarkArmorIds.contains(gear.getId()))
+								{
+									numPiecesOfSwampBark++;
+								}
+							}
+							lengthOfFreeze += numPiecesOfSwampBark;
 							break;
 					}
-					break;
-				case BIND:
-				case SNARE:
-				case ENTANGLE:
-					int numPiecesOfSwampBark = 0;
-					for (int kitId : opponentEquipmentIds)
-					{
-						int itemId = kitId - 512;
-						if (swampBarkArmorIds.contains(itemId))
-						{
-							numPiecesOfSwampBark++;
-						}
-					}
-					lengthOfFreeze += numPiecesOfSwampBark;
-					break;
+				}
 			}
-		}
-		else
-		{
-			ItemContainer equipmentContainer = client.getItemContainer(InventoryID.EQUIPMENT);
-			if (equipmentContainer != null)
+			else
 			{
-				Item[] equipment = equipmentContainer.getItems();
+				Player playerCastingFreeze = null;
+				if (plugin.getConfig().checkOtherPeoplesGearFreezeTimers())
+				{
+					playerCastingFreeze = client.getPlayers().stream().filter(p -> p.getInteracting() != null).
+							filter(p -> p.getInteracting().equals(actorWithGraphic)).
+							filter(p -> EffectTimersPlugin.FREEZE_SPELLS_ANIMATIONS.contains(p.getAnimation())).findFirst().orElse(null);
+				}
+				
+				if (playerCastingFreeze == null)
+				{
+					return lengthOfFreeze;
+				}
+				
+				PlayerComposition opponentInfo = playerCastingFreeze.getPlayerComposition();
+				if (opponentInfo == null)
+				{
+					return lengthOfFreeze;
+				}
+				
+				int[] opponentEquipmentIds = opponentInfo.getEquipmentIds();
 				
 				switch (effect)
 				{
@@ -244,28 +260,25 @@ public class Timer
 					case BURST:
 					case BLITZ:
 					case BARRAGE:
-						Item weapon = equipment[EquipmentInventorySlot.WEAPON.getSlotIdx()];
-						if (weapon != null)
+						int weaponItemId = opponentEquipmentIds[KitType.WEAPON.getIndex()] - 512;
+						switch (weaponItemId)
 						{
-							int weaponId = weapon.getId();
-							switch (weaponId)
-							{
-								case ItemID.ANCIENT_SCEPTRE:
-									lengthOfFreeze += lengthOfFreeze * 10 / 100;
-									break;
-								case ItemID.ICE_ANCIENT_SCEPTRE:
-									lengthOfFreeze += lengthOfFreeze * 35 / 100;
-									break;
-							}
+							case ItemID.ANCIENT_SCEPTRE:
+								lengthOfFreeze += lengthOfFreeze * 10 / 100;
+								break;
+							case ItemID.ICE_ANCIENT_SCEPTRE:
+								lengthOfFreeze += lengthOfFreeze * 35 / 100;
+								break;
 						}
 						break;
 					case BIND:
 					case SNARE:
 					case ENTANGLE:
 						int numPiecesOfSwampBark = 0;
-						for (Item gear : equipment)
+						for (int kitId : opponentEquipmentIds)
 						{
-							if (swampBarkArmorIds.contains(gear.getId()))
+							int itemId = kitId - 512;
+							if (swampBarkArmorIds.contains(itemId))
 							{
 								numPiecesOfSwampBark++;
 							}
@@ -273,7 +286,6 @@ public class Timer
 						lengthOfFreeze += numPiecesOfSwampBark;
 						break;
 				}
-				
 			}
 			
 			if (actorWithGraphic instanceof NPC)

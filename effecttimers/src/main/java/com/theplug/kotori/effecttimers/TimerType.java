@@ -35,28 +35,21 @@ import net.runelite.client.util.ImageUtil;
 @RequiredArgsConstructor
 public enum TimerType
 {
-	FREEZE(5, loadImage("freeze"), loadImage("freezeimmune"), "freezeTimers", Color.CYAN), // 3 seconds
-	TELEBLOCK(100, loadImage("teleblock"), loadImage("teleblockimmune"), "teleblockTimers", new Color(0x5254ae)), // this is 60 seconds, might be wrong
-	VENG(0, loadImage("veng"), null, "vengTimers", Color.RED.brighter()),
-	SOTD(0, loadImage("sotd"), null, "sotdTimers", Color.YELLOW),
-	IMBUEDHEART(0, loadImage("imbheart"), null, "imbHeartTimers", Color.BLACK),
-	SATURATEDHEART(0, loadImage("satheart"),null,"imbHeartTimers",Color.BLACK),
-	DFS(0, loadImage("dfs"), null, "dfsTimers", Color.WHITE),
-	ANCWYVERN(0, loadImage("ancwyvern"), null, "ancWyvernTimers", Color.WHITE);
+	FREEZE(5, loadImage("freeze"), loadImage("freezeimmune"), Color.CYAN), // 3 seconds
+	TELEBLOCK(100, loadImage("teleblock"), loadImage("teleblockimmune"), new Color(0x5254ae)), // this is 60 seconds, might be wrong
+	VENG(0, loadImage("veng"), null, Color.RED.brighter()),
+	SOTD(0, loadImage("sotd"), null, Color.YELLOW),
+	IMBUEDHEART(0, loadImage("imbheart"), null, Color.BLACK),
+	DFS(0, loadImage("dfs"), null, Color.WHITE),
+	ANCWYVERN(0, loadImage("ancwyvern"), null, Color.WHITE);
 
 	private final int immunityLength;
 	private final BufferedImage icon;
 	private final BufferedImage cooldownIcon;
-	private final String renderConfig;
 	private final Color defaultColor;
 
 	private static BufferedImage loadImage(String name)
 	{
 		return ImageUtil.loadImageResource(EffectTimersPlugin.class, name + ".png");
-	}
-
-	public boolean shouldRender(ConfigManager configManager)
-	{
-		return configManager.getConfiguration("effecttimers", renderConfig, boolean.class);
 	}
 }

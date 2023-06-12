@@ -42,6 +42,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import javax.inject.Inject;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -53,10 +54,11 @@ import java.util.Set;
 public class EffectTimersPlugin extends Plugin
 {
 	private static final int VORKATH_REGION = 9023;
-	private static final int BIND_SNARE_ENTANGLE_ANIMATION = 710;
-	private static final int ICE_RUSH_BLITZ_ANIMATION = 1978;
-	private static final int ICE_BURST_BARRAGE_ANIMATION = 1979;
-	private static final Set<Integer> FREEZE_SPELLS_ANIMATIONS = Set.of(BIND_SNARE_ENTANGLE_ANIMATION, ICE_BURST_BARRAGE_ANIMATION, ICE_RUSH_BLITZ_ANIMATION);
+	public static final int BIND_SNARE_ENTANGLE_ANIMATION = 710;
+	public static final int BIND_SNARE_ENTANGLE_ANIMATION_2 = 1161;
+	public static final int ICE_RUSH_BLITZ_ANIMATION = 1978;
+	public static final int ICE_BURST_BARRAGE_ANIMATION = 1979;
+	public static final Set<Integer> FREEZE_SPELLS_ANIMATIONS = Set.of(BIND_SNARE_ENTANGLE_ANIMATION, BIND_SNARE_ENTANGLE_ANIMATION_2, ICE_BURST_BARRAGE_ANIMATION, ICE_RUSH_BLITZ_ANIMATION);
 
 	@Inject
 	@Getter
@@ -82,7 +84,6 @@ public class EffectTimersPlugin extends Plugin
 
 	private int fakeSpotAnim = -1;
 	private boolean initializedPlugin;
-	private Player yourOpponent = null;
 	
 	private final HotkeyListener hotkeyListener = new HotkeyListener(() -> config.debugKeybind())
 	{
@@ -121,7 +122,6 @@ public class EffectTimersPlugin extends Plugin
 		overlayManager.remove(overlay);
 		timerManager.shutDown();
 		prayerTracker.shutDown();
-		yourOpponent = null;
 		initializedPlugin = false;
 	}
 	
@@ -171,27 +171,6 @@ public class EffectTimersPlugin extends Plugin
 			}
 		}
 	}
-	
-	@Subscribe
-	public void onAnimationChanged(AnimationChanged event)
-	{
-		Actor actor = event.getActor();
-		int animation = actor.getAnimation();
-		
-		if (!FREEZE_SPELLS_ANIMATIONS.contains(animation))
-		{
-			return;
-		}
-		
-		if (actor instanceof Player && actor.getInteracting().equals(client.getLocalPlayer()))
-		{
-			yourOpponent = (Player) actor;
-		}
-		else
-		{
-			yourOpponent = null;
-		}
-	}
 
 	@Subscribe
 	public void onGraphicChanged(GraphicChanged event)
@@ -230,8 +209,36 @@ public class EffectTimersPlugin extends Plugin
 				return;
 			}
 			
+			/*
+			Player playerCastingFreeze = null;
+			if (config.checkOtherPeoplesGearFreezeTimers())
+			{
+				if (effect.getType() == TimerType.FREEZE)
+				{
+					List<Player> players = client.getPlayers();
+					for (Player p : players)
+					{
+						Actor pInteractingWith = p.getInteracting();
+						int pAnimation = p.getAnimation();
+						if (pInteractingWith != null)
+						{
+							if (pInteractingWith.equals(actorWithGraphic))
+							{
+								if (FREEZE_SPELLS_ANIMATIONS.contains(pAnimation))
+								{
+									playerCastingFreeze = p;
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
+			
+			 */
+			
 			timerManager.addTimerFor(actorWithGraphic, effect.getType(), new Timer(this, effect,
-					effect.isHalvable() && prayerTracker.getPrayerIconLastTick(actorWithGraphic) == HeadIcons.MAGIC, actorWithGraphic, yourOpponent));
+					effect.isHalvable() && prayerTracker.getPrayerIconLastTick(actorWithGraphic) == HeadIcons.MAGIC, actorWithGraphic));
 		}
 	}
 
