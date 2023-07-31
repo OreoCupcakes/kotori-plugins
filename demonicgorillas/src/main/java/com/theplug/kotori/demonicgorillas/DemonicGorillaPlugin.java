@@ -542,12 +542,6 @@ public class DemonicGorillaPlugin extends Plugin
 					gorilla.setDisabledMeleeMovementForTicks(1);
 				}
 			}
-			
-			if (gorilla.getNpc().getOverheadText() != null && gorilla.getNpc().getOverheadText().toLowerCase().contains("rha")) {
-				gorilla.setAttacksUntilSwitch(0);
-				checkGorillaAttackStyleSwitch(gorilla);
-			}
-			
 			gorilla.setLastTickAnimation(gorilla.getNpc().getAnimation());
 			gorilla.setLastWorldArea(gorilla.getNpc().getWorldArea());
 			gorilla.setLastTickInteracting(gorilla.getNpc().getInteracting());
@@ -634,6 +628,11 @@ public class DemonicGorillaPlugin extends Plugin
 				if (shouldDecreaseCounter)
 				{
 					gorilla.setAttacksUntilSwitch(gorilla.getAttacksUntilSwitch() - 1);
+					checkGorillaAttackStyleSwitch(gorilla);
+				}
+				
+				if (gorilla.getNpc().getOverheadText() != null && gorilla.getNpc().getOverheadText().toLowerCase().contains("rha")) {
+					gorilla.setAttacksUntilSwitch(0);
 					checkGorillaAttackStyleSwitch(gorilla);
 				}
 
