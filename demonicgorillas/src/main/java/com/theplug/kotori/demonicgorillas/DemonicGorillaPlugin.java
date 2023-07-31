@@ -630,11 +630,6 @@ public class DemonicGorillaPlugin extends Plugin
 					gorilla.setAttacksUntilSwitch(gorilla.getAttacksUntilSwitch() - 1);
 					checkGorillaAttackStyleSwitch(gorilla);
 				}
-				
-				if (gorilla.getNpc().getOverheadText() != null && gorilla.getNpc().getOverheadText().toLowerCase().contains("rha")) {
-					gorilla.setAttacksUntilSwitch(0);
-					checkGorillaAttackStyleSwitch(gorilla);
-				}
 
 				it.remove();
 			}
