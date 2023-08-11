@@ -4,9 +4,11 @@ import com.theplug.kotori.kotoriutils.ReflectionLibrary;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.api.kit.KitType;
+import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.RuneLite;
 
+import java.util.Arrays;
 import java.util.Set;
 
 @Slf4j
@@ -66,23 +68,75 @@ public class InventoryInteractions
 	{
 		if (itemIds == null)
 		{
-			return false;
+			return true;
 		}
 		
 		int numItemEquippedAtOnce = 0;
-		ItemContainer inventory = client.getItemContainer(InventoryID.INVENTORY);
-		if (inventory == null)
+		Widget inventoryWidget = client.getWidget(WidgetInfo.INVENTORY.getId());
+		if (inventoryWidget == null)
 		{
-			return false;
+			return true;
 		}
-		Item[] items = inventory.getItems();
-		for (int slot = 0; slot < items.length; slot++)
+		
+		Widget[] itemWidgets = inventoryWidget.getChildren();
+		if (itemWidgets == null)
 		{
+			return true;
+		}
+		
+		for (Widget itemWidget : itemWidgets)
+		{
+			//Item slot number
+			int slot = itemWidget.getIndex();
+			//Check if you can wield the item
+			String[] menuActions = itemWidget.getActions();
+			if (menuActions == null)
+			{
+				continue;
+			}
+			boolean canWield = Arrays.asList(menuActions).contains("Wield");
+			boolean canWear = Arrays.asList(menuActions).contains("Wear");
+			boolean canEquip = Arrays.asList(menuActions).contains("Equip");
+			//Dynamically gets the index of the Wear or Wield action for the invoke actions.
+			//You add 1 to the index of the actions cuz the returned index is always 1 less than the required action.
+			int index = 1;
+			
+			if (canWield)
+			{
+				index += Arrays.asList(menuActions).lastIndexOf("Wield");
+			}
+			else if (canWear)
+			{
+				index += Arrays.asList(menuActions).lastIndexOf("Wear");
+			}
+			else if (canEquip)
+			{
+				index += Arrays.asList(menuActions).lastIndexOf("Equip");
+			}
+			else
+			{
+				continue;
+			}
+			
 			for (int itemId : itemIds)
 			{
-				if (items[slot].getId() == itemId)
+				if (itemWidget.getItemId() == itemId)
 				{
-					ReflectionLibrary.invokeMenuAction(slot, WidgetInfo.INVENTORY.getId(), MenuAction.CC_OP.getId(), 3, itemId);
+					/*
+					Manually edge cases
+					switch (itemId)
+					{
+						case 21760: //Kharedst's memoirs
+						case 25818: //Book of the dead
+							ReflectionLibrary.invokeMenuAction(slot, WidgetInfo.INVENTORY.getId(), MenuAction.CC_OP.getId(), 2, itemId);
+							break;
+						default:
+							ReflectionLibrary.invokeMenuAction(slot, WidgetInfo.INVENTORY.getId(), MenuAction.CC_OP.getId(), 3, itemId);
+							break;
+					}
+					*/
+					
+					ReflectionLibrary.invokeMenuAction(slot, WidgetInfo.INVENTORY.getId(), MenuAction.CC_OP.getId(), index, itemId);
 					numItemEquippedAtOnce++;
 					if (numItemEquippedAtOnce >= numEquips)
 					{
@@ -91,6 +145,7 @@ public class InventoryInteractions
 				}
 			}
 		}
+		
 		//Return true because it went through the entire inventory once
 		return true;
 	}
@@ -260,7 +315,7 @@ public class InventoryInteractions
 			}
 			return false;
 		}
-		return equipmentIds[equipmentSlot.getIndex()] == itemId;
+		return equipmentIds[equipmentSlot.getIndex()] - 512 == itemId;
 	}
 	
 	public static boolean playerEquipmentContains(Player player, int itemId)
