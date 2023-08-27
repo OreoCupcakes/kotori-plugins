@@ -1,8 +1,6 @@
 package com.theplug.kotori.kotoripluginloader;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
@@ -13,7 +11,7 @@ public interface KotoriPluginLoaderConfig extends Config
 {
     //Sections
     @ConfigSection(
-            name = "<html>Kotori Plugin Loader<br>Version 2.0.0</html>",
+            name = "<html>Kotori Plugin Loader<br>Version 2.1.0</html>",
             description = "",
             position = 0,
             closedByDefault = true
@@ -85,12 +83,12 @@ public interface KotoriPluginLoaderConfig extends Config
     )
     default boolean selectAllPluginsChoice() { return false; }
     @ConfigItem(
-            keyName = "alchemicalHydraChoice",
-            name = "Alchemical Hydra",
-            description = "Load the Alchemical Hydra plugin.",
+            keyName = "alchemicalHelperChoice",
+            name = "Alchemical Helper",
+            description = "Load the Alchemical Helper plugin.",
             section = pluginsToLoad
     )
-    default boolean alchemicalHydraChoice() { return false; }
+    default boolean alchemicalHelperChoice() { return false; }
 
     @ConfigItem(
             keyName = "cerberusHelperChoice",

@@ -9,7 +9,7 @@ public class Info
     private String runeliteVersion;
     private String kotoriLoaderVersion;
     private boolean preventMasterLoad;
-    private boolean preventAlchemicalHydra;
+    private boolean preventAlchemicalHelper;
     private boolean preventCerberusHelper;
     private boolean preventDagannothKings;
     private boolean preventDemonicGorillas;
