@@ -3,6 +3,7 @@ package com.theplug.kotori.kotoriutils.methods;
 import com.theplug.kotori.kotoriutils.rlapi.WidgetIDPlus;
 import com.theplug.kotori.kotoriutils.rlapi.WidgetInfoPlus;
 import net.runelite.api.Client;
+import net.runelite.api.VarPlayer;
 import net.runelite.api.Varbits;
 import net.runelite.client.RuneLite;
 
@@ -97,5 +98,96 @@ public class VarUtilities
 	public static boolean isPreserveUnlocked()
 	{
 		return client.getVarbitValue(5453) == 1;
+	}
+	
+	/*
+		Returns the LocalPlayer's current attack style in the form of an int.
+		0 = Melee Attack Style
+		1 = Ranged Attack Style
+		2 = Magic Attack Style
+	 */
+	public static int getPlayerAttackStyle()
+	{
+		/*
+			Refer to https://github.com/runelite/runelite/blob/master/runelite-client/src/main/java/net/runelite/client/plugins/attackstyles/WeaponType.java
+			for the list of weapon types and their respective attack styles
+		 */
+		int weaponType = client.getVarbitValue(Varbits.EQUIPPED_WEAPON_TYPE);
+		int attackStyle = client.getVarpValue(VarPlayer.ATTACK_STYLE);
+		
+		/*
+			CurrentStyle Legend
+			Melee = 0
+			Ranged = 1
+			Magic = 2
+		 */
+		int currentStyle = -1;
+		
+		switch (weaponType)
+		{
+			//Ranged
+			case 3:		//Bows
+			case 5:		//Crossbows/Ballista
+			case 7:		//Chinchompas
+			case 19:	//Darts/Knives/Throwing axes/Blowpipe
+				currentStyle = 1;
+				break;
+			//Magic
+			case 23:	//Powered staves (Tridents)
+				currentStyle = 2;
+				break;
+			case 18:	//Normal staves
+			case 21:	//Staves of dead?
+				if (attackStyle == 4)
+				{
+					currentStyle = 2;
+				}
+				else
+				{
+					currentStyle = 0;
+				}
+				break;
+			case 6:		//Salamanders
+				switch (attackStyle)
+				{
+					case 0:
+						currentStyle = 0;
+						break;
+					case 1:
+						currentStyle = 1;
+						break;
+					case 2:
+						currentStyle = 2;
+						break;
+				}
+				break;
+			//Melee
+			case 0:
+			case 1:
+			case 2:
+			case 4:
+			case 8:
+			case 9:
+			case 10:
+			case 11:
+			case 12:
+			case 13:
+			case 14:
+			case 15:
+			case 16:
+			case 17:
+			case 20:
+			case 22:
+			case 24:
+			case 25:
+			case 26:
+			case 27:
+			case 28:
+			case 29:
+				currentStyle = 0;
+				break;
+		}
+		
+		return currentStyle;
 	}
 }

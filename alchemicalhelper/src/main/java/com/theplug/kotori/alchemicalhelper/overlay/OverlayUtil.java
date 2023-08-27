@@ -1,4 +1,4 @@
-package com.theplug.kotori.alchemicalhydra.overlay;
+package com.theplug.kotori.alchemicalhelper.overlay;
 
 import com.google.common.base.Strings;
 import java.awt.Color;

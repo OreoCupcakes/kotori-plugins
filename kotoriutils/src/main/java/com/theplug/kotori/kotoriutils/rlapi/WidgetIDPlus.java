@@ -55,6 +55,7 @@ public final class WidgetIDPlus
 	public static final int WORLD_SWITCHER_GROUP_ID = 69;
 	public static final int DIALOG_OPTION_GROUP_ID = 219;
 	public static final int SPELLBOOK_GROUP_ID = 218;
+	public static final int PVP_GROUP_ID = 90;
 	public static final int ENTERING_HOUSE_GROUP_ID = 71;
 	public static final int BANK_PIN_GROUP_ID = 213;
 	public static final int DIALOG_MINIGAME_GROUP_ID = 229;
@@ -320,6 +321,11 @@ public final class WidgetIDPlus
 	{
 		static final int CONTAINER = 1;
 		static final int LOGOUT_BUTTON = 23;
+	}
+	
+	static class Pvp
+	{
+		static final int PVP_WORLD_COMBAT_RANGE = 49;
 	}
 
 	// Also used for many other interfaces!

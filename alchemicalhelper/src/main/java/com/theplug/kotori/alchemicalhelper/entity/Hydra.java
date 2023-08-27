@@ -22,13 +22,13 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.theplug.kotori.alchemicalhydra.entity;
+package com.theplug.kotori.alchemicalhelper.entity;
 
 import java.awt.image.BufferedImage;
 import javax.annotation.Nullable;
 import javax.inject.Singleton;
 
-import com.theplug.kotori.alchemicalhydra.overlay.AttackOverlay;
+import com.theplug.kotori.alchemicalhelper.overlay.AttackOverlay;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

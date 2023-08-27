@@ -22,13 +22,13 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.theplug.kotori.alchemicalhydra.entity;
+package com.theplug.kotori.alchemicalhelper.entity;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
-import com.theplug.kotori.alchemicalhydra.AlchemicalHydraPlugin;
-import com.theplug.kotori.alchemicalhydra.overlay.AttackOverlay;
+import com.theplug.kotori.alchemicalhelper.overlay.AttackOverlay;
+import com.theplug.kotori.alchemicalhelper.AlchemicalHelperPlugin;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -41,14 +41,14 @@ import net.runelite.client.util.ImageUtil;
 @RequiredArgsConstructor
 public enum HydraPhase
 {
-	POISON(3, AlchemicalHydraPlugin.HYDRA_1_1, AlchemicalHydraPlugin.HYDRA_1_2, GraphicIDPlus.HYDRA_POISON, 0,
-		825, AlchemicalHydraPlugin.BIG_ASS_GUTHIX_SPELL, new WorldPoint(1371, 10263, 0), Color.GREEN, Color.RED),
-	LIGHTNING(3, AlchemicalHydraPlugin.HYDRA_2_1, AlchemicalHydraPlugin.HYDRA_2_2, 0, AlchemicalHydraPlugin.HYDRA_LIGHTNING,
-		550, AlchemicalHydraPlugin.BIG_SPEC_TRANSFER, new WorldPoint(1371, 10272, 0), Color.CYAN, Color.GREEN),
-	FLAME(3, AlchemicalHydraPlugin.HYDRA_3_1, AlchemicalHydraPlugin.HYDRA_3_2, 0, AlchemicalHydraPlugin.HYDRA_FIRE,
-		275, AlchemicalHydraPlugin.BIG_SUPERHEAT, new WorldPoint(1362, 10272, 0), Color.RED, Color.CYAN),
-	ENRAGED(1, AlchemicalHydraPlugin.HYDRA_4_1, AlchemicalHydraPlugin.HYDRA_4_2, GraphicIDPlus.HYDRA_POISON, 0,
-		0, AlchemicalHydraPlugin.BIG_ASS_GUTHIX_SPELL, null, null, null);
+	POISON(3, AlchemicalHelperPlugin.HYDRA_1_1, AlchemicalHelperPlugin.HYDRA_1_2, GraphicIDPlus.HYDRA_POISON, 0,
+		825, AlchemicalHelperPlugin.BIG_ASS_GUTHIX_SPELL, new WorldPoint(1371, 10263, 0), Color.GREEN, Color.RED),
+	LIGHTNING(3, AlchemicalHelperPlugin.HYDRA_2_1, AlchemicalHelperPlugin.HYDRA_2_2, 0, AlchemicalHelperPlugin.HYDRA_LIGHTNING,
+		550, AlchemicalHelperPlugin.BIG_SPEC_TRANSFER, new WorldPoint(1371, 10272, 0), Color.CYAN, Color.GREEN),
+	FLAME(3, AlchemicalHelperPlugin.HYDRA_3_1, AlchemicalHelperPlugin.HYDRA_3_2, 0, AlchemicalHelperPlugin.HYDRA_FIRE,
+		275, AlchemicalHelperPlugin.BIG_SUPERHEAT, new WorldPoint(1362, 10272, 0), Color.RED, Color.CYAN),
+	ENRAGED(1, AlchemicalHelperPlugin.HYDRA_4_1, AlchemicalHelperPlugin.HYDRA_4_2, GraphicIDPlus.HYDRA_POISON, 0,
+		0, AlchemicalHelperPlugin.BIG_ASS_GUTHIX_SPELL, null, null, null);
 
 	private final int attacksPerSwitch;
 	private final int deathAnimation1;

@@ -1,4 +1,4 @@
-package com.theplug.kotori.alchemicalhydra.overlay;
+package com.theplug.kotori.alchemicalhelper.overlay;
 
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;

@@ -10,6 +10,7 @@ import net.runelite.client.RuneLite;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Slf4j
@@ -351,39 +352,59 @@ public class ReflectionLibrary
 		setFieldBooleanValue(viewport, client.getScene(), true, errorMsg);
 	}
 	
-	public static void sceneWalk(WorldPoint point)
+	public static void sceneWalk(WorldPoint worldPoint, boolean convertForInstance)
 	{
-		Collection<WorldPoint> localInstanceWorldPoints = WorldPoint.toLocalInstance(client, point);
-		WorldPoint walkingPoint = null;
-		for (WorldPoint w : localInstanceWorldPoints)
-		{
-			walkingPoint = w;
-			break;
-		}
-		
-		if (walkingPoint == null || client.getPlane() != walkingPoint.getPlane() || !walkingPoint.isInScene(client))
+		if (worldPoint == null)
 		{
 			return;
 		}
-		
-		int scenePointX = walkingPoint.getX() - client.getBaseX();
-		int scenePointY = walkingPoint.getY() - client.getBaseY();
-		
-		setXCoordinate(scenePointX);
-		setYCoordinate(scenePointY);
-		setViewportWalking();
+
+		if (convertForInstance)
+		{
+			Collection<WorldPoint> localWorldPoints = WorldPoint.toLocalInstance(client, worldPoint);
+			if (localWorldPoints.size() != 1)
+			{
+				return;
+			}
+
+			for (WorldPoint localWorld : localWorldPoints)
+			{
+				sceneWalk(LocalPoint.fromWorld(client, localWorld));
+				return;
+			}
+		}
+		else
+		{
+			sceneWalk(LocalPoint.fromWorld(client, worldPoint));
+		}
 	}
-	
-	public static void sceneWalk(LocalPoint localPoint)
+
+	public static void sceneWalk(WorldPoint worldPoint)
 	{
-		WorldPoint worldPoint = WorldPoint.fromLocalInstance(client, localPoint);
-		sceneWalk(worldPoint);
+		sceneWalk(worldPoint, false);
 	}
-	
+
 	public static void sceneWalk(int worldPointX, int worldPointY, int plane)
 	{
 		WorldPoint point = new WorldPoint(worldPointX, worldPointY, plane);
 		sceneWalk(point);
+	}
+
+	public static void sceneWalk(LocalPoint localPoint)
+	{
+		if (localPoint == null || !localPoint.isInScene())
+		{
+			return;
+		}
+
+		sceneWalk(localPoint.getSceneX(), localPoint.getSceneY());
+	}
+
+	public static void sceneWalk(int sceneX, int sceneY)
+	{
+		setXCoordinate(sceneX);
+		setYCoordinate(sceneY);
+		setViewportWalking();
 	}
 	
 	//Spell Insertion Methods
@@ -469,10 +490,15 @@ public class ReflectionLibrary
 		return getFieldIntValue(pathLength, actor, actorPathLengthMultiplier, errorMsg);
 	}
 	
-	public static boolean isMoving()
+	public static boolean areYouMoving()
 	{
 		Player you = client.getLocalPlayer();
-		return getActorPathLength(you) != 0 || you.getPoseAnimation() != you.getIdlePoseAnimation();
+		return getActorPathLength(you) != 0;
+	}
+
+	public static boolean isActorMoving(Actor actor)
+	{
+		return getActorPathLength(actor) != 0;
 	}
 	
 	//Menus Hook Methods

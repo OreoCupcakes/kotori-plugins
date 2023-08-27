@@ -4,7 +4,7 @@ import com.google.gson.*;
 import com.google.inject.Provides;
 import com.theplug.kotori.kotoriutils.gson.HookInfo;
 import com.theplug.kotori.kotoriutils.gson.Hooks;
-import com.theplug.kotori.kotoriutils.methods.ChatUtilities;
+import com.theplug.kotori.kotoriutils.methods.MiscUtilities;
 import com.theplug.kotori.kotoriutils.methods.PrayerInteractions;
 import com.theplug.kotori.kotoriutils.rlapi.PrayerExtended;
 import com.theplug.kotori.kotoriutils.rlapi.WidgetInfoPlus;
@@ -27,7 +27,6 @@ import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.sql.Ref;
 
 @Slf4j
 @Singleton
@@ -142,11 +141,11 @@ public class KotoriUtils extends Plugin {
     {
         if (event.getMenuOption().contains("Kotori Utils Test - Activate "))
         {
-            ChatUtilities.sendGameMessage("Menu Insertion Test is a success. Thick Skin prayer activated.");
+            MiscUtilities.sendGameMessage("Menu Insertion Test is a success. Thick Skin prayer activated.");
         }
         if (event.getMenuOption().contains("<col=39ff14>Kotori Utils Test - Cast Fire Bolt</col> -> "))
         {
-            ChatUtilities.sendGameMessage("Spell Selection Test is a success. Casted Fire Bolt.");
+            MiscUtilities.sendGameMessage("Spell Selection Test is a success. Casted Fire Bolt.");
         }
     }
 
@@ -305,11 +304,11 @@ public class KotoriUtils extends Plugin {
     
     private void testWalkHooks()
     {
-        WorldPoint currentPlayerLocation = client.getLocalPlayer().getWorldLocation();
-        WorldPoint walkingPoint = new WorldPoint(currentPlayerLocation.getX() - 1, currentPlayerLocation.getY(), currentPlayerLocation.getPlane());
+        WorldPoint currentPlayerLocation = WorldPoint.fromLocalInstance(client, client.getLocalPlayer().getLocalLocation());
+        WorldPoint walkingPoint = currentPlayerLocation.dx(-1);
         ReflectionLibrary.sceneWalk(walkingPoint);
-        ChatUtilities.sendGameMessage("Kotori Utils Test - Current Location" + currentPlayerLocation.toString());
-        ChatUtilities.sendGameMessage("Kotori Utils Test - Walking to: " + walkingPoint.toString());
+        MiscUtilities.sendGameMessage("Kotori Utils Test - Current Location: " + currentPlayerLocation);
+        MiscUtilities.sendGameMessage("Kotori Utils Test - Walking to: " + walkingPoint);
     }
     
     private void testInvokeHook()
@@ -318,12 +317,12 @@ public class KotoriUtils extends Plugin {
         if (client.isPrayerActive(prayer))
         {
             PrayerInteractions.deactivatePrayer(prayer);
-            ChatUtilities.sendGameMessage("Kotori Utils Test - Deactivating Thick Skin prayer");
+            MiscUtilities.sendGameMessage("Kotori Utils Test - Deactivating Thick Skin prayer");
         }
         else
         {
             PrayerInteractions.activatePrayer(prayer);
-            ChatUtilities.sendGameMessage("Kotori Utils Test - Activating Thick Skin prayer");
+            MiscUtilities.sendGameMessage("Kotori Utils Test - Activating Thick Skin prayer");
         }
     }
     
@@ -339,7 +338,7 @@ public class KotoriUtils extends Plugin {
             {
                 npcName = "null";
             }
-            ChatUtilities.sendGameMessage("Kotori Utils Test - NPC Name: " + npcName + ", Animation ID: " + animationId);
+            MiscUtilities.sendGameMessage("Kotori Utils Test - NPC Name: " + npcName + ", Animation ID: " + animationId);
         }
     }
     
@@ -358,11 +357,11 @@ public class KotoriUtils extends Plugin {
             }
             if (headIcon == null)
             {
-                ChatUtilities.sendGameMessage("Kotori Utils Test - NPC Name: " + npcName + " has no overhead icon.");
+                MiscUtilities.sendGameMessage("Kotori Utils Test - NPC Name: " + npcName + " has no overhead icon.");
             }
             else
             {
-                ChatUtilities.sendGameMessage("Kotori Utils Test - NPC Name: " + npcName + ", Overhead Icon: " + headIcon.name());
+                MiscUtilities.sendGameMessage("Kotori Utils Test - NPC Name: " + npcName + ", Overhead Icon: " + headIcon.name());
             }
         }
     }
@@ -420,7 +419,7 @@ public class KotoriUtils extends Plugin {
         int pathLength = ReflectionLibrary.getActorPathLength(you);
         int poseAnimation = you.getPoseAnimation();
         int idleAnimation = you.getIdlePoseAnimation();
-        ChatUtilities.sendGameMessage("Kotori Utils Test - isMoving? " + ReflectionLibrary.isMoving() + ", pathLength: " + pathLength +
+        MiscUtilities.sendGameMessage("Kotori Utils Test - isMoving? " + ReflectionLibrary.areYouMoving() + ", pathLength: " + pathLength +
                 ", poseAnimation: " + poseAnimation + ", idleAnimation: " + idleAnimation);
     }
 }

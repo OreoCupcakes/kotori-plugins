@@ -25,10 +25,10 @@
 
 version = "1.2.0"
 
-project.extra["PluginName"] = "Alchemical Hydra" // This is the name that is used in the external plugin manager panel
-project.extra["PluginDescription"] = "An overlay plugin for the Alchemical Hydra boss." // This is the description that is used in the external plugin manager panel
-project.extra["PluginPackageId"] = "alchemicalhydra" // This is the plugin package folder after the default group package.
-project.extra["PluginMainClassName"] = "AlchemicalHydraPlugin" // This is the plugin's main class which extends Plugin
+project.extra["PluginName"] = "<html><font color=#6b8af6>[K]</font> Alchemical Helper</html>" // This is the name that is used in the external plugin manager panel
+project.extra["PluginDescription"] = "A plugin for the Alchemical Hydra boss. Overlays and automation for prayer and dodging special attacks." // This is the description that is used in the external plugin manager panel
+project.extra["PluginPackageId"] = "alchemicalhelper" // This is the plugin package folder after the default group package.
+project.extra["PluginMainClassName"] = "AlchemicalHelperPlugin" // This is the plugin's main class which extends Plugin
 
 dependencies {
     compileOnly(project(":kotoriutils"))

@@ -1,15 +1,16 @@
 package com.theplug.kotori.kotoriutils.methods;
 
-import net.runelite.api.ChatMessageType;
-import net.runelite.api.Client;
+import net.runelite.api.*;
 import net.runelite.client.RuneLite;
 import net.runelite.client.chat.ChatMessageBuilder;
 import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.chat.QueuedMessage;
 
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 
-public class ChatUtilities
+public class MiscUtilities
 {
 	static final Client client = RuneLite.getInjector().getInstance(Client.class);
 	static final ChatMessageManager chatMessageManager = RuneLite.getInjector().getInstance(ChatMessageManager.class);
@@ -30,5 +31,37 @@ public class ChatUtilities
 	public static void sendGameMessage(String gameMessage)
 	{
 		sendGameMessage(gameMessage, Color.RED);
+	}
+	
+	public static void copyGearIdsToClipboard()
+	{
+		StringBuilder gearIds = new StringBuilder();
+		
+		ItemContainer equipment = client.getItemContainer(InventoryID.EQUIPMENT);
+		if (equipment == null)
+		{
+			return;
+		}
+		
+		Item[] items = equipment.getItems();
+		for (Item item : items)
+		{
+			int id = item.getId();
+			if (id < 0)
+			{
+				continue;
+			}
+			gearIds.append(id);
+			gearIds.append(",");
+		}
+		
+		if (gearIds.lastIndexOf(",") == gearIds.length() - 1)
+		{
+			gearIds.deleteCharAt(gearIds.length() - 1);
+		}
+		
+		StringSelection stringSelection = new StringSelection(gearIds.toString());
+		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+		clipboard.setContents(stringSelection, null);
 	}
 }

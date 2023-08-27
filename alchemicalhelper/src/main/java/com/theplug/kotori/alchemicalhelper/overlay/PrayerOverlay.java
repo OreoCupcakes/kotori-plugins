@@ -25,16 +25,16 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.theplug.kotori.alchemicalhydra.overlay;
+package com.theplug.kotori.alchemicalhelper.overlay;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import javax.inject.Inject;
 
-import com.theplug.kotori.alchemicalhydra.AlchemicalHydraConfig;
-import com.theplug.kotori.alchemicalhydra.AlchemicalHydraPlugin;
-import com.theplug.kotori.alchemicalhydra.entity.Hydra;
+import com.theplug.kotori.alchemicalhelper.AlchemicalHelperConfig;
+import com.theplug.kotori.alchemicalhelper.AlchemicalHelperPlugin;
+import com.theplug.kotori.alchemicalhelper.entity.Hydra;
 import net.runelite.api.Client;
 import net.runelite.api.Prayer;
 import net.runelite.client.ui.overlay.Overlay;
@@ -45,13 +45,13 @@ import net.runelite.client.ui.overlay.OverlayPriority;
 public class PrayerOverlay extends Overlay
 {
 	private final Client client;
-	private final AlchemicalHydraPlugin plugin;
-	private final AlchemicalHydraConfig config;
+	private final AlchemicalHelperPlugin plugin;
+	private final AlchemicalHelperConfig config;
 
 	private Hydra hydra;
 
 	@Inject
-	private PrayerOverlay(final Client client, final AlchemicalHydraPlugin plugin, final AlchemicalHydraConfig config)
+	private PrayerOverlay(final Client client, final AlchemicalHelperPlugin plugin, final AlchemicalHelperConfig config)
 	{
 
 		this.client = client;

@@ -9,18 +9,18 @@ import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.RuneLite;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 @Slf4j
 public class InventoryInteractions
 {
 	static Client client = RuneLite.getInjector().getInstance(Client.class);
-	private static final Set<Integer> prayerPotions = Set.of(ItemID.PRAYER_POTION1, ItemID.PRAYER_POTION2, ItemID.PRAYER_POTION3, ItemID.PRAYER_POTION4);
-	private static final Set<Integer> superRestores = Set.of(ItemID.SUPER_RESTORE1, ItemID.SUPER_RESTORE2, ItemID.SUPER_RESTORE3, ItemID.SUPER_RESTORE4);
-	private static final Set<Integer> sanfewSerums = Set.of(ItemID.SANFEW_SERUM1, ItemID.SANFEW_SERUM2, ItemID.SANFEW_SERUM3, ItemID.SANFEW_SERUM4);
-	private static final Set<Set<Integer>> allPrayerRestoringPotions = Set.of(prayerPotions, superRestores, sanfewSerums);
-	
-	
+	private static final List<Integer> prayerPotions = List.of(ItemID.PRAYER_POTION1, ItemID.PRAYER_POTION2, ItemID.PRAYER_POTION3, ItemID.PRAYER_POTION4);
+	private static final List<Integer> superRestores = List.of(ItemID.SUPER_RESTORE1, ItemID.SUPER_RESTORE2, ItemID.SUPER_RESTORE3, ItemID.SUPER_RESTORE4);
+	private static final List<Integer> sanfewSerums = List.of(ItemID.SANFEW_SERUM1, ItemID.SANFEW_SERUM2, ItemID.SANFEW_SERUM3, ItemID.SANFEW_SERUM4);
+	private static final List<List<Integer>> allPrayerRestoringPotions = List.of(prayerPotions, superRestores, sanfewSerums);
+
 	public static int[] parseStringToItemIds(String listOfItemIds)
 	{
 		if (listOfItemIds == null)
@@ -168,20 +168,20 @@ public class InventoryInteractions
 	
 	public static void drinkPrayerRestoreDose(boolean drinkPrayers, boolean drinkSupers, boolean drinkSanfews)
 	{
-		int setIndex = 0;
-		for (Set<Integer> setOfPots : allPrayerRestoringPotions)
+		int listIndex = 0;
+		for (List<Integer> setOfPots : allPrayerRestoringPotions)
 		{
 			for (int itemId : setOfPots)
 			{
-				if (setIndex == 0 && !drinkPrayers)
+				if (listIndex == 0 && !drinkPrayers)
 				{
 					break;
 				}
-				else if (setIndex == 1 && !drinkSupers)
+				else if (listIndex == 1 && !drinkSupers)
 				{
 					break;
 				}
-				else if (setIndex == 2 && !drinkSanfews)
+				else if (listIndex == 2 && !drinkSanfews)
 				{
 					break;
 				}
@@ -192,7 +192,7 @@ public class InventoryInteractions
 					return;
 				}
 			}
-			setIndex++;
+			listIndex++;
 		}
 		
 		/*

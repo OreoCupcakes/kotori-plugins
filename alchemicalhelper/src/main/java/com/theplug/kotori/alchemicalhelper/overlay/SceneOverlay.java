@@ -23,7 +23,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.theplug.kotori.alchemicalhydra.overlay;
+package com.theplug.kotori.alchemicalhelper.overlay;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -35,24 +35,22 @@ import java.awt.Stroke;
 import java.awt.geom.Area;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import com.theplug.kotori.alchemicalhydra.AlchemicalHydraConfig;
-import com.theplug.kotori.alchemicalhydra.AlchemicalHydraPlugin;
-import com.theplug.kotori.alchemicalhydra.entity.Hydra;
-import net.runelite.api.Client;
-import net.runelite.api.Deque;
-import net.runelite.api.GraphicsObject;
-import net.runelite.api.NPC;
-import net.runelite.api.Perspective;
+import com.theplug.kotori.alchemicalhelper.AlchemicalHelperConfig;
+import com.theplug.kotori.alchemicalhelper.AlchemicalHelperPlugin;
+import com.theplug.kotori.alchemicalhelper.entity.Hydra;
+import com.theplug.kotori.alchemicalhelper.entity.HydraPhase;
+import com.theplug.kotori.kotoriutils.methods.VarUtilities;
+import net.runelite.api.*;
+
 import static net.runelite.api.Perspective.getCanvasTileAreaPoly;
-import net.runelite.api.Point;
-import net.runelite.api.Projectile;
+
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
-import com.theplug.kotori.alchemicalhydra.entity.HydraPhase;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
@@ -71,14 +69,14 @@ public class SceneOverlay extends Overlay
 	private static final int HYDRA_HULL_OUTLINE_STROKE_SIZE = 1;
 
 	private final Client client;
-	private final AlchemicalHydraPlugin plugin;
-	private final AlchemicalHydraConfig config;
+	private final AlchemicalHelperPlugin plugin;
+	private final AlchemicalHelperConfig config;
 	private final ModelOutlineRenderer modelOutlineRenderer;
 
 	private Hydra hydra;
 
 	@Inject
-	public SceneOverlay(final Client client, final AlchemicalHydraPlugin plugin, final AlchemicalHydraConfig config,
+	public SceneOverlay(final Client client, final AlchemicalHelperPlugin plugin, final AlchemicalHelperConfig config,
 						final ModelOutlineRenderer modelOutlineRenderer)
 	{
 		this.client = client;
@@ -101,6 +99,9 @@ public class SceneOverlay extends Overlay
 			return null;
 		}
 
+		//Lightning/Flame Skip at top because the HpUntilPhaseChange and FountainTicks changes the graphic's font and font size
+		renderLightningSkipTile(graphics2D);
+		renderFlameSkipTile(graphics2D);
 		renderHpUntilPhaseChange(graphics2D);
 		renderHydraImmunityOutline();
 		renderPoisonProjectileAreaTiles(graphics2D);
@@ -144,7 +145,8 @@ public class SceneOverlay extends Overlay
 
 	private void renderLightning(final Graphics2D graphics2D)
 	{
-		final Deque<GraphicsObject> graphicsObjects = client.getGraphicsObjects();
+	//	final Deque<GraphicsObject> graphicsObjects = client.getGraphicsObjects();
+		Set<GraphicsObject> graphicsObjects = plugin.getLightningObjects();
 
 		if (!config.lightningOutline() || hydra.getPhase() != HydraPhase.LIGHTNING)
 		{
@@ -359,6 +361,96 @@ public class SceneOverlay extends Overlay
 			config.fontShadow(),
 			config.fontZOffset() * -1
 		);
+	}
+
+	private void renderLightningSkipTile(final Graphics2D graphics2D)
+	{
+		if (config.doLightningSkip() && VarUtilities.getPlayerAttackStyle() != 0)
+		{
+			if (hydra.getPhase() != HydraPhase.LIGHTNING)
+			{
+				return;
+			}
+
+			Collection<WorldPoint> lightningSkipTile = WorldPoint.toLocalInstance(client, AlchemicalHelperPlugin.LIGHTNING_SAFESPOT_1);
+
+			if (lightningSkipTile.size() != 1)
+			{
+				return;
+			}
+
+			for (WorldPoint worldPoint : lightningSkipTile)
+			{
+				LocalPoint localPoint = LocalPoint.fromWorld(client, worldPoint);
+				if (localPoint == null)
+				{
+					return;
+				}
+
+				Polygon polygon = Perspective.getCanvasTilePoly(client, localPoint);
+				if (polygon == null)
+				{
+					return;
+				}
+
+				net.runelite.client.ui.overlay.OverlayUtil.renderPolygon(graphics2D, polygon, config.lightningSkipTileBorder(), config.lightningSkipTileFill(),
+						new BasicStroke((float) 2));
+
+				String directions = "Stand here";
+				Point canvasTextLocation = Perspective.getCanvasTextLocation(client, graphics2D, localPoint, directions, 0);
+				if (canvasTextLocation == null)
+				{
+					return;
+				}
+
+				net.runelite.client.ui.overlay.OverlayUtil.renderTextLocation(graphics2D, canvasTextLocation, directions, config.lightningSkipTileBorder());
+			}
+		}
+	}
+
+	private void renderFlameSkipTile(Graphics2D graphics2D)
+	{
+		if (config.doFlameSkip())
+		{
+			if (hydra.getPhase() != HydraPhase.FLAME)
+			{
+				return;
+			}
+
+			Collection<WorldPoint> flameSkipTile = WorldPoint.toLocalInstance(client, AlchemicalHelperPlugin.FLAME_SAFESPOT_1);
+
+			if (flameSkipTile.size() != 1)
+			{
+				return;
+			}
+
+			for (WorldPoint worldPoint : flameSkipTile)
+			{
+				LocalPoint localPoint = LocalPoint.fromWorld(client, worldPoint);
+				if (localPoint == null)
+				{
+					return;
+				}
+
+				Polygon polygon = Perspective.getCanvasTilePoly(client, localPoint);
+				if (polygon == null)
+				{
+					return;
+				}
+
+				net.runelite.client.ui.overlay.OverlayUtil.renderPolygon(graphics2D, polygon, config.flameSkipTileBorder(), config.flameSkipTileFill(),
+						new BasicStroke((float) 2));
+
+				String directions = "Stand here before stun";
+				Point canvasTextLocation = Perspective.getCanvasTextLocation(client, graphics2D, localPoint, directions, 0);
+				if (canvasTextLocation == null)
+				{
+					return;
+				}
+
+				net.runelite.client.ui.overlay.OverlayUtil.renderTextLocation(graphics2D, canvasTextLocation, directions, config.flameSkipTileBorder());
+			}
+		}
 	}
 
 	private static void drawOutlineAndFill(final Graphics2D graphics2D, final Color outlineColor, final Color fillColor, final float strokeWidth, final Shape shape)

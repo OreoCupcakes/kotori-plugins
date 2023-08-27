@@ -23,7 +23,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.theplug.kotori.alchemicalhydra.overlay;
+package com.theplug.kotori.alchemicalhelper.overlay;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -34,10 +34,10 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import com.theplug.kotori.alchemicalhydra.AlchemicalHydraConfig;
-import com.theplug.kotori.alchemicalhydra.AlchemicalHydraPlugin;
-import com.theplug.kotori.alchemicalhydra.entity.Hydra;
-import com.theplug.kotori.alchemicalhydra.entity.HydraPhase;
+import com.theplug.kotori.alchemicalhelper.AlchemicalHelperConfig;
+import com.theplug.kotori.alchemicalhelper.AlchemicalHelperPlugin;
+import com.theplug.kotori.alchemicalhelper.entity.Hydra;
+import com.theplug.kotori.alchemicalhelper.entity.HydraPhase;
 import net.runelite.api.*;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.game.SpriteManager;
@@ -81,8 +81,8 @@ public class AttackOverlay extends Overlay
 	private final Client client;
 	private final ClientThread clientThread;
 
-	private final AlchemicalHydraPlugin plugin;
-	private final AlchemicalHydraConfig config;
+	private final AlchemicalHelperPlugin plugin;
+	private final AlchemicalHelperConfig config;
 
 	private final SpriteManager spriteManager;
 
@@ -91,7 +91,7 @@ public class AttackOverlay extends Overlay
 	private Hydra hydra;
 
 	@Inject
-	AttackOverlay(final Client client, final ClientThread clientThread, final AlchemicalHydraPlugin plugin, final AlchemicalHydraConfig config, final SpriteManager spriteManager)
+	AttackOverlay(final Client client, final ClientThread clientThread, final AlchemicalHelperPlugin plugin, final AlchemicalHelperConfig config, final SpriteManager spriteManager)
 	{
 		this.client = client;
 		this.clientThread = clientThread;
@@ -245,7 +245,7 @@ public class AttackOverlay extends Overlay
 
 	private BufferedImage createStunImage()
 	{
-		final SpritePixels root = getSprite(AlchemicalHydraPlugin.BIG_ASS_GREY_ENTANGLE);
+		final SpritePixels root = getSprite(AlchemicalHelperPlugin.BIG_ASS_GREY_ENTANGLE);
 		final SpritePixels mark = getSprite(SpriteID.TRADE_EXCLAMATION_MARK_ITEM_REMOVAL_WARNING);
 
 		if (mark == null || root == null)
