@@ -636,13 +636,11 @@ public class AlchemicalHelperPlugin extends Plugin
 							Don't attack if there are still flame walls present in enrage phase and the player is using melee.
 							This covers the edge case of there being no safe melee distance tiles due to the flame walls and poison splash
 						 */
-						if (!flameObjects.isEmpty() && VarUtilities.getPlayerAttackStyle() == 0)
+						if (VarUtilities.getPlayerAttackStyle() != 0 || flameObjects.isEmpty())
 						{
-							performAttackOnHydra = false;
-							return;
+							SpellInteractions.attackNpc(hydra.getNpc());
 						}
 
-						SpellInteractions.attackNpc(hydra.getNpc());
 						performAttackOnHydra = false;
 						poisonSafeTile = null;
 					}
