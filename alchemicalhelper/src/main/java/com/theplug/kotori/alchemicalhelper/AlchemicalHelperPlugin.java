@@ -75,7 +75,7 @@ public class AlchemicalHelperPlugin extends Plugin
 
     public static final WorldPoint LIGHTNING_SAFESPOT_1 = new WorldPoint(1358, 10278, 0);
 	private static final WorldPoint LIGHTNING_SAFESPOT_2 = new WorldPoint(1359, 10277, 0);
-	private static final WorldPoint LIGHTNING_SAFESPOT_3 = new WorldPoint(1359, 10278, 0);
+	public static final WorldPoint LIGHTNING_SAFESPOT_3 = new WorldPoint(1359, 10278, 0);
 
 	private static final Set<WorldPoint> LIGHTNING_DANGER_TILES = Set.of(
 			new WorldPoint(1360, 10278, 0), new WorldPoint(1360, 10277, 0), new WorldPoint(1360, 10276, 0),
@@ -162,7 +162,9 @@ public class AlchemicalHelperPlugin extends Plugin
 	private WorldPoint poisonSafeTile = null;
 	private boolean ranFromPoisonOnce;
 	private boolean performAttackOnHydra;
+	private boolean performAttackAfterDrink;
 	private int lightningSkipState = 0;
+	public boolean inLightningSafeSpot;
 	private int flameSkipState = 0;
 	private int flameSpecialAnimations = 0;
 	private Prayer lastActivatedProtectionPrayer = null;
@@ -220,6 +222,8 @@ public class AlchemicalHelperPlugin extends Plugin
 		allPrayersDeactived = false;
 		ranFromPoisonOnce = false;
 		performAttackOnHydra = false;
+		performAttackAfterDrink = false;
+		inLightningSafeSpot = false;
 		lightningSkipState = 0;
 		flameSkipState = 0;
 		flameSpecialAnimations = 0;
@@ -315,9 +319,9 @@ public class AlchemicalHelperPlugin extends Plugin
 		{
 			lightningObjects.removeIf(GraphicsObject::finished);
 		}
-		
-		handlePrayerInteractions();
+
 		handlePhaseSpecials();
+		handlePrayerInteractions();
 	}
 
 	@Subscribe
@@ -352,6 +356,12 @@ public class AlchemicalHelperPlugin extends Plugin
 			if (currentAnimation == HydraPhase.FLAME.getSpecialAnimationId())
 			{
 				flameSpecialAnimations++;
+			}
+			//Reset lightning skip variables when it casts the animation
+			if (currentAnimation == HydraPhase.LIGHTNING.getSpecialAnimationId())
+			{
+				lightningSkipState = 0;
+				inLightningSafeSpot = false;
 			}
 		}
 	}
@@ -424,12 +434,15 @@ public class AlchemicalHelperPlugin extends Plugin
 			{
 				case POISON:
 					hydra.changePhase(HydraPhase.LIGHTNING);
+					poisonSafeTile = null;
 					break;
 				case LIGHTNING:
 					hydra.changePhase(HydraPhase.FLAME);
+					lightningSkipState = 0;
 					break;
 				case FLAME:
 					hydra.changePhase(HydraPhase.ENRAGED);
+					flameSkipState = 0;
 					break;
 				case ENRAGED:
 					// NpcDespawned event does not fire for Hydra in between kills; must use death animation.
@@ -446,7 +459,9 @@ public class AlchemicalHelperPlugin extends Plugin
 					flameSkipState = 0;
 					flameSpecialAnimations = 0;
 					performAttackOnHydra = false;
+					performAttackAfterDrink = false;
 					ranFromPoisonOnce = false;
+					inLightningSafeSpot = false;
 					lastActivatedProtectionPrayer = null;
 					offensivePrayerActivated = false;
 					poisonSafeTile = null;
@@ -607,6 +622,10 @@ public class AlchemicalHelperPlugin extends Plugin
 							{
 								performAttackOnHydra = true;
 							}
+							else
+							{
+								poisonSafeTile = null;
+							}
 						}
 					}
 
@@ -625,6 +644,7 @@ public class AlchemicalHelperPlugin extends Plugin
 
 						SpellInteractions.attackNpc(hydra.getNpc());
 						performAttackOnHydra = false;
+						poisonSafeTile = null;
 					}
 				}
 				break;
@@ -636,12 +656,6 @@ public class AlchemicalHelperPlugin extends Plugin
 						return;
 					}
 
-					if (lastUniqueAnimation == phase.getSpecialAnimationId())
-					{
-						//Reset the lightning skip movement counter when it does special animation
-						lightningSkipState = 0;
-					}
-
 					Collection<WorldPoint> lightningSafeSpot1LocalWorlds = WorldPoint.toLocalInstance(client, LIGHTNING_SAFESPOT_1);
 					Collection<WorldPoint> lightningSafeSpot2LocalWorlds = WorldPoint.toLocalInstance(client, LIGHTNING_SAFESPOT_2);
 					Collection<WorldPoint> lightningSafeSpot3LocalWorlds = WorldPoint.toLocalInstance(client, LIGHTNING_SAFESPOT_3);
@@ -649,56 +663,48 @@ public class AlchemicalHelperPlugin extends Plugin
 					switch (lightningSkipState)
 					{
 						case 0:
-							if (lightningSafeSpot3LocalWorlds.contains(playerLocation))
-							{
-								ReflectionLibrary.sceneWalk(LIGHTNING_SAFESPOT_1, true);
-								if (config.performAttackAfterLightning())
-								{
-									performAttackOnHydra = true;
-								}
-							}
-							lightningSkipState = 1;
-							break;
-						case 1:
 							if (lightningSafeSpot1LocalWorlds.contains(playerLocation))
 							{
-								//Prioritize checking for the start of lightning skip over attacking from step 0
 								for (GraphicsObject lightning : lightningObjects)
 								{
 									WorldPoint lightningLoc = WorldPoint.fromLocalInstance(client, lightning.getLocation());
 									if (LIGHTNING_DANGER_TILES.contains(lightningLoc))
 									{
 										ReflectionLibrary.sceneWalk(LIGHTNING_SAFESPOT_2, true);
-										lightningSkipState = 2;
-										performAttackOnHydra = false;
+										lightningSkipState = 1;
 										return;
 									}
 								}
-
-								if (performAttackOnHydra)
-								{
-									SpellInteractions.attackNpc(hydra.getNpc());
-									performAttackOnHydra = false;
-								}
 							}
 							break;
-						case 2:
+						case 1:
 							if (lightningSafeSpot2LocalWorlds.contains(playerLocation))
 							{
 								ReflectionLibrary.sceneWalk(LIGHTNING_SAFESPOT_3, true);
-								lightningSkipState = 3;
+								lightningSkipState = 2;
 								if (config.performAttackAfterLightning())
 								{
 									performAttackOnHydra = true;
 								}
 							}
 							break;
-						case 3:
-							if (lightningSafeSpot3LocalWorlds.contains(playerLocation) && performAttackOnHydra)
+						case 2:
+							if (lightningSafeSpot3LocalWorlds.contains(playerLocation))
 							{
-								SpellInteractions.attackNpc(hydra.getNpc());
-								lightningSkipState = 4;
-								performAttackOnHydra = false;
+								if (performAttackOnHydra)
+								{
+									SpellInteractions.attackNpc(hydra.getNpc());
+									performAttackOnHydra = false;
+								}
+								inLightningSafeSpot = true;
+								lightningSkipState = 3;
+							}
+							break;
+						case 3:
+							if (!lightningSafeSpot3LocalWorlds.contains(playerLocation))
+							{
+								inLightningSafeSpot = false;
+								lightningSkipState = 0;
 							}
 							break;
 					}
@@ -831,9 +837,27 @@ public class AlchemicalHelperPlugin extends Plugin
 
 	private void drinkPrayerPotion()
 	{
+		//Check if you're not doing any of the phase handlers before drinking
+		if (poisonSafeTile != null || flameSkipState != 0 || lightningSkipState > 0 && lightningSkipState < 3)
+		{
+			return;
+		}
+
 		if (client.getBoostedSkillLevel(Skill.PRAYER) <= config.prayerThreshold())
 		{
 			InventoryInteractions.drinkPrayerRestoreDose(true, true, false);
+			//Same as enraged poisoned, don't attack if there are flame walls present
+			if (config.performAttackAfterDrink() && flameObjects.isEmpty())
+			{
+				performAttackAfterDrink = true;
+			}
+			return;
+		}
+
+		if (performAttackAfterDrink && !ReflectionLibrary.areYouMoving())
+		{
+			SpellInteractions.attackNpc(hydra.getNpc());
+			performAttackAfterDrink = false;
 		}
 	}
 

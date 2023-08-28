@@ -587,6 +587,15 @@ public interface AlchemicalHelperConfig extends Config
 	)
 	default int prayerThreshold() { return 20; }
 
+	@ConfigItem(
+			keyName = "performAttackAfterDrink",
+			name = "Attack After Drinking",
+			description = "Automatically attack Hydra after drinking a prayer dose.",
+			position = 7,
+			section = automatePrayer
+	)
+	default boolean performAttackAfterDrink() { return false; }
+
 
 
 	//Poison Phase Helper

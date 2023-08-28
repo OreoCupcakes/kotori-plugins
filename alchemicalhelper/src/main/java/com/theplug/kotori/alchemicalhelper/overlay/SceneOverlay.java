@@ -365,92 +365,49 @@ public class SceneOverlay extends Overlay
 
 	private void renderLightningSkipTile(final Graphics2D graphics2D)
 	{
-		if (config.doLightningSkip() && VarUtilities.getPlayerAttackStyle() != 0)
+		if (config.doLightningSkip() && VarUtilities.getPlayerAttackStyle() != 0 && hydra.getPhase() == HydraPhase.LIGHTNING)
 		{
-			if (hydra.getPhase() != HydraPhase.LIGHTNING)
+			if (!plugin.inLightningSafeSpot)
 			{
-				return;
+				Collection<WorldPoint> lightningSkipTile = WorldPoint.toLocalInstance(client, AlchemicalHelperPlugin.LIGHTNING_SAFESPOT_1);
+				if (lightningSkipTile.size() != 1)
+				{
+					return;
+				}
+
+				WorldPoint worldPoint = lightningSkipTile.stream().findFirst().orElse(null);
+				drawTileOverlayWithText(graphics2D, worldPoint, config.lightningSkipTileBorder(), config.lightningSkipTileFill(), 2,
+						"Stand here", config.lightningSkipTileBorder());
 			}
-
-			Collection<WorldPoint> lightningSkipTile = WorldPoint.toLocalInstance(client, AlchemicalHelperPlugin.LIGHTNING_SAFESPOT_1);
-
-			if (lightningSkipTile.size() != 1)
+			else
 			{
-				return;
-			}
-
-			for (WorldPoint worldPoint : lightningSkipTile)
-			{
-				LocalPoint localPoint = LocalPoint.fromWorld(client, worldPoint);
-				if (localPoint == null)
+				Collection<WorldPoint> lightningSafeTile = WorldPoint.toLocalInstance(client, AlchemicalHelperPlugin.LIGHTNING_SAFESPOT_3);
+				if (lightningSafeTile.size() != 1)
 				{
 					return;
 				}
 
-				Polygon polygon = Perspective.getCanvasTilePoly(client, localPoint);
-				if (polygon == null)
-				{
-					return;
-				}
-
-				net.runelite.client.ui.overlay.OverlayUtil.renderPolygon(graphics2D, polygon, config.lightningSkipTileBorder(), config.lightningSkipTileFill(),
-						new BasicStroke((float) 2));
-
-				String directions = "Stand here";
-				Point canvasTextLocation = Perspective.getCanvasTextLocation(client, graphics2D, localPoint, directions, 0);
-				if (canvasTextLocation == null)
-				{
-					return;
-				}
-
-				net.runelite.client.ui.overlay.OverlayUtil.renderTextLocation(graphics2D, canvasTextLocation, directions, config.lightningSkipTileBorder());
+				WorldPoint worldPoint = lightningSafeTile.stream().findFirst().orElse(null);
+				drawTileOverlayWithText(graphics2D, worldPoint, config.lightningSkipTileBorder(), config.lightningSkipTileFill(), 2,
+						"Do not move until phase change", config.lightningSkipTileBorder());
 			}
 		}
 	}
 
 	private void renderFlameSkipTile(Graphics2D graphics2D)
 	{
-		if (config.doFlameSkip())
+		if (config.doFlameSkip() && hydra.getPhase() == HydraPhase.FLAME)
 		{
-			if (hydra.getPhase() != HydraPhase.FLAME)
-			{
-				return;
-			}
-
 			Collection<WorldPoint> flameSkipTile = WorldPoint.toLocalInstance(client, AlchemicalHelperPlugin.FLAME_SAFESPOT_1);
-
 			if (flameSkipTile.size() != 1)
 			{
 				return;
 			}
 
-			for (WorldPoint worldPoint : flameSkipTile)
-			{
-				LocalPoint localPoint = LocalPoint.fromWorld(client, worldPoint);
-				if (localPoint == null)
-				{
-					return;
-				}
-
-				Polygon polygon = Perspective.getCanvasTilePoly(client, localPoint);
-				if (polygon == null)
-				{
-					return;
-				}
-
-				net.runelite.client.ui.overlay.OverlayUtil.renderPolygon(graphics2D, polygon, config.flameSkipTileBorder(), config.flameSkipTileFill(),
-						new BasicStroke((float) 2));
-
-				String directions = "Stand here before stun";
-				Point canvasTextLocation = Perspective.getCanvasTextLocation(client, graphics2D, localPoint, directions, 0);
-				if (canvasTextLocation == null)
-				{
-					return;
-				}
-
-				net.runelite.client.ui.overlay.OverlayUtil.renderTextLocation(graphics2D, canvasTextLocation, directions, config.flameSkipTileBorder());
-			}
-		}
+			WorldPoint worldPoint = flameSkipTile.stream().findFirst().orElse(null);
+			drawTileOverlayWithText(graphics2D, worldPoint, config.flameSkipTileBorder(), config.flameSkipTileFill(), 2,
+					"Stand here before stun", config.flameSkipTileBorder());
+        }
 	}
 
 	private static void drawOutlineAndFill(final Graphics2D graphics2D, final Color outlineColor, final Color fillColor, final float strokeWidth, final Shape shape)
@@ -467,5 +424,31 @@ public class SceneOverlay extends Overlay
 
 		graphics2D.setColor(originalColor);
 		graphics2D.setStroke(originalStroke);
+	}
+
+	private void drawTileOverlayWithText(Graphics2D graphics2D, WorldPoint worldPoint, Color borderColor, Color fillColor, float strokeWidth, String text, Color textColor)
+	{
+		LocalPoint localPoint = LocalPoint.fromWorld(client, worldPoint);
+		if (localPoint == null)
+		{
+			return;
+		}
+
+		Polygon polygon = Perspective.getCanvasTilePoly(client, localPoint);
+		if (polygon == null)
+		{
+			return;
+		}
+
+		net.runelite.client.ui.overlay.OverlayUtil.renderPolygon(graphics2D, polygon, borderColor, fillColor,
+				new BasicStroke(strokeWidth));
+
+		Point canvasTextLocation = Perspective.getCanvasTextLocation(client, graphics2D, localPoint, text, 0);
+		if (canvasTextLocation == null)
+		{
+			return;
+		}
+
+		net.runelite.client.ui.overlay.OverlayUtil.renderTextLocation(graphics2D, canvasTextLocation, text, textColor);
 	}
 }
