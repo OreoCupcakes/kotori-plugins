@@ -43,17 +43,21 @@ public final class ImageManager
 
 	private static final BufferedImage[][] images = new BufferedImage[3][6];
 
-	public static BufferedImage getCerberusBufferedImage(final Phase phase, final Prayer prayer, final CerberusConfig.InfoBoxComponentSize size)
+//	public static BufferedImage getCerberusBufferedImage(final Phase phase, final Prayer prayer, final CerberusConfig.InfoBoxComponentSize size)
+	public static BufferedImage getCerberusBufferedImage(final Phase phase, final Prayer prayer)
 	{
 		if (phase == Phase.AUTO)
 		{
-			return getCerberusPrayerBufferedImage(prayer, size);
+		//	return getCerberusPrayerBufferedImage(prayer, size);
+			return getCerberusPrayerBufferedImage(prayer);
 		}
 
-		return getCerberusPhaseBufferedImage(phase, size);
+	//	return getCerberusPhaseBufferedImage(phase, size);
+		return getCerberusPhaseBufferedImage(phase);
 	}
 
-	private static BufferedImage getCerberusPrayerBufferedImage(final Prayer prayer, final CerberusConfig.InfoBoxComponentSize size)
+//	private static BufferedImage getCerberusPrayerBufferedImage(final Prayer prayer, final CerberusConfig.InfoBoxComponentSize size)
+	private static BufferedImage getCerberusPrayerBufferedImage(final Prayer prayer)
 	{
 		final String path;
 		final int imgIdx;
@@ -75,10 +79,12 @@ public final class ImageManager
 				break;
 		}
 
-		return getBufferedImage(path, imgIdx, size);
+	//	return getBufferedImage(path, imgIdx, size);
+		return getBufferedImage(path, imgIdx);
 	}
 
-	private static BufferedImage getCerberusPhaseBufferedImage(final Phase phase, final CerberusConfig.InfoBoxComponentSize size)
+//	private static BufferedImage getCerberusPhaseBufferedImage(final Phase phase, final CerberusConfig.InfoBoxComponentSize size)
+	private static BufferedImage getCerberusPhaseBufferedImage(final Phase phase)
 	{
 		final String path;
 		final int imgIdx;
@@ -100,15 +106,28 @@ public final class ImageManager
 				break;
 		}
 
-		return getBufferedImage(path, imgIdx, size);
+	//	return getBufferedImage(path, imgIdx, size);
+		return getBufferedImage(path, imgIdx);
 	}
 
-	private static BufferedImage getBufferedImage(final String path, final int imgIdx, final CerberusConfig.InfoBoxComponentSize size)
+//	private static BufferedImage getBufferedImage(final String path, final int imgIdx, final CerberusConfig.InfoBoxComponentSize size)
+	private static BufferedImage getBufferedImage(final String path, final int imgIdx)
 	{
 		final BufferedImage img = ImageUtil.loadImageResource(CerberusPlugin.class, path);
 
-		final int resize = (int) (size.getSize() / RESIZE_FACTOR);
+	//	Removed the info box size config because medium and large are just ridiculously oversized anyways
+	//	final int resize = (int) (size.getSize() / RESIZE_FACTOR);
+		final int resize = (int) (40 / RESIZE_FACTOR);
 
+		if (images[0][imgIdx] == null)
+		{
+			images[0][imgIdx] = ImageUtil.resizeImage(img, resize, resize);
+		}
+		return images[0][imgIdx];
+		/*
+
+
+		Removed the info box size config because medium and large are just ridiculously oversized anyways
 		switch (size)
 		{
 			default:
@@ -131,5 +150,6 @@ public final class ImageManager
 				}
 				return images[2][imgIdx];
 		}
+		*/
 	}
 }

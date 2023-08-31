@@ -87,6 +87,8 @@ public final class Utility
 		return exactHealth;
 	}
 
+	/*
+
 	public static Font getFontFromInfoboxComponentSize(final CerberusConfig.InfoBoxComponentSize size)
 	{
 		final Font font;
@@ -105,6 +107,8 @@ public final class Utility
 
 		return font;
 	}
+
+	 */
 
 	public static Color getColorFromPhase(final Phase phase)
 	{

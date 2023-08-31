@@ -39,7 +39,7 @@ public interface CerberusConfig extends Config
 {
 	// Sections
 	@ConfigSection(
-			name = "<html>Cerberus Helper<br>Version 1.3.0</html>",
+			name = "<html>Cerberus Helper<br>Version 2.0.0</html>",
 			description = "",
 			position = -1,
 			closedByDefault = true
@@ -164,6 +164,8 @@ public interface CerberusConfig extends Config
 		return 4;
 	}
 
+	/*
+
 	@ConfigItem(
 		keyName = "reverseUpcomingAttacks",
 		name = "Reverse order",
@@ -175,6 +177,8 @@ public interface CerberusConfig extends Config
 	{
 		return false;
 	}
+
+	 */
 
 	@ConfigItem(
 		keyName = "showUpcomingAttackNumber",
@@ -188,6 +192,8 @@ public interface CerberusConfig extends Config
 	{
 		return false;
 	}
+
+	/*
 
 	@ConfigItem(
 		keyName = "upcomingAttacksOrientation",
@@ -212,6 +218,8 @@ public interface CerberusConfig extends Config
 	{
 		return InfoBoxComponentSize.SMALL;
 	}
+
+	*/
 
 	// Guitar Hero Mode Section
 
@@ -338,6 +346,8 @@ public interface CerberusConfig extends Config
 
 	// Constants
 
+	/*
+
 	@Getter
 	@RequiredArgsConstructor
 	enum InfoBoxOrientation
@@ -370,6 +380,8 @@ public interface CerberusConfig extends Config
 			return name;
 		}
 	}
+
+	*/
 
 	@Getter
 	@RequiredArgsConstructor

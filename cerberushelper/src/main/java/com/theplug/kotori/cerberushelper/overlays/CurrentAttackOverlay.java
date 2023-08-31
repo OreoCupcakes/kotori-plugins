@@ -47,6 +47,7 @@ import com.theplug.kotori.cerberushelper.util.InfoBoxComponent;
 import com.theplug.kotori.cerberushelper.util.Utility;
 import net.runelite.api.Client;
 import net.runelite.api.Prayer;
+import net.runelite.client.ui.FontManager;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
@@ -120,24 +121,29 @@ public final class CurrentAttackOverlay extends Overlay
 			return null;
 		}
 
-		final CerberusConfig.InfoBoxComponentSize infoBoxComponentSize = config.infoBoxComponentSize();
+	//	final CerberusConfig.InfoBoxComponentSize infoBoxComponentSize = config.infoBoxComponentSize();
 
-		final int size = infoBoxComponentSize.getSize();
+	//	final int size = infoBoxComponentSize.getSize();
+		final int size = 40;
 
 		infoBoxComponent.setPreferredSize(new Dimension(size, size));
 
-		final BufferedImage image = ImageManager.getCerberusBufferedImage(Phase.AUTO, prayer, infoBoxComponentSize);
+
+	//	Removed the info box size config because medium and large are just ridiculously oversized anyways
+	//	final BufferedImage image = ImageManager.getCerberusBufferedImage(Phase.AUTO, prayer, infoBoxComponentSize);
+		final BufferedImage image = ImageManager.getCerberusBufferedImage(Phase.AUTO, prayer);
 
 		infoBoxComponent.setImage(image);
 
 		final Color backgroundColor = client.isPrayerActive(prayer) ? COLOR_PRAYER_ENABLED : COLOR_PRAYER_DISABLED;
 
 		infoBoxComponent.setBackgroundColor(backgroundColor);
-		infoBoxComponent.setFont(Utility.getFontFromInfoboxComponentSize(infoBoxComponentSize));
+	//	infoBoxComponent.setFont(Utility.getFontFromInfoboxComponentSize(infoBoxComponentSize));
+		infoBoxComponent.setFont(FontManager.getRunescapeSmallFont());
 
 		if (config.showCurrentAttackTimer())
 		{
-			final double timeUntilAttack = Math.max((double) ((cerberusAttack.getTick() - plugin.getGameTick()) * 600 - (System.currentTimeMillis() - plugin.getLastTick())) / 1000, 0);
+			final double timeUntilAttack = Math.max((double) ((cerberusAttack.getTick() - plugin.getGameTick()) * 600L - (System.currentTimeMillis() - plugin.getLastTick())) / 1000, 0);
 
 			infoBoxComponent.setText(String.format("+%.1fs", timeUntilAttack));
 		}

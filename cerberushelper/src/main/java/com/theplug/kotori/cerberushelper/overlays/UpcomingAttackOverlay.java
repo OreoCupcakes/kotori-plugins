@@ -41,6 +41,7 @@ import com.theplug.kotori.cerberushelper.domain.Phase;
 import com.theplug.kotori.cerberushelper.util.ImageManager;
 import com.theplug.kotori.cerberushelper.util.InfoBoxComponent;
 import com.theplug.kotori.cerberushelper.util.Utility;
+import net.runelite.client.ui.FontManager;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
@@ -88,22 +89,28 @@ public final class UpcomingAttackOverlay extends Overlay
 		// Remove upcoming attack infobox children
 		PANEL_COMPONENT.getChildren().clear();
 
-		final CerberusConfig.InfoBoxComponentSize infoBoxComponentSize = config.infoBoxComponentSize();
+	//	Removed the info box size config because medium and large are just ridiculously oversized anyways
+	//	final CerberusConfig.InfoBoxComponentSize infoBoxComponentSize = config.infoBoxComponentSize();
 
 		// Set size from config
-		final int size = infoBoxComponentSize.getSize();
+		final int size = 40;
 		final Dimension dimension = new Dimension(size, size);
 		PANEL_COMPONENT.setPreferredSize(dimension);
 
 		// Set orientation from config
-		final ComponentOrientation orientation = config.upcomingAttacksOrientation().getOrientation();
-		PANEL_COMPONENT.setOrientation(orientation);
+	//	Remove the orientation config due to it creating a config loading race condition on some machines
+	//	final ComponentOrientation orientation = config.upcomingAttacksOrientation().getOrientation();
+		PANEL_COMPONENT.setOrientation(ComponentOrientation.VERTICAL);
 
-		final boolean horizontal = orientation == ComponentOrientation.HORIZONTAL;
-		final boolean reverse = config.reverseUpcomingAttacks();
+	//	Remove the orientation config due to it creating a config loading race condition on some machines
+	//	final boolean horizontal = orientation == ComponentOrientation.HORIZONTAL;
+	//	final boolean reverse = config.reverseUpcomingAttacks();
 
 		// Set gap between infobox children
-		final Point gap = new Point(horizontal ? GAP_SIZE : 0, horizontal ? 0 : GAP_SIZE);
+
+	//	Remove the orientation config due to it creating a config loading race condition on some machines
+	//	final Point gap = new Point(horizontal ? GAP_SIZE : 0, horizontal ? 0 : GAP_SIZE);
+		final Point gap = new Point(0, GAP_SIZE);
 		PANEL_COMPONENT.setGap(gap);
 
 		final int attacksShown = config.amountOfAttacksShown();
@@ -112,6 +119,8 @@ public final class UpcomingAttackOverlay extends Overlay
 		{
 			final int attack;
 
+		//	Remove the orientation config due to it creating a config loading race condition on some machines
+		/*
 			if (reverse ^ !horizontal)
 			{
 				attack = attacksShown - i;
@@ -121,6 +130,9 @@ public final class UpcomingAttackOverlay extends Overlay
 				attack = i + 1;
 			}
 
+		 */
+			attack = attacksShown - i;
+
 //			if (attack == 1)
 //			{
 //				renderOutlineBorder(graphics2D, size, horizontal, reverse, gap, attacksShown);
@@ -129,7 +141,10 @@ public final class UpcomingAttackOverlay extends Overlay
 			// Get the image for the infobox
 			final int cerberusHp = cerberus.getHp();
 			final Phase phase = cerberus.getNextAttackPhase(attack, cerberusHp);
-			final BufferedImage image = ImageManager.getCerberusBufferedImage(phase, plugin.getDefaultPrayer(), infoBoxComponentSize);
+
+		//	Removed the info box size config because medium and large are just ridiculously oversized anyways
+		//	final BufferedImage image = ImageManager.getCerberusBufferedImage(phase, plugin.getDefaultPrayer(), infoBoxComponentSize);
+			final BufferedImage image = ImageManager.getCerberusBufferedImage(phase, plugin.getDefaultPrayer());
 
 			if (image == null)
 			{
@@ -138,7 +153,8 @@ public final class UpcomingAttackOverlay extends Overlay
 
 			// Create infobox
 			final InfoBoxComponent infoBoxComponent = new InfoBoxComponent();
-			infoBoxComponent.setFont(Utility.getFontFromInfoboxComponentSize(infoBoxComponentSize));
+		//	infoBoxComponent.setFont(Utility.getFontFromInfoboxComponentSize(infoBoxComponentSize));
+			infoBoxComponent.setFont(FontManager.getRunescapeSmallFont());
 			infoBoxComponent.setTextColor(Color.GREEN);
 			infoBoxComponent.setBackgroundColor(Utility.getColorFromPhase(phase));
 			infoBoxComponent.setPreferredSize(dimension);
@@ -149,11 +165,15 @@ public final class UpcomingAttackOverlay extends Overlay
 
 			if (!nextThresholdPhase.equals(phase))
 			{
+				/*
 				final String text = infoBoxComponentSize == CerberusConfig.InfoBoxComponentSize.SMALL
 					? nextThresholdPhase.name().substring(0, 1)
 					: infoBoxComponentSize == CerberusConfig.InfoBoxComponentSize.MEDIUM
 					? nextThresholdPhase.name().substring(0, 2)
 					: nextThresholdPhase.name();
+
+				 */
+				final String text = nextThresholdPhase.name().substring(0, 1);
 
 				infoBoxComponent.setText(String.format("%s +%d", text, cerberusHp % 200));
 			}
@@ -178,11 +198,11 @@ public final class UpcomingAttackOverlay extends Overlay
 
 		if (horizontalLayout && reverseLayout)
 		{
-			x += (size + gap.getX()) * (numberOfAttacks - 1);
+			x += (int) ((size + gap.getX()) * (numberOfAttacks - 1));
 		}
 		else if (!horizontalLayout && !reverseLayout)
 		{
-			y += (size + gap.getY()) * (numberOfAttacks - 1);
+			y += (int) ((size + gap.getY()) * (numberOfAttacks - 1));
 		}
 
 		final Rectangle rectangle = new Rectangle();
