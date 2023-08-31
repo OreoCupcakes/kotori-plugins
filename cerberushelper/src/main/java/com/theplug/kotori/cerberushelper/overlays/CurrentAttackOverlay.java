@@ -121,16 +121,10 @@ public final class CurrentAttackOverlay extends Overlay
 			return null;
 		}
 
-	//	final CerberusConfig.InfoBoxComponentSize infoBoxComponentSize = config.infoBoxComponentSize();
-
-	//	final int size = infoBoxComponentSize.getSize();
 		final int size = 40;
 
 		infoBoxComponent.setPreferredSize(new Dimension(size, size));
 
-
-	//	Removed the info box size config because medium and large are just ridiculously oversized anyways
-	//	final BufferedImage image = ImageManager.getCerberusBufferedImage(Phase.AUTO, prayer, infoBoxComponentSize);
 		final BufferedImage image = ImageManager.getCerberusBufferedImage(Phase.AUTO, prayer);
 
 		infoBoxComponent.setImage(image);
@@ -138,7 +132,6 @@ public final class CurrentAttackOverlay extends Overlay
 		final Color backgroundColor = client.isPrayerActive(prayer) ? COLOR_PRAYER_ENABLED : COLOR_PRAYER_DISABLED;
 
 		infoBoxComponent.setBackgroundColor(backgroundColor);
-	//	infoBoxComponent.setFont(Utility.getFontFromInfoboxComponentSize(infoBoxComponentSize));
 		infoBoxComponent.setFont(FontManager.getRunescapeSmallFont());
 
 		if (config.showCurrentAttackTimer())

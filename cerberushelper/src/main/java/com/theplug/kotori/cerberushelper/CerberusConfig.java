@@ -164,22 +164,6 @@ public interface CerberusConfig extends Config
 		return 4;
 	}
 
-	/*
-
-	@ConfigItem(
-		keyName = "reverseUpcomingAttacks",
-		name = "Reverse order",
-		description = "Reverse the order of the upcoming attacks.",
-		position = 2,
-		section = upcomingAttacksSection
-	)
-	default boolean reverseUpcomingAttacks()
-	{
-		return false;
-	}
-
-	 */
-
 	@ConfigItem(
 		keyName = "showUpcomingAttackNumber",
 		name = "Show attack number",
@@ -192,34 +176,6 @@ public interface CerberusConfig extends Config
 	{
 		return false;
 	}
-
-	/*
-
-	@ConfigItem(
-		keyName = "upcomingAttacksOrientation",
-		name = "Upcoming attacks orientation",
-		description = "Display upcoming attacks vertically or horizontally.",
-		position = 4,
-		section = upcomingAttacksSection
-	)
-	default InfoBoxOrientation upcomingAttacksOrientation()
-	{
-		return InfoBoxOrientation.VERTICAL;
-	}
-
-	@ConfigItem(
-		keyName = "infoBoxComponentSize",
-		name = "Info box size",
-		description = "Size of the upcoming attacks infoboxes.",
-		position = 5,
-		section = upcomingAttacksSection
-	)
-	default InfoBoxComponentSize infoBoxComponentSize()
-	{
-		return InfoBoxComponentSize.SMALL;
-	}
-
-	*/
 
 	// Guitar Hero Mode Section
 
@@ -345,44 +301,6 @@ public interface CerberusConfig extends Config
 	default int deathChargeHpPercentage() { return 66; }
 
 	// Constants
-
-	/*
-
-	@Getter
-	@RequiredArgsConstructor
-	enum InfoBoxOrientation
-	{
-		HORIZONTAL("Horizontal layout", ComponentOrientation.HORIZONTAL),
-		VERTICAL("Vertical layout", ComponentOrientation.VERTICAL);
-
-		private final String name;
-		private final ComponentOrientation orientation;
-
-		@Override
-		public String toString()
-		{
-			return name;
-		}
-	}
-
-	@Getter
-	@RequiredArgsConstructor
-	enum InfoBoxComponentSize
-	{
-		SMALL("Small boxes", 40), MEDIUM("Medium boxes", 60), LARGE("Large boxes", 80);
-
-		private final String name;
-		private final int size;
-
-		@Override
-		public String toString()
-		{
-			return name;
-		}
-	}
-
-	*/
-
 	@Getter
 	@RequiredArgsConstructor
 	enum OffensivePrayers

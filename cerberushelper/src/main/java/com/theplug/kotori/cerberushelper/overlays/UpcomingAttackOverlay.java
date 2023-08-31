@@ -89,8 +89,6 @@ public final class UpcomingAttackOverlay extends Overlay
 		// Remove upcoming attack infobox children
 		PANEL_COMPONENT.getChildren().clear();
 
-	//	Removed the info box size config because medium and large are just ridiculously oversized anyways
-	//	final CerberusConfig.InfoBoxComponentSize infoBoxComponentSize = config.infoBoxComponentSize();
 
 		// Set size from config
 		final int size = 40;
@@ -98,18 +96,9 @@ public final class UpcomingAttackOverlay extends Overlay
 		PANEL_COMPONENT.setPreferredSize(dimension);
 
 		// Set orientation from config
-	//	Remove the orientation config due to it creating a config loading race condition on some machines
-	//	final ComponentOrientation orientation = config.upcomingAttacksOrientation().getOrientation();
 		PANEL_COMPONENT.setOrientation(ComponentOrientation.VERTICAL);
 
-	//	Remove the orientation config due to it creating a config loading race condition on some machines
-	//	final boolean horizontal = orientation == ComponentOrientation.HORIZONTAL;
-	//	final boolean reverse = config.reverseUpcomingAttacks();
-
 		// Set gap between infobox children
-
-	//	Remove the orientation config due to it creating a config loading race condition on some machines
-	//	final Point gap = new Point(horizontal ? GAP_SIZE : 0, horizontal ? 0 : GAP_SIZE);
 		final Point gap = new Point(0, GAP_SIZE);
 		PANEL_COMPONENT.setGap(gap);
 
@@ -119,31 +108,17 @@ public final class UpcomingAttackOverlay extends Overlay
 		{
 			final int attack;
 
-		//	Remove the orientation config due to it creating a config loading race condition on some machines
-		/*
-			if (reverse ^ !horizontal)
-			{
-				attack = attacksShown - i;
-			}
-			else
-			{
-				attack = i + 1;
-			}
-
-		 */
 			attack = attacksShown - i;
 
-//			if (attack == 1)
-//			{
-//				renderOutlineBorder(graphics2D, size, horizontal, reverse, gap, attacksShown);
-//			}
+			if (attack == 1)
+			{
+				renderOutlineBorder(graphics2D, size, gap, attacksShown);
+			}
 
 			// Get the image for the infobox
 			final int cerberusHp = cerberus.getHp();
 			final Phase phase = cerberus.getNextAttackPhase(attack, cerberusHp);
 
-		//	Removed the info box size config because medium and large are just ridiculously oversized anyways
-		//	final BufferedImage image = ImageManager.getCerberusBufferedImage(phase, plugin.getDefaultPrayer(), infoBoxComponentSize);
 			final BufferedImage image = ImageManager.getCerberusBufferedImage(phase, plugin.getDefaultPrayer());
 
 			if (image == null)
@@ -153,7 +128,6 @@ public final class UpcomingAttackOverlay extends Overlay
 
 			// Create infobox
 			final InfoBoxComponent infoBoxComponent = new InfoBoxComponent();
-		//	infoBoxComponent.setFont(Utility.getFontFromInfoboxComponentSize(infoBoxComponentSize));
 			infoBoxComponent.setFont(FontManager.getRunescapeSmallFont());
 			infoBoxComponent.setTextColor(Color.GREEN);
 			infoBoxComponent.setBackgroundColor(Utility.getColorFromPhase(phase));
@@ -165,14 +139,6 @@ public final class UpcomingAttackOverlay extends Overlay
 
 			if (!nextThresholdPhase.equals(phase))
 			{
-				/*
-				final String text = infoBoxComponentSize == CerberusConfig.InfoBoxComponentSize.SMALL
-					? nextThresholdPhase.name().substring(0, 1)
-					: infoBoxComponentSize == CerberusConfig.InfoBoxComponentSize.MEDIUM
-					? nextThresholdPhase.name().substring(0, 2)
-					: nextThresholdPhase.name();
-
-				 */
 				final String text = nextThresholdPhase.name().substring(0, 1);
 
 				infoBoxComponent.setText(String.format("%s +%d", text, cerberusHp % 200));
@@ -191,19 +157,12 @@ public final class UpcomingAttackOverlay extends Overlay
 		return PANEL_COMPONENT.render(graphics2D);
 	}
 
-	private void renderOutlineBorder(final Graphics2D graphics2D, final int size, final boolean horizontalLayout, final boolean reverseLayout, final Point gap, final int numberOfAttacks)
+	private void renderOutlineBorder(final Graphics2D graphics2D, final int size, final Point gap, final int numberOfAttacks)
 	{
 		int x = -1;
 		int y = -1;
 
-		if (horizontalLayout && reverseLayout)
-		{
-			x += (int) ((size + gap.getX()) * (numberOfAttacks - 1));
-		}
-		else if (!horizontalLayout && !reverseLayout)
-		{
-			y += (int) ((size + gap.getY()) * (numberOfAttacks - 1));
-		}
+		y += (int) ((size + gap.getY()) * (numberOfAttacks - 1));
 
 		final Rectangle rectangle = new Rectangle();
 
