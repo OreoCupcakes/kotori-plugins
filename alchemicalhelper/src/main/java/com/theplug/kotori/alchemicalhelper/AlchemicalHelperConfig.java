@@ -37,7 +37,7 @@ public interface AlchemicalHelperConfig extends Config
 	// Sections
 
 	@ConfigSection(
-			name = "<html>Alchemical Hydra Helper<br>Version 2.0.0</html>",
+			name = "<html>Alchemical Helper<br>Version 2.0.0</html>",
 			description = "",
 			position = -1,
 			closedByDefault = true

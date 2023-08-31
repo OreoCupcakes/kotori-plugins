@@ -355,6 +355,11 @@ public class AlchemicalHelperPlugin extends Plugin
 			//Keep track of flame special animations, 3 animations means its casting the chasing flame
 			if (currentAnimation == HydraPhase.FLAME.getSpecialAnimationId())
 			{
+				//Reset it back to 0, in case flame skip got overridden, the next time it sees the first of three flame animations from the special
+				if (flameSpecialAnimations == 3)
+				{
+					flameSpecialAnimations = 0;
+				}
 				flameSpecialAnimations++;
 			}
 			//Reset lightning skip variables when it casts the animation
@@ -474,7 +479,8 @@ public class AlchemicalHelperPlugin extends Plugin
 		{
 			if (phase == HydraPhase.FLAME)
 			{
-				if (flameSpecialAnimations == 0)
+				//Set the next special attack after the whole flame special is done animating
+				if (flameSpecialAnimations == 3)
 				{
 					hydra.setNextSpecial();
 				}
