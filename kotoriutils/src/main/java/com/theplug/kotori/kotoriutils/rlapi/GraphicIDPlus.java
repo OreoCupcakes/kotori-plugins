@@ -123,6 +123,13 @@ public final class GraphicIDPlus
     public static final int HUNLLEF_CORRUPTED_RANGE_ATTACK = 1712;
     public static final int HUNLLEF_PRAYER_ATTACK = 1713;
     public static final int HUNLLEF_CORRUPTED_PRAYER_ATTACK = 1714;
+
+    public static final int MOVE_ROCK = 2210;
+    public static final int KEPHRI_BOMB = 2266;
+    public static final int KAMIKAZE_BUG = 2147;
+    public static final int ZEBAK_JUG = 2173;
+    public static final int ZEBAK_SPREAD = 2194;
+    public static final int WARDEN_P2_FLAME = 2225;
     
     public static final int PORAZDIR_ENERGY_BALL = 1514;
 }

@@ -63,27 +63,27 @@ public class InventoryInteractions
 		}
 		return -1;
 	}
-	
+
 	public static boolean equipItems(int[] itemIds, int numEquips)
 	{
 		if (itemIds == null)
 		{
 			return true;
 		}
-		
+
 		int numItemEquippedAtOnce = 0;
 		Widget inventoryWidget = client.getWidget(WidgetInfo.INVENTORY.getId());
 		if (inventoryWidget == null)
 		{
 			return true;
 		}
-		
+
 		Widget[] itemWidgets = inventoryWidget.getChildren();
 		if (itemWidgets == null)
 		{
 			return true;
 		}
-		
+
 		for (Widget itemWidget : itemWidgets)
 		{
 			//Item slot number
@@ -94,48 +94,35 @@ public class InventoryInteractions
 			{
 				continue;
 			}
-			boolean canWield = Arrays.asList(menuActions).contains("Wield");
-			boolean canWear = Arrays.asList(menuActions).contains("Wear");
-			boolean canEquip = Arrays.asList(menuActions).contains("Equip");
+			List<String> menuEntries = Arrays.asList(menuActions);
+			boolean canWield = menuEntries.contains("Wield");
+			boolean canWear = menuEntries.contains("Wear");
+			boolean canEquip = menuEntries.contains("Equip");
 			//Dynamically gets the index of the Wear or Wield action for the invoke actions.
 			//You add 1 to the index of the actions cuz the returned index is always 1 less than the required action.
 			int index = 1;
-			
+
 			if (canWield)
 			{
-				index += Arrays.asList(menuActions).lastIndexOf("Wield");
+				index += menuEntries.lastIndexOf("Wield");
 			}
 			else if (canWear)
 			{
-				index += Arrays.asList(menuActions).lastIndexOf("Wear");
+				index += menuEntries.lastIndexOf("Wear");
 			}
 			else if (canEquip)
 			{
-				index += Arrays.asList(menuActions).lastIndexOf("Equip");
+				index += menuEntries.lastIndexOf("Equip");
 			}
 			else
 			{
 				continue;
 			}
-			
+
 			for (int itemId : itemIds)
 			{
 				if (itemWidget.getItemId() == itemId)
 				{
-					/*
-					Manually edge cases
-					switch (itemId)
-					{
-						case 21760: //Kharedst's memoirs
-						case 25818: //Book of the dead
-							ReflectionLibrary.invokeMenuAction(slot, WidgetInfo.INVENTORY.getId(), MenuAction.CC_OP.getId(), 2, itemId);
-							break;
-						default:
-							ReflectionLibrary.invokeMenuAction(slot, WidgetInfo.INVENTORY.getId(), MenuAction.CC_OP.getId(), 3, itemId);
-							break;
-					}
-					*/
-					
 					ReflectionLibrary.invokeMenuAction(slot, WidgetInfo.INVENTORY.getId(), MenuAction.CC_OP.getId(), index, itemId);
 					numItemEquippedAtOnce++;
 					if (numItemEquippedAtOnce >= numEquips)
@@ -145,7 +132,7 @@ public class InventoryInteractions
 				}
 			}
 		}
-		
+
 		//Return true because it went through the entire inventory once
 		return true;
 	}

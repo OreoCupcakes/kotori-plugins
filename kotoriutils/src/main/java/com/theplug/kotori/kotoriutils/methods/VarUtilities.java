@@ -7,6 +7,9 @@ import net.runelite.api.VarPlayer;
 import net.runelite.api.Varbits;
 import net.runelite.client.RuneLite;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class VarUtilities
 {
 	private static final Client client = RuneLite.getInjector().getInstance(Client.class);
