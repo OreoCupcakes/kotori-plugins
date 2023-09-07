@@ -68,7 +68,7 @@ public class PrayerOverlay extends Overlay
 	{
 		hydra = plugin.getHydra();
 
-		if (hydra == null)
+		if (!config.showPrayerOverlay() || hydra == null || config.hidePrayerOnSpecial() && plugin.isSpecialAttack())
 		{
 			return null;
 		}

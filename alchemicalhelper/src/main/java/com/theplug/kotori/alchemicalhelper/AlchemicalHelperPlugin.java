@@ -36,10 +36,7 @@ import com.theplug.kotori.alchemicalhelper.overlay.AttackOverlay;
 import com.theplug.kotori.alchemicalhelper.overlay.SceneOverlay;
 import com.theplug.kotori.kotoriutils.KotoriUtils;
 import com.theplug.kotori.kotoriutils.ReflectionLibrary;
-import com.theplug.kotori.kotoriutils.methods.InventoryInteractions;
-import com.theplug.kotori.kotoriutils.methods.PrayerInteractions;
-import com.theplug.kotori.kotoriutils.methods.SpellInteractions;
-import com.theplug.kotori.kotoriutils.methods.VarUtilities;
+import com.theplug.kotori.kotoriutils.methods.*;
 import lombok.Getter;
 import net.runelite.api.*;
 import net.runelite.api.coords.LocalPoint;
@@ -161,6 +158,7 @@ public class AlchemicalHelperPlugin extends Plugin
 	private boolean allPrayersDeactived;
 	private WorldPoint poisonSafeTile = null;
 	private boolean ranFromPoisonOnce;
+	private int timeSincePoisonDodge = 0;
 	private boolean performAttackOnHydra;
 	private boolean performAttackAfterDrink;
 	private int lightningSkipState = 0;
@@ -227,6 +225,7 @@ public class AlchemicalHelperPlugin extends Plugin
 		lightningSkipState = 0;
 		flameSkipState = 0;
 		flameSpecialAnimations = 0;
+		timeSincePoisonDodge = 0;
 		lastActivatedProtectionPrayer = null;
 		poisonSafeTile = null;
 	}
@@ -334,10 +333,10 @@ public class AlchemicalHelperPlugin extends Plugin
 
 		//Get the current animation that hydra is playing.
 		//onClientTick is checks faster than onGameTick
-		getCurrentHydraAnimation();
+		onAnimationChanged();
 	}
 
-	private void getCurrentHydraAnimation()
+	private void onAnimationChanged()
 	{
 		if (hydra == null)
 		{
@@ -347,28 +346,109 @@ public class AlchemicalHelperPlugin extends Plugin
 		currentAnimation = ReflectionLibrary.getNpcAnimationId(hydra.getNpc());
 
 		//Emulating onAnimationChanged because of RL mixin's blocking Hydra animations.
-		if (lastUniqueAnimation != currentAnimation)
+		if (lastUniqueAnimation == currentAnimation)
 		{
-			lastUniqueAnimation = currentAnimation;
-			changeHydraPhase();
+			return;
+		}
 
-			//Keep track of flame special animations, 3 animations means its casting the chasing flame
-			if (currentAnimation == HydraPhase.FLAME.getSpecialAnimationId())
+		lastUniqueAnimation = currentAnimation;
+
+		final HydraPhase phase = hydra.getPhase();
+
+		//Handle Phase Changes
+		if ((lastUniqueAnimation == phase.getDeathAnimation2() && phase != HydraPhase.FLAME)
+				|| (lastUniqueAnimation == phase.getDeathAnimation1() && phase == HydraPhase.FLAME))
+		{
+			switch (phase)
 			{
-				//Reset it back to 0, in case flame skip got overridden, the next time it sees the first of three flame animations from the special
-				if (flameSpecialAnimations == 3)
-				{
+				case POISON:
+					hydra.changePhase(HydraPhase.LIGHTNING);
+					poisonSafeTile = null;
+					break;
+				case LIGHTNING:
+					hydra.changePhase(HydraPhase.FLAME);
+					lightningSkipState = 0;
+					break;
+				case FLAME:
+					hydra.changePhase(HydraPhase.ENRAGED);
+					flameSkipState = 0;
+					break;
+				case ENRAGED:
+					// NpcDespawned event does not fire for Hydra in between kills; must use death animation.
+					hydra = null;
+
+					poisonProjectiles.clear();
+					flameObjects.clear();
+					poisonObjects.clear();
+					lightningObjects.clear();
+					dangerousTiles.clear();
+					currentAnimation = -1;
+					lastUniqueAnimation = -1;
+					lightningSkipState = 0;
+					flameSkipState = 0;
 					flameSpecialAnimations = 0;
-				}
-				flameSpecialAnimations++;
+					timeSincePoisonDodge = 0;
+					performAttackOnHydra = false;
+					performAttackAfterDrink = false;
+					ranFromPoisonOnce = false;
+					inLightningSafeSpot = false;
+					lastActivatedProtectionPrayer = null;
+					offensivePrayerActivated = false;
+					poisonSafeTile = null;
+					break;
 			}
-			//Reset lightning skip variables when it casts the animation
-			if (currentAnimation == HydraPhase.LIGHTNING.getSpecialAnimationId())
+
+			return;
+		}
+		//Handle Special Attack Animations
+		else if (lastUniqueAnimation == phase.getSpecialAnimationId() && phase.getSpecialAnimationId() != 0)
+		{
+			switch (phase)
 			{
-				lightningSkipState = 0;
-				inLightningSafeSpot = false;
+				case FLAME:
+					//Keep track of flame special animations, 3 animations means its casting the chasing flame
+					//Set the next special attack after the whole flame special is done animating
+					//Reset it back to 0, in case flame skip got overridden, the next time it sees the first of three flame animations from the special
+					if (flameSpecialAnimations == 3)
+					{
+						hydra.setNextSpecial();
+						flameSpecialAnimations = 0;
+					}
+					flameSpecialAnimations++;
+					break;
+				case LIGHTNING:
+					//Reset lightning skip variables when it casts the animation
+					lightningSkipState = 0;
+					inLightningSafeSpot = false;
+					break;
+				default:
+					hydra.setNextSpecial();
+					break;
 			}
 		}
+
+		if (!poisonProjectiles.isEmpty())
+		{
+			poisonProjectiles.values().removeIf(p -> p.getEndCycle() < client.getGameCycle());
+		}
+	}
+
+	public boolean isSpecialAttack()
+	{
+		final HydraPhase phase = hydra.getPhase();
+
+		switch (phase)
+		{
+			case FLAME:
+				final NPC npc = hydra.getNpc();
+				return hydra.getNextSpecialRelative() == 0 || (npc != null && npc.getInteracting() == null);
+			case POISON:
+			case LIGHTNING:
+			case ENRAGED:
+				return hydra.getNextSpecialRelative() == 0;
+		}
+
+		return false;
 	}
 
 	private void updateVentTicks()
@@ -420,80 +500,6 @@ public class AlchemicalHelperPlugin extends Plugin
 				fountainTicks = 11;
 			}
 			allPrayersDeactived = false;
-		}
-	}
-
-	private void changeHydraPhase()
-	{
-		if (hydra == null)
-		{
-			return;
-		}
-
-		final HydraPhase phase = hydra.getPhase();
-
-		if ((lastUniqueAnimation == phase.getDeathAnimation2() && phase != HydraPhase.FLAME)
-			|| (lastUniqueAnimation == phase.getDeathAnimation1() && phase == HydraPhase.FLAME))
-		{
-			switch (phase)
-			{
-				case POISON:
-					hydra.changePhase(HydraPhase.LIGHTNING);
-					poisonSafeTile = null;
-					break;
-				case LIGHTNING:
-					hydra.changePhase(HydraPhase.FLAME);
-					lightningSkipState = 0;
-					break;
-				case FLAME:
-					hydra.changePhase(HydraPhase.ENRAGED);
-					flameSkipState = 0;
-					break;
-				case ENRAGED:
-					// NpcDespawned event does not fire for Hydra in between kills; must use death animation.
-					hydra = null;
-
-					poisonProjectiles.clear();
-					flameObjects.clear();
-					poisonObjects.clear();
-					lightningObjects.clear();
-					dangerousTiles.clear();
-					currentAnimation = -1;
-					lastUniqueAnimation = -1;
-					lightningSkipState = 0;
-					flameSkipState = 0;
-					flameSpecialAnimations = 0;
-					performAttackOnHydra = false;
-					performAttackAfterDrink = false;
-					ranFromPoisonOnce = false;
-					inLightningSafeSpot = false;
-					lastActivatedProtectionPrayer = null;
-					offensivePrayerActivated = false;
-					poisonSafeTile = null;
-					break;
-			}
-
-			return;
-		}
-		else if (lastUniqueAnimation == phase.getSpecialAnimationId() && phase.getSpecialAnimationId() != 0)
-		{
-			if (phase == HydraPhase.FLAME)
-			{
-				//Set the next special attack after the whole flame special is done animating
-				if (flameSpecialAnimations == 3)
-				{
-					hydra.setNextSpecial();
-				}
-			}
-			else
-			{
-				hydra.setNextSpecial();
-			}
-		}
-
-		if (!poisonProjectiles.isEmpty())
-		{
-			poisonProjectiles.values().removeIf(p -> p.getEndCycle() < client.getGameCycle());
 		}
 	}
 	
@@ -620,7 +626,22 @@ public class AlchemicalHelperPlugin extends Plugin
 					{
 						if (!ranFromPoisonOnce)
 						{
-							poisonSafeTile = HandlePoisonSpecial.findNearbySafeTile(client, this, config);
+							//Build the set of dangerousTiles consisting of flame, poison splash, and hydra tiles
+							for (GraphicsObject flame : flameObjects)
+							{
+								dangerousTiles.add(WorldPoint.fromLocal(client, flame.getLocation()));
+							}
+							for (Map.Entry<LocalPoint, Projectile> poison : poisonProjectiles.entrySet())
+							{
+								WorldPoint poisonLocalWorld = WorldPoint.fromLocal(client, poison.getKey());
+								WorldArea splashArea = new WorldArea(poisonLocalWorld.getX() - 1, poisonLocalWorld.getY() - 1, 3, 3, poisonLocalWorld.getPlane());
+								dangerousTiles.addAll(splashArea.toWorldPointList());
+							}
+                            assert hydra.getNpc() != null;
+                            dangerousTiles.add(hydra.getNpc().getWorldArea().toWorldPoint());
+
+							poisonSafeTile = BreadthFirstSearch.dodgeAoeAttack(client, dangerousTiles, hydra.getNpc(),
+									VarUtilities.getPlayerAttackStyle() == 0, config.favorMeleeDistanceDuringPoison(), flameObjects.isEmpty());
 							ReflectionLibrary.sceneWalk(poisonSafeTile, false);
 							dangerousTiles.clear();
 							ranFromPoisonOnce = true;
@@ -636,19 +657,29 @@ public class AlchemicalHelperPlugin extends Plugin
 					}
 
 					//Attack hydra after running from the poison and reaching the safe tile.
-					if (performAttackOnHydra && playerLocation.equals(poisonSafeTile))
+					if (performAttackOnHydra)
 					{
+						timeSincePoisonDodge++;
 						/*
 							Don't attack if there are still flame walls present in enrage phase and the player is using melee.
 							This covers the edge case of there being no safe melee distance tiles due to the flame walls and poison splash
 						 */
-						if (VarUtilities.getPlayerAttackStyle() != 0 || flameObjects.isEmpty())
+						if (playerLocation.equals(poisonSafeTile))
 						{
-							SpellInteractions.attackNpc(hydra.getNpc());
+							if (VarUtilities.getPlayerAttackStyle() != 0 || flameObjects.isEmpty())
+							{
+								SpellInteractions.attackNpc(hydra.getNpc());
+								performAttackOnHydra = false;
+								poisonSafeTile = null;
+								timeSincePoisonDodge = 0;
+							}
 						}
-
-						performAttackOnHydra = false;
-						poisonSafeTile = null;
+						else if (timeSincePoisonDodge > 4)
+						{
+							poisonSafeTile = null;
+							performAttackOnHydra = false;
+							timeSincePoisonDodge = 0;
+						}
 					}
 				}
 				break;

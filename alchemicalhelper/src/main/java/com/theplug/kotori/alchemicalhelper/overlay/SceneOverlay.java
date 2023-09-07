@@ -25,13 +25,7 @@
  */
 package com.theplug.kotori.alchemicalhelper.overlay;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.Polygon;
-import java.awt.Shape;
-import java.awt.Stroke;
+import java.awt.*;
 import java.awt.geom.Area;
 import java.util.Collection;
 import java.util.Map;
@@ -48,6 +42,7 @@ import net.runelite.api.*;
 
 import static net.runelite.api.Perspective.getCanvasTileAreaPoly;
 
+import net.runelite.api.Point;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
@@ -140,7 +135,9 @@ public class SceneOverlay extends Overlay
 			}
 		}
 
-		drawOutlineAndFill(graphics2D, config.poisonOutlineColor(), config.poisonFillColor(), config.poisonStroke(), POISON_AREA);
+		Color color = config.poisonFillColor();
+
+		drawOutlineAndFill(graphics2D, new Color(color.getRed(), color.getGreen(), color.getBlue()), color, 2, POISON_AREA);
 	}
 
 	private void renderLightning(final Graphics2D graphics2D)
@@ -174,8 +171,10 @@ public class SceneOverlay extends Overlay
 				return;
 			}
 
-			drawOutlineAndFill(graphics2D, config.lightningOutlineColor(), config.lightningFillColor(),
-				config.lightningStroke(), polygon);
+			Color color = config.lightningFillColor();
+
+			drawOutlineAndFill(graphics2D, new Color(color.getRed(), color.getGreen(), color.getBlue()), color,
+				1, polygon);
 		}
 	}
 
@@ -314,12 +313,12 @@ public class SceneOverlay extends Overlay
 			OverlayUtil.renderTextLocation(
 				graphics2D,
 				text,
-				config.fountainTicksFontSize(),
-				config.fountainTicksFontStyle().getFont(),
+				16,
+				Font.BOLD,
 				config.fountainTicksFontColor(),
 				timeLoc,
-				config.fountainTicksFontShadow(),
-				config.fountainTicksFontZOffset() * -1
+				true,
+				0
 			);
 		}
 
@@ -354,12 +353,12 @@ public class SceneOverlay extends Overlay
 		OverlayUtil.renderTextLocation(
 			graphics2D,
 			text,
-			config.fontSize(),
-			config.fontStyle().getFont(),
+			16,
+			Font.BOLD,
 			config.fontColor(),
 			point,
-			config.fontShadow(),
-			config.fontZOffset() * -1
+			true,
+			0
 		);
 	}
 

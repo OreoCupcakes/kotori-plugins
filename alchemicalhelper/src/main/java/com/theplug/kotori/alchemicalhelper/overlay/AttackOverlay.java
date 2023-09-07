@@ -117,13 +117,18 @@ public class AttackOverlay extends Overlay
 			return null;
 		}
 
+		if (!config.renderAttackOverlay())
+		{
+			return null;
+		}
+
 		clearPanelComponent();
 
 		updateStunComponent();
 
 		updatePhaseSpecialComponent();
 
-		if (config.hidePrayerOnSpecial() && isSpecialAttack())
+		if (config.hidePrayerOnSpecial() && plugin.isSpecialAttack())
 		{
 			return panelComponent.render(graphics2D);
 		}
@@ -223,24 +228,6 @@ public class AttackOverlay extends Overlay
 		final Prayer prayer = hydra.getNextAttack().getPrayer();
 
 		OverlayUtil.renderPrayerOverlay(graphics2D, client, prayer, prayer == Prayer.PROTECT_FROM_MAGIC ? Color.CYAN : Color.GREEN);
-	}
-
-	private boolean isSpecialAttack()
-	{
-		final HydraPhase phase = hydra.getPhase();
-
-		switch (phase)
-		{
-			case FLAME:
-				final NPC npc = hydra.getNpc();
-				return hydra.getNextSpecialRelative() == 0 || (npc != null && npc.getInteracting() == null);
-			case POISON:
-			case LIGHTNING:
-			case ENRAGED:
-				return hydra.getNextSpecialRelative() == 0;
-		}
-
-		return false;
 	}
 
 	private BufferedImage createStunImage()

@@ -47,8 +47,7 @@ public interface AlchemicalHelperConfig extends Config
 	@ConfigSection(
 			name = "Overlay Settings",
 			description = "Overlay settings to help deal with the boss if you don't want any automation.",
-			position = 0,
-			closedByDefault = true
+			position = 0
 	)
 	String overlaySettings = "Overlay Settings";
 
@@ -83,38 +82,12 @@ public interface AlchemicalHelperConfig extends Config
 
 	
 	// General
-	@ConfigItem(
-			keyName = "hydraOverlayLine1",
-			name = "-------------------------------------",
-			description = "-------------------------------------",
-			position = 0,
-			section = overlaySettings
-	)
-	default Boolean hydraOverlayLine1() { return false; }
-	
-	@ConfigItem(
-			keyName = "hydraOverlayGeneralLine",
-			name = "General Overlay Settings",
-			description = "General overlay settings for Alchemical Hydra.",
-			position = 1,
-			section = overlaySettings
-	)
-	default Boolean hydraOverlayGeneralLine() { return false; }
-	
-	@ConfigItem(
-			keyName = "hydraOverlayLine2",
-			name = "-------------------------------------",
-			description = "-------------------------------------",
-			position = 2,
-			section = overlaySettings
-	)
-	default Boolean hydraOverlayLine2() { return false; }
 	
 	@ConfigItem(
 		keyName = "hydraImmunityOutline",
-		name = "Hydra immunity outline",
+		name = "Show Hydra Immunity",
 		description = "Overlay the hydra with a colored outline while it has immunity/not weakened.",
-		position = 3,
+		position = 0,
 		section = overlaySettings
 	)
 	default boolean hydraImmunityOutline()
@@ -124,9 +97,9 @@ public interface AlchemicalHelperConfig extends Config
 
 	@ConfigItem(
 		keyName = "fountainOutline",
-		name = "Fountain occupancy outline",
+		name = "Show Fountain Occupancy",
 		description = "Overlay fountains with a colored outline indicating if the hydra is standing on it.",
-		position = 4,
+		position = 1,
 		section = overlaySettings
 	)
 	default boolean fountainOutline()
@@ -136,9 +109,9 @@ public interface AlchemicalHelperConfig extends Config
 
 	@ConfigItem(
 		keyName = "fountainTicks",
-		name = "Fountain Ticks",
+		name = "Show Fountain Ticks",
 		description = "Overlay fountains with the ticks until the fountain activates.",
-		position = 5,
+		position = 2,
 		section = overlaySettings
 	)
 	default boolean fountainTicks()
@@ -146,52 +119,11 @@ public interface AlchemicalHelperConfig extends Config
 		return false;
 	}
 
-	@ConfigItem(
-		name = "Font style",
-		description = "Fountain ticks Font style can be bold, plain, or italicized.",
-		position = 6,
-		keyName = "fountainTicksFontStyle",
-		section = overlaySettings
-	)
-	default FontStyle fountainTicksFontStyle()
-	{
-		return FontStyle.BOLD;
-	}
-
-	@ConfigItem(
-		name = "Font shadow",
-		description = "Toggle fountain ticks font shadow.",
-		position = 7,
-		keyName = "fountainTicksFontShadow",
-		section = overlaySettings
-	)
-	default boolean fountainTicksFontShadow()
-	{
-		return true;
-	}
-
-	@Range(
-		min = 12,
-		max = 64
-	)
-	@ConfigItem(
-		name = "Font size",
-		description = "Adjust fountain ticks font size.",
-		position = 8,
-		keyName = "fountainTicksFontSize",
-		section = overlaySettings
-	)
-	@Units(Units.PIXELS)
-	default int fountainTicksFontSize()
-	{
-		return 16;
-	}
-
 	@Alpha
 	@ConfigItem(
-		name = "Font color",
+		name = "Fountain Text Color",
 		description = "Adjust fountain ticks font color.",
-		position = 9,
+		position = 3,
 		keyName = "fountainTicksFontColor",
 		section = overlaySettings
 	)
@@ -200,41 +132,11 @@ public interface AlchemicalHelperConfig extends Config
 		return new Color(255, 255, 255, 255);
 	}
 
-	@Range(
-		min = -100,
-		max = 100
-	)
-	@ConfigItem(
-		name = "Font zOffset",
-		description = "Adjust the fountain ticks  Z coordinate offset.",
-		position = 10,
-		keyName = "fountainTicksFontZOffset",
-		section = overlaySettings
-	)
-	@Units(Units.PIXELS)
-	default int fountainTicksFontZOffset()
-	{
-		return 0;
-	}
-
-	@ConfigItem(
-		keyName = "hidePrayerOnSpecial",
-		name = "Hide prayer on special attack",
-		description = "Hide prayer overlay during special attacks."
-			+ "<br>This can help indicate when to save prayer points.",
-		position = 11,
-		section = overlaySettings
-	)
-	default boolean hidePrayerOnSpecial()
-	{
-		return false;
-	}
-
 	@ConfigItem(
 		keyName = "showHpUntilPhaseChange",
-		name = "Show HP until phase change",
+		name = "Show HP Until Phase Change",
 		description = "Overlay hydra with hp remaining until next phase change.",
-		position = 12,
+		position = 4,
 		section = overlaySettings
 	)
 	default boolean showHpUntilPhaseChange()
@@ -242,52 +144,11 @@ public interface AlchemicalHelperConfig extends Config
 		return false;
 	}
 
-	@ConfigItem(
-		name = "Font style",
-		description = "Font style can be bold, plain, or italicized.",
-		position = 13,
-		keyName = "fontStyle",
-		section = overlaySettings
-	)
-	default FontStyle fontStyle()
-	{
-		return FontStyle.BOLD;
-	}
-
-	@ConfigItem(
-		name = "Font shadow",
-		description = "Toggle font shadow.",
-		position = 14,
-		keyName = "fontShadow",
-		section = overlaySettings
-	)
-	default boolean fontShadow()
-	{
-		return true;
-	}
-
-	@Range(
-		min = 12,
-		max = 64
-	)
-	@ConfigItem(
-		name = "Font size",
-		description = "Adjust font size.",
-		position = 15,
-		keyName = "fontSize",
-		section = overlaySettings
-	)
-	@Units(Units.PIXELS)
-	default int fontSize()
-	{
-		return 16;
-	}
-
 	@Alpha
 	@ConfigItem(
-		name = "Font color",
+		name = "HP Text Color",
 		description = "Adjust font color.",
-		position = 16,
+		position = 5,
 		keyName = "fontColor",
 		section = overlaySettings
 	)
@@ -296,57 +157,11 @@ public interface AlchemicalHelperConfig extends Config
 		return new Color(255, 255, 255, 255);
 	}
 
-	@Range(
-		min = -100,
-		max = 100
-	)
-	@ConfigItem(
-		name = "Font zOffset",
-		description = "Adjust the Z coordinate offset.",
-		position = 17,
-		keyName = "fontZOffset",
-		section = overlaySettings
-	)
-	@Units(Units.PIXELS)
-	default int fontZOffset()
-	{
-		return 0;
-	}
-	
-	
-	// Special Attacks
-	@ConfigItem(
-			name = "-------------------------------------",
-			description = "-------------------------------------",
-			position = 18,
-			keyName = "hydraOverlayLine3",
-			section = overlaySettings
-	)
-	default Boolean hydraOverlayLine3() { return false; }
-	
-	@ConfigItem(
-			name = "Special Attacks Overlay Settings",
-			description = "Overlay settings for Alchemical Hydra's special attacks.",
-			position = 19,
-			keyName = "hydraOverlaySpecialAttackLine",
-			section = overlaySettings
-	)
-	default Boolean hydraOverlaySpecialAttackLine() { return false; }
-	
-	@ConfigItem(
-			name = "-------------------------------------",
-			description = "-------------------------------------",
-			position = 20,
-			keyName = "hydraOverlayLine4",
-			section = overlaySettings
-	)
-	default Boolean hydraOverlayLine4() { return false; }
-	
 	@ConfigItem(
 		keyName = "lightningOutline",
-		name = "Lightning outline",
+		name = "Highlight Lightning",
 		description = "Overlay lightning tiles with a colored outline.",
-		position = 21,
+		position = 6,
 		section = overlaySettings
 	)
 	default boolean lightningOutline()
@@ -354,41 +169,11 @@ public interface AlchemicalHelperConfig extends Config
 		return false;
 	}
 
-	@Range(
-		min = 1,
-		max = 8
-	)
-	@ConfigItem(
-		name = "Outline width",
-		description = "Change the stroke width of the lightning tile outline.",
-		position = 22,
-		keyName = "lightningStroke",
-		section = overlaySettings
-	)
-	@Units(Units.PIXELS)
-	default int lightningStroke()
-	{
-		return 1;
-	}
-
 	@Alpha
 	@ConfigItem(
-		name = "Outline color",
-		description = "Change the tile outline color of lightning.",
-		position = 23,
-		keyName = "lightningOutlineColor",
-		section = overlaySettings
-	)
-	default Color lightningOutlineColor()
-	{
-		return Color.CYAN;
-	}
-
-	@Alpha
-	@ConfigItem(
-		name = "Outline fill color",
+		name = "Lightning Color",
 		description = "Change the tile fill color of lightning.",
-		position = 24,
+		position = 7,
 		keyName = "lightningFillColor",
 		section = overlaySettings
 	)
@@ -399,9 +184,9 @@ public interface AlchemicalHelperConfig extends Config
 
 	@ConfigItem(
 		keyName = "poisonOutline",
-		name = "Poison outline",
+		name = "Highlight Poison Area",
 		description = "Overlay poison tiles with a colored outline.",
-		position = 25,
+		position = 8,
 		section = overlaySettings
 	)
 	default boolean poisonOutline()
@@ -409,83 +194,37 @@ public interface AlchemicalHelperConfig extends Config
 		return false;
 	}
 
-	@Range(
-		min = 1,
-		max = 8
-	)
-	@ConfigItem(
-		name = "Outline width",
-		description = "Change the stroke width of the poison tile outline.",
-		position = 26,
-		keyName = "poisonStroke",
-		section = overlaySettings
-	)
-	@Units(Units.PIXELS)
-	default int poisonStroke()
-	{
-		return 1;
-	}
-
-	@Alpha
-	@ConfigItem(
-		keyName = "poisonOutlineColor",
-		name = "Outline color",
-		description = "Outline color of poison area tiles.",
-		position = 27,
-		section = overlaySettings
-	)
-	default Color poisonOutlineColor()
-	{
-		return Color.RED;
-	}
-
 	@Alpha
 	@ConfigItem(
 		keyName = "poisonFillColor",
-		name = "Outline fill color",
+		name = "Poison Color",
 		description = "Fill color of poison area tiles.",
-		position = 28,
+		position = 9,
 		section = overlaySettings
 	)
 	default Color poisonFillColor()
 	{
 		return new Color(255, 0, 0, 30);
 	}
-	
+
 	@ConfigItem(
-			keyName = "hydraOverlayLine5",
-			name = "-------------------------------------",
-			description = "-------------------------------------",
-			position = 29,
+			keyName = "renderAttackOverlay",
+			name = "Show Upcoming Attack Overlay",
+			description = "Display an infobox overlay showing the upcoming attacks.",
+			position = 10,
 			section = overlaySettings
 	)
-	default Boolean hydraOverlayLine5() { return false; }
-	
-	// Misc
-	@ConfigItem(
-			keyName = "hydraOverlayMiscLine",
-			name = "Misc. Overlay Settings",
-			description = "Miscellaneous overlay settings for Alchemical Hydra.",
-			position = 30,
-			section = overlaySettings
-	)
-	default Boolean hydraOverlayMiscLine() { return false; }
-	
-	@ConfigItem(
-			keyName = "hydraOverlayLine6",
-			name = "-------------------------------------",
-			description = "-------------------------------------",
-			position = 31,
-			section = overlaySettings
-	)
-	default Boolean hydraOverlayLine6() { return false; }
-	
+	default boolean renderAttackOverlay()
+	{
+		return false;
+	}
+
 	@Alpha
 	@ConfigItem(
 		keyName = "safeColor",
-		name = "Safe color",
+		name = "Safe Color",
 		description = "Color indicating there are at least two hydra attacks pending.",
-		position = 32,
+		position = 11,
 		section = overlaySettings
 	)
 	default Color safeColor()
@@ -496,9 +235,9 @@ public interface AlchemicalHelperConfig extends Config
 	@Alpha
 	@ConfigItem(
 		keyName = "warningColor",
-		name = "Warning color",
+		name = "Warning Color",
 		description = "Color indicating there is one hydra attack pending.",
-		position = 33,
+		position = 12,
 		section = overlaySettings
 	)
 	default Color warningColor()
@@ -509,17 +248,43 @@ public interface AlchemicalHelperConfig extends Config
 	@Alpha
 	@ConfigItem(
 		keyName = "dangerColor",
-		name = "Danger color",
+		name = "Danger Color",
 		description = "Color indiciating the hydra will change attacks.",
-		position = 34,
+		position = 13,
 		section = overlaySettings
 	)
 	default Color dangerColor()
 	{
 		return new Color(150, 0, 0, 150);
 	}
-	
-	
+
+	@ConfigItem(
+			keyName = "showPrayerOverlay",
+			name = "Show Prayer Overlay",
+			description = "Renders the prayer overlay over the prayer widgets.",
+			position = 14,
+			section = overlaySettings
+	)
+	default boolean showPrayerOverlay()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+			keyName = "hidePrayerOnSpecial",
+			name = "Hide Prayer Overlay On Spec",
+			description = "Hide prayer overlay during special attacks."
+					+ "<br>This can help indicate when to save prayer points.",
+			position = 15,
+			section = overlaySettings
+	)
+	default boolean hidePrayerOnSpecial()
+	{
+		return false;
+	}
+
+
+
 	// Automate Prayers
 	
 	@ConfigItem(
@@ -601,7 +366,7 @@ public interface AlchemicalHelperConfig extends Config
 	//Poison Phase Helper
 	@ConfigItem(
 			keyName = "goToSafeTilePoisonSpecial",
-			name = "Run To Safety During Special?",
+			name = "Dodge Poison Special?",
 			description = "<html>Enabling this option will cause you to automatically run to the nearest safe tile during the poison special attack.<br>" +
 					"The poison special attack occurs during the first and enraged phase.</html>",
 			position = 0,
@@ -611,7 +376,7 @@ public interface AlchemicalHelperConfig extends Config
 
 	@ConfigItem(
 			keyName = "favorMeleeDistancePoisonSpecial",
-			name = "Melee Only: Favor Melee Dist. Tile?",
+			name = "Melee Only: Favor Melee Dist.?",
 			description = "<html>Melee only. The plugin will check your combat style. Run To Safety During Special must be on.<br>" +
 					"If enabled, the algorithm will find the closest \"safe\" Melee Distance (Melee Dist.) tile from Hydra.<br>" +
 					"Depending on the poison layout, the chosen tile might be too far away resulting in you taking damage.</html>",
@@ -713,24 +478,6 @@ public interface AlchemicalHelperConfig extends Config
 
 
 	// Constants
-
-	@Getter
-	@AllArgsConstructor
-	enum FontStyle
-	{
-		BOLD("Bold", Font.BOLD),
-		ITALIC("Italic", Font.ITALIC),
-		PLAIN("Plain", Font.PLAIN);
-
-		private final String name;
-		private final int font;
-
-		@Override
-		public String toString()
-		{
-			return name;
-		}
-	}
 	
 	@Getter
 	@AllArgsConstructor
