@@ -28,11 +28,13 @@
 
 package com.theplug.kotori.cerberushelper;
 
+import com.theplug.kotori.kotoriutils.rlapi.WidgetInfoPlus;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.runelite.api.Prayer;
 import net.runelite.client.config.*;
-import net.runelite.client.ui.overlay.components.ComponentOrientation;
+
+import java.awt.*;
 
 @ConfigGroup("cerberus")
 public interface CerberusConfig extends Config
@@ -47,75 +49,41 @@ public interface CerberusConfig extends Config
 	String versionInfo = "Version";
 
 	@ConfigSection(
-		name = "General",
-		description = "",
+		name = "Overlay Settings",
+		description = "Various overlay settings",
 		position = 0
 	)
-	String generalSection = "Overlay";
+	String overlaySettings = "Overlay Settings";
 
 	@ConfigSection(
-		name = "Current Attack",
-		description = "",
-		position = 1
+			name = "Lava Helper",
+			description = "Automatic functions for the lava special attack.",
+			position = 1
 	)
-	String currentAttackSection = "Current Attack";
+	String lavaHelper = "Lava Helper";
 
 	@ConfigSection(
-		name = "Upcoming Attacks",
-		description = "",
-		position = 2
+			name = "Prayer Helper",
+			description = "Automatic functions to help with prayer.",
+			position = 2
 	)
-	String upcomingAttacksSection = "Upcoming Attacks";
+	String prayerHelper = "Prayer Helper";
 
 	@ConfigSection(
-		name = "Guitar Hero Mode",
-		description = "",
-		position = 3
+			name = "Spell Helper",
+			description = "Automatically cast certain spells during the fight.",
+			position = 3
 	)
-	String guitarHeroSection = "Guitar Hero Mode";
+	String spellHelper = "Spell Helper";
 
-	@ConfigSection(
-			name = "Auto",
-			description = "",
-			position = 4
-	)
-	String autoSection = "Auto";
 
-	// General Section
-
-	@ConfigItem(
-		keyName = "drawGhostTiles",
-		name = "Show ghost tiles",
-		description = "Overlay ghost tiles with respective colors and attack timers.",
-		position = 0,
-		section = generalSection
-	)
-	default boolean drawGhostTiles()
-	{
-		return false;
-	}
-
-	@ConfigItem(
-		keyName = "calculateAutoAttackPrayer",
-		name = "Calculate auto attack prayer",
-		description = "Calculate prayer for auto attacks based on your equipment defensive bonuses."
-			+ "<br>Default is Protect from Magic.",
-		position = 2,
-		section = generalSection
-	)
-	default boolean calculateAutoAttackPrayer()
-	{
-		return false;
-	}
-
-	// Current Attack Section
-
+	// Overlay Settings
 	@ConfigItem(
 		keyName = "showCurrentAttack",
-		name = "Show current attack",
+		name = "Show Current Attack",
 		description = "Overlay the current attack in a separate infobox.",
 		position = 0,
-		section = currentAttackSection
+		section = overlaySettings
 	)
 	default boolean showCurrentAttack()
 	{
@@ -124,24 +92,22 @@ public interface CerberusConfig extends Config
 
 	@ConfigItem(
 		keyName = "showCurrentAttackTimer",
-		name = "Show current attack timer",
+		name = "Current Attack Timer",
 		description = "Display a timer on the current attack infobox.",
 		position = 1,
-		section = currentAttackSection
+		section = overlaySettings
 	)
 	default boolean showCurrentAttackTimer()
 	{
 		return false;
 	}
 
-	// Upcoming Attacks Section
-
 	@ConfigItem(
 		keyName = "showUpcomingAttacks",
-		name = "Show upcoming attacks",
-		description = "Overlay upcoming attacks in stacked info boxes.",
-		position = 0,
-		section = upcomingAttacksSection
+		name = "Show Upcoming Attacks",
+		description = "Overlay upcoming attacks in vertically stacked info boxes.",
+		position = 2,
+		section = overlaySettings
 	)
 	default boolean showUpcomingAttacks()
 	{
@@ -154,10 +120,10 @@ public interface CerberusConfig extends Config
 	)
 	@ConfigItem(
 		keyName = "amountOfAttacksShown",
-		name = "# of attacks",
+		name = "Display Amount",
 		description = "Number of upcoming attacks to render.",
-		position = 1,
-		section = upcomingAttacksSection
+		position = 3,
+		section = overlaySettings
 	)
 	default int amountOfAttacksShown()
 	{
@@ -165,26 +131,99 @@ public interface CerberusConfig extends Config
 	}
 
 	@ConfigItem(
-		keyName = "showUpcomingAttackNumber",
-		name = "Show attack number",
-		description = "Display the attack pattern number on each upcoming attack." +
-			"<br>See http://pastebin.com/hWCvantS",
-		position = 3,
-		section = upcomingAttacksSection
+			keyName = "drawLavaTiles",
+			name = "Show Lava Tiles",
+			description = "Overlay the lava pool AoE splash tiles.",
+			position = 4,
+			section = overlaySettings
 	)
-	default boolean showUpcomingAttackNumber()
+	default boolean drawLavaTiles()
 	{
 		return false;
 	}
 
-	// Guitar Hero Mode Section
+	@Alpha
+	@ConfigItem(
+			keyName = "lavaFillColor",
+			name = "Lava Tile Color",
+			description = "Set the color for the lava pool overlay.",
+			position = 5,
+			section = overlaySettings
+	)
+	default Color lavaFillColor()
+	{
+		return new Color(255,200,0,150);
+	}
+
+	@ConfigItem(
+			keyName = "drawGhostTiles",
+			name = "Show Ghost Tiles",
+			description = "Overlay ghost tiles with respective colors and attack timers.",
+			position = 6,
+			section = overlaySettings
+	)
+	default boolean drawGhostTiles()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+			keyName = "showPrayerOverlay",
+			name = "Highlight Prayer Widget",
+			description = "Overlay the prayer widget of what to pray against.",
+			position = 7,
+			section = overlaySettings
+	)
+	default boolean showPrayerOverlay()
+	{
+		return false;
+	}
+
+	@Alpha
+	@ConfigItem(
+			keyName = "meleeOverlayColor",
+			name = "Melee Color",
+			description = "Set the color for the melee ghost tile and prayer overlay.",
+			position = 8,
+			section = overlaySettings
+	)
+	default Color meleeOverlayColor()
+	{
+		return new Color(255,0,0, 150);
+	}
+
+	@Alpha
+	@ConfigItem(
+			keyName = "rangedOverlayColor",
+			name = "Ranged Color",
+			description = "Set the color for the ranged ghost tile and prayer overlay.",
+			position = 9,
+			section = overlaySettings
+	)
+	default Color rangedOverlayColor()
+	{
+		return new Color(0,255,0, 150);
+	}
+
+	@Alpha
+	@ConfigItem(
+			keyName = "magicOverlayColor",
+			name = "Magic Color",
+			description = "Set the color for the magic ghost tile and prayer overlay.",
+			position = 10,
+			section = overlaySettings
+	)
+	default Color magicOverlayColor()
+	{
+		return new Color(0,255,255, 150);
+	}
 
 	@ConfigItem(
 		keyName = "guitarHeroMode",
-		name = "Guitar Hero mode",
+		name = "Guitar Hero Mode",
 		description = "Display descending boxes indicating the correct prayer for the current attack.",
-		position = 0,
-		section = guitarHeroSection
+		position = 11,
+		section = overlaySettings
 	)
 	default boolean guitarHeroMode()
 	{
@@ -197,31 +236,80 @@ public interface CerberusConfig extends Config
 	)
 	@ConfigItem(
 		keyName = "guitarHeroTicks",
-		name = "# of ticks",
-		description = "The number of ticks, before the upcoming current attack, to render.",
-		position = 1,
-		section = guitarHeroSection
+		name = "Ticks Before Render",
+		description = "The number of ticks, before the upcoming current attack, to render for guitar hero mode.",
+		position = 12,
+		section = overlaySettings
 	)
 	default int guitarHeroTicks()
 	{
 		return 4;
 	}
 
+
+
 	@ConfigItem(
-			keyName = "autoDefensivePrayers",
-			name = "Auto Defensive Prayers",
+			keyName = "dodgeLavaSpec",
+			name = "Dodge Lava Spec",
+			description = "Automatically run away from the lava special. Plugin will calculate the closest safe tile to run too." +
+					"<br>If you are using melee and are in melee distance when the special goes off, you won't be able to avoid taking some damage." +
+					"<br>The closer you are to Cerberus, the quicker the damage, from the lava, gets applied.",
+			position = 0,
+			section = lavaHelper
+	)
+	default boolean dodgeLavaSpec() { return false; }
+
+	@ConfigItem(
+			keyName = "dodgePreferMelee",
+			name = "Melee Only: Prefer Melee Dist.",
+			description = "Melee Only: The plugin will check your combat style. Dodge Lava Spec must be turned on." +
+					"<br>If enabled, the plugin will prefer running to a safe tile within melee distance (Melee Dist.) of Cerberus.",
+			position = 1,
+			section = lavaHelper
+	)
+	default boolean preferMeleeDistance() { return false; }
+
+	@ConfigItem(
+			keyName = "performAttackAfterLava",
+			name = "Attack After Lava Dodge",
+			description = "Dodge Lava Spec must be turned on. Automatically attack Cerberus after dodging the lava special.",
+			position = 2,
+			section = lavaHelper
+	)
+	default boolean performAttackAfterLava() { return false; }
+
+
+
+
+	@ConfigItem(
+			keyName = "autoProtectionPrayers",
+			name = "Auto Protection Prayers",
 			description = "Automatically pray against Cerberus' attacks.",
 			position = 0,
-			section = autoSection
+			section = prayerHelper
 	)
 	default boolean autoDefensivePrayers() { return false; }
+
+	@ConfigItem(
+			keyName = "overrideAutoAttackCalc",
+			name = "Protection Prayer",
+			description = "The preferred protection prayer to use for Cerberus's auto attacks." +
+					"<br>You cannot get full protection from Cerberus's auto attacks. It is random and cannot be predicted." +
+					"<br><b>Auto:</b> The plugin calculates the best prayer to use depending on your equipment stats." +
+					"<br><b>Magic:</b> Override the default automatic calculation and use Protect from Magic instead." +
+					"<br><b>Melee:</b> Override the default automatic calculation and use Protect from Melee instead." +
+					"<br><b>Missiles:</b> Override the default automatic calculation and use Protect from Missiles instead.",
+			position = 1,
+			section = prayerHelper
+	)
+	default ProtectionPrayers overrideAutoAttackCalc() { return ProtectionPrayers.AUTO; }
 
 	@ConfigItem(
 			keyName = "autoOffensivePrayers",
 			name = "Auto Offensive Prayers",
 			description = "Automatically offensive pray to fight Cerberus.",
-			position = 1,
-			section = autoSection
+			position = 2,
+			section = prayerHelper
 	)
 	default boolean autoOffensivePrayers() { return false; }
 
@@ -229,17 +317,17 @@ public interface CerberusConfig extends Config
 			keyName = "offensivePrayerChoice",
 			name = "Offensive Prayer",
 			description = "Which offensive prayer to use?",
-			position = 2,
-			section = autoSection
+			position = 3,
+			section = prayerHelper
 	)
 	default OffensivePrayers offensivePrayerChoice() { return OffensivePrayers.PIETY; }
-	
+
 	@ConfigItem(
 			keyName = "keepPreservePrayerOn",
-			name = "Keep Preserve Prayer On",
-			description = "Keep the Preserve prayer on after a kill?",
-			position = 3,
-			section = autoSection
+			name = "Turn/Keep Preserve Prayer On",
+			description = "Turn/keep the Preserve prayer on as long as you are in the arena.",
+			position = 4,
+			section = prayerHelper
 	)
 	default boolean keepPreservePrayerOn() { return false; }
 
@@ -248,8 +336,8 @@ public interface CerberusConfig extends Config
 			name = "Ghost Skip? No Offensive Prayer",
 			description = "Are you ghost skipping? Conserve prayer by not using an offensive<br>" +
 					"prayer until the 15th attack from Cerberus or when ghosts spawn.",
-			position = 4,
-			section = autoSection
+			position = 5,
+			section = prayerHelper
 	)
 	default boolean conservePrayerGhostSkip() { return false; }
 
@@ -260,8 +348,8 @@ public interface CerberusConfig extends Config
 					"<br>when below the threshold you set? This will only" +
 					"<br>drink prayer potions when the ghosts aren't spawned," +
 					"<br>before and after Ghost phase.",
-			position = 5,
-			section = autoSection
+			position = 6,
+			section = prayerHelper
 	)
 	default boolean drinkPrayerPotions() { return false; }
 
@@ -273,19 +361,30 @@ public interface CerberusConfig extends Config
 			keyName = "prayerPointsToDrinkAt",
 			name = "Drink At",
 			description = "Prayer point threshold to drink prayer potions.",
-			position = 6,
-			section = autoSection
+			position = 7,
+			section = prayerHelper
 	)
 	default int prayerPointsToDrinkAt() { return 60; }
+
+	@ConfigItem(
+			keyName = "performAttackAfterDrinkingPrayer",
+			name = "Attack After Drinking",
+			description = "Automatically attack Cerberus after drinking prayer doses and restoring your prayer above your selected threshold.",
+			position = 8,
+			section = prayerHelper
+	)
+	default boolean performAttackAfterDrinkingPrayer() { return false; }
+
+
 	
 	@ConfigItem(
 			keyName = "castDeathCharge",
 			name = "Autocast Death Charge",
 			description = "Autocast the spell Death Charge based on Cerberus' current HP percentage, indicated below, and if its off cooldown.",
-			position = 7,
-			section = autoSection
+			position = 0,
+			section = spellHelper
 	)
-	default boolean autocastDeathCharge() { return false; }
+	default boolean autoCastDeathCharge() { return false; }
 	
 	@Units(Units.PERCENT)
 	@Range(min = 0, max = 100)
@@ -295,10 +394,54 @@ public interface CerberusConfig extends Config
 			description = "The HP percentage threshold, of Cerberus, to autocast the Death Charge spell.<br>" +
 					"The default 66% is slightly under 400 HP, the ghost spawn threshold.<br>" +
 					"If it's below this threshold, Death Charge will be cast if it's not on cooldown.",
-			position = 8,
-			section = autoSection
+			position = 1,
+			section = spellHelper
 	)
 	default int deathChargeHpPercentage() { return 66; }
+
+	@ConfigItem(
+			keyName = "summonThrall",
+			name = "Autocast Thralls",
+			description = "Autocast one of the greater thrall spells.",
+			position = 2,
+			section = spellHelper
+	)
+	default boolean autoCastGreaterThrall() { return false; }
+
+	@ConfigItem(
+			keyName = "thrallType",
+			name = "Thrall Type",
+			description = "The thrall to summon.",
+			position = 3,
+			section = spellHelper
+	)
+	default Thrall thrallType() { return Thrall.GHOST; }
+
+	@ConfigItem(
+			keyName = "castDemonicOffering",
+			name = "Autocast Demonic Offering",
+			description = "Autocast demonic offering once you have three infernal ashes in your inventory.",
+			position = 4,
+			section = spellHelper
+	)
+	default boolean autoCastDemonicOffering() { return false; }
+
+	@Range(min = 1, max = 3)
+	@ConfigItem(
+			keyName = "demonicOfferingAmount",
+			name = "Ashes to Offer",
+			description = "How many ashes are needed before casting Demonic Offering?" +
+					"<br>The spell takes up to three ashes in exchange for XP and prayer points." +
+					"<br>Two prayer points are restored for each infernal ash." +
+					"<br>This lets you decide if two prayer points is worth the cost of a soul and wrath rune.",
+			position = 5,
+			section = spellHelper
+	)
+	default int demonicOfferingAmount() { return 3; }
+
+
+
+
 
 	// Constants
 	@Getter
@@ -306,13 +449,47 @@ public interface CerberusConfig extends Config
 	enum OffensivePrayers
 	{
 		PIETY("Piety", Prayer.PIETY),
-		RIGOUR("Rigour",Prayer.RIGOUR),
-		EAGLE_EYE("Eagle Eye",Prayer.EAGLE_EYE);
+		EAGLE_EYE("Eagle Eye",Prayer.EAGLE_EYE),
+		RIGOUR("Rigour",Prayer.RIGOUR);
 
 		private final String prayerName;
 		private final Prayer prayer;
 
 		@Override
-		public String toString() { return prayerName; }
+		public String toString()
+		{
+			return prayerName;
+		}
+	}
+
+	@Getter
+	@RequiredArgsConstructor
+	enum ProtectionPrayers
+	{
+		AUTO("Auto", null),
+		MAGIC("Magic", Prayer.PROTECT_FROM_MAGIC),
+		MELEE("Melee", Prayer.PROTECT_FROM_MELEE),
+		RANGED("Missiles", Prayer.PROTECT_FROM_MISSILES);
+
+
+		private final String name;
+		private final Prayer prayer;
+
+		@Override
+		public String toString()
+		{
+			return name;
+		}
+	}
+
+	@Getter
+	@RequiredArgsConstructor
+	enum Thrall
+	{
+		GHOST(WidgetInfoPlus.SPELL_RESURRECT_GREATER_GHOST),
+		SKELETON(WidgetInfoPlus.SPELL_RESURRECT_GREATER_SKELETON),
+		ZOMBIE(WidgetInfoPlus.SPELL_RESURRECT_GREATER_ZOMBIE);
+
+		private final WidgetInfoPlus spell;
 	}
 }

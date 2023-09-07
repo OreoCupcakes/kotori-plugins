@@ -51,6 +51,7 @@ import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.OverlayPriority;
+import org.checkerframework.checker.units.qual.C;
 
 @Singleton
 public class PrayerOverlay extends Overlay
@@ -87,7 +88,7 @@ public class PrayerOverlay extends Overlay
 
 	private void renderPrayer(final Graphics2D graphics2D)
 	{
-		if (!config.guitarHeroMode() || plugin.getCerberus() == null)
+		if (!config.showPrayerOverlay() || plugin.getCerberus() == null)
 		{
 			return;
 		}
@@ -109,13 +110,16 @@ public class PrayerOverlay extends Overlay
 
 			final Prayer prayer = attack.getAttack().getPrayer();
 
-			renderDescendingBoxes(graphics2D, prayer, tick);
-
 			if (first)
 			{
 				renderPrayerWidget(graphics2D, prayer, tick);
 
 				first = false;
+			}
+
+			if (config.guitarHeroMode())
+			{
+				renderDescendingBoxes(graphics2D, prayer, tick);
 			}
 		}
 	}
@@ -132,11 +136,11 @@ public class PrayerOverlay extends Overlay
 		final long lastTick = plugin.getLastTick();
 
 		int baseX = (int) prayerWidget.getBounds().getX();
-		baseX += prayerWidget.getBounds().getWidth() / 2;
+		baseX += (int) (prayerWidget.getBounds().getWidth() / 2);
 		baseX -= BOX_WIDTH / 2;
 
 		int baseY = (int) prayerWidget.getBounds().getY() - tick * TICK_PIXEL_SIZE - BOX_HEIGHT;
-		baseY += TICK_PIXEL_SIZE - ((lastTick + 600 - System.currentTimeMillis()) / 600.0 * TICK_PIXEL_SIZE);
+		baseY += (int) (TICK_PIXEL_SIZE - ((lastTick + 600 - System.currentTimeMillis()) / 600.0 * TICK_PIXEL_SIZE));
 
 		if (baseY > (int) prayerWidget.getBounds().getY() - BOX_HEIGHT)
 		{
@@ -168,7 +172,26 @@ public class PrayerOverlay extends Overlay
 
 	private void renderPrayerWidget(final Graphics2D graphics2D, final Prayer prayer, final int tick)
 	{
-		final Rectangle rectangle = OverlayUtil.renderPrayerOverlay(graphics2D, client, prayer, Utility.getColorFromPrayer(prayer));
+		Color prayerColor = Color.WHITE;
+
+		switch(prayer)
+		{
+			// Make a new color object to get rid of the alpha from the config color
+			case PROTECT_FROM_MAGIC:
+				Color magicColor = config.magicOverlayColor();
+				prayerColor = new Color(magicColor.getRed(), magicColor.getGreen(), magicColor.getBlue());
+				break;
+			case PROTECT_FROM_MISSILES:
+				Color rangedColor = config.rangedOverlayColor();
+				prayerColor = new Color(rangedColor.getRed(), rangedColor.getGreen(), rangedColor.getBlue());
+				break;
+			case PROTECT_FROM_MELEE:
+				Color meleeColor = config.meleeOverlayColor();
+				prayerColor = new Color(meleeColor.getRed(), meleeColor.getGreen(), meleeColor.getBlue());
+				break;
+		}
+
+		final Rectangle rectangle = OverlayUtil.renderPrayerOverlay(graphics2D, client, prayer, prayerColor);
 
 		if (rectangle == null)
 		{

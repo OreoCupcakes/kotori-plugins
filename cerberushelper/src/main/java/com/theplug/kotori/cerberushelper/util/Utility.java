@@ -87,29 +87,6 @@ public final class Utility
 		return exactHealth;
 	}
 
-	/*
-
-	public static Font getFontFromInfoboxComponentSize(final CerberusConfig.InfoBoxComponentSize size)
-	{
-		final Font font;
-
-		switch (size)
-		{
-			case LARGE:
-			case MEDIUM:
-			default:
-				font = FontManager.getRunescapeFont();
-				break;
-			case SMALL:
-				font = FontManager.getRunescapeSmallFont();
-				break;
-		}
-
-		return font;
-	}
-
-	 */
-
 	public static Color getColorFromPhase(final Phase phase)
 	{
 		final Color color;

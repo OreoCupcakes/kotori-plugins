@@ -89,7 +89,6 @@ public final class UpcomingAttackOverlay extends Overlay
 		// Remove upcoming attack infobox children
 		PANEL_COMPONENT.getChildren().clear();
 
-
 		// Set size from config
 		final int size = 40;
 		final Dimension dimension = new Dimension(size, size);
@@ -145,10 +144,7 @@ public final class UpcomingAttackOverlay extends Overlay
 			}
 
 			// Set title
-			if (config.showUpcomingAttackNumber())
-			{
-				infoBoxComponent.setTitle(String.valueOf(cerberus.getPhaseCount() + attack));
-			}
+			infoBoxComponent.setTitle(String.valueOf(cerberus.getPhaseCount() + attack));
 
 			// Add infobox to panel
 			PANEL_COMPONENT.getChildren().add(infoBoxComponent);

@@ -91,30 +91,7 @@ public final class CurrentAttackOverlay extends Overlay
 			return null;
 		}
 
-		final List<CerberusAttack> upcomingAttacks = plugin.getUpcomingAttacks();
-
-		if (upcomingAttacks.isEmpty())
-		{
-			return null;
-		}
-
-		final CerberusAttack cerberusAttack = plugin.getUpcomingAttacks().get(0);
-
-		if (cerberusAttack.getTick() > (plugin.getGameTick() + GAME_TICK_THRESHOLD))
-		{
-			return null;
-		}
-
-		final Prayer prayer;
-
-		if (cerberusAttack.getAttack() == Cerberus.Attack.AUTO)
-		{
-			prayer = plugin.getDefaultPrayer();
-		}
-		else
-		{
-			prayer = cerberusAttack.getAttack().getPrayer();
-		}
+		final Prayer prayer = plugin.getUpcomingAttackPrayer();
 
 		if (prayer == null)
 		{
@@ -136,7 +113,7 @@ public final class CurrentAttackOverlay extends Overlay
 
 		if (config.showCurrentAttackTimer())
 		{
-			final double timeUntilAttack = Math.max((double) ((cerberusAttack.getTick() - plugin.getGameTick()) * 600L - (System.currentTimeMillis() - plugin.getLastTick())) / 1000, 0);
+			final double timeUntilAttack = Math.max((double) ((plugin.getUpcomingAttacks().get(0).getTick() - plugin.getGameTick()) * 600L - (System.currentTimeMillis() - plugin.getLastTick())) / 1000, 0);
 
 			infoBoxComponent.setText(String.format("+%.1fs", timeUntilAttack));
 		}

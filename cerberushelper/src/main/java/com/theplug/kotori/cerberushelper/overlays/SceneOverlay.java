@@ -25,14 +25,9 @@
 
 package com.theplug.kotori.cerberushelper.overlays;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics2D;
-import java.awt.Polygon;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.util.List;
+import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -41,10 +36,7 @@ import com.theplug.kotori.cerberushelper.CerberusPlugin;
 import com.theplug.kotori.cerberushelper.domain.Arena;
 import com.theplug.kotori.cerberushelper.domain.Cerberus;
 import com.theplug.kotori.cerberushelper.domain.Ghost;
-import net.runelite.api.Client;
-import net.runelite.api.NPC;
-import net.runelite.api.Perspective;
-import net.runelite.api.Player;
+import net.runelite.api.*;
 import net.runelite.api.Point;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
@@ -97,6 +89,7 @@ public final class SceneOverlay extends Overlay
 		}
 
 		renderGhostTiles(graphics2D);
+		renderLavaProjectileAreaTiles(graphics2D);
 
 		return null;
 	}
@@ -202,6 +195,38 @@ public final class SceneOverlay extends Overlay
 
 		OverlayUtil.renderTextLocation(graphics2D, timeUntilAttack, 12,
 			Font.PLAIN, textColor, newPoint, true, 0);
+	}
+
+	private void renderLavaProjectileAreaTiles(final Graphics2D graphics2D)
+	{
+		final Map<LocalPoint, Projectile> lavaProjectiles = plugin.getLavaProjectiles();
+
+		if (!config.drawLavaTiles() || lavaProjectiles.isEmpty())
+		{
+			return;
+		}
+
+		for (final Map.Entry<LocalPoint, Projectile> entry : lavaProjectiles.entrySet())
+		{
+			if (entry.getValue().getRemainingCycles() <= 0)
+			{
+				continue;
+			}
+
+			final LocalPoint localPoint = entry.getKey();
+
+			final Polygon polygon = Perspective.getCanvasTileAreaPoly(client, localPoint, 3);
+
+			if (polygon == null)
+			{
+				continue;
+			}
+
+			Color c = config.lavaFillColor();
+
+			net.runelite.client.ui.overlay.OverlayUtil.renderPolygon(graphics2D, polygon, new Color(c.getRed(), c.getGreen(), c.getBlue()),
+					config.lavaFillColor(), new BasicStroke(2));
+		}
 	}
 
 	private Point getRectangleCenterPoint(final Rectangle rect)

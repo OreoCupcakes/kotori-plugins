@@ -33,20 +33,20 @@ import com.theplug.kotori.cerberushelper.overlays.SceneOverlay;
 import com.theplug.kotori.cerberushelper.overlays.UpcomingAttackOverlay;
 import com.google.common.collect.ComparisonChain;
 import com.google.inject.Provides;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+
+import java.util.*;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import com.theplug.kotori.kotoriutils.KotoriUtils;
-import com.theplug.kotori.kotoriutils.methods.InventoryInteractions;
-import com.theplug.kotori.kotoriutils.methods.PrayerInteractions;
-import com.theplug.kotori.kotoriutils.methods.SpellInteractions;
+import com.theplug.kotori.kotoriutils.ReflectionLibrary;
+import com.theplug.kotori.kotoriutils.methods.*;
+import com.theplug.kotori.kotoriutils.rlapi.WidgetInfoPlus;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
+import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.AnimationChanged;
@@ -97,9 +97,6 @@ public class CerberusPlugin extends Plugin
 	private static final int PROJECTILE_ID_LAVA = 1247;
 
 	private static final Set<Integer> REGION_IDS = Set.of(4883, 5140, 5395);
-	private static final WorldArea region4883 = new WorldArea(1230, 1243, 21, 15, 0);
-	private static final WorldArea region5140 = new WorldArea(1294, 1307, 21, 15, 0);
-	private static final WorldArea region5395 = new WorldArea(1358, 1243, 21, 15, 0);
 
 	@Inject
 	private Client client;
@@ -141,7 +138,10 @@ public class CerberusPlugin extends Plugin
 	@Nullable
 	private Cerberus cerberus;
 
-	private final ArrayList<Projectile> cerberusProjectiles = new ArrayList<>();
+	private final Set<Projectile> cerberusProjectiles = new HashSet<>();
+
+	@Getter
+	private final Map<LocalPoint, Projectile> lavaProjectiles = new HashMap<>();
 
 	@Getter
 	private int gameTick;
@@ -154,6 +154,12 @@ public class CerberusPlugin extends Plugin
 	private boolean inArena;
 	private boolean inAreaPastFlames;
 	private boolean allPrayersDeactivated;
+	private boolean ranFromLavaOnce;
+	private boolean performAttackOnCerb;
+	private boolean performAttackAfterPrayer;
+	private WorldPoint lavaSafeTile = null;
+	private int ticksSinceLavaDodge = 0;
+	private int ghostAttacked = 0;
 
 	@Provides
 	CerberusConfig provideConfig(final ConfigManager configManager)
@@ -197,6 +203,7 @@ public class CerberusPlugin extends Plugin
 		upcomingAttacks.clear();
 		tickTimestamps.clear();
 		cerberusProjectiles.clear();
+		lavaProjectiles.clear();
 
 		defaultPrayer = Prayer.PROTECT_FROM_MAGIC;
 
@@ -205,6 +212,15 @@ public class CerberusPlugin extends Plugin
 		gameTick = 0;
 		tickTimestampIndex = 0;
 		lastTick = 0;
+
+		ranFromLavaOnce = false;
+		performAttackAfterPrayer = false;
+		performAttackOnCerb = false;
+
+		ghostAttacked = 0;
+
+		lavaSafeTile = null;
+		ticksSinceLavaDodge = 0;
 	}
 
 	@Subscribe
@@ -245,99 +261,80 @@ public class CerberusPlugin extends Plugin
 	@Subscribe
 	private void onGameTick(final GameTick event)
 	{
-		if (!inArena || cerberus == null)
+		if (!inArena)
 		{
 			return;
 		}
-		
-		inAreaPastFlames();
 
-		if (tickTimestamps.size() <= tickTimestampIndex)
+		if (cerberus != null)
 		{
-			tickTimestamps.add(System.currentTimeMillis());
-		}
-		else
-		{
-			tickTimestamps.set(tickTimestampIndex, System.currentTimeMillis());
-		}
+			inAreaPastFlames();
 
-		long min = 0;
-
-		for (int i = 0; i < tickTimestamps.size(); ++i)
-		{
-			if (min == 0)
+			if (tickTimestamps.size() <= tickTimestampIndex)
 			{
-				min = tickTimestamps.get(i) + 600 * ((tickTimestampIndex - i + 5) % 5);
-			}
-			else
+				tickTimestamps.add(System.currentTimeMillis());
+			} else
 			{
-				min = Math.min(min, tickTimestamps.get(i) + 600 * ((tickTimestampIndex - i + 5) % 5));
-			}
-		}
-
-		tickTimestampIndex = (tickTimestampIndex + 1) % 5;
-
-		lastTick = min;
-
-		++gameTick;
-
-		if (config.calculateAutoAttackPrayer() && gameTick % 10 == 3)
-		{
-			setAutoAttackPrayer();
-		}
-
-		calculateUpcomingAttacks();
-
-		if (ghosts.size() > 1)
-		{
-			/*
-			 * First, sort by the southernmost ghost (e.g with lowest y).
-			 * Then, sort by the westernmost ghost (e.g with lowest x).
-			 * This will give use the current wave and order of the ghosts based on what ghost will attack first.
-			 */
-			ghosts.sort((a, b) -> ComparisonChain.start()
-				.compare(a.getLocalLocation().getY(), b.getLocalLocation().getY())
-				.compare(a.getLocalLocation().getX(), b.getLocalLocation().getX())
-				.result());
-		}
-
-		if (config.autoDefensivePrayers())
-		{
-			prayAgainstCerberus();
-		}
-
-		if (config.autoOffensivePrayers())
-		{
-			if (upcomingAttacks.isEmpty())
-			{
-				return;
+				tickTimestamps.set(tickTimestampIndex, System.currentTimeMillis());
 			}
 
-			if (config.conservePrayerGhostSkip())
+			long min = 0;
+
+			for (int i = 0; i < tickTimestamps.size(); ++i)
 			{
-				if (cerberus.getPhaseCount() >= 14 || cerberus.getHp() <= 400)
+				if (min == 0)
 				{
-					prayOffensively();
+					min = tickTimestamps.get(i) + 600 * ((tickTimestampIndex - i + 5) % 5);
+				} else
+				{
+					min = Math.min(min, tickTimestamps.get(i) + 600 * ((tickTimestampIndex - i + 5) % 5));
 				}
 			}
-			else
+
+			tickTimestampIndex = (tickTimestampIndex + 1) % 5;
+
+			lastTick = min;
+
+			++gameTick;
+
+			if (gameTick % 10 == 3)
 			{
-				prayOffensively();
+				switch (config.overrideAutoAttackCalc())
+				{
+					case MAGIC:
+						defaultPrayer = Prayer.PROTECT_FROM_MAGIC;
+						break;
+					case MELEE:
+						defaultPrayer = Prayer.PROTECT_FROM_MELEE;
+						break;
+					case RANGED:
+						defaultPrayer = Prayer.PROTECT_FROM_MISSILES;
+						break;
+					default:
+						setAutoAttackPrayer();
+						break;
+				}
+			}
+
+			calculateUpcomingAttacks();
+
+			if (ghosts.size() > 1)
+			{
+				/*
+				 * First, sort by the southernmost ghost (e.g with lowest y).
+				 * Then, sort by the westernmost ghost (e.g with lowest x).
+				 * This will give use the current wave and order of the ghosts based on what ghost will attack first.
+				 */
+				ghosts.sort((a, b) -> ComparisonChain.start()
+						.compare(a.getLocalLocation().getY(), b.getLocalLocation().getY())
+						.compare(a.getLocalLocation().getX(), b.getLocalLocation().getX())
+						.result());
 			}
 		}
 
-		if (config.drinkPrayerPotions())
-		{
-			if (ghosts.isEmpty() || upcomingAttacks.get(0).getAttack().getPriority() != 2)
-			{
-				handlePrayerPotionDrinking();
-			}
-		}
-		
-		if (config.autocastDeathCharge())
-		{
-			autoDeathCharge();
-		}
+		handlePrayerInteractions();
+		handleSpellInteractions();
+		dodgeLavaSpecial();
 
 		/*
 			Check if the stored projectiles have expired. If expired, then reset it to null.
@@ -348,6 +345,7 @@ public class CerberusPlugin extends Plugin
 	private void clearProjectileArray()
 	{
 		cerberusProjectiles.removeIf(p -> p.getRemainingCycles() <= 0);
+		lavaProjectiles.values().removeIf(p -> p.getRemainingCycles() <= 0);
 	}
 
 	@Subscribe
@@ -409,21 +407,26 @@ public class CerberusPlugin extends Plugin
 				{
 					log.debug("gameTick={}, attack={}, cerbHp={}, expectedAttack={}, ghostProjectile={}", gameTick, cerberus.getPhaseCount() + 1, hp, expectedAttack, "RANGED");
 				}
+				ghostAttacked++;
 				break;
 			case GHOST_PROJECTILE_ID_MAGIC:
 				if (!ghosts.isEmpty())
 				{
 					log.debug("gameTick={}, attack={}, cerbHp={}, expectedAttack={}, ghostProjectile={}", gameTick, cerberus.getPhaseCount() + 1, hp, expectedAttack, "MAGIC");
 				}
+				ghostAttacked++;
 				break;
 			case GHOST_PROJECTILE_ID_MELEE:
 				if (!ghosts.isEmpty())
 				{
 					log.debug("gameTick={}, attack={}, cerbHp={}, expectedAttack={}, ghostProjectile={}", gameTick, cerberus.getPhaseCount() + 1, hp, expectedAttack, "MELEE");
 				}
+				ghostAttacked++;
+				break;
+			case PROJECTILE_ID_LAVA: //Lava
+				lavaProjectiles.put(event.getPosition(), projectile);
 				break;
 			case PROJECTILE_ID_NO_FUCKING_IDEA:
-			case PROJECTILE_ID_LAVA: //Lava
 			default:
 				break;
 		}
@@ -456,31 +459,21 @@ public class CerberusPlugin extends Plugin
 		{
 			case ANIMATION_ID_MELEE:
 				log.debug("gameTick={}, attack={}, cerbHp={}, expectedAttack={}, cerbAnimation={}", gameTick, cerberus.getPhaseCount() + 1, hp, expectedAttack, "MELEE");
-
 				cerberus.setLastTripleAttack(null);
 				cerberus.nextPhase(expectedAttack);
 				cerberus.doProjectileOrAnimation(gameTick, Cerberus.Attack.MELEE);
 				break;
 			case ANIMATION_ID_LAVA:
 				log.debug("gameTick={}, attack={}, cerbHp={}, expectedAttack={}, cerbAnimation={}", gameTick, cerberus.getPhaseCount() + 1, hp, expectedAttack, "LAVA");
-
 				cerberus.nextPhase(Phase.LAVA);
 				cerberus.doProjectileOrAnimation(gameTick, Cerberus.Attack.LAVA);
 				break;
 			case ANIMATION_ID_GHOSTS:
 				log.debug("gameTick={}, attack={}, cerbHp={}, expectedAttack={}, cerbAnimation={}", gameTick, cerberus.getPhaseCount() + 1, hp, expectedAttack, "GHOSTS");
-
 				cerberus.nextPhase(Phase.GHOSTS);
 				cerberus.setLastGhostYellTick(gameTick);
 				cerberus.setLastGhostYellTime(System.currentTimeMillis());
 				cerberus.doProjectileOrAnimation(gameTick, Cerberus.Attack.GHOSTS);
-				if (config.autoOffensivePrayers())
-				{
-					if (config.conservePrayerGhostSkip())
-					{
-						prayOffensively();
-					}
-				}
 				break;
 			case ANIMATION_ID_SIT_DOWN:
 			case ANIMATION_ID_STAND_UP:
@@ -499,6 +492,15 @@ public class CerberusPlugin extends Plugin
 			case ANIMATION_ID_DEATH:
 				cerberus = null;
 				ghosts.clear();
+				cerberusProjectiles.clear();
+				lavaProjectiles.clear();
+				ranFromLavaOnce = false;
+				performAttackAfterPrayer = false;
+				performAttackOnCerb = false;
+				lavaSafeTile = null;
+				ticksSinceLavaDodge = 0;
+				ghostAttacked = 0;
+				deactivatePrayers();
 				break;
 			default:
 				log.debug("gameTick={}, animationId={} (UNKNOWN)", gameTick, animationId);
@@ -557,6 +559,14 @@ public class CerberusPlugin extends Plugin
 		{
 			cerberus = null;
 			ghosts.clear();
+			cerberusProjectiles.clear();
+			lavaProjectiles.clear();
+			ranFromLavaOnce = false;
+			performAttackAfterPrayer = false;
+			performAttackOnCerb = false;
+			lavaSafeTile = null;
+			ticksSinceLavaDodge = 0;
+			ghostAttacked = 0;
 			deactivatePrayers();
 
 			log.debug("onNpcDespawned name={}, id={}", npc.getName(), npc.getId());
@@ -766,31 +776,146 @@ public class CerberusPlugin extends Plugin
 		}
 	}
 
-	private void prayAgainstCerberus()
+	private boolean inCerberusRegion()
 	{
-		if (cerberus == null || upcomingAttacks.isEmpty() || !inAreaPastFlames || !isCerberusInteractingWithYou())
+		return REGION_IDS.contains(client.getLocalPlayer().getWorldLocation().getRegionID());
+	}
+
+	private void inAreaPastFlames()
+	{
+		if (!inArena)
 		{
 			return;
+		}
+
+		if (!inAreaPastFlames || cerberus == null)
+		{
+			inAreaPastFlames = Arena.getArena(client.getLocalPlayer().getWorldLocation()) != null;
+		}
+	}
+
+	private boolean isCerberusNotAttackingYou()
+	{
+		if (cerberus == null)
+		{
+			return true;
+		}
+
+		Actor interact = cerberus.getNpc().getInteracting();
+		if (interact instanceof Player)
+		{
+			return !interact.equals(client.getLocalPlayer());
+		}
+		return true;
+	}
+
+	public Prayer getUpcomingAttackPrayer()
+	{
+		if (cerberus == null || upcomingAttacks.isEmpty())
+		{
+			return null;
 		}
 
 		final CerberusAttack cerberusAttack = upcomingAttacks.get(0);
 
 		if (cerberusAttack.getTick() > getGameTick() + 6)
 		{
-			return;
+			return null;
 		}
-
-		final Prayer prayerToInvoke;
 
 		if (cerberusAttack.getAttack() == Cerberus.Attack.AUTO)
 		{
-			prayerToInvoke = getDefaultPrayer();
+			return getDefaultPrayer();
+		}
+
+		return cerberusAttack.getAttack().getPrayer();
+	}
+
+	private void dodgeLavaSpecial()
+	{
+		if (cerberus == null || !config.dodgeLavaSpec())
+		{
+			return;
+		}
+
+		WorldPoint playerLoc = client.getLocalPlayer().getWorldLocation();
+
+		if (lavaProjectiles.isEmpty())
+		{
+			ranFromLavaOnce = false;
 		}
 		else
 		{
-			prayerToInvoke = cerberusAttack.getAttack().getPrayer();
+			if (!ranFromLavaOnce)
+			{
+				//Create dangerousTiles set
+				Set<WorldPoint> dangerousTiles = new HashSet<>();
+				for (Map.Entry<LocalPoint, Projectile> lava : lavaProjectiles.entrySet())
+				{
+					WorldPoint lavaLocalWorld = WorldPoint.fromLocal(client, lava.getKey());
+					WorldArea lavaSplash = new WorldArea(lavaLocalWorld.getX() - 1, lavaLocalWorld.getY() - 1, 3, 3, lavaLocalWorld.getPlane());
+					dangerousTiles.addAll(lavaSplash.toWorldPointList());
+				}
+				dangerousTiles.addAll(cerberus.getNpc().getWorldArea().toWorldPointList());
+
+				lavaSafeTile = BreadthFirstSearch.dodgeAoeAttack(client, dangerousTiles, cerberus.getNpc(), VarUtilities.getPlayerAttackStyle() == 0,
+						config.preferMeleeDistance(), true);
+				ReflectionLibrary.sceneWalk(lavaSafeTile, false);
+				dangerousTiles.clear();
+				ranFromLavaOnce = true;
+				if (config.performAttackAfterLava())
+				{
+					performAttackOnCerb = true;
+					return;
+				}
+				else
+				{
+					lavaSafeTile = null;
+				}
+			}
 		}
 
+		if (performAttackOnCerb)
+		{
+			ticksSinceLavaDodge++;
+
+			if (playerLoc.equals(lavaSafeTile))
+			{
+				SpellInteractions.attackNpc(cerberus.getNpc());
+				performAttackOnCerb = false;
+				lavaSafeTile = null;
+				ticksSinceLavaDodge = 0;
+			}
+			else if (ticksSinceLavaDodge > 4)
+			{
+				lavaSafeTile = null;
+				performAttackOnCerb = false;
+				ticksSinceLavaDodge = 0;
+			}
+		}
+	}
+
+	private void handlePrayerInteractions()
+	{
+		if (!inAreaPastFlames || isCerberusNotAttackingYou())
+		{
+			return;
+		}
+
+		prayDefensively();
+		prayOffensively();
+		prayPreserve();
+		handlePrayerPotionDrinking();
+	}
+
+	private void prayDefensively()
+	{
+		if (!config.autoDefensivePrayers() || cerberus == null || upcomingAttacks.isEmpty())
+		{
+			return;
+		}
+
+		final Prayer prayerToInvoke = getUpcomingAttackPrayer();
 		if (prayerToInvoke == null)
 		{
 			return;
@@ -801,19 +926,29 @@ public class CerberusPlugin extends Plugin
 
 	private void prayOffensively()
 	{
-		if (cerberus == null || !inAreaPastFlames)
+		if (!config.autoOffensivePrayers() || cerberus == null || upcomingAttacks.isEmpty())
 		{
 			return;
 		}
 
 		final Prayer prayer = config.offensivePrayerChoice().getPrayer();
 
-		if (client.isPrayerActive(prayer))
+		if (config.conservePrayerGhostSkip() && cerberus.getHp() > 400 && cerberus.getPhaseCount() < 15)
 		{
 			return;
 		}
 
 		PrayerInteractions.activatePrayer(prayer);
+	}
+
+	private void prayPreserve()
+	{
+		if (!config.keepPreservePrayerOn())
+		{
+			return;
+		}
+
+		PrayerInteractions.activatePrayer(Prayer.PRESERVE);
 	}
 
 	private void deactivatePrayers()
@@ -828,67 +963,60 @@ public class CerberusPlugin extends Plugin
 
 	private void handlePrayerPotionDrinking()
 	{
-		if (!inAreaPastFlames)
+		//Don't drink prayer doses if ghosts attacks are coming.
+		if (!config.drinkPrayerPotions() || cerberus == null || upcomingAttacks.isEmpty())
 		{
 			return;
 		}
+
+		CerberusAttack attack = upcomingAttacks.get(0);
+		if (attack != null && attack.getAttack().getPriority() == 2)
+		{
+			if (ghostAttacked > 0)
+			{
+				return;
+			}
+		}
+		else
+		{
+			if (ghostAttacked > 0)
+			{
+				ghostAttacked = 0;
+			}
+		}
+
 		final int valueToDrinkAt = config.prayerPointsToDrinkAt();
 
 		if (client.getBoostedSkillLevel(Skill.PRAYER) <= valueToDrinkAt)
 		{
-			InventoryInteractions.drinkPrayerRestoreDose(true, true, true);
+			InventoryInteractions.drinkPrayerRestoreDose(true, true, false);
+			if (config.performAttackAfterDrinkingPrayer())
+			{
+				performAttackAfterPrayer = true;
+			}
+		}
+		else if (performAttackAfterPrayer && client.getBoostedSkillLevel(Skill.PRAYER) > valueToDrinkAt)
+		{
+			SpellInteractions.attackNpc(cerberus.getNpc());
+			performAttackAfterPrayer = false;
 		}
 	}
 
-	private boolean inCerberusRegion()
+	private void handleSpellInteractions()
 	{
-		int regionId = client.getLocalPlayer().getWorldLocation().getRegionID();
-		return REGION_IDS.contains(regionId);
-	}
-	
-	private void inAreaPastFlames()
-	{
-		if (!inArena)
+		if (!inAreaPastFlames)
 		{
 			return;
 		}
-		
-		WorldPoint wp = client.getLocalPlayer().getWorldLocation();
-		switch(client.getLocalPlayer().getWorldLocation().getRegionID())
-		{
-			case 4883:
-				inAreaPastFlames = region4883.contains(wp);
-				break;
-			case 5140:
-				inAreaPastFlames = region5140.contains(wp);
-				break;
-			case 5395:
-				inAreaPastFlames = region5395.contains(wp);
-				break;
-			default:
-				inAreaPastFlames = false;
-				break;
-		}
-	}
-	
-	private boolean isCerberusInteractingWithYou()
-	{
-		if (cerberus == null)
-		{
-			return false;
-		}
-		
-		Actor interact = cerberus.getNpc().getInteracting();
-		if (interact instanceof Player)
-		{
-			return interact.equals(client.getLocalPlayer());
-		}
-		return false;
+
+		autoDeathCharge();
+		autoThralls();
+		autoDemonicOffering();
 	}
 	
 	private void autoDeathCharge()
 	{
-		if (cerberus == null || !inAreaPastFlames || !isCerberusInteractingWithYou())
+		if (!config.autoCastDeathCharge() || cerberus == null || isCerberusNotAttackingYou())
 		{
 			return;
 		}
@@ -896,6 +1024,35 @@ public class CerberusPlugin extends Plugin
 		if (cerberus.getHpPercentage() <= config.deathChargeHpPercentage())
 		{
 			SpellInteractions.castSpellDeathCharge();
+		}
+	}
+
+	private void autoThralls()
+	{
+		if (!config.autoCastGreaterThrall() || cerberus == null || isCerberusNotAttackingYou())
+		{
+			return;
+		}
+
+		SpellInteractions.castResurrectGreaterThrall(config.thrallType().getSpell());
+	}
+
+	private void autoDemonicOffering()
+	{
+		if (!config.autoCastDemonicOffering() || cerberus != null)
+		{
+			return;
+		}
+
+		ItemContainer inventory = client.getItemContainer(InventoryID.INVENTORY);
+		if (inventory == null)
+		{
+			return;
+		}
+
+		if (inventory.contains(25778) && inventory.count(25778) >= config.demonicOfferingAmount())
+		{
+			SpellInteractions.castSpell(WidgetInfoPlus.SPELL_DEMONIC_OFFERING);
 		}
 	}
 }
