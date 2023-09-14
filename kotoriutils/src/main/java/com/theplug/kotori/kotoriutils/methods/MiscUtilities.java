@@ -64,4 +64,24 @@ public class MiscUtilities
 		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 		clipboard.setContents(stringSelection, null);
 	}
+
+	public static MenuEntry findAnyMenuEntryWithAction(MenuAction... menuActions)
+	{
+		MenuEntry[] activeEntries = client.getMenuEntries();
+
+		//Go backwards here because the back of the array is the top menu entry
+		for (int i = activeEntries.length - 1; i >= 0; i--)
+		{
+			for (MenuAction action : menuActions)
+			{
+				MenuEntry entry = activeEntries[i];
+				if (entry.getType() == action)
+				{
+					return entry;
+				}
+			}
+		}
+
+		return null;
+	}
 }

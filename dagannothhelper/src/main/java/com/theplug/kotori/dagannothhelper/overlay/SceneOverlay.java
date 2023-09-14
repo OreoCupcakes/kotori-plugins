@@ -24,14 +24,13 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.theplug.kotori.dagannothkings.overlay;
+package com.theplug.kotori.dagannothhelper.overlay;
 
-import com.theplug.kotori.dagannothkings.DagannothKingsConfig;
-import com.theplug.kotori.dagannothkings.DagannothKingsPlugin;
-import com.theplug.kotori.dagannothkings.entity.DagannothKing;
+import com.theplug.kotori.dagannothhelper.DagannothKingsConfig;
+import com.theplug.kotori.dagannothhelper.DagannothKingsPlugin;
+import com.theplug.kotori.dagannothhelper.entity.DagannothKing;
 import net.runelite.api.Point;
 import net.runelite.api.*;
-import net.runelite.api.coords.LocalPoint;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
@@ -78,7 +77,6 @@ public class SceneOverlay extends Overlay
 		}
 
 		renderNpcTickCount(graphics2D);
-		renderNpcTile(graphics2D);
 
 		return null;
 	}
@@ -113,71 +111,8 @@ public class SceneOverlay extends Overlay
 				return;
 			}
 
-			OverlayUtil.renderTextLocation(graphics2D, text, config.fontSize(), config.fontStyle().getFont(),
-				ticksUntilNextAnimation == 1 ? Color.WHITE : dagannothKing.getColor(), npcPoint, config.fontShadow(), 0);
+			OverlayUtil.renderTextLocation(graphics2D, text, 20, Font.BOLD,
+				ticksUntilNextAnimation == 1 ? Color.WHITE : dagannothKing.getColor(), npcPoint, true, 0);
 		}
-	}
-
-	private void renderNpcTile(final Graphics2D graphics2D)
-	{
-		if (!config.showNpcTileOutline())
-		{
-			return;
-		}
-
-		for (final DagannothKing armadylNpc : dagannothKings)
-		{
-			drawNpcTile(graphics2D, armadylNpc.getNpc(), armadylNpc.getColor());
-		}
-	}
-
-	private void drawNpcTile(final Graphics2D graphics2D, final NPC npc, final Color color)
-	{
-		if (npc == null || npc.isDead())
-		{
-			return;
-		}
-
-		int size = 1;
-
-		final NPCComposition npcComposition = npc.getComposition();
-
-		if (npcComposition != null)
-		{
-			size = npcComposition.getSize();
-		}
-
-		final LocalPoint localPoint = npc.getLocalLocation();
-
-		final int x = localPoint.getX() - ((size - 1) * Perspective.LOCAL_TILE_SIZE / 2);
-		final int y = localPoint.getY() - ((size - 1) * Perspective.LOCAL_TILE_SIZE / 2);
-
-		final Polygon tile = Perspective.getCanvasTileAreaPoly(client, localPoint, size);
-
-		if (tile == null)
-		{
-			return;
-		}
-
-		final Polygon southWestTile = Perspective.getCanvasTilePoly(client, new LocalPoint(x, y));
-
-		drawOutlineAndFill(graphics2D, color, southWestTile);
-		drawOutlineAndFill(graphics2D, color, tile);
-	}
-
-	private static void drawOutlineAndFill(final Graphics2D graphics2D, final Color outlineColor, final Shape shape)
-	{
-		final Color originalColor = graphics2D.getColor();
-		final Stroke originalStroke = graphics2D.getStroke();
-
-		graphics2D.setStroke(new BasicStroke(1));
-		graphics2D.setColor(outlineColor);
-		graphics2D.draw(shape);
-
-		graphics2D.setColor(SceneOverlay.TRANSPARENT);
-		graphics2D.fill(shape);
-
-		graphics2D.setColor(originalColor);
-		graphics2D.setStroke(originalStroke);
 	}
 }

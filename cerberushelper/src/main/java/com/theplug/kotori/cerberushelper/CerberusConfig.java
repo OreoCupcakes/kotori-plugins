@@ -28,6 +28,7 @@
 
 package com.theplug.kotori.cerberushelper;
 
+import com.theplug.kotori.kotoriutils.rlapi.Spells;
 import com.theplug.kotori.kotoriutils.rlapi.WidgetInfoPlus;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +37,7 @@ import net.runelite.client.config.*;
 
 import java.awt.*;
 
-@ConfigGroup("cerberus")
+@ConfigGroup("cerberushelper")
 public interface CerberusConfig extends Config
 {
 	// Sections
@@ -486,10 +487,10 @@ public interface CerberusConfig extends Config
 	@RequiredArgsConstructor
 	enum Thrall
 	{
-		GHOST(WidgetInfoPlus.SPELL_RESURRECT_GREATER_GHOST),
-		SKELETON(WidgetInfoPlus.SPELL_RESURRECT_GREATER_SKELETON),
-		ZOMBIE(WidgetInfoPlus.SPELL_RESURRECT_GREATER_ZOMBIE);
+		GHOST(Spells.RESURRECT_GREATER_GHOST),
+		SKELETON(Spells.RESURRECT_GREATER_SKELETON),
+		ZOMBIE(Spells.RESURRECT_GREATER_ZOMBIE);
 
-		private final WidgetInfoPlus spell;
+		private final Spells spell;
 	}
 }

@@ -1,4 +1,4 @@
-package com.theplug.kotori.dagannothkings.overlay;
+package com.theplug.kotori.dagannothhelper.overlay;
 
 import com.google.common.base.Strings;
 import com.theplug.kotori.kotoriutils.rlapi.InterfaceTab;

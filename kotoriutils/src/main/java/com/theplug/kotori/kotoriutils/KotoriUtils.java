@@ -399,7 +399,7 @@ public class KotoriUtils extends Plugin {
                 break;
             }
         }
-        ReflectionLibrary.setSelectedSpell(WidgetInfoPlus.SPELL_FIRE_STRIKE.getId(), -1, -1);
+        ReflectionLibrary.setSelectedSpell(WidgetInfoPlus.SPELL_FIRE_STRIKE.getId());
         String menuOptionText = "<col=39ff14>Kotori Utils Test - Cast Fire Strike</col> -> ";
         MenuEntry hotkeyEntry = client.createMenuEntry(-1).setForceLeftClick(true).setParam0(0).setParam1(0).setType(MenuAction.WIDGET_TARGET_ON_NPC)
                 .setOption(menuOptionText);

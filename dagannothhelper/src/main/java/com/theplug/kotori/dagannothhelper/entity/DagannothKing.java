@@ -27,9 +27,9 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.theplug.kotori.dagannothkings.entity;
+package com.theplug.kotori.dagannothhelper.entity;
 
-import com.theplug.kotori.dagannothkings.DagannothKingsPlugin;
+import com.theplug.kotori.dagannothhelper.DagannothKingsPlugin;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -40,10 +40,10 @@ import net.runelite.api.Prayer;
 
 import java.awt.*;
 
+@Getter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class DagannothKing implements Comparable<DagannothKing>
+public class DagannothKing
 {
-	@Getter
 	@EqualsAndHashCode.Include
 	private final NPC npc;
 
@@ -94,23 +94,12 @@ public class DagannothKing implements Comparable<DagannothKing>
 		return npc.getInteracting();
 	}
 
-	@Override
-	public int compareTo(final DagannothKing dagannothKing)
-	{
-		if (dagannothKing.ticksUntilNextAnimation == 0)
-		{
-			return -1;
-		}
-
-		return ticksUntilNextAnimation - dagannothKing.ticksUntilNextAnimation;
-	}
-
 	@RequiredArgsConstructor
 	public enum Boss
 	{
-		DAGANNOTH_PRIME(NpcID.DAGANNOTH_PRIME, DagannothKingsPlugin.DAG_PRIME, 4, AttackStyle.MAGE),
-		DAGANNOTH_REX(NpcID.DAGANNOTH_REX, DagannothKingsPlugin.DAG_REX, 4, AttackStyle.MELEE),
-		DAGANNOTH_SUPREME(NpcID.DAGANNOTH_SUPREME, DagannothKingsPlugin.DAG_SUPREME, 4, AttackStyle.RANGE);
+		DAGANNOTH_PRIME(NpcID.DAGANNOTH_PRIME, DagannothKingsPlugin.DAG_PRIME_ATTACK, 4, AttackStyle.MAGE),
+		DAGANNOTH_REX(NpcID.DAGANNOTH_REX, DagannothKingsPlugin.DAG_REX_ATTACK, 4, AttackStyle.MELEE),
+		DAGANNOTH_SUPREME(NpcID.DAGANNOTH_SUPREME, DagannothKingsPlugin.DAG_SUPREME_ATTACK, 4, AttackStyle.RANGE);
 
 		private final int npcId;
 		private final int animationId;
@@ -135,11 +124,12 @@ public class DagannothKing implements Comparable<DagannothKing>
 	@RequiredArgsConstructor
 	public enum AttackStyle
 	{
-		MAGE(Prayer.PROTECT_FROM_MAGIC, Color.CYAN),
-		RANGE(Prayer.PROTECT_FROM_MISSILES, Color.GREEN),
-		MELEE(Prayer.PROTECT_FROM_MELEE, Color.RED);
+		MAGE(Prayer.PROTECT_FROM_MAGIC, 3, Color.CYAN),
+		RANGE(Prayer.PROTECT_FROM_MISSILES, 2, Color.GREEN),
+		MELEE(Prayer.PROTECT_FROM_MELEE, 1, Color.RED);
 
 		private final Prayer prayer;
+		private final int priority;
 		private final Color color;
 	}
 }

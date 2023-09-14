@@ -415,21 +415,37 @@ public class ReflectionLibrary
 		String errorMsg = "Kotori Plugin Utils - Unable to set selected spell widget.";
 		setFieldIntValue(spellWidget, clazz, widgetPackedId, selectedSpellWidgetMultiplier, errorMsg);
 	}
-	
+
+	/*
+		SpellChildIndex is actually the Widget index in its parent's children array. This can be gotten from Widget.getIndex().
+		This needs to be set to -1 when you are trying to cast an actual spell because interacting with other widgets could set this value to not -1.
+		For example, interacting with an item in the inventory would set this value to the index in the inventory array.
+	 */
 	private static void setSelectedSpellChildIndex(int index)
 	{
 		Field spellChild = getField(selectedSpellChildIndexClassName, selectedSpellChildIndexFieldName);
 		String errorMsg = "Kotori Plugin Utils - Unable to set selected spell child index.";
 		setFieldIntValue(spellChild, client, index, selectedSpellChildIndexMultiplier, errorMsg);
 	}
-	
+
+	/*
+		SpellItemId is actually the item ID displayed by a widget. This can be gotten from Widget.getItemId().
+		This needs to be set to -1 when you are trying to cast an actual spell because interacting with other widgets could set this value to not -1.
+		For example, interacting with an item in the inventory would set this value to the item id of the item you interacted with.
+	 */
 	private static void setSelectedSpellItemId(int itemId)
 	{
 		Field spellItem = getField(selectedSpellItemIDClassName, selectedSpellItemIDFieldName);
 		String errorMsg = "Kotori Plugin Utils - Unable to set selected spell item id.";
 		setFieldIntValue(spellItem, client, itemId, selectedSpellItemIDMultiplier, errorMsg);
 	}
-	
+
+	public static void setSelectedSpell(int spellWidgetId)
+	{
+		setSelectedSpell(spellWidgetId, -1, -1);
+	}
+
+	//As explained above, you need to set spellChildIndex and spellItemId to -1 if you want to cast a spell.
 	public static void setSelectedSpell(int spellWidgetId, int spellChildIndex, int spellItemId)
 	{
 		setSelectedSpellWidget(spellWidgetId);
@@ -508,6 +524,11 @@ public class ReflectionLibrary
 		String errorMsg = "Kotori Plugin Utils - Failed to get menu options count.";
 		return getFieldIntValue(optionsCount, client, menuOptionsCountMultiplier, errorMsg);
 	}
+
+	public static int getTopMenuEntryIndex()
+	{
+		return getMenuOptionsCount() - 1;
+	}
 	
 	private static void setMenuIdentifier(int index, int value)
 	{
@@ -516,7 +537,7 @@ public class ReflectionLibrary
 		setFieldIntArrayValue(menuIdentifiers, client, index, value, errorMsg);
 	}
 	
-	private static void setMenuItemId(int index, int value)
+	public static void setMenuItemId(int index, int value)
 	{
 		Field menuItemIds = getField(menuItemIdsClassName, menuItemIdsFieldName);
 		String errorMsg = "Kotori Plugin Utils - Failed to set menu item id \"" + value + "\" in menu index \"" + index + "\".";

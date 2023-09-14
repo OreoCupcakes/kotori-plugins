@@ -26,11 +26,11 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.theplug.kotori.dagannothkings.overlay;
+package com.theplug.kotori.dagannothhelper.overlay;
 
-import com.theplug.kotori.dagannothkings.DagannothKingsConfig;
-import com.theplug.kotori.dagannothkings.DagannothKingsPlugin;
-import com.theplug.kotori.dagannothkings.entity.DagannothKing;
+import com.theplug.kotori.dagannothhelper.DagannothKingsConfig;
+import com.theplug.kotori.dagannothhelper.DagannothKingsPlugin;
+import com.theplug.kotori.dagannothhelper.entity.DagannothKing;
 import com.theplug.kotori.kotoriutils.rlapi.PrayerExtended;
 import net.runelite.api.*;
 import net.runelite.api.Point;

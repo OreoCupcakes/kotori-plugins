@@ -22,95 +22,105 @@ public class PrayerInteractions
 	
 	public static boolean activatePrayer(Prayer prayer)
 	{
-			PrayerExtended prayerExtended = PrayerExtended.valueOf(prayer.name());
-			//do nothing if prayer is already active or prayer points is at 0
-			if (client.isPrayerActive(prayer) || client.getBoostedSkillLevel(Skill.PRAYER) <= 0 || client.getRealSkillLevel(Skill.PRAYER) < prayerExtended.getLevel())
-			{
-				return false;
-			}
-			
-			switch (prayerExtended)
-			{
-				case CHIVALRY:
-					if (!VarUtilities.isPietyUnlocked() && client.getRealSkillLevel(Skill.DEFENCE) < 65)
-					{
-						return false;
-					}
-					break;
-				case PIETY:
-					if (!VarUtilities.isPietyUnlocked() && client.getRealSkillLevel(Skill.DEFENCE) < 70)
-					{
-						return false;
-					}
-					break;
-				case PRESERVE:
-					if (!VarUtilities.isPreserveUnlocked())
-					{
-						return false;
-					}
-					break;
-				case RIGOUR:
-					if (!VarUtilities.isRigourUnlocked() && client.getRealSkillLevel(Skill.DEFENCE) < 70)
-					{
-						return false;
-					}
-					break;
-				case AUGURY:
-					if (!VarUtilities.isAuguryUnlocked() && client.getRealSkillLevel(Skill.DEFENCE) < 70)
-					{
-						return false;
-					}
-					break;
-			}
-			
-			int param1 = prayerExtended.getWidgetInfoPlus().getId();
-			
-			ReflectionLibrary.invokeMenuAction(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "", "", 0, 0);
-			return true;
+		if (prayer == null)
+		{
+			return false;
+		}
+
+		PrayerExtended prayerExtended = PrayerExtended.valueOf(prayer.name());
+		//do nothing if prayer is already active or prayer points is at 0
+		if (client.isPrayerActive(prayer) || client.getBoostedSkillLevel(Skill.PRAYER) <= 0 || client.getRealSkillLevel(Skill.PRAYER) < prayerExtended.getLevel())
+		{
+			return false;
+		}
+
+		switch (prayerExtended)
+		{
+			case CHIVALRY:
+				if (!VarUtilities.isPietyUnlocked() && client.getRealSkillLevel(Skill.DEFENCE) < 65)
+				{
+					return false;
+				}
+				break;
+			case PIETY:
+				if (!VarUtilities.isPietyUnlocked() && client.getRealSkillLevel(Skill.DEFENCE) < 70)
+				{
+					return false;
+				}
+				break;
+			case PRESERVE:
+				if (!VarUtilities.isPreserveUnlocked())
+				{
+					return false;
+				}
+				break;
+			case RIGOUR:
+				if (!VarUtilities.isRigourUnlocked() && client.getRealSkillLevel(Skill.DEFENCE) < 70)
+				{
+					return false;
+				}
+				break;
+			case AUGURY:
+				if (!VarUtilities.isAuguryUnlocked() && client.getRealSkillLevel(Skill.DEFENCE) < 70)
+				{
+					return false;
+				}
+				break;
+		}
+
+		int param1 = prayerExtended.getWidgetInfoPlus().getId();
+
+		ReflectionLibrary.invokeMenuAction(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "", "", 0, 0);
+		return true;
 	}
 	
 	public static boolean deactivatePrayer(Prayer prayer)
 	{
-			PrayerExtended prayerExtended = PrayerExtended.valueOf(prayer.name());
-			//do nothing if prayer is not active or prayer points is at 0
-			if (!client.isPrayerActive(prayer) || client.getBoostedSkillLevel(Skill.PRAYER) <= 0 || client.getRealSkillLevel(Skill.PRAYER) < prayerExtended.getLevel())
-			{
-				return false;
-			}
+		if (prayer == null)
+		{
+			return false;
+		}
+
+		PrayerExtended prayerExtended = PrayerExtended.valueOf(prayer.name());
+		//do nothing if prayer is not active or prayer points is at 0
+		if (!client.isPrayerActive(prayer) || client.getBoostedSkillLevel(Skill.PRAYER) <= 0 || client.getRealSkillLevel(Skill.PRAYER) < prayerExtended.getLevel())
+		{
+			return false;
+		}
 			
-			switch (prayerExtended)
-			{
-				case CHIVALRY:
-				case PIETY:
-					if (!VarUtilities.isPietyUnlocked())
-					{
-						return false;
-					}
-					break;
-				case PRESERVE:
-					if (!VarUtilities.isPreserveUnlocked())
-					{
-						return false;
-					}
-					break;
-				case RIGOUR:
-					if (!VarUtilities.isRigourUnlocked())
-					{
-						return false;
-					}
-					break;
-				case AUGURY:
-					if (!VarUtilities.isAuguryUnlocked())
-					{
-						return false;
-					}
-					break;
-			}
+		switch (prayerExtended)
+		{
+			case CHIVALRY:
+			case PIETY:
+				if (!VarUtilities.isPietyUnlocked())
+				{
+					return false;
+				}
+				break;
+			case PRESERVE:
+				if (!VarUtilities.isPreserveUnlocked())
+				{
+					return false;
+				}
+				break;
+			case RIGOUR:
+				if (!VarUtilities.isRigourUnlocked())
+				{
+					return false;
+				}
+				break;
+			case AUGURY:
+				if (!VarUtilities.isAuguryUnlocked())
+				{
+					return false;
+				}
+				break;
+		}
 			
-			int param1 = prayerExtended.getWidgetInfoPlus().getId();
+		int param1 = prayerExtended.getWidgetInfoPlus().getId();
 			
-			ReflectionLibrary.invokeMenuAction(-1, param1, MenuAction.CC_OP.getId(), 1, -1);
-			return true;
+		ReflectionLibrary.invokeMenuAction(-1, param1, MenuAction.CC_OP.getId(), 1, -1);
+		return true;
 	}
 	
 	public static boolean deactivatePrayers(boolean keepPreserveOn)

@@ -31,7 +31,7 @@ import lombok.Getter;
 import net.runelite.api.Prayer;
 import net.runelite.client.config.*;
 
-@ConfigGroup("alchemicalhydra")
+@ConfigGroup("alchemicalhelper")
 public interface AlchemicalHelperConfig extends Config
 {
 	// Sections

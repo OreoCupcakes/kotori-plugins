@@ -2,13 +2,8 @@ package com.theplug.kotori.kotoriutils.methods;
 
 import com.theplug.kotori.kotoriutils.rlapi.WidgetIDPlus;
 import com.theplug.kotori.kotoriutils.rlapi.WidgetInfoPlus;
-import net.runelite.api.Client;
-import net.runelite.api.VarPlayer;
-import net.runelite.api.Varbits;
+import net.runelite.api.*;
 import net.runelite.client.RuneLite;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class VarUtilities
 {
@@ -136,9 +131,15 @@ public class VarUtilities
 				currentStyle = 1;
 				break;
 			//Magic
+			case 18:
+			case 21:
 			case 23:	//Powered staves (Tridents)
 				currentStyle = 2;
 				break;
+			/*
+			This checks if autocast is set for staves, but almost no one intentionally melees with staff except PvPers (staff of the dead).
+			So we just assume its a magic weapon above.
+
 			case 18:	//Normal staves
 			case 21:	//Staves of dead?
 				if (attackStyle == 4)
@@ -150,6 +151,7 @@ public class VarUtilities
 					currentStyle = 0;
 				}
 				break;
+			*/
 			case 6:		//Salamanders
 				switch (attackStyle)
 				{
@@ -192,5 +194,131 @@ public class VarUtilities
 		}
 		
 		return currentStyle;
+	}
+
+	public static boolean boostedSkillEqualGreater(Skill skill, int level)
+	{
+		return client.getBoostedSkillLevel(skill) >= level;
+	}
+
+	public static boolean skillEqualGreater(Skill skill, int level)
+	{
+		return client.getRealSkillLevel(skill) >= level;
+	}
+
+	public static Prayer bestStrengthBoostPrayer()
+	{
+		if (isPietyUnlocked() && skillEqualGreater(Skill.PRAYER, 70) && skillEqualGreater(Skill.DEFENCE, 70))
+		{
+			return Prayer.PIETY;
+		}
+		else if (isPietyUnlocked() && skillEqualGreater(Skill.PRAYER, 60) && skillEqualGreater(Skill.DEFENCE, 65))
+		{
+			return Prayer.CHIVALRY;
+		}
+		else if (skillEqualGreater(Skill.PRAYER, 31))
+		{
+			return Prayer.ULTIMATE_STRENGTH;
+		}
+		else if (skillEqualGreater(Skill.PRAYER, 13))
+		{
+			return Prayer.SUPERHUMAN_STRENGTH;
+		}
+		else if (skillEqualGreater(Skill.PRAYER, 4))
+		{
+			return Prayer.BURST_OF_STRENGTH;
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	public static Prayer bestAttackBoostPrayer()
+	{
+		if (skillEqualGreater(Skill.PRAYER, 34))
+		{
+			return Prayer.INCREDIBLE_REFLEXES;
+		}
+		else if (skillEqualGreater(Skill.PRAYER, 16))
+		{
+			return Prayer.IMPROVED_REFLEXES;
+		}
+		else if (skillEqualGreater(Skill.PRAYER, 7))
+		{
+			return Prayer.CLARITY_OF_THOUGHT;
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	public static Prayer bestDefenseBoostPrayer()
+	{
+		if (skillEqualGreater(Skill.PRAYER, 28))
+		{
+			return Prayer.STEEL_SKIN;
+		}
+		else if (skillEqualGreater(Skill.PRAYER, 10))
+		{
+			return Prayer.ROCK_SKIN;
+		}
+		else if (skillEqualGreater(Skill.PRAYER, 1))
+		{
+			return Prayer.THICK_SKIN;
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	public static Prayer bestRangedPrayer()
+	{
+		if (isRigourUnlocked() && skillEqualGreater(Skill.PRAYER, 74) && skillEqualGreater(Skill.DEFENCE, 70))
+		{
+			return Prayer.RIGOUR;
+		}
+		else if (skillEqualGreater(Skill.PRAYER, 44))
+		{
+			return Prayer.EAGLE_EYE;
+		}
+		else if (skillEqualGreater(Skill.PRAYER, 26))
+		{
+			return Prayer.HAWK_EYE;
+		}
+		else if (skillEqualGreater(Skill.PRAYER, 8))
+		{
+			return Prayer.SHARP_EYE;
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	public static Prayer bestMagicPrayer()
+	{
+		if (isAuguryUnlocked() && skillEqualGreater(Skill.PRAYER, 77) && skillEqualGreater(Skill.DEFENCE, 70))
+		{
+			return Prayer.AUGURY;
+		}
+		else if (skillEqualGreater(Skill.PRAYER, 45))
+		{
+			return Prayer.MYSTIC_MIGHT;
+		}
+		else if (skillEqualGreater(Skill.PRAYER, 27))
+		{
+			return Prayer.MYSTIC_LORE;
+		}
+		else if (skillEqualGreater(Skill.PRAYER, 9))
+		{
+			return Prayer.MYSTIC_WILL;
+		}
+		else
+		{
+			return null;
+		}
 	}
 }

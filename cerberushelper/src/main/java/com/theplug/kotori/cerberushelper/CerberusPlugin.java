@@ -42,6 +42,7 @@ import javax.inject.Singleton;
 import com.theplug.kotori.kotoriutils.KotoriUtils;
 import com.theplug.kotori.kotoriutils.ReflectionLibrary;
 import com.theplug.kotori.kotoriutils.methods.*;
+import com.theplug.kotori.kotoriutils.rlapi.Spells;
 import com.theplug.kotori.kotoriutils.rlapi.WidgetInfoPlus;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -1052,7 +1053,7 @@ public class CerberusPlugin extends Plugin
 
 		if (inventory.contains(25778) && inventory.count(25778) >= config.demonicOfferingAmount())
 		{
-			SpellInteractions.castSpell(WidgetInfoPlus.SPELL_DEMONIC_OFFERING);
+			SpellInteractions.castSpell(Spells.DEMONIC_OFFERING);
 		}
 	}
 }
