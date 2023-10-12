@@ -4,13 +4,8 @@ import java.awt.Polygon;
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.TreeMap;
-import net.runelite.api.Client;
-import net.runelite.api.InventoryID;
-import net.runelite.api.Item;
-import net.runelite.api.ItemComposition;
-import net.runelite.api.Player;
-import net.runelite.api.Varbits;
-import net.runelite.api.WorldType;
+
+import net.runelite.api.*;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.util.QuantityFormatter;
@@ -137,11 +132,13 @@ public class PvPUtil
 
     public static int calculateRisk(Client client, ItemManager itemManager)
     {
-        if (client.getItemContainer(InventoryID.EQUIPMENT) == null)
+        ItemContainer equipment = client.getItemContainer(InventoryID.EQUIPMENT);
+        ItemContainer inventory = client.getItemContainer(InventoryID.INVENTORY);
+        if (equipment == null)
         {
             return 0;
         }
-        if (client.getItemContainer(InventoryID.INVENTORY).getItems() == null)
+        if (inventory == null)
         {
             return 0;
         }

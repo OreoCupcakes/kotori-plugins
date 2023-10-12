@@ -25,13 +25,16 @@
 package com.theplug.kotori.effecttimers;
 
 import com.google.inject.Provides;
+import com.theplug.kotori.kotoriutils.methods.MiscUtilities;
 import com.theplug.kotori.effecttimers.utils.PvPUtil;
 import com.theplug.kotori.effecttimers.utils.WorldTypeExtended;
 import com.theplug.kotori.kotoriutils.KotoriUtils;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.*;
+import net.runelite.api.kit.KitType;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.input.KeyManager;
@@ -43,11 +46,9 @@ import net.runelite.client.util.HotkeyListener;
 import org.apache.commons.lang3.ArrayUtils;
 
 import javax.inject.Inject;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-
+@Slf4j
 @PluginDependency(KotoriUtils.class)
 @PluginDescriptor(
 	name = "<html><font color=#6b8af6>[P]</font> Effect Timers</html>",
@@ -57,11 +58,7 @@ import java.util.Set;
 public class EffectTimersPlugin extends Plugin
 {
 	private static final int VORKATH_REGION = 9023;
-	public static final int BIND_SNARE_ENTANGLE_ANIMATION = 710;
-	public static final int BIND_SNARE_ENTANGLE_ANIMATION_2 = 1161;
-	public static final int ICE_RUSH_BLITZ_ANIMATION = 1978;
-	public static final int ICE_BURST_BARRAGE_ANIMATION = 1979;
-	public static final Set<Integer> FREEZE_SPELLS_ANIMATIONS = Set.of(BIND_SNARE_ENTANGLE_ANIMATION, BIND_SNARE_ENTANGLE_ANIMATION_2, ICE_BURST_BARRAGE_ANIMATION, ICE_RUSH_BLITZ_ANIMATION);
+	public final Set<Integer> swampBarkArmorIds = Set.of(ItemID.SWAMPBARK_BODY, ItemID.SWAMPBARK_HELM, ItemID.SWAMPBARK_LEGS);
 
 	@Inject
 	@Getter
@@ -79,6 +76,7 @@ public class EffectTimersPlugin extends Plugin
 	@Inject
 	private EffectTimersOverlay overlay;
 
+	@Getter
 	@Inject
 	private EffectTimersConfig config;
 
@@ -96,13 +94,8 @@ public class EffectTimersPlugin extends Plugin
 		}
 	};
 
-	public EffectTimersConfig getConfig()
-	{
-		return config;
-	}
-
 	@Provides
-	public EffectTimersConfig getConfig(ConfigManager configManager)
+	private EffectTimersConfig getConfig(ConfigManager configManager)
 	{
 		return configManager.getConfig(EffectTimersConfig.class);
 	}
@@ -128,7 +121,7 @@ public class EffectTimersPlugin extends Plugin
 		initializedPlugin = false;
 	}
 	
-	public void init()
+	private void init()
 	{
 		overlayManager.add(overlay);
 		keyManager.registerKeyListener(hotkeyListener);
@@ -136,7 +129,7 @@ public class EffectTimersPlugin extends Plugin
 	}
 
 	@Subscribe
-	public void onGameTick(GameTick gameTick)
+	private void onGameTick(GameTick gameTick)
 	{
 		prayerTracker.gameTick();
 
@@ -176,8 +169,9 @@ public class EffectTimersPlugin extends Plugin
 	}
 
 	@Subscribe
-	public void onGraphicChanged(GraphicChanged event)
+	private void onGraphicChanged(GraphicChanged event)
 	{
+		//GraphicChanged seems to happen on tick before the game registers your interaction with the actor so getInteracting will always return null.
 		Actor actorWithGraphic = event.getActor();
 		//	actor.getGraphic() deprecated, actor can have multiple spot anims.
 		//	int spotAnim = fakeSpotAnim == -1 ? actor.getGraphic() : fakeSpotAnim;
@@ -212,41 +206,13 @@ public class EffectTimersPlugin extends Plugin
 				return;
 			}
 			
-			/*
-			Player playerCastingFreeze = null;
-			if (config.checkOtherPeoplesGearFreezeTimers())
-			{
-				if (effect.getType() == TimerType.FREEZE)
-				{
-					List<Player> players = client.getPlayers();
-					for (Player p : players)
-					{
-						Actor pInteractingWith = p.getInteracting();
-						int pAnimation = p.getAnimation();
-						if (pInteractingWith != null)
-						{
-							if (pInteractingWith.equals(actorWithGraphic))
-							{
-								if (FREEZE_SPELLS_ANIMATIONS.contains(pAnimation))
-								{
-									playerCastingFreeze = p;
-									break;
-								}
-							}
-						}
-					}
-				}
-			}
-			
-			 */
-			
 			timerManager.addTimerFor(actorWithGraphic, effect.getType(), new Timer(this, effect,
 					effect.isHalvable() && prayerTracker.getPrayerIconLastTick(actorWithGraphic) == HeadIcons.MAGIC, actorWithGraphic));
 		}
 	}
 
 	@Subscribe
-	public void onChatMessage(ChatMessage event)
+	private void onChatMessage(ChatMessage event)
 	{
 		if (event.getType() != ChatMessageType.GAMEMESSAGE
 			|| !event.getMessage().contains("Your Tele Block has been removed"))
@@ -263,7 +229,7 @@ public class EffectTimersPlugin extends Plugin
 	}
 	
 	@Subscribe
-	public void onNpcDespawned(NpcDespawned event)
+	private void onNpcDespawned(NpcDespawned event)
 	{
 		if (!isAtVorkath())
 		{
@@ -285,7 +251,7 @@ public class EffectTimersPlugin extends Plugin
 	}
 
 	@Subscribe
-	public void onActorDeath(ActorDeath event)
+	private void onActorDeath(ActorDeath event)
 	{
 		for (TimerType type : TimerType.values())
 		{
@@ -294,7 +260,7 @@ public class EffectTimersPlugin extends Plugin
 	}
 	
 	@Subscribe
-	public void onGameStateChanged(GameStateChanged event)
+	private void onGameStateChanged(GameStateChanged event)
 	{
 		GameState gameState = event.getGameState();
 		
@@ -315,6 +281,16 @@ public class EffectTimersPlugin extends Plugin
 				}
 				timerManager.clearExpiredTimers();
 				break;
+		}
+	}
+	
+	public void debugMsg(String message)
+	{
+		if (config.debugLogging())
+		{
+			System.out.println(message);
+			log.info(message);
+			MiscUtilities.sendGameMessage(message);
 		}
 	}
 }

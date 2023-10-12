@@ -37,7 +37,7 @@ public interface EffectTimersConfig extends Config
 			position = -1,
 			closedByDefault = true
 	)
-	String versionInfo = "Version";
+	String debugSettings = "Version";
 	
 	@ConfigSection(
 			name = "Display Settings",
@@ -203,25 +203,12 @@ public interface EffectTimersConfig extends Config
 			keyName = "adaptiveFreezeTimers",
 			description = "Note: Show Freeze Timers needs to be on for this to work." +
 					"<br>With the introduction of gear like Swampbark armor and Ancient Sceptre, as well as NPCs having freeze resistance," +
-					"<br>the standard freeze timers are not always accurate. Turning this option on will check your own gear when you cast" +
-					"<br>spells that increase or decrease the freeze timer. This will only work for freezes that you cause.",
+					"<br>the standard freeze timers are not always accurate. Turning this option on will check your OWN gear when you cast" +
+					"<br>spells that increase the freeze timer. This effects all freezes cast, including ones from other players.",
 			position = 2,
 			section = freezeSettings
 	)
 	default boolean adaptiveFreezeTimers() { return true; }
-	
-	@ConfigItem(
-			name = "Check Other Peoples' Gear",
-			keyName = "checkOtherPeoplesGearFreezeTimers",
-			description = "Note: Show Freeze Timers and Adaptive Freeze Timers needs to be on for this to work." +
-					"<br>Just like Adaptive Freeze Timers, this will extend it's functionality and adapt other people's freeze timers" +
-					"<br>as well as your own based on their gear. This works pretty well in single combat, but could possibly get" +
-					"<br>confused and display incorrect timers in multi-combat if there are multiple people casting a freeze spell" +
-					"<br>on the same NPC/Player. That confusion is why this is an optional toggle.",
-			position = 3,
-			section = freezeSettings
-	)
-	default boolean checkOtherPeoplesGearFreezeTimers() { return false; }
 
 	@ConfigItem(
 		name = "Show Teleblock Timers",
@@ -260,7 +247,7 @@ public interface EffectTimersConfig extends Config
 	}
 
 	@ConfigItem(
-		name = "Show Imbued/Saturated Heart Timers",
+		name = "Show Imbued/Sat. Heart Timers",
 		keyName = "imbHeartTimers",
 		description = "Should we render imbued/saturated heart timers?",
 		position = 6,
@@ -272,7 +259,7 @@ public interface EffectTimersConfig extends Config
 	}
 
 	@ConfigItem(
-		name = "Show Dragonfire Shield/Ward Timers",
+		name = "Show DFS/DFW Timers",
 		keyName = "dfsTimers",
 		description = "Should we render the Dragonfire shield and Dragonfire Ward timers?",
 		position = 7,
@@ -284,7 +271,7 @@ public interface EffectTimersConfig extends Config
 	}
 
 	@ConfigItem(
-		name = "Show Ancient Wyvern Shield Timers",
+		name = "Show Wyvern Shield Timers",
 		keyName = "ancWyvernTimers",
 		description = "Should we render the Ancient Wyvern shield timers?",
 		position = 8,
@@ -295,13 +282,22 @@ public interface EffectTimersConfig extends Config
 		return true;
 	}
 
-	
+	@ConfigItem(
+			name = "Enable Debug Logging",
+			keyName = "debugLogging",
+			description = "Enable debug messages to show up in the client.log",
+			position = 1,
+			section = debugSettings,
+			hidden = true
+	)
+	default boolean debugLogging() { return false; }
 	
 	@ConfigItem(
 		name = "Debug Keybind",
 		keyName = "debugKeybind",
 		description = "Don't press this unless you know what it does :)",
 		position = 1,
+		section = debugSettings,
 		hidden = true
 	)
 	default Keybind debugKeybind()
@@ -314,6 +310,7 @@ public interface EffectTimersConfig extends Config
 		keyName = "debugInteger",
 		description = "Related to the keybind in some way :)",
 		position = 2,
+		section = debugSettings,
 		hidden = true
 	)
 	default int debugInteger()

@@ -32,6 +32,7 @@ project.extra["PluginMainClassName"] = "EffectTimersPlugin" // This is the plugi
 
 dependencies {
     compileOnly(project(":kotoriutils"))
+    testImplementation(project(mapOf("path" to ":kotoriutils")))
 }
 
 tasks {

@@ -123,7 +123,6 @@ public class TimerManager
 		timerMap.get(actor).put(type, timer);
 	}
 
-	// TODO: test me
 	public void jumpToCooldown(Actor actor, TimerType type)
 	{
 		Timer timer = getTimerFor(actor, type);
@@ -134,6 +133,16 @@ public class TimerManager
 		timer.setStartMillis(System.currentTimeMillis());
 		timer.setTicksStart(plugin.getClient().getTickCount());
 		timer.setTicksLength(0);
+	}
+	
+	public void modifyTimerLength(Actor actor, TimerType type, int newLength)
+	{
+		Timer timer = getTimerFor(actor, type);
+		if (timer == null)
+		{
+			return;
+		}
+		timer.setTicksLength(newLength);
 	}
 	
 	public boolean timerMapContainsActor(Actor actor)
