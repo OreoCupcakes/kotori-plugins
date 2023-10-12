@@ -51,7 +51,7 @@ import java.util.*;
 @Slf4j
 @PluginDependency(KotoriUtils.class)
 @PluginDescriptor(
-	name = "<html><font color=#6b8af6>[P]</font> Effect Timers</html>",
+	name = "Effect Timers",
 	description = "Effect timer overlay on players",
 	tags = {"freeze", "timers", "barrage", "teleblock", "pklite", "ported", "kotori"}
 )
