@@ -32,12 +32,12 @@ import lombok.RequiredArgsConstructor;
 import net.runelite.client.config.*;
 
 @ConfigGroup("dagannothhelper")
-public interface DagannothKingsConfig extends Config
+public interface DagannothHelperConfig extends Config
 {
 	// Sections
 
 	@ConfigSection(
-			name = "<html>Dagannoth Kings<br>Version 2.0.0</html>",
+			name = "<html>Dagannoth Helper<br>Version 2.0.0</html>",
 			description = "",
 			position = -1,
 			closedByDefault = true

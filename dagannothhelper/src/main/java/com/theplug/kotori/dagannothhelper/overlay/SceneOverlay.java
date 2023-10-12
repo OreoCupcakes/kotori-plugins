@@ -26,8 +26,8 @@
  */
 package com.theplug.kotori.dagannothhelper.overlay;
 
-import com.theplug.kotori.dagannothhelper.DagannothKingsConfig;
-import com.theplug.kotori.dagannothhelper.DagannothKingsPlugin;
+import com.theplug.kotori.dagannothhelper.DagannothHelperConfig;
+import com.theplug.kotori.dagannothhelper.DagannothHelperPlugin;
 import com.theplug.kotori.dagannothhelper.entity.DagannothKing;
 import net.runelite.api.Point;
 import net.runelite.api.*;
@@ -46,14 +46,14 @@ public class SceneOverlay extends Overlay
 {
 	private static final Color TRANSPARENT = new Color(0, 0, 0, 0);
 
-	private final DagannothKingsPlugin plugin;
-	private final DagannothKingsConfig config;
+	private final DagannothHelperPlugin plugin;
+	private final DagannothHelperConfig config;
 	private final Client client;
 
 	private Set<DagannothKing> dagannothKings;
 
 	@Inject
-	public SceneOverlay(final DagannothKingsPlugin plugin, final DagannothKingsConfig config, final Client client)
+	public SceneOverlay(final DagannothHelperPlugin plugin, final DagannothHelperConfig config, final Client client)
 	{
 		super(plugin);
 

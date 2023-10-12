@@ -27,8 +27,8 @@
  */
 package com.theplug.kotori.dagannothhelper.overlay;
 
-import com.theplug.kotori.dagannothhelper.DagannothKingsConfig;
-import com.theplug.kotori.dagannothhelper.DagannothKingsPlugin;
+import com.theplug.kotori.dagannothhelper.DagannothHelperConfig;
+import com.theplug.kotori.dagannothhelper.DagannothHelperPlugin;
 import com.theplug.kotori.dagannothhelper.entity.DagannothKing;
 import net.runelite.api.Client;
 import net.runelite.api.Prayer;
@@ -71,13 +71,13 @@ public class InfoboxOverlay extends Overlay
 
 	private final Client client;
 
-	private final DagannothKingsPlugin plugin;
-	private final DagannothKingsConfig config;
+	private final DagannothHelperPlugin plugin;
+	private final DagannothHelperConfig config;
 
 	private final SpriteManager spriteManager;
 
 	@Inject
-	public InfoboxOverlay(final Client client, final DagannothKingsPlugin plugin, final DagannothKingsConfig config, final SpriteManager spriteManager)
+	public InfoboxOverlay(final Client client, final DagannothHelperPlugin plugin, final DagannothHelperConfig config, final SpriteManager spriteManager)
 	{
 		super(plugin);
 

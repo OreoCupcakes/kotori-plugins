@@ -23,15 +23,16 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "1.2.0"
+version = "2.0.0"
 
-project.extra["PluginName"] = "Dagannoth Kings" // This is the name that is used in the external plugin manager panel
-project.extra["PluginDescription"] = "An overlay plugin for the Dagannoth Kings." // This is the description that is used in the external plugin manager panel
+project.extra["PluginName"] = "<html><font color=#6b8af6>[K]</font> Dagannoth Helper</html>" // This is the name that is used in the external plugin manager panel
+project.extra["PluginDescription"] = "A plugin for the Dagannoth Kings including overlays and helpers." // This is the description that is used in the external plugin manager panel
 project.extra["PluginPackageId"] = "dagannothkings" // This is the plugin package folder after the default group package.
 project.extra["PluginMainClassName"] = "DagannothKingsPlugin" // This is the plugin's main class which extends Plugin
 
 dependencies {
     compileOnly(project(":kotoriutils"))
+    testImplementation(project(mapOf("path" to ":kotoriutils")))
 }
 
 tasks {

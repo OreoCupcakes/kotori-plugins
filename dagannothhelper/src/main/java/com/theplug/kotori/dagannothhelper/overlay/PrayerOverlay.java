@@ -28,8 +28,8 @@
  */
 package com.theplug.kotori.dagannothhelper.overlay;
 
-import com.theplug.kotori.dagannothhelper.DagannothKingsConfig;
-import com.theplug.kotori.dagannothhelper.DagannothKingsPlugin;
+import com.theplug.kotori.dagannothhelper.DagannothHelperConfig;
+import com.theplug.kotori.dagannothhelper.DagannothHelperPlugin;
 import com.theplug.kotori.dagannothhelper.entity.DagannothKing;
 import com.theplug.kotori.kotoriutils.rlapi.PrayerExtended;
 import net.runelite.api.*;
@@ -54,14 +54,14 @@ public class PrayerOverlay extends Overlay
 	private static final int BOX_WIDTH = 10;
 	private static final int BOX_HEIGHT = 5;
 
-	private final DagannothKingsPlugin plugin;
-	private final DagannothKingsConfig config;
+	private final DagannothHelperPlugin plugin;
+	private final DagannothHelperConfig config;
 	private final Client client;
 
 	private Set<DagannothKing> dagannothKings;
 
 	@Inject
-	public PrayerOverlay(final DagannothKingsPlugin plugin, final DagannothKingsConfig config, final Client client)
+	public PrayerOverlay(final DagannothHelperPlugin plugin, final DagannothHelperConfig config, final Client client)
 	{
 		super(plugin);
 

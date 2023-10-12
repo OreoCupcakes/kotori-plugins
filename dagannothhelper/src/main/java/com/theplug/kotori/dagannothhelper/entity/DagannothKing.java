@@ -29,7 +29,7 @@
  */
 package com.theplug.kotori.dagannothhelper.entity;
 
-import com.theplug.kotori.dagannothhelper.DagannothKingsPlugin;
+import com.theplug.kotori.dagannothhelper.DagannothHelperPlugin;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -97,9 +97,9 @@ public class DagannothKing
 	@RequiredArgsConstructor
 	public enum Boss
 	{
-		DAGANNOTH_PRIME(NpcID.DAGANNOTH_PRIME, DagannothKingsPlugin.DAG_PRIME_ATTACK, 4, AttackStyle.MAGE),
-		DAGANNOTH_REX(NpcID.DAGANNOTH_REX, DagannothKingsPlugin.DAG_REX_ATTACK, 4, AttackStyle.MELEE),
-		DAGANNOTH_SUPREME(NpcID.DAGANNOTH_SUPREME, DagannothKingsPlugin.DAG_SUPREME_ATTACK, 4, AttackStyle.RANGE);
+		DAGANNOTH_PRIME(NpcID.DAGANNOTH_PRIME, DagannothHelperPlugin.DAG_PRIME_ATTACK, 4, AttackStyle.MAGE),
+		DAGANNOTH_REX(NpcID.DAGANNOTH_REX, DagannothHelperPlugin.DAG_REX_ATTACK, 4, AttackStyle.MELEE),
+		DAGANNOTH_SUPREME(NpcID.DAGANNOTH_SUPREME, DagannothHelperPlugin.DAG_SUPREME_ATTACK, 4, AttackStyle.RANGE);
 
 		private final int npcId;
 		private final int animationId;

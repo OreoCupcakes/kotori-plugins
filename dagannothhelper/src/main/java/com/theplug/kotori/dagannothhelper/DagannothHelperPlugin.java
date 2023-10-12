@@ -63,20 +63,20 @@ import java.util.Set;
 	description = "A plugin for the Dagannoth Kings including overlays and helpers.",
 	tags = {"dagannoth", "kings", "dks", "daggs", "ported","kotori"}
 )
-public class DagannothKingsPlugin extends Plugin
+public class DagannothHelperPlugin extends Plugin
 {
 	public static final int DAG_REX_ATTACK = 2853;
 	public static final int DAG_PRIME_ATTACK = 2854;
 	public static final int DAG_SUPREME_ATTACK = 2855;
 	public static final int DAG_KING_DEATH = 2856;
 
-	private static final int WATERBITH_REGION = 11589;
+	private static final Set<Integer> WATERBITH_REGIONS = Set.of(11588, 11589);
 
 	@Inject
 	private Client client;
 
 	@Inject
-	private DagannothKingsConfig config;
+	private DagannothHelperConfig config;
 
 	@Inject
 	private OverlayManager overlayManager;
@@ -169,9 +169,9 @@ public class DagannothKingsPlugin extends Plugin
 
 
 	@Provides
-	DagannothKingsConfig provideConfig(final ConfigManager configManager)
+	DagannothHelperConfig provideConfig(final ConfigManager configManager)
 	{
-		return configManager.getConfig(DagannothKingsConfig.class);
+		return configManager.getConfig(DagannothHelperConfig.class);
 	}
 
 	@Override
@@ -419,7 +419,7 @@ public class DagannothKingsPlugin extends Plugin
 
 	private boolean atDks()
 	{
-		return Arrays.stream(client.getMapRegions()).anyMatch(x -> x == WATERBITH_REGION);
+		return WATERBITH_REGIONS.contains(client.getLocalPlayer().getWorldLocation().getRegionID());
 	}
 
 	private void deactivatePrayers()
