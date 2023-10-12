@@ -93,6 +93,7 @@ public class HouseOverlayPlugin extends Plugin
         cached_fairy_ring_names.put("BLP", "TzHaar area");
         cached_fairy_ring_names.put("BLR", "Legends' Guild");
         cached_fairy_ring_names.put("BLQ", "Yu'biusk");
+        cached_fairy_ring_names.put("BLS", "South of Mount Quidamortem, CoX, Stranglewood");
         // "C" Combinations
         cached_fairy_ring_names.put("CIP", "Miscellania");
         cached_fairy_ring_names.put("CIQ", "North-west of Yanille");
