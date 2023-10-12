@@ -37,8 +37,8 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import com.theplug.kotori.cerberushelper.CerberusConfig;
-import com.theplug.kotori.cerberushelper.CerberusPlugin;
+import com.theplug.kotori.cerberushelper.CerberusHelperConfig;
+import com.theplug.kotori.cerberushelper.CerberusHelperPlugin;
 import com.theplug.kotori.cerberushelper.domain.CerberusAttack;
 import com.theplug.kotori.kotoriutils.rlapi.PrayerExtended;
 import net.runelite.api.Client;
@@ -46,12 +46,10 @@ import net.runelite.api.Point;
 import net.runelite.api.Prayer;
 import net.runelite.api.widgets.Widget;
 import com.theplug.kotori.cerberushelper.util.OverlayUtil;
-import com.theplug.kotori.cerberushelper.util.Utility;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.OverlayPriority;
-import org.checkerframework.checker.units.qual.C;
 
 @Singleton
 public class PrayerOverlay extends Overlay
@@ -61,13 +59,13 @@ public class PrayerOverlay extends Overlay
 	private static final int BOX_HEIGHT = 5;
 
 	private final Client client;
-	private final CerberusPlugin plugin;
-	private final CerberusConfig config;
+	private final CerberusHelperPlugin plugin;
+	private final CerberusHelperConfig config;
 
 	private final Map<Widget, Integer> lastBoxBaseYMap = new HashMap<>();
 
 	@Inject
-	private PrayerOverlay(final Client client, final CerberusPlugin plugin, final CerberusConfig config)
+	private PrayerOverlay(final Client client, final CerberusHelperPlugin plugin, final CerberusHelperConfig config)
 	{
 		this.client = client;
 		this.plugin = plugin;

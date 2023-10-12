@@ -29,7 +29,6 @@
 package com.theplug.kotori.cerberushelper;
 
 import com.theplug.kotori.kotoriutils.rlapi.Spells;
-import com.theplug.kotori.kotoriutils.rlapi.WidgetInfoPlus;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.runelite.api.Prayer;
@@ -38,7 +37,7 @@ import net.runelite.client.config.*;
 import java.awt.*;
 
 @ConfigGroup("cerberushelper")
-public interface CerberusConfig extends Config
+public interface CerberusHelperConfig extends Config
 {
 	// Sections
 	@ConfigSection(

@@ -31,8 +31,8 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import com.theplug.kotori.cerberushelper.CerberusConfig;
-import com.theplug.kotori.cerberushelper.CerberusPlugin;
+import com.theplug.kotori.cerberushelper.CerberusHelperConfig;
+import com.theplug.kotori.cerberushelper.CerberusHelperPlugin;
 import com.theplug.kotori.cerberushelper.domain.Arena;
 import com.theplug.kotori.cerberushelper.domain.Cerberus;
 import com.theplug.kotori.cerberushelper.domain.Ghost;
@@ -61,13 +61,13 @@ public final class SceneOverlay extends Overlay
 	private static final int GHOST_YELL_TICK_WINDOW = 17;
 
 	private final Client client;
-	private final CerberusPlugin plugin;
-	private final CerberusConfig config;
+	private final CerberusHelperPlugin plugin;
+	private final CerberusHelperConfig config;
 
 	private Cerberus cerberus;
 
 	@Inject
-	SceneOverlay(final Client client, final CerberusPlugin plugin, final CerberusConfig config)
+	SceneOverlay(final Client client, final CerberusHelperPlugin plugin, final CerberusHelperConfig config)
 	{
 		this.client = client;
 		this.plugin = plugin;

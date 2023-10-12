@@ -43,7 +43,6 @@ import com.theplug.kotori.kotoriutils.KotoriUtils;
 import com.theplug.kotori.kotoriutils.ReflectionLibrary;
 import com.theplug.kotori.kotoriutils.methods.*;
 import com.theplug.kotori.kotoriutils.rlapi.Spells;
-import com.theplug.kotori.kotoriutils.rlapi.WidgetInfoPlus;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
@@ -75,7 +74,7 @@ import net.runelite.http.api.item.ItemStats;
 	description = "A helper plugin for the Cerberus boss. Comes with overlays and auto prayers.",
 	tags = {"cerberus", "hellhound", "doggie", "ported","kotori"}
 )
-public class CerberusPlugin extends Plugin
+public class CerberusHelperPlugin extends Plugin
 {
 	private static final int ANIMATION_ID_IDLE = -1;
 	private static final int ANIMATION_ID_STAND_UP = 4486;
@@ -103,7 +102,7 @@ public class CerberusPlugin extends Plugin
 	private Client client;
 
 	@Inject
-	private CerberusConfig config;
+	private CerberusHelperConfig config;
 
 	@Inject
 	private ItemManager itemManager;
@@ -163,9 +162,9 @@ public class CerberusPlugin extends Plugin
 	private int ghostAttacked = 0;
 
 	@Provides
-	CerberusConfig provideConfig(final ConfigManager configManager)
+	CerberusHelperConfig provideConfig(final ConfigManager configManager)
 	{
-		return configManager.getConfig(CerberusConfig.class);
+		return configManager.getConfig(CerberusHelperConfig.class);
 	}
 
 	@Override

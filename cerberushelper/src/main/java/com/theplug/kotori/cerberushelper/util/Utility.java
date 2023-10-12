@@ -27,14 +27,11 @@
 package com.theplug.kotori.cerberushelper.util;
 
 import java.awt.Color;
-import java.awt.Font;
 
 import com.theplug.kotori.cerberushelper.domain.Phase;
-import com.theplug.kotori.cerberushelper.CerberusConfig;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.runelite.api.Prayer;
-import net.runelite.client.ui.FontManager;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Utility

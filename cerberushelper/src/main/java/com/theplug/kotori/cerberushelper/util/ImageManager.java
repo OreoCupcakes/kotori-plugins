@@ -29,8 +29,7 @@ package com.theplug.kotori.cerberushelper.util;
 import java.awt.image.BufferedImage;
 
 import com.theplug.kotori.cerberushelper.domain.Phase;
-import com.theplug.kotori.cerberushelper.CerberusConfig;
-import com.theplug.kotori.cerberushelper.CerberusPlugin;
+import com.theplug.kotori.cerberushelper.CerberusHelperPlugin;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.runelite.api.Prayer;
@@ -113,7 +112,7 @@ public final class ImageManager
 //	private static BufferedImage getBufferedImage(final String path, final int imgIdx, final CerberusConfig.InfoBoxComponentSize size)
 	private static BufferedImage getBufferedImage(final String path, final int imgIdx)
 	{
-		final BufferedImage img = ImageUtil.loadImageResource(CerberusPlugin.class, path);
+		final BufferedImage img = ImageUtil.loadImageResource(CerberusHelperPlugin.class, path);
 
 	//	Removed the info box size config because medium and large are just ridiculously oversized anyways
 	//	final int resize = (int) (size.getSize() / RESIZE_FACTOR);

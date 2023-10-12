@@ -34,8 +34,8 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import com.theplug.kotori.cerberushelper.CerberusConfig;
-import com.theplug.kotori.cerberushelper.CerberusPlugin;
+import com.theplug.kotori.cerberushelper.CerberusHelperConfig;
+import com.theplug.kotori.cerberushelper.CerberusHelperPlugin;
 import com.theplug.kotori.cerberushelper.domain.Cerberus;
 import com.theplug.kotori.cerberushelper.domain.Phase;
 import com.theplug.kotori.cerberushelper.util.ImageManager;
@@ -58,11 +58,11 @@ public final class UpcomingAttackOverlay extends Overlay
 
 	private static final int GAP_SIZE = 2;
 
-	private final CerberusPlugin plugin;
-	private final CerberusConfig config;
+	private final CerberusHelperPlugin plugin;
+	private final CerberusHelperConfig config;
 
 	@Inject
-	public UpcomingAttackOverlay(final CerberusPlugin plugin, final CerberusConfig config)
+	public UpcomingAttackOverlay(final CerberusHelperPlugin plugin, final CerberusHelperConfig config)
 	{
 		this.plugin = plugin;
 		this.config = config;

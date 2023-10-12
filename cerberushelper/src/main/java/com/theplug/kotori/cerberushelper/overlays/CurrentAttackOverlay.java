@@ -33,18 +33,14 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import com.theplug.kotori.cerberushelper.domain.CerberusAttack;
 import com.theplug.kotori.cerberushelper.domain.Phase;
-import com.theplug.kotori.cerberushelper.CerberusConfig;
-import com.theplug.kotori.cerberushelper.CerberusPlugin;
-import com.theplug.kotori.cerberushelper.domain.Cerberus;
+import com.theplug.kotori.cerberushelper.CerberusHelperConfig;
+import com.theplug.kotori.cerberushelper.CerberusHelperPlugin;
 import com.theplug.kotori.cerberushelper.util.ImageManager;
 import com.theplug.kotori.cerberushelper.util.InfoBoxComponent;
-import com.theplug.kotori.cerberushelper.util.Utility;
 import net.runelite.api.Client;
 import net.runelite.api.Prayer;
 import net.runelite.client.ui.FontManager;
@@ -63,13 +59,13 @@ public final class CurrentAttackOverlay extends Overlay
 	private static final int GAME_TICK_THRESHOLD = 6;
 
 	private final Client client;
-	private final CerberusPlugin plugin;
-	private final CerberusConfig config;
+	private final CerberusHelperPlugin plugin;
+	private final CerberusHelperConfig config;
 
 	private final InfoBoxComponent infoBoxComponent;
 
 	@Inject
-	CurrentAttackOverlay(final Client client, final CerberusPlugin plugin, final CerberusConfig config)
+	CurrentAttackOverlay(final Client client, final CerberusHelperPlugin plugin, final CerberusHelperConfig config)
 	{
 		this.client = client;
 		this.plugin = plugin;
