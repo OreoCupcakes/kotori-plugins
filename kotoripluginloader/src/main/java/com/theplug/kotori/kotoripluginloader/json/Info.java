@@ -32,9 +32,4 @@ public class Info
     private boolean preventAoeWarnings;
     private boolean preventFightCaves;
     private boolean preventInferno;
-
-    //delete
-    private boolean preventAlchemicalHydra;
-    private boolean preventGauntletExtended;
-    private boolean preventDagannothKings;
 }

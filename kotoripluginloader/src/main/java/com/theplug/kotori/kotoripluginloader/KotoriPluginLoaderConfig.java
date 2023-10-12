@@ -99,12 +99,12 @@ public interface KotoriPluginLoaderConfig extends Config
     default boolean cerberusHelperChoice() { return false; }
 
     @ConfigItem(
-            keyName = "dagannothKingsChoice",
-            name = "Dagannoth Kings",
-            description = "Load the Dagannoth Kings plugin.",
+            keyName = "dagannothHelperChoice",
+            name = "Dagannoth Helper",
+            description = "Load the Dagannoth Helper plugin.",
             section = pluginsToLoad
     )
-    default boolean dagannothKingsChoice() { return false; }
+    default boolean dagannothHelperChoice() { return false; }
 
     @ConfigItem(
             keyName = "demonicGorillasChoice",
@@ -123,12 +123,12 @@ public interface KotoriPluginLoaderConfig extends Config
     default boolean effectTimersChoice() { return false; }
 
     @ConfigItem(
-            keyName = "gauntletExtendedChoice",
-            name = "Gauntlet Extended",
-            description = "Load the Gauntlet Extended plugin.",
+            keyName = "gauntletHelperChoice",
+            name = "Gauntlet Helper",
+            description = "Load the Gauntlet Helper plugin.",
             section = pluginsToLoad
     )
-    default boolean gauntletExtendedChoice() { return false; }
+    default boolean gauntletHelperChoice() { return false; }
 
     @ConfigItem(
             keyName = "hallowedHelperChoice",
@@ -217,14 +217,6 @@ public interface KotoriPluginLoaderConfig extends Config
             section = pluginsToLoad
     )
     default boolean tarnsLairChoice() { return false; }
-
-    @ConfigItem(
-            keyName = "reorderPrayersChoice",
-            name = "Reorder Prayers",
-            description = "Load the Reorder Prayers plugin.",
-            section = pluginsToLoad
-    )
-    default boolean reorderPrayersChoice() { return false; }
 
     @ConfigItem(
             keyName = "nightmareChoice",

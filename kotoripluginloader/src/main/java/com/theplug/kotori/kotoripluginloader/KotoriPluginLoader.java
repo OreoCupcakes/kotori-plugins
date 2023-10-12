@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @PluginDescriptor(
-		name = "Kotori Plugin Loader",
+		name = "<html><font color=#6b8af6>Kotori</font> Plugin Loader</html>",
 		enabledByDefault = true,
 		description = "Plugin loader for plugins maintained by Kotori.",
 		tags = {"kotori","ported","loader"}
@@ -143,10 +143,10 @@ public class KotoriPluginLoader extends Plugin
 			
 			keys.add("alchemicalHelperChoice");
 			keys.add("cerberusHelperChoice");
-			keys.add("dagannothKingsChoice");
+			keys.add("dagannothHelperChoice");
 			keys.add("demonicGorillasChoice");
 			keys.add("effectTimersChoice");
-			keys.add("gauntletExtendedChoice");
+			keys.add("gauntletHelperChoice");
 			keys.add("godWarsHelperChoice");
 			keys.add("grotesqueGuardiansChoice");
 			keys.add("hallowedHelperChoice");
@@ -414,51 +414,49 @@ public class KotoriPluginLoader extends Plugin
 		ArrayList<String> pluginClassPathsToLoad = new ArrayList<>();
 		
 		//Load Kotori Plugin Utils always
-		addToPluginToLoadList(pluginClassPathsToLoad, true, infoJsonObject.isPreventKotoriUtils(), "Kotori Plugin Utils", 0);
+		addToPluginToLoadList(pluginClassPathsToLoad, true, infoJsonObject.isPreventKotoriUtils(), "Plugin Utils", 3);
 		//Load Alch Helper
 		addToPluginToLoadList(pluginClassPathsToLoad, config.alchemicalHelperChoice(), infoJsonObject.isPreventAlchemicalHelper(), "Alchemical Helper", 2);
 		//Load Cerberus Helper
-		addToPluginToLoadList(pluginClassPathsToLoad, config.cerberusHelperChoice(), infoJsonObject.isPreventCerberusHelper(), "Cerberus Helper", 0);
+		addToPluginToLoadList(pluginClassPathsToLoad, config.cerberusHelperChoice(), infoJsonObject.isPreventCerberusHelper(), "Cerberus Helper", 2);
 		//Load Dagannoth Kings
-		addToPluginToLoadList(pluginClassPathsToLoad, config.dagannothKingsChoice(), infoJsonObject.isPreventDagannothKings(), "Dagannoth Kings", 0);
+		addToPluginToLoadList(pluginClassPathsToLoad, config.dagannothHelperChoice(), infoJsonObject.isPreventDagannothHelper(), "Dagannoth Helper", 2);
 		//Load Demonic Gorillas
-		addToPluginToLoadList(pluginClassPathsToLoad, config.demonicGorillasChoice(), infoJsonObject.isPreventDemonicGorillas(), "Demonic Gorillas", 0);
+		addToPluginToLoadList(pluginClassPathsToLoad, config.demonicGorillasChoice(), infoJsonObject.isPreventDemonicGorillas(), "Demonic Gorillas", 1);
 		//Load Effect Timers
 		addToPluginToLoadList(pluginClassPathsToLoad, config.effectTimersChoice(), infoJsonObject.isPreventEffectTimers(), "Effect Timers", 1);
 		//Load Gauntlet Extended
-		addToPluginToLoadList(pluginClassPathsToLoad, config.gauntletExtendedChoice(), infoJsonObject.isPreventGauntletExtended(), "Gauntlet Extended", 0);
+		addToPluginToLoadList(pluginClassPathsToLoad, config.gauntletHelperChoice(), infoJsonObject.isPreventGauntletHelper(), "Gauntlet Helper", 2);
 		//Load Grotesque Guardians
-		addToPluginToLoadList(pluginClassPathsToLoad, config.grotesqueGuardiansChoice(), infoJsonObject.isPreventGrotesqueGuardians(), "Grotesque Guardians", 0);
+		addToPluginToLoadList(pluginClassPathsToLoad, config.grotesqueGuardiansChoice(), infoJsonObject.isPreventGrotesqueGuardians(), "Grotesque Guardian", 1);
 		//Load God Wars Helper
-		addToPluginToLoadList(pluginClassPathsToLoad, config.godWarsHelperChoice(), infoJsonObject.isPreventGwdHelper(), "God Wars Helper", 0);
+		addToPluginToLoadList(pluginClassPathsToLoad, config.godWarsHelperChoice(), infoJsonObject.isPreventGwdHelper(), "God Wars Helper", 2);
 		//Load Hallowed Helper
-		addToPluginToLoadList(pluginClassPathsToLoad, config.hallowedHelperChoice(), infoJsonObject.isPreventHallowedHelper(), "Hallowed Sepulchre (Deluxe)", 0);
+		addToPluginToLoadList(pluginClassPathsToLoad, config.hallowedHelperChoice(), infoJsonObject.isPreventHallowedHelper(), "Hallowed Sepulchre", 1);
 		//Load House Overlay
-		addToPluginToLoadList(pluginClassPathsToLoad, config.houseOverlayChoice(), infoJsonObject.isPreventHouseOverlay(), "House Overlay", 0);
+		addToPluginToLoadList(pluginClassPathsToLoad, config.houseOverlayChoice(), infoJsonObject.isPreventHouseOverlay(), "House Overlay", 1);
 		//Load Multi-Indicators
-		addToPluginToLoadList(pluginClassPathsToLoad, config.multiIndicatorsChoice(), infoJsonObject.isPreventMultiIndicators(), "Multi-Lines Indicators", 0);
+		addToPluginToLoadList(pluginClassPathsToLoad, config.multiIndicatorsChoice(), infoJsonObject.isPreventMultiIndicators(), "Multi Indicators", 1);
 		//Load Nex
-		addToPluginToLoadList(pluginClassPathsToLoad, config.nexExtendedChoice(), infoJsonObject.isPreventNex(), "Nex Extended", 0);
+		addToPluginToLoadList(pluginClassPathsToLoad, config.nexExtendedChoice(), infoJsonObject.isPreventNex(), "Nex Extended", 1);
 		//Load Nightmare
-		addToPluginToLoadList(pluginClassPathsToLoad, config.nightmareChoice(), infoJsonObject.isPreventNightmare(), "Nightmare of Ashihama", 0);
-		//Load Reorder Prayers
-		addToPluginToLoadList(pluginClassPathsToLoad, config.reorderPrayersChoice(), infoJsonObject.isPreventReorderPrayers(), "Reorder Prayers", 0);
+		addToPluginToLoadList(pluginClassPathsToLoad, config.nightmareChoice(), infoJsonObject.isPreventNightmare(), "Nightmare", 1);
 		//Load Specbar
-		addToPluginToLoadList(pluginClassPathsToLoad, config.specBarChoice(), infoJsonObject.isPreventSpecbar(), "Spec Bar", 0);
+		addToPluginToLoadList(pluginClassPathsToLoad, config.specBarChoice(), infoJsonObject.isPreventSpecbar(), "Spec Bar", 1);
 		//Load Tarn's Lair
-		addToPluginToLoadList(pluginClassPathsToLoad, config.tarnsLairChoice(), infoJsonObject.isPreventTarnsLair(), "Tarn's Lair", 0);
+		addToPluginToLoadList(pluginClassPathsToLoad, config.tarnsLairChoice(), infoJsonObject.isPreventTarnsLair(), "Tarn's Lair", 1);
 		//Load Temple Trekking
-		addToPluginToLoadList(pluginClassPathsToLoad, config.templeTrekkingChoice(), infoJsonObject.isPreventTempleTrekking(), "Temple Trekking", 0);
+		addToPluginToLoadList(pluginClassPathsToLoad, config.templeTrekkingChoice(), infoJsonObject.isPreventTempleTrekking(), "Temple Trekking", 1);
 		//Load Vorkath
-		addToPluginToLoadList(pluginClassPathsToLoad, config.vorkathOverlayChoice(), infoJsonObject.isPreventVorkath(), "Vorkath", 0);
+		addToPluginToLoadList(pluginClassPathsToLoad, config.vorkathOverlayChoice(), infoJsonObject.isPreventVorkath(), "Vorkath", 1);
 		//Load Zulrah
-		addToPluginToLoadList(pluginClassPathsToLoad, config.zulrahOverlayChoice(), infoJsonObject.isPreventZulrah(), "Zulrah", 0);
+		addToPluginToLoadList(pluginClassPathsToLoad, config.zulrahOverlayChoice(), infoJsonObject.isPreventZulrah(), "Zulrah", 1);
 		//Load AoE Warnings
-		addToPluginToLoadList(pluginClassPathsToLoad, config.aoeWarningsChoice(), infoJsonObject.isPreventAoeWarnings(), "AoE Warnings", 0);
+		addToPluginToLoadList(pluginClassPathsToLoad, config.aoeWarningsChoice(), infoJsonObject.isPreventAoeWarnings(), "AoE Warnings", 1);
 		//Load Fight Caves
-		addToPluginToLoadList(pluginClassPathsToLoad, config.fightCavesChoice(), infoJsonObject.isPreventFightCaves(), "Fight Caves", 0);
+		addToPluginToLoadList(pluginClassPathsToLoad, config.fightCavesChoice(), infoJsonObject.isPreventFightCaves(), "Fight Caves", 1);
 		//Load Inferno
-		addToPluginToLoadList(pluginClassPathsToLoad, config.infernoChoice(), infoJsonObject.isPreventInferno(), "Inferno", 0);
+		addToPluginToLoadList(pluginClassPathsToLoad, config.infernoChoice(), infoJsonObject.isPreventInferno(), "Inferno", 1);
 		
 		return pluginClassPathsToLoad;
 	}
