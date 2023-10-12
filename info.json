@@ -1,6 +1,6 @@
 {
-  "gameRevision": "214",
-  "runeliteVersion": "1.10.4",
+  "gameRevision": "217",
+  "runeliteVersion": "1.10.14",
   "kotoriLoaderVersion": "2.0.0",
   "preventMasterLoad": "false",
   "preventAlchemicalHydra": "false",
@@ -25,5 +25,8 @@
   "preventGwdHelper": "false",
   "preventAoeWarnings": "false",
   "preventFightCaves": "false",
-  "preventInferno": "false"
+  "preventInferno": "false",
+  "preventAlchemicalHelper": "false",
+  "preventDagannothHelper": "false",
+  "preventGauntletHelper": "false"
 }

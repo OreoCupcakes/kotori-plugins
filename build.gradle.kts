@@ -9,7 +9,7 @@ plugins {
     checkstyle
 }
 
-project.extra["GithubUrl"] = "https://github.com/OreoCupcakes/kotori-ported-plugins-hosting"
+project.extra["GithubUrl"] = "https://github.com/OreoCupcakes/kotori-plugins-releases"
 
 apply<BootstrapPlugin>()
 apply<VersionPlugin>()
@@ -40,7 +40,7 @@ subprojects {
     group = "com.theplug.kotori"
 
     project.extra["PluginProvider"] = "Kotori"
-    project.extra["ProjectSupportUrl"] = "https://discord.gg/cuell"
+    project.extra["ProjectSupportUrl"] = "https://discord.gg/JZFhwNVH85"
     project.extra["PluginLicense"] = "2-Clause BSD License"
 
     repositories {

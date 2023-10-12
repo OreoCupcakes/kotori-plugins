@@ -25,16 +25,12 @@
 
 rootProject.name = "kotori-ported-plugins"
 
-include(":alchemicalhydra")
-include(":alchemicalhydrarlpl")
+include(":alchemicalhelper")
 include(":cerberushelper")
-include(":dagannothkings")
+include(":dagannothhelper")
 include(":demonicgorillas")
 include(":effecttimers")
-include(":gauntletextended")
-include(":gwdticktimers")
 include(":hallowedhelper")
-include(":hallowedsepulchre")
 include(":houseoverlay")
 include(":javaexample")
 include(":kotoripluginloader")
@@ -42,7 +38,6 @@ include(":kotoriutils")
 include(":multiindicators")
 include(":nex")
 include(":vorkathoverlay")
-include(":vorkathoverlayrlpl")
 include(":zulrahoverlay")
 include(":grotesqueguardians")
 include(":specbar")
@@ -51,17 +46,16 @@ include(":tarnslair")
 include(":reorderprayers")
 include(":nightmare")
 include(":gwdhelper")
-include(":gauntletextended2")
 include(":kotoritest")
 include(":fightcaves")
 include(":inferno")
 include(":aoewarnings")
+include(":gauntlethelper")
 
 for (project in rootProject.children) {
     project.apply {
         projectDir = file(name)
         buildFileName = "$name.gradle.kts"
-
         require(projectDir.isDirectory) { "Project '${project.path} must have a $projectDir directory" }
         require(buildFile.isFile) { "Project '${project.path} must have a $buildFile build script" }
     }
