@@ -23,9 +23,9 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "1.1.4"
+version = "1.1.5"
 
-project.extra["PluginName"] = "<html><font color=#6b8af6>[P]</font> Multi-Lines Indicators</html>" // This is the name that is used in the external plugin manager panel
+project.extra["PluginName"] = "<html><font color=#6b8af6>[P]</font> Multi Indicators</html>" // This is the name that is used in the external plugin manager panel
 project.extra["PluginDescription"] = "Shows borders of multicombat and PvP safezones." // This is the description that is used in the external plugin manager panel
 project.extra["PluginPackageId"] = "multiindicators" // This is the plugin package folder after the default group package.
 project.extra["PluginMainClassName"] = "MultiIndicatorsPlugin" // This is the plugin's main class which extends Plugin
