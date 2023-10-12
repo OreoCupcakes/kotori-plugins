@@ -63,7 +63,7 @@ import net.runelite.client.ui.overlay.OverlayManager;
 @Slf4j
 @PluginDependency(KotoriUtils.class)
 @PluginDescriptor(
-	name = "<html><font color=#6b8af6>[P]</font> Grotesque Guardians</html>",
+	name = "<html><font color=#6b8af6>[P]</font> Grotesque Guardian</html>",
 	enabledByDefault = false,
 	description = "A plugin for Grotesque Guardians boss.",
 	tags = {"grotesque", "guardians", "gargoyles", "kotori"}
