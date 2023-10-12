@@ -62,7 +62,7 @@ import static com.theplug.kotori.aoewarnings.AoeWarningConfig.*;
 
 @PluginDependency(KotoriUtils.class)
 @PluginDescriptor(
-	name = "AoE Warnings",
+	name = "<html><font color=#6b8af6>[P]</font> AoE Warnings</html>",
 	enabledByDefault = false,
 	description = "Shows the final destination for AoE Attack projectiles",
 	tags = {"bosses", "combat", "pve", "overlay", "kotori", "ported"}
@@ -74,7 +74,7 @@ public class AoeWarningPlugin extends Plugin
 
 	@Getter(AccessLevel.PACKAGE)
 	private final Set<ProjectileContainer> projectiles = new HashSet<>();
-	private final ArrayList<Projectile> spawnedProjectiles = new ArrayList<>();
+	private final Set<Projectile> spawnedProjectiles = new HashSet<>();
 
 	@Inject
 	public AoeWarningConfig config;

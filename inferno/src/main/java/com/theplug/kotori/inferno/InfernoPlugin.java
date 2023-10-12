@@ -66,7 +66,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 @PluginDependency(KotoriUtils.class)
 @PluginDescriptor(
-	name = "Inferno",
+	name = "<html><font color=#6b8af6>[P]</font> Inferno</html>",
 	enabledByDefault = false,
 	description = "Inferno helper",
 	tags = {"combat", "overlay", "pve", "pvm", "ported", "kotori"}

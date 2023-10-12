@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 //        name = "<html>Hallowed <font size=\"\" color=\"red\"<b>BETA</font></b></html>",
 @PluginDescriptor(
-        name = "Hallowed Sepulchre (Deluxe)",
+        name = "<html><font color=#6b8af6>[P]</font> Hallowed Sepulchre (Deluxe)</html>",
         description = "Hallowed Sepulchre helper with tons of overlays.",
         tags = {"grace", "marks", "overlay", "skilling", "traps", "sepulchre", "hallowed", "imno", "ported", "darkmeyer", "agility", "course", "minigame", "kotori"}
 )

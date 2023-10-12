@@ -25,7 +25,7 @@
 
 version = "1.3.0"
 
-project.extra["PluginName"] = "Effect Timers" // This is the name that is used in the external plugin manager panel
+project.extra["PluginName"] = "<html><font color=#6b8af6>[P]</font> Effect Timers</html>" // This is the name that is used in the external plugin manager panel
 project.extra["PluginDescription"] = "Effect timers overlay on players." // This is the description that is used in the external plugin manager panel
 project.extra["PluginPackageId"] = "effecttimers" // This is the plugin package folder after the default group package.
 project.extra["PluginMainClassName"] = "EffectTimersPlugin" // This is the plugin's main class which extends Plugin

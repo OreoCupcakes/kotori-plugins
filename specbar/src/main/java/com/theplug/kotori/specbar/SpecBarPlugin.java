@@ -35,7 +35,7 @@ import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 
 @PluginDescriptor(
-	name = "Spec Bar",
+	name = "<html><font color=#6b8af6>[P]</font> Spec Bar</html>",
 	enabledByDefault = false,
 	description = "Adds a spec bar to every weapon.",
 	tags = {"spec bar", "special attack", "spec", "bar", "pklite", "kotori", "ported"}

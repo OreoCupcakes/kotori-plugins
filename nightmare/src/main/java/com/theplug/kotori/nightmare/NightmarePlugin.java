@@ -30,7 +30,7 @@ import net.runelite.client.ui.overlay.infobox.Timer;
 import net.runelite.client.util.Text;
 
 @PluginDescriptor(
-	name = "Nightmare of Ashihama",
+	name = "<html><font color=#6b8af6>[P]</font> Nightmare of Ashihama</html>",
 	enabledByDefault = false,
 	description = "Show what prayer to use and which tiles to avoid.",
 	tags = {"bosses", "combat", "nm", "overlay", "nightmare", "pve", "pvm", "ashihama", "kotori", "ported"}

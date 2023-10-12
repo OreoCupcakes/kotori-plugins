@@ -23,9 +23,9 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "2.1.2"
+version = "2.1.3"
 
-project.extra["PluginName"] = "God Wars Helper" // This is the name that is used in the external plugin manager panel
+project.extra["PluginName"] = "<html><font color=#6b8af6>[K]</font> God Wars Helper</html>" // This is the name that is used in the external plugin manager panel
 project.extra["PluginDescription"] = "Overlay and automatic helper plugin for the GWD bosses." // This is the description that is used in the external plugin manager panel
 project.extra["PluginPackageId"] = "gwdhelper" // This is the plugin package folder after the default group package.
 project.extra["PluginMainClassName"] = "GodWarsHelperPlugin" // This is the plugin's main class which extends Plugin

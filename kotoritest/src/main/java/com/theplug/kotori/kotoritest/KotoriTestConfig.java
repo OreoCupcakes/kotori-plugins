@@ -24,23 +24,26 @@
  */
 package com.theplug.kotori.kotoritest;
 
+import lombok.AllArgsConstructor;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
 import net.runelite.client.config.Keybind;
+
+import java.util.*;
 
 @ConfigGroup("kotoritest")
 
 public interface KotoriTestConfig extends Config
 {
 	@ConfigItem(
-		keyName = "keybind",
-		name = "Keybind",
+		keyName = "test",
+		name = "Test",
 		description = "",
 		position = 0
 	)
-	default Keybind keybind()
+	default boolean test()
 	{
-		return Keybind.NOT_SET;
+		return false;
 	}
 }

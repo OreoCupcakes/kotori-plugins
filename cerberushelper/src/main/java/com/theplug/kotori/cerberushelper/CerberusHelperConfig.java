@@ -41,7 +41,7 @@ public interface CerberusHelperConfig extends Config
 {
 	// Sections
 	@ConfigSection(
-			name = "<html>Cerberus Helper<br>Version 2.0.0</html>",
+			name = "<html>Cerberus Helper<br>Version 2.0.2</html>",
 			description = "",
 			position = -1,
 			closedByDefault = true

@@ -10,6 +10,8 @@ import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.*;
+import net.runelite.api.widgets.Widget;
+import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.RuneLiteProperties;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
@@ -23,7 +25,6 @@ import net.runelite.client.util.HotkeyListener;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -31,6 +32,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
@@ -59,13 +61,13 @@ public class KotoriTestPlugin extends Plugin
 	@Override
 	protected void startUp()
 	{
-		keyManager.registerKeyListener(hotkey);
+
 	}
 
 	@Override
 	protected void shutDown()
 	{
-		keyManager.unregisterKeyListener(hotkey);
+
 	}
 	
 	public void init()
@@ -76,25 +78,13 @@ public class KotoriTestPlugin extends Plugin
 	@Subscribe
 	private void onGameStateChanged(GameStateChanged event)
 	{
-		final GameState gameState = event.getGameState();
+
 	}
 
 	@Subscribe
 	private void onGameTick(GameTick gameTick)
 	{
-		try
-		{
-			Class<?> clazz = client.getClass().getClassLoader().loadClass("client");
-			Field field = clazz.getDeclaredField("ns");
-			field.setAccessible(true);
-			int option = field.getInt(clazz) * -54831947;
-			field.setAccessible(false);
-			System.out.println("Menu Options Count: " + option);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
+
 	}
 	
 	@Subscribe
@@ -112,7 +102,7 @@ public class KotoriTestPlugin extends Plugin
 	@Subscribe
 	private void onMenuOptionClicked(MenuOptionClicked event)
 	{
-	
+
 	}
 	
 	@Subscribe
@@ -124,7 +114,7 @@ public class KotoriTestPlugin extends Plugin
 	@Subscribe
 	private void onGraphicChanged(GraphicChanged event)
 	{
-	
+		
 	}
 	
 	@Subscribe
@@ -138,51 +128,11 @@ public class KotoriTestPlugin extends Plugin
 	{
 	
 	}
-	
-	private final HotkeyListener hotkey = new HotkeyListener(() -> config.keybind())
+
+	@Subscribe
+	private void onItemContainerChanged(ItemContainerChanged event)
 	{
-		@Override
-		public void hotkeyPressed()
-		{
-		
-		}
-		
-		@Override
-		public void hotkeyReleased()
-		{
-		
-		}
-	};
-	
-		static  public void gcdExtended(long a, long b)
-		{
-			long x = 0, y = 1, lastx = 1, lasty = 0, temp;
-			while (b != 0)
-			{
-				long q = a / b;
-				long r = a % b;
-				
-				a = b;
-				b = r;
-				
-				temp = x;
-				x = lastx - q * x;
-				lastx = temp;
-				
-				temp = y;
-				y = lasty - q * y;
-				lasty = temp;
-			}
-			System.out.println("GCD "+a+" and its Roots  x : "+ (int) lastx +" y :"+ (int )lasty);
-		}
-	public static long[] egcd(long a, long b) {
-		if (b == 0) return new long[] {a, 1, 0};
-		else {
-			long[] ret = egcd(b, a % b);
-			long tmp = ret[1] - ret[2] * (a / b);
-			ret[1] = ret[2];
-			ret[2] = tmp;
-			return ret;
-		}
+
 	}
 }
+

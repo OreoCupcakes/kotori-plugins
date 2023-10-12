@@ -23,9 +23,9 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "1.1.0"
+version = "1.1.1"
 
-project.extra["PluginName"] = "Spec Bar" // This is the name that is used in the external plugin manager panel
+project.extra["PluginName"] = "<html><font color=#6b8af6>[P]</font> Spec Bar</html>" // This is the name that is used in the external plugin manager panel
 project.extra["PluginDescription"] = "Adds a spec bar to every weapon." // This is the description that is used in the external plugin manager panel
 project.extra["PluginPackageId"] = "specbar" // This is the plugin package folder after the default group package.
 project.extra["PluginMainClassName"] = "SpecBarPlugin" // This is the plugin's main class which extends Plugin

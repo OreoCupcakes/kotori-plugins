@@ -65,7 +65,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 @PluginDependency(KotoriUtils.class)
 @PluginDescriptor(
-	name = "Vorkath",
+	name = "<html><font color=#6b8af6>[P]</font> Vorkath</html>",
 	enabledByDefault = false,
 	description = "Count vorkath attacks, indicate next phase, wooxwalk timer, indicate path through acid",
 	tags = {"combat", "overlay", "pve", "pvm", "ported", "vorkath", "blue", "dragon", "zombie", "kotori"}

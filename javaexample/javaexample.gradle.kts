@@ -30,6 +30,11 @@ project.extra["PluginDescription"] = "Java example plugin" // This is the descri
 project.extra["PluginPackageId"] = "javaexample" // This is the plugin package folder after the default group package.
 project.extra["PluginMainClassName"] = "JavaExamplePlugin" // This is the plugin's main class which extends Plugin
 
+dependencies {
+    compileOnly(project(":kotoriutils"))
+    testImplementation(project(mapOf("path" to ":kotoriutils")))
+}
+
 tasks {
     jar {
         manifest {

@@ -23,9 +23,9 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "1.2.0"
+version = "1.2.1"
 
-project.extra["PluginName"] = "Nex Extended" // This is the name that is used in the external plugin manager panel
+project.extra["PluginName"] = "<html><font color=#6b8af6>[P]</font> Nex Extended</html>" // This is the name that is used in the external plugin manager panel
 project.extra["PluginDescription"] = "Overlay plugin for the Nex boss." // This is the description that is used in the external plugin manager panel
 project.extra["PluginPackageId"] = "nex" // This is the plugin package folder after the default group package.
 project.extra["PluginMainClassName"] = "NexPlugin" // This is the plugin's main class which extends Plugin

@@ -42,7 +42,7 @@ import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
 
 @PluginDescriptor(
-	name = "Tarn's Lair",
+	name = "<html><font color=#6b8af6>[P]</font> Tarn's Lair</html>",
 	enabledByDefault = false,
 	description = "Mark tiles and clickboxes to help traverse the maze. Overlays the path to the elite clue step.",
 	tags = {"agility", "maze", "minigame", "overlay", "ported", "kotori", "clue", "elite clue"}

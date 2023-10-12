@@ -142,7 +142,18 @@ public enum AoeProjectileInfo
 	 * Verzik
 	 */
 	VERZIK_PURPLE_SPAWN(GraphicIDPlus.VERZIK_PURPLE_SPAWN, 3),
-	VERZIK_P1_ROCKS(GraphicIDPlus.DUSK_CEILING, 1);
+	VERZIK_P1_ROCKS(GraphicIDPlus.DUSK_CEILING, 1),
+
+
+	/*
+	 * Ba-Ba
+	 */
+	MOVE_ROCK(GraphicIDPlus.MOVE_ROCK, 1),
+	ZEBAK_JUG(GraphicIDPlus.ZEBAK_JUG, 1),
+	ZEBAK_SPREAD(GraphicIDPlus.ZEBAK_SPREAD, 1),
+	KAMIKAZE_BUG(GraphicIDPlus.KAMIKAZE_BUG, 1),//3x3 for Aerial Assault
+	KEPHRI_BOMB(GraphicIDPlus.KEPHRI_BOMB,1),//3x3 for Aerial Assault
+	WARDEN_P2_FLAME(GraphicIDPlus.WARDEN_P2_FLAME, 1);
 	
 	private static final Map<Integer, AoeProjectileInfo> map = new HashMap<>();
 	

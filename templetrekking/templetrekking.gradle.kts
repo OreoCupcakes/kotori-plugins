@@ -23,9 +23,9 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "1.1.1"
+version = "1.1.2"
 
-project.extra["PluginName"] = "Temple Trekking" // This is the name that is used in the external plugin manager panel
+project.extra["PluginName"] = "<html><font color=#6b8af6>[P]</font> Temple Trekking</html>" // This is the name that is used in the external plugin manager panel
 project.extra["PluginDescription"] = "Helpers for the Temple Trek minigame." // This is the description that is used in the external plugin manager panel
 project.extra["PluginPackageId"] = "templetrekking" // This is the plugin package folder after the default group package.
 project.extra["PluginMainClassName"] = "TempleTrekkingPlugin" // This is the plugin's main class which extends Plugin

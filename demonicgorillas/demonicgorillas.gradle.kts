@@ -23,9 +23,9 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "1.3.0"
+version = "1.3.1"
 
-project.extra["PluginName"] = "Demonic Gorillas" // This is the name that is used in the external plugin manager panel
+project.extra["PluginName"] = "<html><font color=#6b8af6>[P]</font> Demonic Gorillas</html>" // This is the name that is used in the external plugin manager panel
 project.extra["PluginDescription"] = "An overlay plugin for the Demonic Gorillas." // This is the description that is used in the external plugin manager panel
 project.extra["PluginPackageId"] = "demonicgorillas" // This is the plugin package folder after the default group package.
 project.extra["PluginMainClassName"] = "DemonicGorillaPlugin" // This is the plugin's main class which extends Plugin

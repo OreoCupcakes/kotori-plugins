@@ -23,9 +23,9 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "1.2.2"
+version = "1.2.3"
 
-project.extra["PluginName"] = "Tarn's Lair" // This is the name that is used in the external plugin manager panel
+project.extra["PluginName"] = "<html><font color=#6b8af6>[P]</font> Tarn's Lair</html>" // This is the name that is used in the external plugin manager panel
 project.extra["PluginDescription"] = "Mark tiles and clickboxes to help traverse the maze." // This is the description that is used in the external plugin manager panel
 project.extra["PluginPackageId"] = "tarnslair" // This is the plugin package folder after the default group package.
 project.extra["PluginMainClassName"] = "TarnsLairPlugin" // This is the plugin's main class which extends Plugin

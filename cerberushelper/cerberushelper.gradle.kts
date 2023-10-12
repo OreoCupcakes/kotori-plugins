@@ -23,9 +23,9 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "2.0.1"
+version = "2.0.2"
 
-project.extra["PluginName"] = "Cerberus Helper" // This is the name that is used in the external plugin manager panel
+project.extra["PluginName"] = "<html><font color=#6b8af6>[K]</font> Cerberus Helper</html>" // This is the name that is used in the external plugin manager panel
 project.extra["PluginDescription"] = "A helper plugin for the Cerberus boss. Comes with overlays and auto prayers." // This is the description that is used in the external plugin manager panel
 project.extra["PluginPackageId"] = "cerberushelper" // This is the plugin package folder after the default group package.
 project.extra["PluginMainClassName"] = "CerberusHelperPlugin" // This is the plugin's main class which extends Plugin

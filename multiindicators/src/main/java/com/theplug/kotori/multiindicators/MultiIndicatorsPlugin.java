@@ -48,7 +48,7 @@ import java.awt.geom.GeneralPath;
 import java.util.Arrays;
 
 @PluginDescriptor(
-	name = "Multi-Lines Indicators",
+	name = "<html><font color=#6b8af6>[P]</font> Multi-Lines Indicators</html>",
 	enabledByDefault = false,
 	description = "Show borders of multicombat and PvP safezones",
 	tags = {"multicombat", "lines", "pvp", "deadman", "safezones", "ported", "kotori"}

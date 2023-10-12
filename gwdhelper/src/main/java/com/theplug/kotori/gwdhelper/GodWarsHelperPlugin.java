@@ -52,7 +52,7 @@ import java.util.Set;
 @Slf4j
 @PluginDependency(KotoriUtils.class)
 @PluginDescriptor(
-	name = "God Wars Helper",
+	name = "<html><font color=#6b8af6>[K]</font> God Wars Helper</html>",
 	enabledByDefault = false,
 	description = "Overlay and automated actions for the original God Wars Dungeon bosses.",
 	tags = {"pvm", "bossing", "kotori", "ported", "gwd", "sara", "zammy", "arma", "bandos"}

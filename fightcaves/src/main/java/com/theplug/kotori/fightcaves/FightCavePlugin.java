@@ -60,7 +60,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 @PluginDependency(KotoriUtils.class)
 @PluginDescriptor(
-	name = "Fight Caves",
+	name = "<html><font color=#6b8af6>[P]</font> Fight Caves</html>",
 	enabledByDefault = false,
 	description = "Displays current and upcoming wave monsters in the Fight Caves and what to pray at TzTok-Jad",
 	tags = {"bosses", "combat", "minigame", "overlay", "pve", "pvm", "jad", "fire", "cape", "wave", "ported", "kotori"}
