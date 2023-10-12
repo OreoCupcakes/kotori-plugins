@@ -141,6 +141,12 @@ public class InventoryInteractions
 	{
 		return equipItems(itemIds, 3);
 	}
+
+	public static boolean equipItems(int itemId)
+	{
+		int[] itemToEquip = new int[]{itemId};
+		return equipItems(itemToEquip);
+	}
 	
 	public static boolean consumeItem(int itemID)
 	{
@@ -181,44 +187,17 @@ public class InventoryInteractions
 			}
 			listIndex++;
 		}
-		
-		/*
-		if (drinkPrayers)
+	}
+
+	public static boolean inventoryContains(int itemId)
+	{
+		ItemContainer inventory = client.getItemContainer(InventoryID.INVENTORY);
+		if (inventory == null)
 		{
-			for (int prayerPotion : prayerPotions)
-			{
-				boolean drank = consumeItem(prayerPotion);
-				if (drank)
-				{
-					return;
-				}
-			}
+			return false;
 		}
-		
-		if (drinkSupers)
-		{
-			for (int superRestore : superRestores)
-			{
-				boolean drank = consumeItem(superRestore);
-				if (drank)
-				{
-					return;
-				}
-			}
-		}
-		
-		if (drinkSanfews)
-		{
-			for (int sanfewSerum : sanfewSerums)
-			{
-				boolean drank = consumeItem(sanfewSerum);
-				if (drank)
-				{
-					return;
-				}
-			}
-		}
-		*/
+
+		return inventory.contains(itemId);
 	}
 	
 	// Equipment Methods
@@ -235,19 +214,13 @@ public class InventoryInteractions
 		{
 			return false;
 		}
-		
-		Item[] equipment = equipmentContainer.getItems();
+
 		if (slot == null)
 		{
-			for (Item item : equipment)
-			{
-				if (item.getId() == itemId)
-				{
-					return true;
-				}
-			}
-			return false;
+			return equipmentContainer.contains(itemId);
 		}
+
+		Item[] equipment = equipmentContainer.getItems();
 		return equipment[slot.getSlotIdx()].getId() == itemId;
 	}
 	
@@ -335,5 +308,20 @@ public class InventoryInteractions
 		}
 		
 		return numberOfItemsEquipped;
+	}
+
+	public static int getEquippedItemId(EquipmentInventorySlot slot)
+	{
+		ItemContainer equipment = client.getItemContainer(InventoryID.EQUIPMENT);
+		if (equipment == null)
+		{
+			return -1;
+		}
+		Item weapon = equipment.getItem(slot.getSlotIdx());
+		if (weapon == null)
+		{
+			return -1;
+		}
+		return weapon.getId();
 	}
 }

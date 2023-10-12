@@ -36,6 +36,11 @@ public class ReflectionLibrary
 	private static String sceneSelectedYClassName;
 	@Setter
 	private static String sceneSelectedYFieldName;
+
+	@Setter
+	private static String checkClickClassName;
+	@Setter
+	private static String checkClickFieldName;
 	
 	@Setter
 	private static String viewportWalkingClassName;
@@ -344,6 +349,13 @@ public class ReflectionLibrary
 		String errorMsg = "Kotori Plugin Utils - Failed to set scene selected Y coordinate.";
 		setFieldIntValue(yField, client.getScene(), y, 1, errorMsg);
 	}
+
+	private static void setCheckClick()
+	{
+		Field checkClick = getField(checkClickClassName, checkClickFieldName);
+		String errorMsg = "Kotori Plugin Utils - Failed to set check click walking boolean.";
+		setFieldBooleanValue(checkClick, client.getScene(), false, errorMsg);
+	}
 	
 	private static void setViewportWalking()
 	{
@@ -404,6 +416,7 @@ public class ReflectionLibrary
 	{
 		setXCoordinate(sceneX);
 		setYCoordinate(sceneY);
+		setCheckClick();
 		setViewportWalking();
 	}
 	

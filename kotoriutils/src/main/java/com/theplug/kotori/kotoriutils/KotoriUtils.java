@@ -31,7 +31,7 @@ import java.net.URL;
 @Slf4j
 @Singleton
 @PluginDescriptor(
-        name = "Kotori Plugin Utils",
+        name = "<html><font color=#6b8af6>[K]</font> Plugin Utils</html>",
         enabledByDefault = true,
         description = "Utilities needed for certain ported plugins to work.",
         tags = {"ported", "kotori", "utilities", "utils", "plugin"}
@@ -219,6 +219,10 @@ public class KotoriUtils extends Plugin {
                     ReflectionLibrary.setViewportWalkingClassName(hookInfo.getC());
                     ReflectionLibrary.setViewportWalkingFieldName(hookInfo.getP());
                     break;
+                case "setCheckClick":
+                    ReflectionLibrary.setCheckClickClassName(hookInfo.getC());
+                    ReflectionLibrary.setCheckClickFieldName(hookInfo.getP());
+                    break;
                 case "setSelectedSpellWidget":
                     ReflectionLibrary.setSelectedSpellWidgetClassName(hookInfo.getC());
                     ReflectionLibrary.setSelectedSpellWidgetFieldName(hookInfo.getP());
@@ -324,6 +328,8 @@ public class KotoriUtils extends Plugin {
             PrayerInteractions.activatePrayer(prayer);
             MiscUtilities.sendGameMessage("Kotori Utils Test - Activating Thick Skin prayer");
         }
+
+    //    PrayerInteractions.oneTickFlickPrayers(Prayer.PROTECT_FROM_MAGIC, Prayer.EAGLE_EYE);
     }
     
     private void testNpcAnimationHook()

@@ -17,8 +17,6 @@ import java.util.concurrent.TimeUnit;
 public class PrayerInteractions
 {
 	static Client client = RuneLite.getInjector().getInstance(Client.class);
-	static ClientThread clientThread = RuneLite.getInjector().getInstance(ClientThread.class);
-	static ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 	
 	public static boolean activatePrayer(Prayer prayer)
 	{
@@ -147,23 +145,27 @@ public class PrayerInteractions
 		}
 		return true;
 	}
-	
-	public static void oneTickFlickPrayer(Prayer prayer)
+
+	public static void oneTickFlickPrayers(Prayer... prayers)
 	{
-		executor.schedule(() ->
-			clientThread.invokeLater(() -> activatePrayer(prayer)), randomDelay(150, 250), TimeUnit.MILLISECONDS);
-		executor.schedule(() ->
-			clientThread.invokeLater(() -> deactivatePrayer(prayer)), randomDelay(150, 250), TimeUnit.MILLISECONDS);
-	}
-	
-	private static int randomDelay(int min, int max)
-	{
-		Random rand = new Random();
-		int n = rand.nextInt(max) + 1;
-		if (n < min)
+		int active = 0;
+		for (Prayer prayer : Prayer.values())
 		{
-			n += min;
+			if (client.isPrayerActive(prayer))
+			{
+				active++;
+			}
 		}
-		return n;
+		if (active > 0)
+		{
+			for (Prayer p : prayers)
+			{
+				deactivatePrayer(p);
+			}
+		}
+		for (Prayer p2 : prayers)
+		{
+			activatePrayer(p2);
+		}
 	}
 }

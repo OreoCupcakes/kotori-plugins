@@ -25,7 +25,7 @@
 
 version = "1.2.1"
 
-project.extra["PluginName"] = "Kotori Plugin Utils" // This is the name that is used in the external plugin manager panel
+project.extra["PluginName"] = "<html><font color=#6b8af6>[K]</font> Plugin Utils</html>" // This is the name that is used in the external plugin manager panel
 project.extra["PluginDescription"] = "Utilities needed for certain ported plugins to work." // This is the description that is used in the external plugin manager panel
 project.extra["PluginPackageId"] = "kotoriutils" // This is the plugin package folder after the default group package.
 project.extra["PluginMainClassName"] = "KotoriUtils" // This is the plugin's main class which extends Plugin

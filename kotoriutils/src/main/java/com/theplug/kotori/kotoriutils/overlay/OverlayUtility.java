@@ -1,22 +1,19 @@
-package com.theplug.kotori.gauntletextended.overlay;
+package com.theplug.kotori.kotoriutils.overlay;
 
 import com.google.common.base.Strings;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.Polygon;
-import java.awt.Rectangle;
-
 import com.theplug.kotori.kotoriutils.rlapi.InterfaceTab;
 import com.theplug.kotori.kotoriutils.rlapi.PrayerExtended;
-import net.runelite.api.Client;
 import net.runelite.api.Point;
-import net.runelite.api.Prayer;
-import net.runelite.api.VarClientInt;
+import net.runelite.api.*;
+import net.runelite.api.coords.LocalPoint;
+import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.widgets.Widget;
+
+import java.awt.*;
+
 import static net.runelite.client.ui.overlay.OverlayUtil.renderPolygon;
 
-public class OverlayUtil
+public class OverlayUtility
 {
 	public static Rectangle renderPrayerOverlay(Graphics2D graphics, Client client, Prayer prayer, Color color)
 	{
@@ -74,5 +71,60 @@ public class OverlayUtil
 
 		graphics.setColor(color);
 		graphics.drawString(text, x, y);
+	}
+
+	public static void renderFilledPolygon(Graphics2D graphics, Shape poly, Color color)
+	{
+		graphics.setColor(color);
+		final Stroke originalStroke = graphics.getStroke();
+		graphics.setStroke(new BasicStroke(2));
+		graphics.draw(poly);
+		graphics.fill(poly);
+		graphics.setStroke(originalStroke);
+	}
+
+	public static void drawTiles(Graphics2D graphics, Client client, WorldPoint point, WorldPoint playerPoint, Color color, int strokeWidth, int outlineAlpha, int fillAlpha)
+	{
+		if (point.distanceTo(playerPoint) >= 32)
+		{
+			return;
+		}
+		LocalPoint lp = LocalPoint.fromWorld(client, point);
+		if (lp == null)
+		{
+			return;
+		}
+
+		Polygon poly = Perspective.getCanvasTilePoly(client, lp);
+		if (poly == null)
+		{
+			return;
+		}
+		drawStrokeAndFillPoly(graphics, color, strokeWidth, outlineAlpha, fillAlpha, poly);
+	}
+
+	public static void drawStrokeAndFillPoly(Graphics2D graphics, Color color, int strokeWidth, int outlineAlpha, int fillAlpha, Polygon poly)
+	{
+		graphics.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), outlineAlpha));
+		graphics.setStroke(new BasicStroke(strokeWidth));
+		graphics.draw(poly);
+		graphics.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), fillAlpha));
+		graphics.fill(poly);
+	}
+
+	public static void drawOutlineAndFill(final Graphics2D graphics2D, final Color outlineColor, final Color fillColor, final float strokeWidth, final Shape shape)
+	{
+		final Color originalColor = graphics2D.getColor();
+		final Stroke originalStroke = graphics2D.getStroke();
+
+		graphics2D.setStroke(new BasicStroke(strokeWidth));
+		graphics2D.setColor(outlineColor);
+		graphics2D.draw(shape);
+
+		graphics2D.setColor(fillColor);
+		graphics2D.fill(shape);
+
+		graphics2D.setColor(originalColor);
+		graphics2D.setStroke(originalStroke);
 	}
 }
