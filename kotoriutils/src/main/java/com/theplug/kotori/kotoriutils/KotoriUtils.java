@@ -31,7 +31,7 @@ import java.net.URL;
 @Slf4j
 @Singleton
 @PluginDescriptor(
-        name = "<html><font color=#6b8af6>Kotori Plugin Utils</font></html>",
+        name = "<html><font color=#6b8af6>Kotori</font> Plugin Utils</html>",
         enabledByDefault = true,
         description = "Utilities needed for certain ported plugins to work.",
         tags = {"ported", "kotori", "utilities", "utils", "plugin"}
