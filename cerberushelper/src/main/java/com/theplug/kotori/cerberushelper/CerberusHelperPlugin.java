@@ -69,7 +69,7 @@ import net.runelite.http.api.item.ItemStats;
 @Singleton
 @PluginDependency(KotoriUtils.class)
 @PluginDescriptor(
-	name = "<html><font color=#6b8af6>[K]</font> Cerberus Helper</html>",
+	name = "Cerberus Helper",
 	enabledByDefault = false,
 	description = "A helper plugin for the Cerberus boss. Comes with overlays and auto prayers.",
 	tags = {"cerberus", "hellhound", "doggie", "ported","kotori"}
