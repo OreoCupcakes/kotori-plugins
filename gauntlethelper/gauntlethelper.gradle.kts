@@ -25,10 +25,10 @@
 
 version = "2.0.0"
 
-project.extra["PluginName"] = "<html><font color=#6b8af6>[K]</font> Alchemical Helper</html>" // This is the name that is used in the external plugin manager panel
-project.extra["PluginDescription"] = "A plugin for the Alchemical Hydra boss. Overlays and automation for prayer and dodging special attacks." // This is the description that is used in the external plugin manager panel
-project.extra["PluginPackageId"] = "alchemicalhelper" // This is the plugin package folder after the default group package.
-project.extra["PluginMainClassName"] = "AlchemicalHelperPlugin" // This is the plugin's main class which extends Plugin
+project.extra["PluginName"] = "<html><font color=#6b8af6>[K]</font> Gauntlet Helper</html>" // This is the name that is used in the external plugin manager panel
+project.extra["PluginDescription"] = "All-in-one plugin for The Gauntlet." // This is the description that is used in the external plugin manager panel
+project.extra["PluginPackageId"] = "gauntlethelper" // This is the plugin package folder after the default group package.
+project.extra["PluginMainClassName"] = "GauntletHelperPlugin" // This is the plugin's main class which extends Plugin
 
 dependencies {
     compileOnly(project(":kotoriutils"))
@@ -39,11 +39,11 @@ tasks {
     jar {
         manifest {
             attributes(mapOf(
-                "Plugin-Version" to project.version,
-                "Plugin-Id" to nameToId(project.extra["PluginName"] as String),
-                "Plugin-Provider" to project.extra["PluginProvider"],
-                "Plugin-Description" to project.extra["PluginDescription"],
-                "Plugin-License" to project.extra["PluginLicense"]
+                    "Plugin-Version" to project.version,
+                    "Plugin-Id" to nameToId(project.extra["PluginName"] as String),
+                    "Plugin-Provider" to project.extra["PluginProvider"],
+                    "Plugin-Description" to project.extra["PluginDescription"],
+                    "Plugin-License" to project.extra["PluginLicense"]
             ))
         }
     }

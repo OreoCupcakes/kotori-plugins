@@ -1,5 +1,7 @@
 /*
- * Copyright (c) 2019 Owain van Brakel <https://github.com/Owain94>
+ * BSD 2-Clause License
+ *
+ * Copyright (c) 2023, rdutta <https://github.com/rdutta>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -23,28 +25,11 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "2.0.0"
+package com.theplug.kotori.gauntlethelper.module;
 
-project.extra["PluginName"] = "<html><font color=#6b8af6>[K]</font> Alchemical Helper</html>" // This is the name that is used in the external plugin manager panel
-project.extra["PluginDescription"] = "A plugin for the Alchemical Hydra boss. Overlays and automation for prayer and dodging special attacks." // This is the description that is used in the external plugin manager panel
-project.extra["PluginPackageId"] = "alchemicalhelper" // This is the plugin package folder after the default group package.
-project.extra["PluginMainClassName"] = "AlchemicalHelperPlugin" // This is the plugin's main class which extends Plugin
+public interface Module
+{
+	void start();
 
-dependencies {
-    compileOnly(project(":kotoriutils"))
-    testImplementation(project(mapOf("path" to ":kotoriutils")))
-}
-
-tasks {
-    jar {
-        manifest {
-            attributes(mapOf(
-                "Plugin-Version" to project.version,
-                "Plugin-Id" to nameToId(project.extra["PluginName"] as String),
-                "Plugin-Provider" to project.extra["PluginProvider"],
-                "Plugin-Description" to project.extra["PluginDescription"],
-                "Plugin-License" to project.extra["PluginLicense"]
-            ))
-        }
-    }
+	void stop();
 }
