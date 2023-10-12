@@ -35,10 +35,6 @@ import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.*;
 import net.runelite.client.callback.ClientThread;
-import net.runelite.client.chat.ChatColorType;
-import net.runelite.client.chat.ChatMessageBuilder;
-import net.runelite.client.chat.ChatMessageManager;
-import net.runelite.client.chat.QueuedMessage;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.input.KeyManager;
@@ -111,24 +107,6 @@ public class GodWarsHelperPlugin extends Plugin
 	public static final WorldArea ZAMMY_BOSS_ROOM = new WorldArea(2916,5317,25,16,2);
 	public static final WorldArea SARA_BOSS_ROOM = new WorldArea(2884,5257,25,20,0);
 	public static final WorldArea ARMA_BOSS_ROOM = new WorldArea(2820,5295,24,15,2);
-	
-	
-	//general graardor - attack 7018,7019 - death 7020
-	//Sergeant steelwill - attack 7071, death 6156
-	//Sergeant strongstack - attack 6154, death - 6156
-	//Sergeant grimspike - attack 7073, death? - 6156
-	//Kril - attack 6947,6948 - spec 6950? - death 6949
-	//Tstanon - attack 64/65 - death 68
-	//Zakl - attack 7077 - death 67
-	//Balfrug - attack 4630  - death 67
-	//commander zilyana - attack 6969, 6967, 6970 - death 6968
-	//bree - attack 7026 - death 7028
-	//growler - attack 7037,7035 - death 7034
-	//starlight - attack 6376,6375 death 6377
-	//kree'arra - attack 6980,6978 - death 6979
-	//flockleader geerin - attack 6956 - death 6959
-	//flight kilisa - attack 6957 - death 6959
-	//wingman skree - attack 6955 - death 6959
 
 	@Inject
 	private Client client;
@@ -538,23 +516,23 @@ public class GodWarsHelperPlugin extends Plugin
 		if (isBandosPrayerHotkeyOn)
 		{
 			isBandosPrayerHotkeyOn = false;
-			ChatUtilities.sendGameMessage("Bandos God Wars Dungeon automatic protection prayers turned off.");
+			MiscUtilities.sendGameMessage("Bandos God Wars Dungeon automatic protection prayers turned off.");
 		}
 		
 		if (isZammyPrayerHotkeyOn)
 		{
 			isZammyPrayerHotkeyOn = false;
-			ChatUtilities.sendGameMessage("Zamorak God Wars Dungeon automatic protection prayers turned off.");
+			MiscUtilities.sendGameMessage("Zamorak God Wars Dungeon automatic protection prayers turned off.");
 		}
 		if (isSaraPrayerHotkeyOn)
 		{
 			isSaraPrayerHotkeyOn = false;
-			ChatUtilities.sendGameMessage("Saradomin God Wars Dungeon automatic protection prayers turned off.");
+			MiscUtilities.sendGameMessage("Saradomin God Wars Dungeon automatic protection prayers turned off.");
 		}
 		if (isArmaPrayerHotkeyOn)
 		{
 			isArmaPrayerHotkeyOn = false;
-			ChatUtilities.sendGameMessage("Armadyl God Wars Dungeon automatic protection prayers turned off.");
+			MiscUtilities.sendGameMessage("Armadyl God Wars Dungeon automatic protection prayers turned off.");
 		}
 	}
 	
@@ -774,25 +752,25 @@ public class GodWarsHelperPlugin extends Plugin
 			case GENERAL_REGION:
 			{
 				chooseDefensiveConfigStyle(config.autoBandosDefensePrayers(), config.generalGraadorPriority(), config.sergeantSteelwillPriority(), config.sergeantGrimspikePriority(),
-						config.sergeantStrongstackPriority(), isBandosPrayerHotkeyOn, config.bandosBetaLagProtection());
+						config.sergeantStrongstackPriority(), isBandosPrayerHotkeyOn);
 				break;
 			}
 			case ZAMMY_REGION:
 			{
 				chooseDefensiveConfigStyle(config.autoZamorakDefensePrayers(), config.krilTsutsarothPriority(), config.balfrugKreeyathPriority(), config.zaklnGritchPriority(),
-						config.tstanonKarlakPriority(), isZammyPrayerHotkeyOn, config.zamorakBetaLagProtection());
+						config.tstanonKarlakPriority(), isZammyPrayerHotkeyOn);
 				break;
 			}
 			case SARA_REGION:
 			{
 				chooseDefensiveConfigStyle(config.autoSaradominDefensePrayers(), config.commanderZilyanaPriority(), config.growlerPriority(), config.breePriority(),
-						config.starlightPriority(), isSaraPrayerHotkeyOn, false);
+						config.starlightPriority(), isSaraPrayerHotkeyOn);
 				break;
 			}
 			case ARMA_REGION:
 			{
 				chooseDefensiveConfigStyle(config.autoArmadylDefensePrayers(), config.kreearraPriority(), config.wingmanSkreePriority(), config.flockleaderGeerinPriority(),
-						config.flightKilisaPriority(), isArmaPrayerHotkeyOn, false);
+						config.flightKilisaPriority(), isArmaPrayerHotkeyOn);
 				break;
 			}
 			default:
@@ -801,7 +779,7 @@ public class GodWarsHelperPlugin extends Plugin
 	}
 	
 	private void chooseDefensiveConfigStyle(GodWarsHelperConfig.PrayerSwitchChoice style, int bossPriority, int magePriority, int rangedPriority,
-											int meleePriority, boolean hotkey, boolean betaLagProtection)
+											int meleePriority, boolean hotkey)
 	{
 		NPCContainer npcToPrayAgainst = null;
 		switch (style)
@@ -811,11 +789,11 @@ public class GodWarsHelperPlugin extends Plugin
 				{
 					return;
 				}
-				npcToPrayAgainst = identifyNpcToPrayAgainst(bossPriority, magePriority, rangedPriority, meleePriority, betaLagProtection);
+				npcToPrayAgainst = identifyNpcToPrayAgainst(bossPriority, magePriority, rangedPriority, meleePriority);
 				identifyAndInvokeProtectionPrayer(npcToPrayAgainst);
 				break;
 			case ALL_KILL_LONG:
-				npcToPrayAgainst = identifyNpcToPrayAgainst(bossPriority, magePriority, rangedPriority, meleePriority, betaLagProtection);
+				npcToPrayAgainst = identifyNpcToPrayAgainst(bossPriority, magePriority, rangedPriority, meleePriority);
 				identifyAndInvokeProtectionPrayer(npcToPrayAgainst);
 				break;
 			case HOTKEY:
@@ -823,7 +801,7 @@ public class GodWarsHelperPlugin extends Plugin
 				{
 					return;
 				}
-				npcToPrayAgainst = identifyNpcToPrayAgainst(bossPriority, magePriority, rangedPriority, meleePriority, betaLagProtection);
+				npcToPrayAgainst = identifyNpcToPrayAgainst(bossPriority, magePriority, rangedPriority, meleePriority);
 				identifyAndInvokeProtectionPrayer(npcToPrayAgainst);
 				break;
 			case OFF:
@@ -833,7 +811,7 @@ public class GodWarsHelperPlugin extends Plugin
 		}
 	}
 	
-	private NPCContainer identifyNpcToPrayAgainst(int bossPriorityConfig, int magicMinionPriorityConfig, int rangedMinionPriorityConfig, int meleeMinionPriorityConfig, boolean betaLagProtection)
+	private NPCContainer identifyNpcToPrayAgainst(int bossPriorityConfig, int magicMinionPriorityConfig, int rangedMinionPriorityConfig, int meleeMinionPriorityConfig)
 	{
 		NPCContainer npcAboutToAttack = null;
 		int highestPriorityConfig = -1;
@@ -907,34 +885,6 @@ public class GodWarsHelperPlugin extends Plugin
 					break;
 				default:
 					break;
-			}
-		}
-		
-		if (betaLagProtection)
-		{
-			if (bossContainer != null)
-			{
-				if (bossContainer.getTicksUntilAttack() == -1)
-				{
-					NPCContainer.BossMonsters type = bossContainer.getMonsterType();
-					switch (type)
-					{
-						case GENERAL_GRAARDOR:
-						case KRIL_TSUTSAROTH:
-							Player you = client.getLocalPlayer();
-							if (bossContainer.getNpcInteracting().equals(you))
-							{
-								List<WorldPoint> hitSquares = OverlayUtil.getHitSquares(bossContainer.getNpc().getWorldLocation(), bossContainer.getNpcSize(), 2, false);
-								if (hitSquares.contains(you.getWorldLocation()))
-								{
-									npcAboutToAttack = bossContainer;
-								}
-							}
-							break;
-						default:
-							break;
-					}
-				}
 			}
 		}
 		
@@ -1130,7 +1080,7 @@ public class GodWarsHelperPlugin extends Plugin
 				break;
 			}
 		}
-		ReflectionLibrary.setSelectedSpell(spellChoice.getWidgetInfo().getId(), -1, -1);
+		ReflectionLibrary.setSelectedSpell(spellChoice.getWidgetInfo().getId());
 		String menuOptionText = "<col=39ff14>Cast " + spellChoice.getSpellString() + "</col> -> ";
 		MenuEntry hotkeyEntry = client.createMenuEntry(-1).setForceLeftClick(true).setParam0(0).setParam1(0).setType(MenuAction.WIDGET_TARGET_ON_NPC)
 				.setOption(menuOptionText);
@@ -1154,12 +1104,12 @@ public class GodWarsHelperPlugin extends Plugin
 			if (!isBandosPrayerHotkeyOn)
 			{
 				isBandosPrayerHotkeyOn = true;
-				ChatUtilities.sendGameMessage("Bandos God Wars Dungeon automatic protection prayers turned on.");
+				MiscUtilities.sendGameMessage("Bandos God Wars Dungeon automatic protection prayers turned on.");
 			}
 			else
 			{
 				isBandosPrayerHotkeyOn = false;
-				ChatUtilities.sendGameMessage("Bandos God Wars Dungeon automatic protection prayers turned off.");
+				MiscUtilities.sendGameMessage("Bandos God Wars Dungeon automatic protection prayers turned off.");
 			}
 		}
 	};
@@ -1172,12 +1122,12 @@ public class GodWarsHelperPlugin extends Plugin
 			if (!isZammyPrayerHotkeyOn)
 			{
 				isZammyPrayerHotkeyOn = true;
-				ChatUtilities.sendGameMessage("Zamorak God Wars Dungeon automatic protection prayers turned on.");
+				MiscUtilities.sendGameMessage("Zamorak God Wars Dungeon automatic protection prayers turned on.");
 			}
 			else
 			{
 				isZammyPrayerHotkeyOn = false;
-				ChatUtilities.sendGameMessage("Zamorak God Wars Dungeon automatic protection prayers turned off.");
+				MiscUtilities.sendGameMessage("Zamorak God Wars Dungeon automatic protection prayers turned off.");
 			}
 		}
 	};
@@ -1190,12 +1140,12 @@ public class GodWarsHelperPlugin extends Plugin
 			if (!isSaraPrayerHotkeyOn)
 			{
 				isSaraPrayerHotkeyOn = true;
-				ChatUtilities.sendGameMessage("Saradomin God Wars Dungeon automatic protection prayers turned on.");
+				MiscUtilities.sendGameMessage("Saradomin God Wars Dungeon automatic protection prayers turned on.");
 			}
 			else
 			{
 				isSaraPrayerHotkeyOn = false;
-				ChatUtilities.sendGameMessage("Saradomin God Wars Dungeon automatic protection prayers turned off.");
+				MiscUtilities.sendGameMessage("Saradomin God Wars Dungeon automatic protection prayers turned off.");
 			}
 		}
 	};
@@ -1208,12 +1158,12 @@ public class GodWarsHelperPlugin extends Plugin
 			if (!isArmaPrayerHotkeyOn)
 			{
 				isArmaPrayerHotkeyOn = true;
-				ChatUtilities.sendGameMessage("Armadyl God Wars Dungeon automatic protection prayers turned on.");
+				MiscUtilities.sendGameMessage("Armadyl God Wars Dungeon automatic protection prayers turned on.");
 			}
 			else
 			{
 				isArmaPrayerHotkeyOn = false;
-				ChatUtilities.sendGameMessage("Armadyl God Wars Dungeon automatic protection prayers turned off.");
+				MiscUtilities.sendGameMessage("Armadyl God Wars Dungeon automatic protection prayers turned off.");
 			}
 		}
 	};

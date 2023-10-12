@@ -36,7 +36,7 @@ import java.awt.*;
 public interface GodWarsHelperConfig extends Config
 {
 	@ConfigSection(
-			name = "<html>God Wars Helper<br>Version 2.1.1</html>",
+			name = "<html>God Wars Helper<br>Version 2.1.2</html>",
 			description = "",
 			position = -1,
 			closedByDefault = true
@@ -289,18 +289,6 @@ public interface GodWarsHelperConfig extends Config
 			section = bandosHelper
 	)
 	default Keybind bandosAutoPrayerHotkey() { return Keybind.NOT_SET; }
-	
-	@ConfigItem(
-			position = 9,
-			keyName = "bandosBetaLagProtection",
-			name = "[BETA] {#}:0 \"Lag\" Protection",
-			description = 	"[BETA] This feature is for people doing 6:0 and other {#}:0 methods." +
-							"<br>It attempts to preemptively pray against Graardor if you miss a" +
-							"<br>tick on the {#}:0 methods and Graardor gets close to attacking you." +
-							"<br>It works by calculating if you are within two tiles of Graardor's model.",
-			section = bandosHelper
-	)
-	default boolean bandosBetaLagProtection() { return false; }
 	
 	@ConfigItem(
 			position = 10,
@@ -710,18 +698,6 @@ public interface GodWarsHelperConfig extends Config
 			section = zamorakHelper
 	)
 	default Keybind zamorakAutoPrayerHotkey() { return Keybind.NOT_SET; }
-	
-	@ConfigItem(
-			position = 11,
-			keyName = "zamorakBetaLagProtection",
-			name = "[BETA] {#}:0 \"Lag\" Protection",
-			description = 	"[BETA] This feature is for people doing 6:0 and other {#}:0 methods." +
-					"<br>It attempts to preemptively pray against K'ril if you miss a" +
-					"<br>tick on the {#}:0 methods and K'ril gets close to attacking you." +
-					"<br>It works by calculating if you are within two tiles of K'ril's model.",
-			section = zamorakHelper
-	)
-	default boolean zamorakBetaLagProtection() { return false; }
 	
 	@ConfigItem(
 			position = 12,
