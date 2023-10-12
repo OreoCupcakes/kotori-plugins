@@ -37,14 +37,6 @@ public interface AlchemicalHelperConfig extends Config
 	// Sections
 
 	@ConfigSection(
-			name = "<html>Alchemical Helper<br>Version 2.0.0</html>",
-			description = "",
-			position = -1,
-			closedByDefault = true
-	)
-	String versionInfo = "Version";
-
-	@ConfigSection(
 			name = "Overlay Settings",
 			description = "Overlay settings to help deal with the boss if you don't want any automation.",
 			position = 0

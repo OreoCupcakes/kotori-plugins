@@ -35,14 +35,6 @@ import java.awt.*;
 @ConfigGroup("multiindicators")
 public interface MultiIndicatorsConfig extends Config
 {
-	@ConfigSection(
-			name = "<html>Multi-Lines Indicators<br>Version 1.1.3</html>",
-			description = "",
-			position = -1,
-			closedByDefault = true
-	)
-	String versionInfo = "Version";
-
 	@ConfigItem(
 		keyName = "multicombatZoneVisibility",
 		name = "Multicombat zones",

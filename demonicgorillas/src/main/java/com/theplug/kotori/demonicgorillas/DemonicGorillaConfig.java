@@ -8,19 +8,5 @@ import net.runelite.client.config.ConfigSection;
 @ConfigGroup("demonicgorilla")
 public interface DemonicGorillaConfig extends Config
 {
-    @ConfigSection(
-            name = "<html>Demonic Gorillas<br>Version 1.3.0</html>",
-            description = "",
-            position = 0,
-            closedByDefault = true
-    )
-    String versionInfo = "Version";
 
-    @ConfigItem(
-            keyName = "version",
-            name = "",
-            description = "",
-            section = versionInfo
-    )
-    default Boolean versionString() { return true; }
 }

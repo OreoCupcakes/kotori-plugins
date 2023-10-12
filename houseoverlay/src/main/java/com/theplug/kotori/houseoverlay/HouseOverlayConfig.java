@@ -30,16 +30,8 @@ import java.awt.*;
 
 @ConfigGroup("HouseOverlay")
 
-public interface HouseOverlayConfig extends Config {
-
-    @ConfigSection(
-            name = "<html>House Overlay<br>Version 1.2.0</html>",
-            description = "",
-            position = -1,
-            closedByDefault = true
-    )
-    String versionInfo = "Version";
-
+public interface HouseOverlayConfig extends Config
+{
     @ConfigSection(
             name = "Color Settings",
             description = "",

@@ -38,14 +38,6 @@ import net.runelite.client.config.Units;
 public interface FightCaveConfig extends Config
 {
 	@ConfigSection(
-			name = "<html>Fight Caves<br>Version 1.2.1</html>",
-			description = "",
-			position = -1,
-			closedByDefault = true
-	)
-	String versionInfo = "Version";
-	
-	@ConfigSection(
 		position = 0,
 		name = "Features",
 		description = ""

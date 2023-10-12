@@ -11,10 +11,10 @@ public class Info
     private boolean preventMasterLoad;
     private boolean preventAlchemicalHelper;
     private boolean preventCerberusHelper;
-    private boolean preventDagannothKings;
+    private boolean preventDagannothHelper;
     private boolean preventDemonicGorillas;
     private boolean preventEffectTimers;
-    private boolean preventGauntletExtended;
+    private boolean preventGauntletHelper;
     private boolean preventGrotesqueGuardians;
     private boolean preventHallowedHelper;
     private boolean preventHouseOverlay;
@@ -32,4 +32,9 @@ public class Info
     private boolean preventAoeWarnings;
     private boolean preventFightCaves;
     private boolean preventInferno;
+
+    //delete
+    private boolean preventAlchemicalHydra;
+    private boolean preventGauntletExtended;
+    private boolean preventDagannothKings;
 }

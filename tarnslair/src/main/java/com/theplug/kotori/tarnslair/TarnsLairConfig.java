@@ -35,14 +35,6 @@ import java.awt.*;
 
 public interface TarnsLairConfig extends Config
 {
-	@ConfigSection(
-			name = "<html>Tarn's Lair<br>Version 1.2.3</html>",
-			description = "",
-			position = -1,
-			closedByDefault = true
-	)
-	String versionInfo = "Version";
-	
 	@ConfigItem(
 			keyName = "line",
 			name = "Paths to the Toad Batta Clue Step",

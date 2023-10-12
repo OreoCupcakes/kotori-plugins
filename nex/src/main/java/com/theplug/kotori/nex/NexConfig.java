@@ -38,14 +38,6 @@ public interface NexConfig extends Config
 	String GROUP = "nextended";
 
 	@ConfigSection(
-			name = "<html>Nex<br>Version 1.2.0</html>",
-			description = "",
-			position = 0,
-			closedByDefault = true
-	)
-	String versionInfo = "Loader Version";
-
-	@ConfigSection(
 		name = "General",
 		description = "Configure general settings.",
 		position = 100

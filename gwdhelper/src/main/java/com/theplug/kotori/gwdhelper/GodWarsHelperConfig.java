@@ -36,14 +36,6 @@ import java.awt.*;
 public interface GodWarsHelperConfig extends Config
 {
 	@ConfigSection(
-			name = "<html>God Wars Helper<br>Version 2.1.2</html>",
-			description = "",
-			position = -1,
-			closedByDefault = true
-	)
-	String versionInfo = "Version";
-
-	@ConfigSection(
 		position = 0,
 		name = "Overlay Settings",
 		description = "",

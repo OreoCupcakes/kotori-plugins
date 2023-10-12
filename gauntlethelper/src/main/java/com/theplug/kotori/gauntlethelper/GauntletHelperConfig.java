@@ -49,14 +49,6 @@ public interface GauntletHelperConfig extends Config
 {
 	// Sections
 	@ConfigSection(
-			name = "<html>Gauntlet Helper<br>Version 2.0.0</html>",
-			description = "",
-			position = -1,
-			closedByDefault = true
-	)
-	String versionInfo = "Version";
-
-	@ConfigSection(
 		name = "Resource Tracking",
 		description = "Resource tracking section.",
 		position = 0,

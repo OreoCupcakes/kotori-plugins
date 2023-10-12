@@ -3,12 +3,12 @@
   "runeliteVersion": "1.10.14",
   "kotoriLoaderVersion": "2.0.0",
   "preventMasterLoad": "false",
-  "preventAlchemicalHydra": "false",
+  "preventAlchemicalHelper": "false",
   "preventCerberusHelper": "false",
-  "preventDagannothKings": "false",
+  "preventDagannothHelper": "false",
   "preventDemonicGorillas": "false",
   "preventEffectTimers": "false",
-  "preventGauntletExtended": "false",
+  "preventGauntletHelper": "false",
   "preventGrotesqueGuardians": "false",
   "preventHallowedHelper": "false",
   "preventHouseOverlay": "false",
@@ -26,7 +26,4 @@
   "preventAoeWarnings": "false",
   "preventFightCaves": "false",
   "preventInferno": "false",
-  "preventAlchemicalHelper": "false",
-  "preventDagannothHelper": "false",
-  "preventGauntletHelper": "false"
 }

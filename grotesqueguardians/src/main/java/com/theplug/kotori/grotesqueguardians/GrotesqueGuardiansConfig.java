@@ -44,15 +44,6 @@ public interface GrotesqueGuardiansConfig extends Config
 {
 	// Sections
 	@ConfigSection(
-			name = "<html>Grotesque Guardians<br>Version 1.1.0</html>",
-			description = "",
-			position = -1,
-			closedByDefault = true
-	)
-	String versionInfo = "Version";
-
-
-	@ConfigSection(
 		name = "Tick counters",
 		description = "Tick counter settings.",
 		position = 0

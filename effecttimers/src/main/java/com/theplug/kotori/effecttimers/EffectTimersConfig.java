@@ -32,14 +32,6 @@ import net.runelite.client.config.*;
 public interface EffectTimersConfig extends Config
 {
 	@ConfigSection(
-			name = "<html>Effect Timers<br>Version 1.3.0</html>",
-			description = "",
-			position = -1,
-			closedByDefault = true
-	)
-	String debugSettings = "Version";
-	
-	@ConfigSection(
 			name = "Display Settings",
 			description = "Settings that change the visual look of the timer overlays.",
 			position = 1
@@ -286,8 +278,8 @@ public interface EffectTimersConfig extends Config
 			name = "Enable Debug Logging",
 			keyName = "debugLogging",
 			description = "Enable debug messages to show up in the client.log",
-			position = 1,
-			section = debugSettings,
+			position = 10,
+			section = otherSettings,
 			hidden = true
 	)
 	default boolean debugLogging() { return false; }
@@ -296,8 +288,8 @@ public interface EffectTimersConfig extends Config
 		name = "Debug Keybind",
 		keyName = "debugKeybind",
 		description = "Don't press this unless you know what it does :)",
-		position = 1,
-		section = debugSettings,
+		position = 11,
+		section = otherSettings,
 		hidden = true
 	)
 	default Keybind debugKeybind()
@@ -309,8 +301,8 @@ public interface EffectTimersConfig extends Config
 		name = "Debug Integer",
 		keyName = "debugInteger",
 		description = "Related to the keybind in some way :)",
-		position = 2,
-		section = debugSettings,
+		position = 12,
+		section = otherSettings,
 		hidden = true
 	)
 	default int debugInteger()

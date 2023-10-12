@@ -41,14 +41,6 @@ public interface CerberusHelperConfig extends Config
 {
 	// Sections
 	@ConfigSection(
-			name = "<html>Cerberus Helper<br>Version 2.0.2</html>",
-			description = "",
-			position = -1,
-			closedByDefault = true
-	)
-	String versionInfo = "Version";
-
-	@ConfigSection(
 		name = "Overlay Settings",
 		description = "Various overlay settings",
 		position = 0

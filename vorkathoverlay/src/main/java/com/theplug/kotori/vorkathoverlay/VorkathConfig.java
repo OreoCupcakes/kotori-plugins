@@ -34,14 +34,6 @@ import net.runelite.client.config.ConfigSection;
 public interface VorkathConfig extends Config
 {
 	@ConfigSection(
-			name = "<html>Vorkath<br>Version 1.3.0</html>",
-			description = "",
-			position = -1,
-			closedByDefault = true
-	)
-	String versionInfo = "Version";
-
-	@ConfigSection(
 		position = 1,
 		name = "Acid",
 		description = ""

@@ -37,14 +37,6 @@ public interface DagannothHelperConfig extends Config
 	// Sections
 
 	@ConfigSection(
-			name = "<html>Dagannoth Helper<br>Version 2.0.0</html>",
-			description = "",
-			position = -1,
-			closedByDefault = true
-	)
-	String versionInfo = "Version";
-
-	@ConfigSection(
 		position = 0,
 		name = "Overlay Settings",
 		description = "Various overlay settings."
