@@ -302,13 +302,9 @@ public class CerberusHelperPlugin extends Plugin
 				switch (config.overrideAutoAttackCalc())
 				{
 					case MAGIC:
-						defaultPrayer = Prayer.PROTECT_FROM_MAGIC;
-						break;
 					case MELEE:
-						defaultPrayer = Prayer.PROTECT_FROM_MELEE;
-						break;
-					case RANGED:
-						defaultPrayer = Prayer.PROTECT_FROM_MISSILES;
+					case MISSILES:
+						defaultPrayer = config.overrideAutoAttackCalc().getPrayer();
 						break;
 					default:
 						setAutoAttackPrayer();

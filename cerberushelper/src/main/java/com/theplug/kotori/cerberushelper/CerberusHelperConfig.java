@@ -39,6 +39,41 @@ import java.awt.*;
 @ConfigGroup("cerberushelper")
 public interface CerberusHelperConfig extends Config
 {
+	// Constants
+	@Getter
+	@RequiredArgsConstructor
+	enum OffensivePrayers
+	{
+		PIETY(Prayer.PIETY),
+		EAGLE_EYE(Prayer.EAGLE_EYE),
+		RIGOUR(Prayer.RIGOUR);
+
+		private final Prayer prayer;
+	}
+
+	@Getter
+	@RequiredArgsConstructor
+	enum ProtectionPrayers
+	{
+		AUTO(null),
+		MAGIC(Prayer.PROTECT_FROM_MAGIC),
+		MELEE(Prayer.PROTECT_FROM_MELEE),
+		MISSILES(Prayer.PROTECT_FROM_MISSILES);
+
+		private final Prayer prayer;
+	}
+
+	@Getter
+	@RequiredArgsConstructor
+	enum Thrall
+	{
+		GHOST(Spells.RESURRECT_GREATER_GHOST),
+		SKELETON(Spells.RESURRECT_GREATER_SKELETON),
+		ZOMBIE(Spells.RESURRECT_GREATER_ZOMBIE);
+
+		private final Spells spell;
+	}
+
 	// Sections
 	@ConfigSection(
 		name = "Overlay Settings",
@@ -430,58 +465,4 @@ public interface CerberusHelperConfig extends Config
 			section = spellHelper
 	)
 	default int demonicOfferingAmount() { return 3; }
-
-
-
-
-
-	// Constants
-	@Getter
-	@RequiredArgsConstructor
-	enum OffensivePrayers
-	{
-		PIETY("Piety", Prayer.PIETY),
-		EAGLE_EYE("Eagle Eye",Prayer.EAGLE_EYE),
-		RIGOUR("Rigour",Prayer.RIGOUR);
-
-		private final String prayerName;
-		private final Prayer prayer;
-
-		@Override
-		public String toString()
-		{
-			return prayerName;
-		}
-	}
-
-	@Getter
-	@RequiredArgsConstructor
-	enum ProtectionPrayers
-	{
-		AUTO("Auto", null),
-		MAGIC("Magic", Prayer.PROTECT_FROM_MAGIC),
-		MELEE("Melee", Prayer.PROTECT_FROM_MELEE),
-		RANGED("Missiles", Prayer.PROTECT_FROM_MISSILES);
-
-
-		private final String name;
-		private final Prayer prayer;
-
-		@Override
-		public String toString()
-		{
-			return name;
-		}
-	}
-
-	@Getter
-	@RequiredArgsConstructor
-	enum Thrall
-	{
-		GHOST(Spells.RESURRECT_GREATER_GHOST),
-		SKELETON(Spells.RESURRECT_GREATER_SKELETON),
-		ZOMBIE(Spells.RESURRECT_GREATER_ZOMBIE);
-
-		private final Spells spell;
-	}
 }

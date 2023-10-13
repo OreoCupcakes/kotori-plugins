@@ -34,6 +34,18 @@ import net.runelite.client.config.*;
 @ConfigGroup("alchemicalhelper")
 public interface AlchemicalHelperConfig extends Config
 {
+	// Constants
+	@Getter
+	@AllArgsConstructor
+	enum OffensivePrayer
+	{
+		PIETY(Prayer.PIETY),
+		EAGLE_EYE(Prayer.EAGLE_EYE),
+		RIGOUR(Prayer.RIGOUR);
+
+		private final Prayer prayer;
+	}
+
 	// Sections
 
 	@ConfigSection(
@@ -467,18 +479,4 @@ public interface AlchemicalHelperConfig extends Config
 			section = flamePhaseHelpers
 	)
 	default Color flameSkipTileFill() { return new Color(255, 204, 153, 50); }
-
-
-	// Constants
-	
-	@Getter
-	@AllArgsConstructor
-	enum OffensivePrayer
-	{
-		PIETY(Prayer.PIETY),
-		EAGLE_EYE(Prayer.EAGLE_EYE),
-		RIGOUR(Prayer.RIGOUR);
-		
-		private final Prayer prayer;
-	}
 }
