@@ -799,7 +799,7 @@ public class AlchemicalHelperPlugin extends Plugin
 		
 		if (hydra == null)
 		{
-			if (!allPrayersDeactived)
+			if ((config.autoProtectionPrayers() || config.autoOffensivePrayers()) && !allPrayersDeactived)
 			{
 				allPrayersDeactived = PrayerInteractions.deactivatePrayers(config.autoPreservePrayer());
 			}
