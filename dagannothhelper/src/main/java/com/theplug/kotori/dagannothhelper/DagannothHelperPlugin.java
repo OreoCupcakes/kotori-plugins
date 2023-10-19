@@ -429,7 +429,10 @@ public class DagannothHelperPlugin extends Plugin
 			return;
 		}
 
-		prayersDeactivated = PrayerInteractions.deactivatePrayers(config.autoPreservePrayer());
+		if (config.autoProtectionPrayers() || config.autoOffensiveMagicPrayer() || config.autoOffensiveMeleePrayer() || config.autoOffensiveRangedPrayer())
+		{
+			prayersDeactivated = PrayerInteractions.deactivatePrayers(config.autoPreservePrayer());
+		}
 	}
 
 	private void prayPreservePrayer()

@@ -954,7 +954,10 @@ public class CerberusHelperPlugin extends Plugin
 			return;
 		}
 
-		allPrayersDeactivated = PrayerInteractions.deactivatePrayers(config.keepPreservePrayerOn());
+		if (config.autoDefensivePrayers() || config.autoOffensivePrayers())
+		{
+			allPrayersDeactivated = PrayerInteractions.deactivatePrayers(config.keepPreservePrayerOn());
+		}
 	}
 
 	private void handlePrayerPotionDrinking()
