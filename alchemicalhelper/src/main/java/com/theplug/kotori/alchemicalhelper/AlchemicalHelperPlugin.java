@@ -873,7 +873,7 @@ public class AlchemicalHelperPlugin extends Plugin
 	private void drinkPrayerPotion()
 	{
 		//Check if you're not doing any of the phase handlers before drinking
-		if (poisonSafeTile != null || flameSkipState != 0 || lightningSkipState > 0 && lightningSkipState < 3)
+		if (!config.drinkPrayerPotions() || poisonSafeTile != null || flameSkipState != 0 || lightningSkipState > 0 && lightningSkipState < 3)
 		{
 			return;
 		}
