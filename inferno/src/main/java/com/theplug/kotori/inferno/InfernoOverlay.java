@@ -488,7 +488,11 @@ public class InfernoOverlay extends Overlay
 				final Color color = (tick == 1 && currentAttack == bestAttack) ? Color.RED : Color.ORANGE;
 				final Widget prayerWidget = client.getWidget(PrayerExtended.getPrayerWidgetId(currentAttack.getPrayer()));
 				
-				assert prayerWidget != null;
+				if (prayerWidget == null)
+				{
+					continue;
+				}
+
 				int baseX = (int) prayerWidget.getBounds().getX();
 				baseX += prayerWidget.getBounds().getWidth() / 2;
 				baseX -= BOX_WIDTH / 2;
@@ -533,7 +537,10 @@ public class InfernoOverlay extends Overlay
 			if (plugin.getClosestAttack() != prayerForAttack || config.indicateWhenPrayingCorrectly())
 			{
 				final Widget prayerWidget = client.getWidget(PrayerExtended.getPrayerWidgetId(plugin.getClosestAttack().getPrayer()));
-				assert prayerWidget != null;
+				if (prayerWidget == null)
+				{
+					return;
+				}
 				final Rectangle prayerRectangle = new Rectangle((int) prayerWidget.getBounds().getWidth(),
 					(int) prayerWidget.getBounds().getHeight());
 				prayerRectangle.translate((int) prayerWidget.getBounds().getX(), (int) prayerWidget.getBounds().getY());
