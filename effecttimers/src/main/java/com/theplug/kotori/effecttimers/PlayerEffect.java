@@ -42,6 +42,7 @@ public enum PlayerEffect
 	BARRAGE("Ice Barrage", 369, 32, false, TimerType.FREEZE),
 	TELEBLOCK("Teleblock", 345, 500, true, TimerType.TELEBLOCK),
 	VENG("Vengeance", 726, 50, false, TimerType.VENG),
+	VENG_LEAGUES_FOUR("Vengeance", 2605, 50, false, TimerType.VENG),
 	VENG_OTHER("Vengeance Other", 725, 50, false, TimerType.VENG),
 	STAFF_OF_THE_DEAD("Staff of the Dead", 1228, 100, false, TimerType.SOTD),
 	STAFF_OF_LIGHT("Staff of Light", 1516, 100, false, TimerType.SOTD),
