@@ -361,6 +361,7 @@ public class KotoriUtils extends Plugin {
             {
                 npcName = "null";
             }
+
             if (headIcon == null)
             {
                 MiscUtilities.sendGameMessage("Kotori Utils Test - NPC Name: " + npcName + " has no overhead icon.");

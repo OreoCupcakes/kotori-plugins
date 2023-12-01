@@ -486,7 +486,35 @@ public class ReflectionLibrary
 		{
 			return null;
 		}
-		
+
+		Method getHeadIconArrayMethod = null;
+		try
+		{
+			for (Method declaredMethod : npcComposition.getClass().getDeclaredMethods())
+			{
+				if (declaredMethod.getReturnType() == short[].class && declaredMethod.getParameterTypes().length == 0)
+				{
+					getHeadIconArrayMethod = declaredMethod;
+					getHeadIconArrayMethod.setAccessible(true);
+					short[] headIconArray = (short[]) getHeadIconArrayMethod.invoke(npcComposition);
+					getHeadIconArrayMethod.setAccessible(false);
+					if (headIconArray == null || headIconArray.length == 0)
+					{
+						continue;
+					}
+					return HeadIcon.values()[headIconArray[0]];
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			log.error("Kotori Plugin Utils - Unable to get NPC Composition's overhead icon.", e);
+			return null;
+		}
+
+		return null;
+
+		/*
 		Field overheads = getField(npcOverheadIconClassName, npcOverheadIconFieldName);
 		if (overheads == null)
 		{
@@ -510,6 +538,8 @@ public class ReflectionLibrary
 			log.error("Kotori Plugin Utils - Unable to get NPC Composition's overhead icon.", e);
 			return null;
 		}
+
+		 */
 	}
 	
 	public static int getActorPathLength(Actor actor)
