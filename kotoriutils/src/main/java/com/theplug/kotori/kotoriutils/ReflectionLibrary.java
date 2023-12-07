@@ -487,6 +487,7 @@ public class ReflectionLibrary
 			return null;
 		}
 
+		/*
 		Method getHeadIconArrayMethod = null;
 		try
 		{
@@ -514,7 +515,9 @@ public class ReflectionLibrary
 
 		return null;
 
-		/*
+		 */
+
+
 		Field overheads = getField(npcOverheadIconClassName, npcOverheadIconFieldName);
 		if (overheads == null)
 		{
@@ -538,8 +541,6 @@ public class ReflectionLibrary
 			log.error("Kotori Plugin Utils - Unable to get NPC Composition's overhead icon.", e);
 			return null;
 		}
-
-		 */
 	}
 	
 	public static int getActorPathLength(Actor actor)
