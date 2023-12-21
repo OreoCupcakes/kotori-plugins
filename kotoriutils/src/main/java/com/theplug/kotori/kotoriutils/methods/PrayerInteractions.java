@@ -126,6 +126,12 @@ public class PrayerInteractions
 		int actionsTaken = 0;
 		for (Prayer prayer : Prayer.values())
 		{
+			//Skip the Ruinous prayers as I don't support it
+			if (prayer.name().contains("RP_"))
+			{
+				continue;
+			}
+
 			if (actionsTaken > 3)
 			{
 				return false;
@@ -151,6 +157,12 @@ public class PrayerInteractions
 		int active = 0;
 		for (Prayer prayer : Prayer.values())
 		{
+			//Skip the Ruinous prayers
+			if (prayer.name().contains("RP_"))
+			{
+				continue;
+			}
+
 			if (client.isPrayerActive(prayer))
 			{
 				active++;
