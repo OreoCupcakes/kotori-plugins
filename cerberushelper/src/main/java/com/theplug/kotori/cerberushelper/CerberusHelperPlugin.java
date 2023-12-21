@@ -98,6 +98,8 @@ public class CerberusHelperPlugin extends Plugin
 
 	private static final Set<Integer> REGION_IDS = Set.of(4883, 5140, 5395);
 
+	private static final Set<Integer> CERBERUS_IDS = Set.of(NpcID.CERBERUS, NpcID.CERBERUS_5863, NpcID.CERBERUS_5866);
+
 	@Inject
 	private Client client;
 
@@ -181,6 +183,21 @@ public class CerberusHelperPlugin extends Plugin
 	private void init()
 	{
 		inArena = true;
+
+		if (cerberus == null)
+		{
+			/*
+			This is for Leagues, as when you last recall back into the arena, the NpcSpawned event does not actually trigger causing cerberus to be null.
+			 */
+			for (NPC npc : client.getNpcs())
+			{
+				if (CERBERUS_IDS.contains(npc.getId()))
+				{
+					cerberus = new Cerberus(npc);
+					break;
+				}
+			}
+		}
 
 		overlayManager.add(sceneOverlay);
 		overlayManager.add(prayerOverlay);
