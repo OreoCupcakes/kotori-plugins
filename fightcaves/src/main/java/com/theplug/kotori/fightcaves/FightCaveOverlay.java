@@ -33,6 +33,8 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import com.theplug.kotori.kotoriutils.overlay.OverlayUtility;
 import net.runelite.api.Client;
 import net.runelite.api.Point;
 import net.runelite.api.Prayer;
@@ -102,7 +104,7 @@ public class FightCaveOverlay extends Overlay
 				renderImageLocation(graphics, npc.getNpc().getCanvasImageLocation(ImageUtil.resizeImage(pray, 36, 36), 0), pray, 12, 30);
 			}
 
-			OverlayUtil.renderTextLocation(graphics, ticksLeftStr, config.textSize(), font, color, canvasPoint, shadows, 0);
+			OverlayUtility.renderTextLocation(graphics, ticksLeftStr, config.textSize(), font, color, canvasPoint, shadows, 0);
 		}
 
 		if (config.tickTimersWidget())
@@ -143,11 +145,11 @@ public class FightCaveOverlay extends Overlay
 	{
 		if (prayer != null)
 		{
-			Rectangle bounds = OverlayUtil.renderPrayerOverlay(graphics, client, prayer, color);
+			Rectangle bounds = OverlayUtility.renderPrayerOverlay(graphics, client, prayer, color);
 
 			if (bounds != null)
 			{
-				renderTextLocation(graphics, ticks, 16, config.fontStyle().getFont(), color, centerPoint(bounds), shadows);
+				OverlayUtility.renderTextLocation(graphics, ticks, 16, config.fontStyle().getFont(), color, centerPoint(bounds), shadows, 0);
 			}
 		}
 	}
@@ -172,25 +174,6 @@ public class FightCaveOverlay extends Overlay
 		int y = imgLoc.getY() - yOffset;
 
 		graphics.drawImage(image, x, y, null);
-	}
-
-	private void renderTextLocation(Graphics2D graphics, String txtString, int fontSize, int fontStyle, Color fontColor, Point canvasPoint, boolean shadows)
-	{
-		graphics.setFont(new Font("Arial", fontStyle, fontSize));
-		if (canvasPoint != null)
-		{
-			final Point canvasCenterPoint = new Point(
-				canvasPoint.getX() - 3,
-				canvasPoint.getY() + 6);
-			final Point canvasCenterPoint_shadow = new Point(
-				canvasPoint.getX() - 2,
-				canvasPoint.getY() + 7);
-			if (shadows)
-			{
-				OverlayUtil.renderTextLocation(graphics, canvasCenterPoint_shadow, txtString, Color.BLACK);
-			}
-			OverlayUtil.renderTextLocation(graphics, canvasCenterPoint, txtString, fontColor);
-		}
 	}
 
 	private Point centerPoint(Rectangle rect)
