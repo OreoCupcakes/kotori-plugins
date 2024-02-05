@@ -35,6 +35,7 @@ import javax.inject.Inject;
 import com.theplug.kotori.alchemicalhelper.AlchemicalHelperConfig;
 import com.theplug.kotori.alchemicalhelper.AlchemicalHelperPlugin;
 import com.theplug.kotori.alchemicalhelper.entity.Hydra;
+import com.theplug.kotori.kotoriutils.overlay.OverlayUtility;
 import net.runelite.api.Client;
 import net.runelite.api.Prayer;
 import net.runelite.client.ui.overlay.Overlay;
@@ -82,7 +83,7 @@ public class PrayerOverlay extends Overlay
 	{
 		final Prayer prayer = hydra.getNextAttack().getPrayer();
 
-		OverlayUtil.renderPrayerOverlay(graphics2D, client, prayer, prayer == Prayer.PROTECT_FROM_MAGIC ? Color.CYAN : Color.GREEN);
+		OverlayUtility.renderPrayerOverlay(graphics2D, client, prayer, prayer == Prayer.PROTECT_FROM_MAGIC ? Color.CYAN : Color.GREEN);
 	}
 
 }

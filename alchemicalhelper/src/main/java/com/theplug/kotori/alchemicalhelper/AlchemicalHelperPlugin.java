@@ -668,7 +668,7 @@ public class AlchemicalHelperPlugin extends Plugin
 						{
 							if (VarUtilities.getPlayerAttackStyle() != 0 || flameObjects.isEmpty())
 							{
-								SpellInteractions.attackNpc(hydra.getNpc());
+								NPCInteractions.attackNpc(hydra.getNpc());
 								performAttackOnHydra = false;
 								poisonSafeTile = null;
 								timeSincePoisonDodge = 0;
@@ -686,7 +686,7 @@ public class AlchemicalHelperPlugin extends Plugin
 			case LIGHTNING:
 				if (config.doLightningSkip())
 				{
-					if (VarUtilities.getPlayerAttackStyle() != 1)
+					if (VarUtilities.getPlayerAttackStyle() == 0)
 					{
 						return;
 					}
@@ -728,7 +728,7 @@ public class AlchemicalHelperPlugin extends Plugin
 							{
 								if (performAttackOnHydra)
 								{
-									SpellInteractions.attackNpc(hydra.getNpc());
+									NPCInteractions.attackNpc(hydra.getNpc());
 									performAttackOnHydra = false;
 								}
 								inLightningSafeSpot = true;
@@ -774,7 +774,7 @@ public class AlchemicalHelperPlugin extends Plugin
 							{
 								if (performAttackOnHydra)
 								{
-									SpellInteractions.attackNpc(hydra.getNpc());
+									NPCInteractions.attackNpc(hydra.getNpc());
 									performAttackOnHydra = false;
 								}
 								flameSkipState = 2;
@@ -891,7 +891,7 @@ public class AlchemicalHelperPlugin extends Plugin
 
 		if (performAttackAfterDrink && !ReflectionLibrary.areYouMoving())
 		{
-			SpellInteractions.attackNpc(hydra.getNpc());
+			NPCInteractions.attackNpc(hydra.getNpc());
 			performAttackAfterDrink = false;
 		}
 	}

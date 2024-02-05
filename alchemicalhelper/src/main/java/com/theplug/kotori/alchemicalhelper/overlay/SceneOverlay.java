@@ -38,6 +38,7 @@ import com.theplug.kotori.alchemicalhelper.AlchemicalHelperPlugin;
 import com.theplug.kotori.alchemicalhelper.entity.Hydra;
 import com.theplug.kotori.alchemicalhelper.entity.HydraPhase;
 import com.theplug.kotori.kotoriutils.methods.VarUtilities;
+import com.theplug.kotori.kotoriutils.overlay.OverlayUtility;
 import net.runelite.api.*;
 
 import static net.runelite.api.Perspective.getCanvasTileAreaPoly;
@@ -310,7 +311,7 @@ public class SceneOverlay extends Overlay
 			Point timeLoc = Perspective.getCanvasTextLocation(client, graphics2D, localPoint, text, graphics2D.getFontMetrics().getHeight());
 
 
-			OverlayUtil.renderTextLocation(
+			OverlayUtility.renderTextLocation(
 				graphics2D,
 				text,
 				16,
@@ -350,7 +351,7 @@ public class SceneOverlay extends Overlay
 			return;
 		}
 
-		OverlayUtil.renderTextLocation(
+		OverlayUtility.renderTextLocation(
 			graphics2D,
 			text,
 			16,
