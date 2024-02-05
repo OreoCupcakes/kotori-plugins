@@ -8,10 +8,13 @@ import net.runelite.api.*;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.widgets.Widget;
+import net.runelite.client.ui.components.IconTextField;
+import net.runelite.client.ui.overlay.OverlayUtil;
+import net.runelite.client.util.ColorUtil;
 
+import javax.swing.*;
 import java.awt.*;
-
-import static net.runelite.client.ui.overlay.OverlayUtil.renderPolygon;
+import java.awt.event.ActionListener;
 
 public class OverlayUtility
 {
@@ -25,7 +28,7 @@ public class OverlayUtility
 		}
 
 		Rectangle bounds = widget.getBounds();
-		renderPolygon(graphics, rectangleToPolygon(bounds), color);
+		OverlayUtil.renderPolygon(graphics, rectangleToPolygon(bounds), color);
 		return bounds;
 	}
 
@@ -39,77 +42,116 @@ public class OverlayUtility
 
 	public static void renderTextLocation(Graphics2D graphics, String txtString, int fontSize, int fontStyle, Color fontColor, Point canvasPoint, boolean shadows, int yOffset)
 	{
-		graphics.setFont(new Font("Arial", fontStyle, fontSize));
-		if (canvasPoint != null)
+		if (canvasPoint == null)
 		{
-			final Point canvasCenterPoint = new Point(
-				canvasPoint.getX(),
-				canvasPoint.getY() + yOffset);
-			final Point canvasCenterPoint_shadow = new Point(
-				canvasPoint.getX() + 1,
-				canvasPoint.getY() + 1 + yOffset);
-			if (shadows)
-			{
-				renderTextLocation(graphics, canvasCenterPoint_shadow, txtString, Color.BLACK);
-			}
-			renderTextLocation(graphics, canvasCenterPoint, txtString, fontColor);
+			return;
 		}
+		Font originalFont = graphics.getFont();
+		graphics.setFont(new Font("Arial", fontStyle, fontSize));
+		final Point canvasCenterPoint = new Point(canvasPoint.getX(), canvasPoint.getY() + yOffset);
+		final Point canvasCenterPoint_shadow = new Point(canvasPoint.getX() + 1, canvasPoint.getY() + 1 + yOffset);
+		if (shadows)
+		{
+			OverlayUtil.renderTextLocation(graphics, canvasCenterPoint_shadow, txtString, Color.BLACK);
+		}
+		OverlayUtil.renderTextLocation(graphics, canvasCenterPoint, txtString, fontColor);
+		graphics.setFont(originalFont);
 	}
 
-	public static void renderTextLocation(Graphics2D graphics, Point txtLoc, String text, Color color)
+	public static void renderTextLocation(Graphics2D graphics2D, Client client, LocalPoint localPoint, String txtString, int fontSize, int fontStyle, Color fontColor, boolean shadows, int yOffset)
 	{
-		if (Strings.isNullOrEmpty(text))
+		if (localPoint == null)
 		{
 			return;
 		}
 
-		int x = txtLoc.getX();
-		int y = txtLoc.getY();
+		Point canvasPoint = Perspective.getCanvasTextLocation(client, graphics2D, localPoint, txtString, 0);
+		if (canvasPoint == null)
+		{
+			return;
+		}
 
-		graphics.setColor(Color.BLACK);
-		graphics.drawString(text, x + 1, y + 1);
-
-		graphics.setColor(color);
-		graphics.drawString(text, x, y);
+		renderTextLocation(graphics2D, txtString, fontSize, fontStyle, fontColor, canvasPoint, shadows, yOffset);
 	}
 
-	public static void renderFilledPolygon(Graphics2D graphics, Shape poly, Color color)
+	public static void renderTextLocation(Graphics2D graphics2D, Client client, LocalPoint localPoint, String text, Color textColor)
 	{
-		graphics.setColor(color);
-		final Stroke originalStroke = graphics.getStroke();
-		graphics.setStroke(new BasicStroke(2));
-		graphics.draw(poly);
-		graphics.fill(poly);
-		graphics.setStroke(originalStroke);
+		renderTextLocation(graphics2D, client, localPoint, text, textColor, 0, 16);
 	}
 
-	public static void drawTiles(Graphics2D graphics, Client client, WorldPoint point, WorldPoint playerPoint, Color color, int strokeWidth, int outlineAlpha, int fillAlpha)
+	public static void renderTextLocation(Graphics2D graphics2D, Client client, LocalPoint localPoint, String text, Color textColor, int zOffset, int fontSize)
 	{
-		if (point.distanceTo(playerPoint) >= 32)
+		Font originalFont = graphics2D.getFont();
+		Point canvasTextLocation = Perspective.getCanvasTextLocation(client, graphics2D, localPoint, text, zOffset);
+		if (canvasTextLocation == null)
+		{
+			return;
+		}
+
+		graphics2D.setFont(originalFont.deriveFont((float) fontSize));
+		OverlayUtil.renderTextLocation(graphics2D, canvasTextLocation, text, textColor);
+		graphics2D.setFont(originalFont);
+	}
+
+	public static void renderTextLocation(Graphics2D graphics2D, Client client, WorldPoint worldPoint, String text, Color textColor)
+	{
+		renderTextLocation(graphics2D, client, worldPoint, text, textColor, 0, 16);
+	}
+
+	public static void renderTextLocation(Graphics2D graphics2D, Client client, WorldPoint worldPoint, String text, Color textColor, int zOffset, int fontSize)
+	{
+		LocalPoint localPoint = LocalPoint.fromWorld(client, worldPoint);
+		if (localPoint == null)
+		{
+			return;
+		}
+
+		renderTextLocation(graphics2D, client, localPoint, text, textColor, zOffset, fontSize);
+	}
+
+	public static void drawTiles(Graphics2D graphics2D, Client client, WorldPoint point, Color color)
+	{
+		drawTiles(graphics2D, client, point, color, 2);
+	}
+
+	public static void drawTiles(Graphics2D graphics2D, Client client, WorldPoint point, Color color, int strokeWidth)
+	{
+		drawTiles(graphics2D, client, point, color, new Color(0, 0, 0, 50), strokeWidth);
+	}
+
+	public static void drawTiles(Graphics2D graphics, Client client, WorldPoint point, Color color, Color fillColor, int strokeWidth)
+	{
+		if (point == null)
 		{
 			return;
 		}
 		LocalPoint lp = LocalPoint.fromWorld(client, point);
-		if (lp == null)
-		{
-			return;
-		}
-
-		Polygon poly = Perspective.getCanvasTilePoly(client, lp);
-		if (poly == null)
-		{
-			return;
-		}
-		drawStrokeAndFillPoly(graphics, color, strokeWidth, outlineAlpha, fillAlpha, poly);
+		drawTiles(graphics, client, lp, color, fillColor, strokeWidth);
 	}
 
-	public static void drawStrokeAndFillPoly(Graphics2D graphics, Color color, int strokeWidth, int outlineAlpha, int fillAlpha, Polygon poly)
+	public static void drawTiles(Graphics2D graphics2D, Client client, LocalPoint localPoint, Color color)
 	{
-		graphics.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), outlineAlpha));
-		graphics.setStroke(new BasicStroke(strokeWidth));
-		graphics.draw(poly);
-		graphics.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), fillAlpha));
-		graphics.fill(poly);
+		drawTiles(graphics2D, client, localPoint, color, 2);
+	}
+
+	public static void drawTiles(Graphics2D graphics2D, Client client, LocalPoint localPoint, Color color, int strokeWidth)
+	{
+		drawTiles(graphics2D, client, localPoint, color, new Color(0, 0, 0, 50), strokeWidth);
+	}
+
+	public static void drawTiles(Graphics2D graphics2D, Client client, LocalPoint localPoint, Color color, Color fillColor, int strokeWidth)
+	{
+		if (localPoint == null)
+		{
+			return;
+		}
+
+		Polygon polygon = Perspective.getCanvasTilePoly(client, localPoint);
+		if (polygon == null)
+		{
+			return;
+		}
+		OverlayUtil.renderPolygon(graphics2D, polygon, color, fillColor, new BasicStroke(strokeWidth));
 	}
 
 	public static void drawOutlineAndFill(final Graphics2D graphics2D, final Color outlineColor, final Color fillColor, final float strokeWidth, final Shape shape)
@@ -126,5 +168,39 @@ public class OverlayUtility
 
 		graphics2D.setColor(originalColor);
 		graphics2D.setStroke(originalStroke);
+	}
+
+	public static void drawPolygon(Graphics2D graphics2D, Client client, LocalPoint localPoint, int rectangleSize, Color color, Color fillColor, int strokeWidth)
+	{
+		if (localPoint == null)
+		{
+			return;
+		}
+
+		final Polygon polygon = Perspective.getCanvasTileAreaPoly(client, localPoint, rectangleSize);
+
+		if (polygon == null)
+		{
+			return;
+		}
+
+		OverlayUtil.renderPolygon(graphics2D, polygon, color, fillColor, new BasicStroke(strokeWidth));
+	}
+
+	public static void drawPolygon(Graphics2D graphics2D, Client client, WorldPoint worldPoint, int rectangleSize, Color color, Color fillColor, int strokeWidth)
+	{
+		if (worldPoint == null)
+		{
+			return;
+		}
+
+		LocalPoint localPoint = LocalPoint.fromWorld(client, worldPoint);
+
+		if (localPoint == null)
+		{
+			return;
+		}
+
+		drawPolygon(graphics2D, client, localPoint, rectangleSize, color, fillColor, strokeWidth);
 	}
 }

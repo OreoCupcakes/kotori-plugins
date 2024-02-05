@@ -86,12 +86,4 @@ public class SpellInteractions
 				break;
 		}
 	}
-
-	public static void attackNpc(NPC npc)
-	{
-		if (npc != null)
-		{
-			ReflectionLibrary.invokeMenuAction(0, 0, MenuAction.NPC_SECOND_OPTION.getId(), npc.getIndex(), -1);
-		}
-	}
 }

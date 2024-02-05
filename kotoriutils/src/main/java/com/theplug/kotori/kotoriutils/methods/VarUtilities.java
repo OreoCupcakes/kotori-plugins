@@ -5,6 +5,9 @@ import com.theplug.kotori.kotoriutils.rlapi.WidgetInfoPlus;
 import net.runelite.api.*;
 import net.runelite.client.RuneLite;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class VarUtilities
 {
 	private static final Client client = RuneLite.getInjector().getInstance(Client.class);
@@ -320,5 +323,76 @@ public class VarUtilities
 		{
 			return null;
 		}
+	}
+
+	public static Prayer bestOffensivePrayer()
+	{
+		switch (getPlayerAttackStyle())
+		{
+			case 0:
+				return bestStrengthBoostPrayer();
+			case 1:
+				return bestRangedPrayer();
+			case 2:
+				return bestMagicPrayer();
+			default:
+				return null;
+		}
+	}
+
+	public static Set<Prayer> bestOffensivePrayers(boolean useAttackPrayer, boolean useDefensePrayer)
+	{
+		int attackStyle = getPlayerAttackStyle();
+		Set<Prayer> prayers = new HashSet<>();
+		Prayer mainPrayer = null;
+
+		switch (attackStyle)
+		{
+			case 0:
+				mainPrayer = bestStrengthBoostPrayer();
+				break;
+			case 1:
+				mainPrayer = bestRangedPrayer();
+				break;
+			case 2:
+				mainPrayer = bestMagicPrayer();
+				break;
+		}
+
+		if (mainPrayer == null)
+		{
+			return prayers;
+		}
+
+		prayers.add(mainPrayer);
+
+		switch (mainPrayer)
+		{
+			case EAGLE_EYE:
+			case HAWK_EYE:
+			case SHARP_EYE:
+			case MYSTIC_MIGHT:
+			case MYSTIC_LORE:
+			case MYSTIC_WILL:
+				if (useDefensePrayer)
+				{
+					prayers.add(bestDefenseBoostPrayer());
+				}
+				break;
+			case ULTIMATE_STRENGTH:
+			case SUPERHUMAN_STRENGTH:
+			case BURST_OF_STRENGTH:
+				if (useDefensePrayer)
+				{
+					prayers.add(bestDefenseBoostPrayer());
+				}
+				if (useAttackPrayer)
+				{
+					prayers.add(bestAttackBoostPrayer());
+				}
+				break;
+		}
+
+		return prayers;
 	}
 }
