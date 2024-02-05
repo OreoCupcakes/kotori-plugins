@@ -40,6 +40,19 @@ public class OverlayUtility
 		return new Polygon(xpoints, ypoints, 4);
 	}
 
+	//This one is for the guitar hero descending boxes
+	public static void renderFilledPolygon(Graphics2D graphics, Shape poly, Color color)
+	{
+		final Color originalColor = graphics.getColor();
+		final Stroke originalStroke = graphics.getStroke();
+		graphics.setColor(color);
+		graphics.setStroke(new BasicStroke(2));
+		graphics.draw(poly);
+		graphics.fill(poly);
+		graphics.setStroke(originalStroke);
+		graphics.setColor(originalColor);
+	}
+
 	public static void renderTextLocation(Graphics2D graphics, String txtString, int fontSize, int fontStyle, Color fontColor, Point canvasPoint, boolean shadows, int yOffset)
 	{
 		if (canvasPoint == null)
