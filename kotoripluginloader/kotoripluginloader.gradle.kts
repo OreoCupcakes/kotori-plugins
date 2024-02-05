@@ -23,7 +23,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "2.1.0"
+version = "2.2.0"
 
 project.extra["PluginName"] = "<html><font color=#6b8af6>Kotori</font> Plugin Loader</html>" // This is the name that is used in the external plugin manager panel
 project.extra["PluginDescription"] = "Loads plugins ported by Kotori" // This is the description that is used in the external plugin manager panel
