@@ -103,8 +103,7 @@ public class DagannothHelperPlugin extends Plugin
 
 	private boolean prayersDeactivated;
 	private int lastAttackStyle = -1;
-	private Prayer lastOffensivePrayer = null;
-	private Prayer lastSecondaryOffensivePrayer = null;
+	private Set<Prayer> lastOffensivePrayers = null;
 	private Prayer lastProtectionPrayer = null;
 	private boolean finishedEquippingItems;
 	private boolean rexDeath;
@@ -215,8 +214,7 @@ public class DagannothHelperPlugin extends Plugin
 		itemsToEquip = null;
 		spellToLeftClick = null;
 		lastAttackStyle = -1;
-		lastOffensivePrayer = null;
-		lastSecondaryOffensivePrayer = null;
+		lastOffensivePrayers = null;
 		lastProtectionPrayer = null;
 	}
 
@@ -296,8 +294,7 @@ public class DagannothHelperPlugin extends Plugin
 		{
 			deactivatePrayers();
 			lastAttackStyle = -1;
-			lastOffensivePrayer = null;
-			lastSecondaryOffensivePrayer = null;
+			lastOffensivePrayers = null;
 			lastProtectionPrayer = null;
 		}
 		else
@@ -529,58 +526,46 @@ public class DagannothHelperPlugin extends Plugin
 			return;
 		}
 
-
 		lastAttackStyle = currentAttackStyle;
 
-		Prayer prayerToUse = null;
-		Prayer secondaryPrayerToUse = null;
+		Set<Prayer> prayersToUse = null;
 
 		switch (lastAttackStyle)
 		{
 			case 0:
 				if (config.autoOffensiveMeleePrayer())
 				{
-					prayerToUse = VarUtilities.bestStrengthBoostPrayer();
-					if (prayerToUse != Prayer.PIETY && prayerToUse != Prayer.CHIVALRY)
-					{
-						secondaryPrayerToUse = VarUtilities.bestAttackBoostPrayer();
-					}
+					prayersToUse = VarUtilities.bestOffensivePrayers(true, false);
 				}
 				break;
 			case 1:
 				if (config.autoOffensiveRangedPrayer())
 				{
-					prayerToUse = VarUtilities.bestRangedPrayer();
+					prayersToUse = VarUtilities.bestOffensivePrayers(false, false);
 				}
 				break;
 			case 2:
 				if (config.autoOffensiveMagicPrayer())
 				{
-					prayerToUse = VarUtilities.bestMagicPrayer();
+					prayersToUse = VarUtilities.bestOffensivePrayers(false, false);
 				}
 				break;
 		}
 
-		if (prayerToUse != null)
+		if (prayersToUse != null && !prayersToUse.isEmpty())
 		{
-			PrayerInteractions.activatePrayer(prayerToUse);
-			lastOffensivePrayer = prayerToUse;
-
-			if (secondaryPrayerToUse != null)
+			for (Prayer prayer : prayersToUse)
 			{
-				PrayerInteractions.activatePrayer(secondaryPrayerToUse);
-				lastSecondaryOffensivePrayer = secondaryPrayerToUse;
+				PrayerInteractions.activatePrayer(prayer);
 			}
 		}
 		//This deactivates offensive prayers after weapon switches if a switch is not needed
-		else if (lastOffensivePrayer != null)
+		else if (lastOffensivePrayers != null && !lastOffensivePrayers.isEmpty())
 		{
-			PrayerInteractions.deactivatePrayer(lastOffensivePrayer);
-			lastOffensivePrayer = null;
-			if (lastSecondaryOffensivePrayer != null)
+			for (Prayer prayer : lastOffensivePrayers)
 			{
-				PrayerInteractions.deactivatePrayer(lastSecondaryOffensivePrayer);
-				lastSecondaryOffensivePrayer = null;
+				PrayerInteractions.deactivatePrayer(prayer);
+				lastOffensivePrayers = null;
 			}
 		}
 	}

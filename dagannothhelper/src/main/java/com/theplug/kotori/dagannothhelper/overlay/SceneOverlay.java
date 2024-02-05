@@ -29,6 +29,7 @@ package com.theplug.kotori.dagannothhelper.overlay;
 import com.theplug.kotori.dagannothhelper.DagannothHelperConfig;
 import com.theplug.kotori.dagannothhelper.DagannothHelperPlugin;
 import com.theplug.kotori.dagannothhelper.entity.DagannothKing;
+import com.theplug.kotori.kotoriutils.overlay.OverlayUtility;
 import net.runelite.api.Point;
 import net.runelite.api.*;
 import net.runelite.client.ui.overlay.Overlay;
@@ -111,7 +112,7 @@ public class SceneOverlay extends Overlay
 				return;
 			}
 
-			OverlayUtil.renderTextLocation(graphics2D, text, 20, Font.BOLD,
+			OverlayUtility.renderTextLocation(graphics2D, text, 20, Font.BOLD,
 				ticksUntilNextAnimation == 1 ? Color.WHITE : dagannothKing.getColor(), npcPoint, true, 0);
 		}
 	}

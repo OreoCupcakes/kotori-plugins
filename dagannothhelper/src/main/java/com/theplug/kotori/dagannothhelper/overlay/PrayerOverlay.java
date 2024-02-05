@@ -31,6 +31,7 @@ package com.theplug.kotori.dagannothhelper.overlay;
 import com.theplug.kotori.dagannothhelper.DagannothHelperConfig;
 import com.theplug.kotori.dagannothhelper.DagannothHelperPlugin;
 import com.theplug.kotori.dagannothhelper.entity.DagannothKing;
+import com.theplug.kotori.kotoriutils.overlay.OverlayUtility;
 import com.theplug.kotori.kotoriutils.rlapi.PrayerExtended;
 import net.runelite.api.*;
 import net.runelite.api.Point;
@@ -111,7 +112,7 @@ public class PrayerOverlay extends Overlay
 
 			if (config.showPrayerWidgetOverlay())
 			{
-				final Rectangle rectangle = OverlayUtil.renderPrayerOverlay(graphics2D, client, attackStyle.getPrayer(), attackStyle.getColor());
+				final Rectangle rectangle = OverlayUtility.renderPrayerOverlay(graphics2D, client, attackStyle.getPrayer(), attackStyle.getColor());
 
 				if (rectangle == null)
 				{
@@ -131,7 +132,7 @@ public class PrayerOverlay extends Overlay
 
 				final Point canvasPoint = new Point(prayerWidgetPoint.getX() - 3, prayerWidgetPoint.getY() + 6);
 
-				OverlayUtil.renderTextLocation(graphics2D, text, fontSize, fontStyle, fontColor, canvasPoint, true, 0);
+				OverlayUtility.renderTextLocation(graphics2D, text, fontSize, fontStyle, fontColor, canvasPoint, true, 0);
 			}
 
 			if (config.showGuitarHeroOverlay())
@@ -170,6 +171,6 @@ public class PrayerOverlay extends Overlay
 		final Rectangle boxRectangle = new Rectangle(BOX_WIDTH, BOX_HEIGHT);
 		boxRectangle.translate(baseX, baseY);
 
-		OverlayUtil.renderFilledPolygon(graphics2D, boxRectangle, color);
+		OverlayUtility.renderFilledPolygon(graphics2D, boxRectangle, color);
 	}
 }
