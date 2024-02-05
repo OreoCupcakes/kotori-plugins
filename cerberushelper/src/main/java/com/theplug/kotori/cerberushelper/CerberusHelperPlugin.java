@@ -894,7 +894,7 @@ public class CerberusHelperPlugin extends Plugin
 
 			if (playerLoc.equals(lavaSafeTile))
 			{
-				SpellInteractions.attackNpc(cerberus.getNpc());
+				NPCInteractions.attackNpc(cerberus.getNpc());
 				performAttackOnCerb = false;
 				lavaSafeTile = null;
 				ticksSinceLavaDodge = 0;
@@ -1013,7 +1013,7 @@ public class CerberusHelperPlugin extends Plugin
 		}
 		else if (performAttackAfterPrayer && client.getBoostedSkillLevel(Skill.PRAYER) > valueToDrinkAt)
 		{
-			SpellInteractions.attackNpc(cerberus.getNpc());
+			NPCInteractions.attackNpc(cerberus.getNpc());
 			performAttackAfterPrayer = false;
 		}
 	}

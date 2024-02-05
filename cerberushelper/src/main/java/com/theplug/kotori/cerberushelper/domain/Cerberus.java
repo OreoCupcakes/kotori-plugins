@@ -28,7 +28,7 @@ package com.theplug.kotori.cerberushelper.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.theplug.kotori.cerberushelper.util.Utility;
+import com.theplug.kotori.kotoriutils.methods.NPCInteractions;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -89,7 +89,7 @@ public class Cerberus
 
 	public int getHp()
 	{
-		final var calculatedHp = Utility.calculateNpcHp(npc.getHealthRatio(), npc.getHealthScale(), TOTAL_HP);
+		final var calculatedHp = NPCInteractions.calculateNpcHp(npc.getHealthRatio(), npc.getHealthScale(), TOTAL_HP);
 
 		if (calculatedHp != -1)
 		{

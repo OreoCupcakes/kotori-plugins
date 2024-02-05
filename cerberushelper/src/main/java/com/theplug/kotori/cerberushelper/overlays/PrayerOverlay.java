@@ -40,12 +40,12 @@ import javax.inject.Singleton;
 import com.theplug.kotori.cerberushelper.CerberusHelperConfig;
 import com.theplug.kotori.cerberushelper.CerberusHelperPlugin;
 import com.theplug.kotori.cerberushelper.domain.CerberusAttack;
+import com.theplug.kotori.kotoriutils.overlay.OverlayUtility;
 import com.theplug.kotori.kotoriutils.rlapi.PrayerExtended;
 import net.runelite.api.Client;
 import net.runelite.api.Point;
 import net.runelite.api.Prayer;
 import net.runelite.api.widgets.Widget;
-import com.theplug.kotori.cerberushelper.util.OverlayUtil;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
@@ -165,7 +165,7 @@ public class PrayerOverlay extends Overlay
 		final Rectangle boxRectangle = new Rectangle(BOX_WIDTH, BOX_HEIGHT);
 		boxRectangle.translate(baseX, baseY);
 
-		OverlayUtil.renderFilledPolygon(graphics2D, boxRectangle, Color.ORANGE);
+		OverlayUtility.renderFilledPolygon(graphics2D, boxRectangle, Color.ORANGE);
 	}
 
 	private void renderPrayerWidget(final Graphics2D graphics2D, final Prayer prayer, final int tick)
@@ -189,7 +189,7 @@ public class PrayerOverlay extends Overlay
 				break;
 		}
 
-		final Rectangle rectangle = OverlayUtil.renderPrayerOverlay(graphics2D, client, prayer, prayerColor);
+		final Rectangle rectangle = OverlayUtility.renderPrayerOverlay(graphics2D, client, prayer, prayerColor);
 
 		if (rectangle == null)
 		{
@@ -207,6 +207,6 @@ public class PrayerOverlay extends Overlay
 
 		final Point point = new Point(x - 3, y + 6);
 
-		OverlayUtil.renderTextLocation(graphics2D, text, fontSize, fontStyle, fontColor, point, true, 0);
+		OverlayUtility.renderTextLocation(graphics2D, text, fontSize, fontStyle, fontColor, point, true, 0);
 	}
 }

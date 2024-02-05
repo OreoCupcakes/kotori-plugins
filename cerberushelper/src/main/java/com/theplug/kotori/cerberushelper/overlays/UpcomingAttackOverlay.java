@@ -40,7 +40,6 @@ import com.theplug.kotori.cerberushelper.domain.Cerberus;
 import com.theplug.kotori.cerberushelper.domain.Phase;
 import com.theplug.kotori.cerberushelper.util.ImageManager;
 import com.theplug.kotori.cerberushelper.util.InfoBoxComponent;
-import com.theplug.kotori.cerberushelper.util.Utility;
 import net.runelite.client.ui.FontManager;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
@@ -52,6 +51,10 @@ import net.runelite.client.ui.overlay.components.PanelComponent;
 @Singleton
 public final class UpcomingAttackOverlay extends Overlay
 {
+	private static final Color COLOR_DEFAULT = new Color(70, 61, 50, 225);
+	private static final Color COLOR_GHOSTS = new Color(255, 255, 255, 225);
+	private static final Color COLOR_TRIPLE_ATTACK = new Color(0, 15, 255, 225);
+	private static final Color COLOR_LAVA = new Color(82, 0, 0, 225);
 	private static final Color COLOR_NEXT_ATTACK_BORDER = Color.WHITE;
 
 	private static final PanelComponent PANEL_COMPONENT = new PanelComponent();
@@ -129,7 +132,7 @@ public final class UpcomingAttackOverlay extends Overlay
 			final InfoBoxComponent infoBoxComponent = new InfoBoxComponent();
 			infoBoxComponent.setFont(FontManager.getRunescapeSmallFont());
 			infoBoxComponent.setTextColor(Color.GREEN);
-			infoBoxComponent.setBackgroundColor(Utility.getColorFromPhase(phase));
+			infoBoxComponent.setBackgroundColor(getColorFromPhase(phase));
 			infoBoxComponent.setPreferredSize(dimension);
 			infoBoxComponent.setImage(image);
 
@@ -167,5 +170,29 @@ public final class UpcomingAttackOverlay extends Overlay
 
 		graphics2D.setColor(COLOR_NEXT_ATTACK_BORDER);
 		graphics2D.draw(rectangle);
+	}
+
+	public static Color getColorFromPhase(final Phase phase)
+	{
+		final Color color;
+
+		switch (phase)
+		{
+			case TRIPLE:
+				color = COLOR_TRIPLE_ATTACK;
+				break;
+			case LAVA:
+				color = COLOR_LAVA;
+				break;
+			case GHOSTS:
+				color = COLOR_GHOSTS;
+				break;
+			case AUTO:
+			default:
+				color = COLOR_DEFAULT;
+				break;
+		}
+
+		return color;
 	}
 }

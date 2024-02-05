@@ -36,15 +36,16 @@ import com.theplug.kotori.cerberushelper.CerberusHelperPlugin;
 import com.theplug.kotori.cerberushelper.domain.Arena;
 import com.theplug.kotori.cerberushelper.domain.Cerberus;
 import com.theplug.kotori.cerberushelper.domain.Ghost;
+import com.theplug.kotori.kotoriutils.overlay.OverlayUtility;
 import net.runelite.api.*;
 import net.runelite.api.Point;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
-import com.theplug.kotori.cerberushelper.util.OverlayUtil;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.OverlayPriority;
+import net.runelite.client.util.ColorUtil;
 
 @Singleton
 public final class SceneOverlay extends Overlay
@@ -55,8 +56,8 @@ public final class SceneOverlay extends Overlay
 	private static final int GHOST_TIME_FONT_SIZE = 12;
 
 	private static final int GHOST_TILE_OUTLINE_WIDTH = 2;
-	private static final int GHOST_TILE_OUTLINE_APLHA = 255;
-	private static final int GHOST_TILE_FILL_APLHA = 20;
+	private static final int GHOST_TILE_OUTLINE_ALPHA = 255;
+	private static final int GHOST_TILE_FILL_ALPHA = 20;
 
 	private static final int GHOST_YELL_TICK_WINDOW = 17;
 
@@ -152,7 +153,8 @@ public final class SceneOverlay extends Overlay
 			}
 		}
 
-		OverlayUtil.drawTiles(graphics2D, client, ghostTile, playerPoint, ghostTileFillColor, GHOST_TILE_OUTLINE_WIDTH, GHOST_TILE_OUTLINE_APLHA, GHOST_TILE_FILL_APLHA);
+		OverlayUtility.drawTiles(graphics2D, client, ghostTile, ColorUtil.colorWithAlpha(ghostTileFillColor, GHOST_TILE_OUTLINE_ALPHA)
+				, ColorUtil.colorWithAlpha(ghostTileFillColor, GHOST_TILE_FILL_ALPHA), GHOST_TILE_OUTLINE_WIDTH);
 	}
 
 	private void renderGhostTileAttackTime(final Graphics2D graphics2D, final WorldPoint ghostTile, final int tileIndex)
@@ -193,7 +195,7 @@ public final class SceneOverlay extends Overlay
 
 		final Point newPoint = new Point(centerPoint.getX() - (metrics.stringWidth(timeUntilAttack) / 2), centerPoint.getY() + (metrics.getHeight() / 2));
 
-		OverlayUtil.renderTextLocation(graphics2D, timeUntilAttack, 12,
+		OverlayUtility.renderTextLocation(graphics2D, timeUntilAttack, 12,
 			Font.PLAIN, textColor, newPoint, true, 0);
 	}
 
