@@ -74,6 +74,7 @@ public class HouseOverlayPlugin extends Plugin
         cached_fairy_ring_names.put("AJS", "Penguins near Miscellania");
         cached_fairy_ring_names.put("AKP", "Necropolis");
         cached_fairy_ring_names.put("AKQ", "Piscatoris Hunter area");
+        cached_fairy_ring_names.put("AKR", "Hosidius Vinery");
         cached_fairy_ring_names.put("AKS", "Feldip Hunter area");
         cached_fairy_ring_names.put("ALP", "Lighthouse");
         cached_fairy_ring_names.put("ALQ", "Haunted Woods east of Canifis");
@@ -93,7 +94,7 @@ public class HouseOverlayPlugin extends Plugin
         cached_fairy_ring_names.put("BLP", "TzHaar area");
         cached_fairy_ring_names.put("BLR", "Legends' Guild");
         cached_fairy_ring_names.put("BLQ", "Yu'biusk");
-        cached_fairy_ring_names.put("BLS", "South of Mount Quidamortem, CoX, Stranglewood");
+        cached_fairy_ring_names.put("BLS", "South of Mount Quidamortem");
         // "C" Combinations
         cached_fairy_ring_names.put("CIP", "Miscellania");
         cached_fairy_ring_names.put("CIQ", "North-west of Yanille");
@@ -125,13 +126,7 @@ public class HouseOverlayPlugin extends Plugin
 
     public String get_fairy_ring_name(String key)
     {
-        if(cached_fairy_ring_names.containsKey(key)) {
-            return cached_fairy_ring_names.get(key);
-        }
-        else
-        {
-            return key;
-        }
+        return cached_fairy_ring_names.getOrDefault(key, key);
     }
 
     @Override
