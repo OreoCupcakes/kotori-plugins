@@ -1,6 +1,5 @@
 package com.theplug.kotori.sirehelper;
 
-import com.google.errorprone.annotations.Var;
 import com.google.inject.Provides;
 import com.theplug.kotori.kotoriutils.KotoriUtils;
 import com.theplug.kotori.kotoriutils.ReflectionLibrary;
@@ -88,7 +87,7 @@ public class SireHelperPlugin extends Plugin
 	private WorldPoint anchorDodgeTile;
 	private WorldPoint miasmaDodgeTile;
 	private WorldPoint dodgeExplosionTile;
-	private Spells shadowSpellToUse;
+	private Spells spellToUse;
 	private int[] itemsToEquip;
 	private boolean phaseTwoSwitchDone;
 	private boolean finishedEquippingItems;
@@ -130,7 +129,7 @@ public class SireHelperPlugin extends Plugin
 		anchorDodgeTile = null;
 		miasmaDodgeTile = null;
 		dodgeExplosionTile = null;
-		shadowSpellToUse = null;
+		spellToUse = null;
 		itemsToEquip = null;
 		offensivePrayer = null;
 		protectionPrayer = null;
@@ -150,7 +149,7 @@ public class SireHelperPlugin extends Plugin
 		anchorDodgeTile = null;
 		miasmaDodgeTile = null;
 		dodgeExplosionTile = null;
-		shadowSpellToUse = null;
+		spellToUse = null;
 		itemsToEquip = null;
 		offensivePrayer = null;
 		protectionPrayer = null;
@@ -183,6 +182,7 @@ public class SireHelperPlugin extends Plugin
 		overlayManager.add(sceneOverlay);
 		npcOverlayService.registerHighlighter(npcHighlighter);
 		keyManager.registerKeyListener(shadowSpellHotkey);
+		keyManager.registerKeyListener(bloodSpellHotkey);
 		keyManager.registerKeyListener(phaseOneGearHotkey);
 		keyManager.registerKeyListener(phaseTwoPlusGearHotkey);
 	}
@@ -192,6 +192,7 @@ public class SireHelperPlugin extends Plugin
 		overlayManager.remove(sceneOverlay);
 		npcOverlayService.unregisterHighlighter(npcHighlighter);
 		keyManager.unregisterKeyListener(shadowSpellHotkey);
+		keyManager.unregisterKeyListener(bloodSpellHotkey);
 		keyManager.unregisterKeyListener(phaseOneGearHotkey);
 		keyManager.unregisterKeyListener(phaseTwoPlusGearHotkey);
 	}
@@ -256,9 +257,9 @@ public class SireHelperPlugin extends Plugin
 			prioritizeSpawnsOverSire();
 		}
 
-		if (config.leftClickShadowSpells() && shadowSpellToUse != null)
+		if (config.leftClickSpells() && spellToUse != null)
 		{
-			SpellInteractions.createOneClickAttackSpell(shadowSpellToUse);
+			SpellInteractions.createOneClickAttackSpell(spellToUse);
 		}
 	}
 
@@ -809,18 +810,33 @@ public class SireHelperPlugin extends Plugin
 		return null;
 	}
 
-	private final HotkeyListener shadowSpellHotkey = new HotkeyListener(() -> config.spellHotkey())
+	private final HotkeyListener shadowSpellHotkey = new HotkeyListener(() -> config.shadowSpellHotkey())
 	{
 		@Override
 		public void hotkeyPressed()
 		{
-			shadowSpellToUse = config.spellType().getSpell();
+			spellToUse = config.shadowSpellType().getSpell();
 		}
 
 		@Override
 		public void hotkeyReleased()
 		{
-			shadowSpellToUse = null;
+			spellToUse = null;
+		}
+	};
+
+	private final HotkeyListener bloodSpellHotkey = new HotkeyListener(() -> config.bloodSpellHotkey())
+	{
+		@Override
+		public void hotkeyPressed()
+		{
+			spellToUse = config.bloodSpellType().getSpell();
+		}
+
+		@Override
+		public void hotkeyReleased()
+		{
+			spellToUse = null;
 		}
 	};
 

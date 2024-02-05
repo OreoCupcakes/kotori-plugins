@@ -48,6 +48,18 @@ public interface SireHelperConfig extends Config
 		private final Spells spell;
 	}
 
+	@Getter
+	@AllArgsConstructor
+	enum BloodSpells
+	{
+		RUSH(Spells.BLOOD_RUSH),
+		BURST(Spells.BLOOD_BURST),
+		BLITZ(Spells.BLOOD_BLITZ),
+		BARRAGE(Spells.BLOOD_BARRAGE);
+
+		private final Spells spell;
+	}
+
 
 
 
@@ -113,37 +125,61 @@ public interface SireHelperConfig extends Config
 	}
 
 	@ConfigItem(
-			name = "Left Click Cast Shadow Spell",
-			keyName = "leftClickShadowSpells",
+			name = "Left Click Cast Spells",
+			keyName = "leftClickSpells",
 			description = "Allows you to cast a shadow spell on the Abyssal Sire, when holding down the hotkey, without switching to the spell book menu.",
 			position = 4,
 			section = helperSection
 	)
-	default boolean leftClickShadowSpells()
+	default boolean leftClickSpells()
 	{
 		return false;
 	}
 
 	@ConfigItem(
 			name = "Shadow Spell",
-			keyName = "spellType",
+			keyName = "shadowSpellType",
 			description = "The shadow spell you want to left click cast when holding down the hotkey.",
 			position = 5,
 			section = helperSection
 	)
-	default ShadowSpells spellType()
+	default ShadowSpells shadowSpellType()
 	{
 		return ShadowSpells.BARRAGE;
 	}
 
 	@ConfigItem(
-			name = "Spell Hotkey",
-			keyName = "spellHotkey",
+			name = "Shadow Spell Hotkey",
+			keyName = "shadowSpellHotkey",
 			description = "The hotkey to hold down, enabling the ability to cast a shadow spell without switching to the spell book menu.",
 			position = 6,
 			section = helperSection
 	)
-	default Keybind spellHotkey()
+	default Keybind shadowSpellHotkey()
+	{
+		return Keybind.NOT_SET;
+	}
+
+	@ConfigItem(
+			name = "Blood Spell",
+			keyName = "bloodSpellType",
+			description = "The blood spell you want to left click cast when holding down the hotkey.",
+			position = 7,
+			section = helperSection
+	)
+	default BloodSpells bloodSpellType()
+	{
+		return BloodSpells.BARRAGE;
+	}
+
+	@ConfigItem(
+			name = "Blood Spell Hotkey",
+			keyName = "bloodSpellHotkey",
+			description = "The hotkey to hold down, enabling the ability to cast a blood spell without switching to the spell book menu.",
+			position = 8,
+			section = helperSection
+	)
+	default Keybind bloodSpellHotkey()
 	{
 		return Keybind.NOT_SET;
 	}
@@ -154,7 +190,7 @@ public interface SireHelperConfig extends Config
 			description = "Automatically swap your gear without the need to press the hotkeys." +
 					"<br>Swaps to 'Phase 1 Gear Ids' when you the Abyssal Sire dies." +
 					"<br>Swaps to 'Phase 2+ Gear Ids' when phase 1 ends.",
-			position = 7,
+			position = 9,
 			section = helperSection
 	)
 	default boolean autoGearSwap()
@@ -167,7 +203,7 @@ public interface SireHelperConfig extends Config
 			name = "Equips Per Tick",
 			keyName = "equipsPerTick",
 			description = "The number of items you want to equip per game tick when using the gear swap helper.",
-			position = 8,
+			position = 10,
 			section = helperSection
 	)
 	default int equipsPerTick()
@@ -181,7 +217,7 @@ public interface SireHelperConfig extends Config
 			description = "The item ids to equip for phase 1 of the Abyssal Sire fight." +
 					"<br>This is generally your ranged or magic gear as recommended by the wiki." +
 					"<br>Enter the ids in a '###,###,###' format.",
-			position = 9,
+			position = 11,
 			section = helperSection
 	)
 	default String phaseOneGearIds()
@@ -193,7 +229,7 @@ public interface SireHelperConfig extends Config
 			name = "Phase 1 Gear Hotkey",
 			keyName = "phaseOneGearHotkey",
 			description = "The hotkey to press which will auto equip all item ids within 'Phase 1 Gear Ids'.",
-			position = 10,
+			position = 12,
 			section = helperSection
 	)
 	default Keybind phaseOneGearHotkey()
@@ -207,7 +243,7 @@ public interface SireHelperConfig extends Config
 			description = "The item ids to equip for phase 2+ of the Abyssal Sire fight." +
 					"<br>This is generally your melee gear as recommended by the wiki." +
 					"<br>Enter the ids in a '###,###,###' format.",
-			position = 11,
+			position = 13,
 			section = helperSection
 	)
 	default String phaseTwoPlusGearIds()
@@ -219,7 +255,7 @@ public interface SireHelperConfig extends Config
 			name = "Phase 2+ Gear Hotkey",
 			keyName = "phaseTwoPlusHotkey",
 			description = "The hotkey to press which will auto equip all items ids within 'Phase 2+ Gear Ids'.",
-			position = 12,
+			position = 14,
 			section = helperSection
 	)
 	default Keybind phaseTwoPlusHotkey()
@@ -231,7 +267,7 @@ public interface SireHelperConfig extends Config
 			name = "Auto Prayers",
 			keyName = "autoPrayers",
 			description = "Automate protection and offensive prayers against the Abyssal Sire.",
-			position = 13,
+			position = 15,
 			section = helperSection
 	)
 	default boolean autoPrayers()
@@ -244,7 +280,7 @@ public interface SireHelperConfig extends Config
 			keyName = "usePrayerOnPhaseOne",
 			description = "Automate offensive prayers usage for phase 1 of the Abyssal Sire." +
 					"<br>Phase 1 is the stunning of the tentacles and killing the respiratory systems.",
-			position = 14,
+			position = 16,
 			section = helperSection
 	)
 	default boolean usePrayerOnPhaseOne()
@@ -257,14 +293,13 @@ public interface SireHelperConfig extends Config
 			keyName = "keepPreservePrayerOn",
 			description = "Prayers will automatically turn off after the Abyssal Sire dies." +
 					"<br>Turning this on keeps the Preserve prayer on.",
-			position = 15,
+			position = 17,
 			section = helperSection
 	)
 	default boolean keepPreservePrayerOn()
 	{
 		return false;
 	}
-
 
 
 
