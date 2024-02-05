@@ -11,7 +11,7 @@ public interface KotoriPluginLoaderConfig extends Config
 {
     //Sections
     @ConfigSection(
-            name = "<html>Kotori Plugin Loader<br>Version 2.1.0</html>",
+            name = "<html>Kotori Plugin Loader<br>Version 2.2.0</html>",
             description = "",
             position = 0,
             closedByDefault = true
@@ -249,4 +249,15 @@ public interface KotoriPluginLoaderConfig extends Config
             section = pluginsToLoad
     )
     default boolean infernoChoice() { return false; }
+
+    @ConfigItem(
+            keyName = "sireHelperChoice",
+            name = "Sire Helper",
+            description = "load the Sire Helper plugin.",
+            section = pluginsToLoad
+    )
+    default boolean sireHelperChoice()
+    {
+        return false;
+    }
 }

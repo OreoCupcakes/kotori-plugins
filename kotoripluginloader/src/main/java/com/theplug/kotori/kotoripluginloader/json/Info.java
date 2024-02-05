@@ -32,4 +32,5 @@ public class Info
     private boolean preventAoeWarnings;
     private boolean preventFightCaves;
     private boolean preventInferno;
+    private boolean preventSireHelper;
 }

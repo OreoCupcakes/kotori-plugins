@@ -37,7 +37,7 @@ public class KotoriPluginLoader extends Plugin
 {
 	final private String pluginsJsonURL = "https://github.com/OreoCupcakes/kotori-plugins-releases/blob/master/plugins.json?raw=true";
 	final private String infoJsonURL = "https://github.com/OreoCupcakes/kotori-plugins-releases/blob/master/info.json?raw=true";
-	final private String currentLoaderVersion = "2.1.0";
+	final private String currentLoaderVersion = "2.2.0";
 	
 	@Inject
 	private Client client;
@@ -163,6 +163,7 @@ public class KotoriPluginLoader extends Plugin
 			keys.add("aoeWarningsChoice");
 			keys.add("fightCavesChoice");
 			keys.add("infernoChoice");
+			keys.add("sireHelperChoice");
 			
 			if (config.selectAllPluginsChoice())
 			{
@@ -457,7 +458,9 @@ public class KotoriPluginLoader extends Plugin
 		addToPluginToLoadList(pluginClassPathsToLoad, config.fightCavesChoice(), infoJsonObject.isPreventFightCaves(), "Fight Caves", 1);
 		//Load Inferno
 		addToPluginToLoadList(pluginClassPathsToLoad, config.infernoChoice(), infoJsonObject.isPreventInferno(), "Inferno", 1);
-		
+		//Load Sire Helper
+		addToPluginToLoadList(pluginClassPathsToLoad, config.sireHelperChoice(), infoJsonObject.isPreventSireHelper(), "Sire Helper", 2);
+
 		return pluginClassPathsToLoad;
 	}
 	
