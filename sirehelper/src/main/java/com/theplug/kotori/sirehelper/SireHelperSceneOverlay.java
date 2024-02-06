@@ -56,7 +56,7 @@ public class SireHelperSceneOverlay extends Overlay
     {
         super(plugin);
         setPosition(OverlayPosition.DYNAMIC);
-        setLayer(OverlayLayer.ABOVE_SCENE);
+        setLayer(OverlayLayer.UNDER_WIDGETS);
         this.client = client;
         this.plugin = plugin;
         this.config = config;
@@ -70,11 +70,11 @@ public class SireHelperSceneOverlay extends Overlay
             return null;
         }
 
-        renderMiasmaPools(graphics);
-        renderStunTimer(graphics);
-        renderRespiratorySafeSpots(graphics);
         renderWhereToStandTiles(graphics);
+        renderRespiratorySafeSpots(graphics);
+        renderStunTimer(graphics);
         renderHpUntilPhaseChange(graphics);
+        renderMiasmaPools(graphics);
 
         return null;
     }
