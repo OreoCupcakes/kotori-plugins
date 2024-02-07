@@ -7,6 +7,7 @@ import com.theplug.kotori.kotoriutils.methods.*;
 import com.theplug.kotori.kotoriutils.rlapi.Spells;
 import com.theplug.kotori.sirehelper.entity.AbyssalSire;
 import com.theplug.kotori.sirehelper.entity.MiasmaPools;
+import com.theplug.kotori.sirehelper.entity.RespiratorySystem;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
@@ -59,7 +60,7 @@ public class SireHelperPlugin extends Plugin
 	@Getter
 	private final Map<LocalPoint, MiasmaPools> miasmaPoolsMap = new HashMap<>();
 	@Getter
-	private final Set<NPC> respiratorySet = new HashSet<>();
+	private final Map<WorldPoint, RespiratorySystem> respiratorsMap = new HashMap<>();
 
 	private final Function<NPC, HighlightedNpc> npcHighlighter = this::highlightNpc;
 
@@ -118,7 +119,7 @@ public class SireHelperPlugin extends Plugin
 		atSire = false;
 
 		miasmaPoolsMap.clear();
-		respiratorySet.clear();
+		respiratorsMap.clear();
 
 		abyssalSire = null;
 		isYourSireKill = false;
@@ -228,13 +229,20 @@ public class SireHelperPlugin extends Plugin
 	@Subscribe
 	private void onGameTick(GameTick gameTick)
 	{
-		if (!atSire || abyssalSire == null)
+		if (!atSire)
+		{
+			return;
+		}
+
+		updateRespiratoryVariables();
+		updateMiasmaPools();
+
+		if (abyssalSire == null)
 		{
 			return;
 		}
 
 		updateSireVariables();
-		updateMiasmaPools();
 
 		if (isYourSireKill)
 		{
@@ -304,7 +312,7 @@ public class SireHelperPlugin extends Plugin
 		switch (npc.getId())
 		{
 			case NpcID.RESPIRATORY_SYSTEM:
-				respiratorySet.add(npc);
+				respiratorsMap.putIfAbsent(npc.getWorldLocation(), new RespiratorySystem(npc));
 				break;
 			//Sire spawns twice in the fight, once for phase 1 and then for phase 2+.
 			case NpcID.ABYSSAL_SIRE:
@@ -331,7 +339,16 @@ public class SireHelperPlugin extends Plugin
 		switch (npc.getId())
 		{
 			case NpcID.RESPIRATORY_SYSTEM:
-				respiratorySet.remove(npc);
+				WorldPoint ventPoint = npc.getWorldLocation();
+				RespiratorySystem system = respiratorsMap.get(ventPoint);
+				if (system != null)
+				{
+					if (npc.isDead() || npc.getWorldLocation().getRegionID() != client.getLocalPlayer().getWorldLocation().getRegionID())
+					{
+						system.updateHp();
+						respiratorsMap.remove(ventPoint);
+					}
+				}
 				break;
 			/*
 				It despawns twice in a fight, once when it transitions to phase 2 and then when you kill it.
@@ -355,7 +372,7 @@ public class SireHelperPlugin extends Plugin
 				offensivePrayer = null;
 				protectionPrayer = null;
 				miasmaPoolsMap.clear();
-				respiratorySet.clear();
+				respiratorsMap.clear();
 				break;
 		}
 	}
@@ -428,6 +445,22 @@ public class SireHelperPlugin extends Plugin
 	}
 
 	@Subscribe
+	private void onHitsplatApplied(HitsplatApplied event)
+	{
+		if (!atSire && respiratorsMap.isEmpty())
+		{
+			return;
+		}
+
+		RespiratorySystem system = respiratorsMap.get(event.getActor().getWorldLocation());
+
+		if (system != null)
+		{
+			system.addToDamageDealt(event.getHitsplat().getAmount());
+		}
+	}
+
+	@Subscribe
 	private void onChatMessage(ChatMessage event)
 	{
 		if (!atSire || abyssalSire == null)
@@ -465,6 +498,19 @@ public class SireHelperPlugin extends Plugin
 			{
 				abyssalSire.decrementStunTimer();
 			}
+		}
+	}
+
+	private void updateRespiratoryVariables()
+	{
+		if (respiratorsMap.isEmpty())
+		{
+			return;
+		}
+
+		for (Map.Entry<WorldPoint, RespiratorySystem> entry : respiratorsMap.entrySet())
+		{
+			entry.getValue().updateHp();
 		}
 	}
 

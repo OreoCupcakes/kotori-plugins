@@ -664,7 +664,9 @@ public interface SireHelperConfig extends Config
 	@ConfigItem(
 			name = "Show Stun Timer On Respirators",
 			keyName = "showStunTimerOnRespirators",
-			description = "Show how long the Abyssal Sire will still be stunned for on top of the respiratory systems.",
+			description = "Show how long the Abyssal Sire will still be stunned for on top of the respiratory systems." +
+					"<br>If both stun timer and damage dealt is turned on, then the stun timer will be the number on the left side of the text." +
+					"<br>For example: '8 : 47', 8 is the stun timer denoted in game ticks and 47 is the amount of damage you did to the vent.",
 			position = 3,
 			section = tentaclesRespiratorsSection
 	)
@@ -673,28 +675,42 @@ public interface SireHelperConfig extends Config
 		return true;
 	}
 
-	@Alpha
 	@ConfigItem(
-			name = "Timer Color",
-			keyName = "stunTimerColor",
-			description = "The color used for the respiratory stun timer.",
+			name = "Show Total Damage Dealt",
+			keyName = "showTotalDamageDealtRespirators",
+			description = "Show how much total damage you have currently done to the respiratory systems." +
+					"<br>If both stun timer and damage dealt is turned on, then damage dealt will be the number on the right side of the text." +
+					"<br>For example: '8 : 47', 8 is the stun timer denoted in game ticks and 47 is the amount of damage you did to the vent.",
 			position = 4,
 			section = tentaclesRespiratorsSection
 	)
-	default Color stunTimerColor()
+	default boolean showTotalDamageDealtToRespirators()
+	{
+		return true;
+	}
+
+	@Alpha
+	@ConfigItem(
+			name = "Text Color",
+			keyName = "respiratorTextColor",
+			description = "The color used for the respiratory stun timer and damage dealt overlay text.",
+			position = 5,
+			section = tentaclesRespiratorsSection
+	)
+	default Color respiratorTextColor()
 	{
 		return Color.WHITE;
 	}
 
 	@Range(min = 16, max = 32)
 	@ConfigItem(
-			name = "Timer Size",
-			keyName = "stunTimerSize",
-			description = "The font size used for the respiratory stun timer.",
-			position = 5,
+			name = "Text Size",
+			keyName = "respiratorTextSize",
+			description = "The font size used for the respiratory stun timer and damage dealt overlay text.",
+			position = 6,
 			section = tentaclesRespiratorsSection
 	)
-	default int stunTimerSize()
+	default int respiratorTextSize()
 	{
 		return 24;
 	}
@@ -703,7 +719,7 @@ public interface SireHelperConfig extends Config
 			name = "Show Respiratory Safe Spots",
 			keyName = "showRespiratorySafeSpots",
 			description = "Show the safe spot tiles to attack the respirators for the Respiratory Runner combat achievement.",
-			position = 6,
+			position = 7,
 			section = tentaclesRespiratorsSection
 	)
 	default boolean showRespiratorySafeSpots()
@@ -716,7 +732,7 @@ public interface SireHelperConfig extends Config
 			name = "Border Color",
 			keyName = "safeSpotBorderColor",
 			description = "The color for the border of the respiratory safe spots.",
-			position = 7,
+			position = 8,
 			section = tentaclesRespiratorsSection
 	)
 	default Color safeSpotBorderColor()
@@ -729,7 +745,7 @@ public interface SireHelperConfig extends Config
 			name = "Fill Color",
 			keyName = "safeSpotFillColor",
 			description = "The color for the fill of the respiratory safe spots.",
-			position = 8,
+			position = 9,
 			section = tentaclesRespiratorsSection
 	)
 	default Color safeSpotFillColor()

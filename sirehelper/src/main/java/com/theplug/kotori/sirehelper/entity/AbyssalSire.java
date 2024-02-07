@@ -42,6 +42,10 @@ public class AbyssalSire
         {
             hp = calculatedHp;
         }
+        else if (npc.isDead())
+        {
+            hp = 0;
+        }
     }
 
     public int getHpPercentage()

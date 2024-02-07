@@ -3,8 +3,8 @@ package com.theplug.kotori.sirehelper;
 import com.theplug.kotori.kotoriutils.overlay.OverlayUtility;
 import com.theplug.kotori.sirehelper.entity.AbyssalSire;
 import com.theplug.kotori.sirehelper.entity.MiasmaPools;
+import com.theplug.kotori.sirehelper.entity.RespiratorySystem;
 import net.runelite.api.Client;
-import net.runelite.api.NPC;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.ui.overlay.Overlay;
@@ -70,10 +70,9 @@ public class SireHelperSceneOverlay extends Overlay
             return null;
         }
 
-        renderWhereToStandTiles(graphics);
-        renderRespiratorySafeSpots(graphics);
-        renderStunTimer(graphics);
-        renderHpUntilPhaseChange(graphics);
+        renderGroundMarkers(graphics);
+        renderRespiratoryInfo(graphics);
+        renderAbyssalSireInfo(graphics);
         renderMiasmaPools(graphics);
 
         return null;
@@ -112,59 +111,60 @@ public class SireHelperSceneOverlay extends Overlay
         }
     }
 
-    private void renderStunTimer(Graphics2D graphics2D)
+    private void renderRespiratoryInfo(Graphics2D graphics2D)
     {
         AbyssalSire sire = plugin.getAbyssalSire();
 
-        if (!config.showStunTimerOnRespirators() || sire == null  || !sire.isStunned() || plugin.getRespiratorySet().isEmpty())
+        if ((!config.showStunTimerOnRespirators() && !config.showTotalDamageDealtToRespirators()) || sire == null || plugin.getRespiratorsMap().isEmpty())
         {
             return;
         }
 
-        for (NPC npc : plugin.getRespiratorySet())
+        for (Map.Entry<WorldPoint, RespiratorySystem> respEntry : plugin.getRespiratorsMap().entrySet())
         {
-            LocalPoint localPoint = npc.getLocalLocation();
-            final String timerText = String.valueOf(sire.getStunTimer());
+            LocalPoint localPoint = LocalPoint.fromWorld(client, respEntry.getKey());
+            String infoText = "";
 
-            OverlayUtility.renderTextLocation(graphics2D, client, localPoint, timerText, config.stunTimerSize(),
-                    Font.BOLD, config.stunTimerColor(), true, 0);
-        }
-    }
-
-    private void renderTileSet(Graphics2D graphics2D, Set<WorldPoint> pointSet, Color borderColor, Color fillColor)
-    {
-        for (WorldPoint worldPoint : pointSet)
-        {
-            if (worldPoint.getPlane() != client.getPlane() && !worldPoint.isInScene(client))
+            if (config.showStunTimerOnRespirators())
             {
-                continue;
+                infoText += sire.getStunTimer();
             }
 
-            OverlayUtility.drawTiles(graphics2D, client, worldPoint, borderColor, fillColor, 2);
+            if (config.showTotalDamageDealtToRespirators())
+            {
+                RespiratorySystem system = respEntry.getValue();
+                if (infoText.isEmpty())
+                {
+                    infoText += system.getDamageDealt();
+                }
+                else
+                {
+                    infoText += " : " + system.getDamageDealt();
+                }
+            }
+
+            if (!infoText.isEmpty())
+            {
+                OverlayUtility.renderTextLocation(graphics2D, client, localPoint, infoText, config.respiratorTextSize(),
+                        Font.BOLD, config.respiratorTextColor(), true, 0);
+            }
         }
     }
 
-    private void renderRespiratorySafeSpots(Graphics2D graphics2D)
+    private void renderGroundMarkers(Graphics2D graphics2D)
     {
-        if (!config.showRespiratorySafeSpots())
+        if (config.showWhereToStandTiles())
         {
-            return;
+            renderTileSet(graphics2D, WHERE_TO_STAND_TILES, config.whereToStandBorderColor(), config.whereToStandFillColor());
         }
 
-        renderTileSet(graphics2D, RESP_SAFESPOTS, config.safeSpotBorderColor(), config.safeSpotFillColor());
-    }
-
-    private void renderWhereToStandTiles(Graphics2D graphics2D)
-    {
-        if (!config.showWhereToStandTiles())
+        if (config.showRespiratorySafeSpots())
         {
-            return;
+            renderTileSet(graphics2D, RESP_SAFESPOTS, config.safeSpotBorderColor(), config.safeSpotFillColor());
         }
-
-        renderTileSet(graphics2D, WHERE_TO_STAND_TILES, config.whereToStandBorderColor(), config.whereToStandFillColor());
     }
 
-    private void renderHpUntilPhaseChange(Graphics2D graphics2D)
+    private void renderAbyssalSireInfo(Graphics2D graphics2D)
     {
         final AbyssalSire sire = plugin.getAbyssalSire();
 
@@ -186,5 +186,18 @@ public class SireHelperSceneOverlay extends Overlay
 
         OverlayUtility.renderTextLocation(graphics2D, client, localPoint, hpText, config.phaseChangeTextSize(),
                 Font.BOLD, config.phaseChangeTextColor(), true, 0);
+    }
+
+    private void renderTileSet(Graphics2D graphics2D, Set<WorldPoint> pointSet, Color borderColor, Color fillColor)
+    {
+        for (WorldPoint worldPoint : pointSet)
+        {
+            if (worldPoint.getPlane() != client.getPlane() && !worldPoint.isInScene(client))
+            {
+                continue;
+            }
+
+            OverlayUtility.drawTiles(graphics2D, client, worldPoint, borderColor, fillColor, 2);
+        }
     }
 }
