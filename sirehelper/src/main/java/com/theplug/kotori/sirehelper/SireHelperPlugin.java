@@ -322,7 +322,14 @@ public class SireHelperPlugin extends Plugin
 			case NpcID.ABYSSAL_SIRE_5890:
 			case NpcID.ABYSSAL_SIRE_5891:
 			case NpcID.ABYSSAL_SIRE_5908:
-				abyssalSire = new AbyssalSire(npc);
+				if (abyssalSire == null)
+				{
+					abyssalSire = new AbyssalSire(npc);
+				}
+				else
+				{
+					abyssalSire.setNpc(npc);
+				}
 				break;
 		}
 	}

@@ -16,7 +16,8 @@ public class AbyssalSire
     private static final int STUN_TIME_TICKS = 50;
 
     @NonNull
-    private final NPC npc;
+    @Setter
+    private NPC npc;
 
     private int hp;
     private int phase;

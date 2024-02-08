@@ -23,7 +23,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "1.0.2"
+version = "1.0.3"
 
 project.extra["PluginName"] = "<html><font color=#6b8af6>[K]</font> Sire Helper</html>" // This is the name that is used in the external plugin manager panel
 project.extra["PluginDescription"] = "A plugin for the Abyssal Sire boss. Overlays and some automation." // This is the description that is used in the external plugin manager panel
