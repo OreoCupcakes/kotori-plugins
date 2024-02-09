@@ -314,7 +314,10 @@ public class SireHelperPlugin extends Plugin
 			case NpcID.RESPIRATORY_SYSTEM:
 				respiratorsMap.putIfAbsent(npc.getWorldLocation(), new RespiratorySystem(npc));
 				break;
-			//Sire spawns twice in the fight, once for phase 1 and then for phase 2+.
+			/*
+				Sire spawns twice in the fight, once for phase 1 and then for phase 2+.
+				If the Sire goes out of scene and comes back into scene, then the sire NPC will be different from the stored sire NPC
+			 */
 			case NpcID.ABYSSAL_SIRE:
 			case NpcID.ABYSSAL_SIRE_5887:
 			case NpcID.ABYSSAL_SIRE_5888:
