@@ -554,12 +554,13 @@ public class DagannothHelperPlugin extends Plugin
 
 		if (prayersToUse != null && !prayersToUse.isEmpty())
 		{
+			lastOffensivePrayers = prayersToUse;
 			for (Prayer prayer : prayersToUse)
 			{
 				PrayerInteractions.activatePrayer(prayer);
 			}
 		}
-		//This deactivates offensive prayers after weapon switches if a switch is not needed
+		//This deactivates offensive prayers after weapon switches if an offensive prayer is not needed
 		else if (lastOffensivePrayers != null && !lastOffensivePrayers.isEmpty())
 		{
 			for (Prayer prayer : lastOffensivePrayers)
