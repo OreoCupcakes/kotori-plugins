@@ -459,7 +459,6 @@ public class ReflectionLibrary
 	public static void setSelectedSpell(int spellWidgetId)
 	{
 		setSelectedWidgetHooks(spellWidgetId, -1, -1);
-		client.setWidgetSelected(true);
 	}
 
 	public static void setSelectedWidgetHooks(int spellWidgetId, int spellChildIndex, int spellItemId)
