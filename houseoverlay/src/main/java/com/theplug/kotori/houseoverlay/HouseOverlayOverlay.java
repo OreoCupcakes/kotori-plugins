@@ -102,6 +102,7 @@ class HouseOverlayOverlay extends Overlay {
                 {
                     case 29241://Rejuvenate Pool
                     case 40848://Frozen reju Pool
+                    case 49993://Trailblazer reloaded rejuvenation pool
                         //Portal Nexus Models
                     case 27097:
                     case 33354:
