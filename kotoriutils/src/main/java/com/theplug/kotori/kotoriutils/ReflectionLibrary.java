@@ -10,7 +10,6 @@ import net.runelite.client.RuneLite;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Collection;
 
 @Slf4j
@@ -421,6 +420,9 @@ public class ReflectionLibrary
 	}
 	
 	//Spell Insertion Methods
+	/*
+		Spell Widget is just any selected widget's packed id.
+	 */
 	private static void setSelectedSpellWidget(int widgetPackedId)
 	{
 		Class<?> clazz = getClass(selectedSpellWidgetClassName);
@@ -444,7 +446,7 @@ public class ReflectionLibrary
 	/*
 		SpellItemId is actually the item ID displayed by a widget. This can be gotten from Widget.getItemId().
 		This needs to be set to -1 when you are trying to cast an actual spell because interacting with other widgets could set this value to not -1.
-		For example, interacting with an item in the inventory would set this value to the item id of the item you interacted with.
+		For example, interacting with an item in the inventory (Use -> Target) would set this value to the item id of the item you interacted with.
 	 */
 	private static void setSelectedSpellItemId(int itemId)
 	{
@@ -453,13 +455,14 @@ public class ReflectionLibrary
 		setFieldIntValue(spellItem, client, itemId, selectedSpellItemIDMultiplier, errorMsg);
 	}
 
+	//As explained above, you need to set spellChildIndex and spellItemId to -1 if you want to cast a spell.
 	public static void setSelectedSpell(int spellWidgetId)
 	{
-		setSelectedSpell(spellWidgetId, -1, -1);
+		setSelectedWidgetHooks(spellWidgetId, -1, -1);
+		client.setWidgetSelected(true);
 	}
 
-	//As explained above, you need to set spellChildIndex and spellItemId to -1 if you want to cast a spell.
-	public static void setSelectedSpell(int spellWidgetId, int spellChildIndex, int spellItemId)
+	public static void setSelectedWidgetHooks(int spellWidgetId, int spellChildIndex, int spellItemId)
 	{
 		setSelectedSpellWidget(spellWidgetId);
 		setSelectedSpellChildIndex(spellChildIndex);
