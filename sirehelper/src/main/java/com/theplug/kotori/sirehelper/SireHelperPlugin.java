@@ -135,6 +135,11 @@ public class SireHelperPlugin extends Plugin
 		offensivePrayer = null;
 		protectionPrayer = null;
 
+		if (config.autoPrayers())
+		{
+			PrayerInteractions.deactivatePrayers(config.keepPreservePrayerOn());
+		}
+
 		removeServices();
 	}
 	
