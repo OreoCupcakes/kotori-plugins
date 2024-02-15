@@ -446,6 +446,7 @@ class HouseOverlayOverlay extends Overlay {
                 return "Exit";
             case 29241:
             case 40848://Frozen
+            case 49993://Trailblazer
                 return "Rejuvenation Pool";
         }
 
@@ -454,7 +455,7 @@ class HouseOverlayOverlay extends Overlay {
 
     public Color getcolor(int id, Color defaultcolor)
     {
-        if(id == 29241 || id == 40848)//Ornate rej.
+        if(id == 29241 || id == 40848 || id == 49993)//Ornate rej.
         {
             if(plugin.currentanimation == 7305)
             {
