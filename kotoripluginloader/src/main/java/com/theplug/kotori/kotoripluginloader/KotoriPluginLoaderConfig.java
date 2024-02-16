@@ -11,7 +11,7 @@ public interface KotoriPluginLoaderConfig extends Config
 {
     //Sections
     @ConfigSection(
-            name = "<html>Kotori Plugin Loader<br>Version 2.2.0</html>",
+            name = "<html>Kotori Plugin Loader<br>Version 3.0.0</html>",
             description = "",
             position = 0,
             closedByDefault = true
