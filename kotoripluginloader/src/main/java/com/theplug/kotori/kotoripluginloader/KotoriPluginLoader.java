@@ -16,6 +16,7 @@ import net.runelite.client.events.ProfileChanged;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.plugins.PluginManager;
+import net.runelite.client.externalplugins.ExternalPluginManager;
 
 import javax.inject.Inject;
 import javax.swing.*;
@@ -37,7 +38,7 @@ public class KotoriPluginLoader extends Plugin
 {
 	final private String pluginsJsonURL = "https://github.com/OreoCupcakes/kotori-plugins-releases/blob/master/plugins.json?raw=true";
 	final private String infoJsonURL = "https://github.com/OreoCupcakes/kotori-plugins-releases/blob/master/info.json?raw=true";
-	final private String currentLoaderVersion = "2.2.0";
+	final private String currentLoaderVersion = "3.0.0";
 	
 	@Inject
 	private Client client;
@@ -45,6 +46,8 @@ public class KotoriPluginLoader extends Plugin
 	private KotoriPluginLoaderConfig config;
 	@Inject
 	private PluginManager manager;
+	@Inject
+	private ExternalPluginManager externalManager;
 	@Inject
 	private EventBus eventBus;
 	@Inject
@@ -337,6 +340,8 @@ public class KotoriPluginLoader extends Plugin
 					installedPlugins.add(scannedPlugins.get(i));
 				}
 			}
+
+            manager.loadDefaultPluginConfiguration(scannedPlugins); 
 			
 			SwingUtilities.invokeLater(() ->
 			{
@@ -358,6 +363,8 @@ public class KotoriPluginLoader extends Plugin
 				}
 			});
 			eventBus.post(new ExternalPluginsChanged());
+			externalManager.update();
+			
 			
 			if (!config.disablePluginsLoadMsg())
 			{
