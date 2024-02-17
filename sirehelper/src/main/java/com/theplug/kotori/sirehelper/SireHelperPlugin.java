@@ -141,11 +141,6 @@ public class SireHelperPlugin extends Plugin
 		protectionPrayer = null;
 		systemRegenTimer = 0;
 
-		if (config.autoPrayers() && client.getGameState() == GameState.LOGGED_IN)
-		{
-			PrayerInteractions.deactivatePrayers(config.keepPreservePrayerOn());
-		}
-
 		removeServices();
 	}
 	
@@ -228,6 +223,11 @@ public class SireHelperPlugin extends Plugin
 					if (atSire)
 					{
 						shutDown();
+
+						if (config.autoPrayers())
+						{
+							PrayerInteractions.deactivatePrayers(config.keepPreservePrayerOn());
+						}
 					}
 				}
 				break;
