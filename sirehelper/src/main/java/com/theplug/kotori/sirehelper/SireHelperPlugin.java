@@ -574,7 +574,7 @@ public class SireHelperPlugin extends Plugin
 			RespiratorySystem system = entry.getValue();
 			system.updateHp();
 
-			if (system.getDamageDealt() > 0 && systemRegenTimer == 9)
+			if (system.getDamageDealt() > 0 && system.getDamageDealt() < 50 && systemRegenTimer == 9)
 			{
 				system.removeFromDamageDealt();
 			}
