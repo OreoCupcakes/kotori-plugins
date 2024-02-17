@@ -576,10 +576,49 @@ public interface SireHelperConfig extends Config
 	}
 
 	@ConfigItem(
+			name = "Show Evolution Timer",
+			keyName = "showSpawnEvolutionTimer",
+			description = "Show the time remaining until the Spawn evolves into a Scion." +
+					"<br>Helpful for the They Grow Up Too Fast combat achievement.",
+			position = 3,
+			section = spawnsScionSection
+	)
+	default boolean showSpawnEvolutionTimer()
+	{
+		return false;
+	}
+
+	@Alpha
+	@ConfigItem(
+			name = "Text Color",
+			keyName = "evolutionTextColor",
+			description = "The color used for the spawn evolution timer text.",
+			position = 4,
+			section = spawnsScionSection
+	)
+	default Color evolutionTextColor()
+	{
+		return Color.WHITE;
+	}
+
+	@Range(min = 12, max = 32)
+	@ConfigItem(
+			name = "Text Size",
+			keyName = "evolutionTextSize",
+			description = "The font size used for the spawn evolution timer text.",
+			position = 5,
+			section = spawnsScionSection
+	)
+	default int evolutionTextSize()
+	{
+		return 12;
+	}
+
+	@ConfigItem(
 			name = "Highlight Scions",
 			keyName = "highlightScions",
 			description = "Highlight the Scions that evolve from Spawns.",
-			position = 3,
+			position = 6,
 			section = spawnsScionSection
 	)
 	default boolean highlightScions()
@@ -592,7 +631,7 @@ public interface SireHelperConfig extends Config
 			name = "Border Color",
 			keyName = "scionBorderColor",
 			description = "The border color for the Scion tiles.",
-			position = 4,
+			position = 7,
 			section = spawnsScionSection
 	)
 	default Color scionBorderColor()
@@ -605,7 +644,7 @@ public interface SireHelperConfig extends Config
 			name = "Fill Color",
 			keyName = "scionFillColor",
 			description = "The fill color for the Scion tiles.",
-			position = 5,
+			position = 8,
 			section = spawnsScionSection
 	)
 	default Color scionFillColor()

@@ -8,6 +8,7 @@ import com.theplug.kotori.kotoriutils.rlapi.Spells;
 import com.theplug.kotori.sirehelper.entity.AbyssalSire;
 import com.theplug.kotori.sirehelper.entity.MiasmaPools;
 import com.theplug.kotori.sirehelper.entity.RespiratorySystem;
+import com.theplug.kotori.sirehelper.entity.Spawn;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
@@ -61,6 +62,8 @@ public class SireHelperPlugin extends Plugin
 	private final Map<LocalPoint, MiasmaPools> miasmaPoolsMap = new HashMap<>();
 	@Getter
 	private final Map<WorldPoint, RespiratorySystem> respiratorsMap = new HashMap<>();
+	@Getter
+	private final Set<Spawn> spawnSet = new HashSet<>();
 
 	private final Function<NPC, HighlightedNpc> npcHighlighter = this::highlightNpc;
 
@@ -94,6 +97,7 @@ public class SireHelperPlugin extends Plugin
 	private boolean finishedEquippingItems;
 	private Prayer offensivePrayer;
 	private Prayer protectionPrayer;
+	private int systemRegenTimer;
 
 
 	@Provides
@@ -120,6 +124,7 @@ public class SireHelperPlugin extends Plugin
 
 		miasmaPoolsMap.clear();
 		respiratorsMap.clear();
+		spawnSet.clear();
 
 		abyssalSire = null;
 		isYourSireKill = false;
@@ -134,8 +139,9 @@ public class SireHelperPlugin extends Plugin
 		itemsToEquip = null;
 		offensivePrayer = null;
 		protectionPrayer = null;
+		systemRegenTimer = 0;
 
-		if (config.autoPrayers())
+		if (config.autoPrayers() && client.getGameState() == GameState.LOGGED_IN)
 		{
 			PrayerInteractions.deactivatePrayers(config.keepPreservePrayerOn());
 		}
@@ -159,6 +165,7 @@ public class SireHelperPlugin extends Plugin
 		itemsToEquip = null;
 		offensivePrayer = null;
 		protectionPrayer = null;
+		systemRegenTimer = 0;
 
 		addServices();
 
@@ -240,6 +247,7 @@ public class SireHelperPlugin extends Plugin
 		}
 
 		updateRespiratoryVariables();
+		updateSpawnVariables();
 		updateMiasmaPools();
 
 		if (abyssalSire == null)
@@ -316,6 +324,10 @@ public class SireHelperPlugin extends Plugin
 		NPC npc = event.getNpc();
 		switch (npc.getId())
 		{
+			case NpcID.SPAWN:
+			case NpcID.SPAWN_5917:
+				spawnSet.add(new Spawn(npc));
+				break;
 			case NpcID.RESPIRATORY_SYSTEM:
 				respiratorsMap.putIfAbsent(npc.getWorldLocation(), new RespiratorySystem(npc));
 				break;
@@ -353,6 +365,10 @@ public class SireHelperPlugin extends Plugin
 		NPC npc = event.getNpc();
 		switch (npc.getId())
 		{
+			case NpcID.SPAWN:
+			case NpcID.SPAWN_5917:
+				spawnSet.removeIf(spawn -> spawn.getNpc().equals(npc));
+				break;
 			case NpcID.RESPIRATORY_SYSTEM:
 				WorldPoint ventPoint = npc.getWorldLocation();
 				RespiratorySystem system = respiratorsMap.get(ventPoint);
@@ -388,6 +404,7 @@ public class SireHelperPlugin extends Plugin
 				protectionPrayer = null;
 				miasmaPoolsMap.clear();
 				respiratorsMap.clear();
+				spawnSet.clear();
 				break;
 		}
 	}
@@ -516,8 +533,37 @@ public class SireHelperPlugin extends Plugin
 		}
 	}
 
+	private void updateSpawnVariables()
+	{
+		if (spawnSet.isEmpty())
+		{
+			return;
+		}
+
+		Set<Spawn> spawnsToRemove = new HashSet<>();
+
+		for (Spawn spawn : spawnSet)
+		{
+			if (spawn.getEvolutionTimer() <= 1)
+			{
+				spawnsToRemove.add(spawn);
+			}
+			else
+			{
+				spawn.decrementTicksUntilEvolution();
+			}
+		}
+
+		for (Spawn spawn : spawnsToRemove)
+		{
+			spawnSet.remove(spawn);
+		}
+	}
+
 	private void updateRespiratoryVariables()
 	{
+		systemRegenTimer = systemRegenTimer < 9 ? systemRegenTimer + 1 : 0;
+
 		if (respiratorsMap.isEmpty())
 		{
 			return;
@@ -525,7 +571,13 @@ public class SireHelperPlugin extends Plugin
 
 		for (Map.Entry<WorldPoint, RespiratorySystem> entry : respiratorsMap.entrySet())
 		{
-			entry.getValue().updateHp();
+			RespiratorySystem system = entry.getValue();
+			system.updateHp();
+
+			if (system.getDamageDealt() > 0 && systemRegenTimer == 9)
+			{
+				system.removeFromDamageDealt();
+			}
 		}
 	}
 

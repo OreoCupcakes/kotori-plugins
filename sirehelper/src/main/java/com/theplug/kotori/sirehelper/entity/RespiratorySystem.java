@@ -43,4 +43,9 @@ public class RespiratorySystem
     {
         damageDealt += damage;
     }
+
+    public void removeFromDamageDealt()
+    {
+        damageDealt--;
+    }
 }

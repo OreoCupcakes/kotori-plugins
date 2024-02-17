@@ -4,6 +4,7 @@ import com.theplug.kotori.kotoriutils.overlay.OverlayUtility;
 import com.theplug.kotori.sirehelper.entity.AbyssalSire;
 import com.theplug.kotori.sirehelper.entity.MiasmaPools;
 import com.theplug.kotori.sirehelper.entity.RespiratorySystem;
+import com.theplug.kotori.sirehelper.entity.Spawn;
 import net.runelite.api.Client;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
@@ -73,6 +74,7 @@ public class SireHelperSceneOverlay extends Overlay
         renderGroundMarkers(graphics);
         renderRespiratoryInfo(graphics);
         renderAbyssalSireInfo(graphics);
+        renderSpawnInfo(graphics);
         renderMiasmaPools(graphics);
 
         return null;
@@ -186,6 +188,30 @@ public class SireHelperSceneOverlay extends Overlay
 
         OverlayUtility.renderTextLocation(graphics2D, client, localPoint, hpText, config.phaseChangeTextSize(),
                 Font.BOLD, config.phaseChangeTextColor(), true, 0);
+    }
+
+    private void renderSpawnInfo(Graphics2D graphics2D)
+    {
+        if (!config.showSpawnEvolutionTimer() || plugin.getSpawnSet().isEmpty())
+        {
+            return;
+        }
+
+        for (Spawn spawn : plugin.getSpawnSet())
+        {
+            final int timer = spawn.getEvolutionTimer();
+
+            if (timer == 0)
+            {
+                return;
+            }
+
+            final String timerText = String.valueOf(timer);
+            LocalPoint localPoint = spawn.getNpc().getLocalLocation();
+
+            OverlayUtility.renderTextLocation(graphics2D, client, localPoint, timerText, config.evolutionTextSize(),
+                    Font.BOLD, config.evolutionTextColor(), true, 0);
+        }
     }
 
     private void renderTileSet(Graphics2D graphics2D, Set<WorldPoint> pointSet, Color borderColor, Color fillColor)
