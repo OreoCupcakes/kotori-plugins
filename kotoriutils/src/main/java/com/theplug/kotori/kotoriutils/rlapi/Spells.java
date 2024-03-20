@@ -1,4 +1,4 @@
-package com.theplug.kotori.kotoriutils.rlapi;
+package com.kotori.kotoriutils.rlapi;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -62,11 +62,12 @@ public enum Spells
     CAMELOT_TELEPORT("Camelot Teleport", WidgetInfoPlus.SPELL_CAMELOT_TELEPORT, 45, 0, 0, 1),
     CAMELOT_TELEPORT_SEERS("Seer's Camelot Teleport", WidgetInfoPlus.SPELL_CAMELOT_TELEPORT, 45, 0, 0, 2),
     ARDOUGNE_TELEPORT("Ardougne Teleport", WidgetInfoPlus.SPELL_ARDOUGNE_TELEPORT, 51, 0, 0, 1),
+    CIVITAS_ILLA_FORTIS_TELEPORT("Civitas illa Fortis Teleport", WidgetInfoPlus.SPELL_CIVITAS_ILLA_FORTIS_TELEPORT, 54, 0, 0, 1),
     WATCHTOWER_TELEPORT("Watchtower Teleport", WidgetInfoPlus.SPELL_WATCHTOWER_TELEPORT, 58, 0, 0, 1),
     WATCHTOWER_TELEPORT_YANILLE("Yanille Watchtower Teleport", WidgetInfoPlus.SPELL_WATCHTOWER_TELEPORT, 58, 0, 0, 2),
     TROLLHEIM_TELEPORT("Trollheim Teleport", WidgetInfoPlus.SPELL_TROLLHEIM_TELEPORT, 61, 0, 0, 1),
     APE_ATOLL_TELEPORT_NORMAL("Ape Atoll Teleport", WidgetInfoPlus.SPELL_TELEPORT_TO_APE_ATOLL, 64, 0, 0, 1),
-    KOUREND_CASTLE_TELEPORT("Kourend Castle Teleport", WidgetInfoPlus.SPELL_TELEPORT_TO_KOUREND, 69, 0, 0, 1),
+    KOUREND_CASTLE_TELEPORT("Kourend Castle Teleport", WidgetInfoPlus.SPELL_KOUREND_CASTLE_TELEPORT, 69, 0, 0, 1),
     TELEOTHER_LUMBRIDGE("Teleother Lumbridge", WidgetInfoPlus.SPELL_TELEOTHER_LUMBRIDGE, 74, 0, 3, 0),
     TELEOTHER_FALADOR("Teleother Falador", WidgetInfoPlus.SPELL_TELEOTHER_FALADOR, 82, 0, 3, 0),
     TELEPORT_TO_TARGET("Teleport to Target", WidgetInfoPlus.SPELL_BOUNTY_TARGET_TELEPORT, 85, 0, 0, 1),
