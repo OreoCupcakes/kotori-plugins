@@ -1,4 +1,4 @@
-package com.kotori.kotoriutils.rlapi;
+package com.theplug.kotori.kotoriutils.rlapi;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

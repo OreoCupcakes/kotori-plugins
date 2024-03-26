@@ -22,7 +22,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.kotori.kotoriutils.rlapi;
+package com.theplug.kotori.kotoriutils.rlapi;
 
 /**
  * Extension of Runelite's WidgetID class mapping out constants they didn't or previously removed.
