@@ -110,11 +110,12 @@ public class VarUtilities
 	public static int getPlayerAttackStyle()
 	{
 		/*
-			Refer to https://github.com/runelite/runelite/blob/master/runelite-client/src/main/java/net/runelite/client/plugins/attackstyles/WeaponType.java
+			Refer to https://github.com/runelite/runelite/blob/f5c04bf327ea7c72ac155d2e3342884670e23f69/runelite-client/src/main/java/net/runelite/client/plugins/attackstyles/WeaponType.java
 			for the list of weapon types and their respective attack styles
 		 */
-		int weaponType = client.getVarbitValue(Varbits.EQUIPPED_WEAPON_TYPE);
-		int attackStyle = client.getVarpValue(VarPlayer.ATTACK_STYLE);
+		final int weaponType = client.getVarbitValue(Varbits.EQUIPPED_WEAPON_TYPE);
+		final int attackStyle = client.getVarpValue(VarPlayer.ATTACK_STYLE);
+		final int castingMode = client.getVarbitValue(Varbits.DEFENSIVE_CASTING_MODE);
 		
 		/*
 			CurrentStyle Legend
@@ -123,7 +124,10 @@ public class VarUtilities
 			Magic = 2
 		 */
 		int currentStyle = -1;
-		
+
+		/*
+			Jagex "removed" type 22. They incremented everything up by 1, so old 22 became 23 and so on.
+		 */
 		switch (weaponType)
 		{
 			//Ranged
@@ -134,18 +138,13 @@ public class VarUtilities
 				currentStyle = 1;
 				break;
 			//Magic
-			case 18:
-			case 21:
-			case 23:	//Powered staves (Tridents)
-				currentStyle = 2;
-				break;
-			/*
-			This checks if autocast is set for staves, but almost no one intentionally melees with staff except PvPers (staff of the dead).
-			So we just assume its a magic weapon above.
-
-			case 18:	//Normal staves
-			case 21:	//Staves of dead?
-				if (attackStyle == 4)
+			case 18://Regular staves
+			case 21://SOTD
+				if (castingMode == 1)
+				{
+					currentStyle = 2;
+				}
+				else if (attackStyle == 4)
 				{
 					currentStyle = 2;
 				}
@@ -154,7 +153,10 @@ public class VarUtilities
 					currentStyle = 0;
 				}
 				break;
-			*/
+			case 24://Powered staves (Tridents)
+			case 29://Shadow
+				currentStyle = 2;
+				break;
 			case 6:		//Salamanders
 				switch (attackStyle)
 				{
@@ -185,18 +187,61 @@ public class VarUtilities
 			case 16:
 			case 17:
 			case 20:
-			case 22:
-			case 24:
+			case 23://Godswords
 			case 25:
 			case 26:
 			case 27:
 			case 28:
-			case 29:
+			case 30://Keris Partisan
 				currentStyle = 0;
 				break;
 		}
 		
 		return currentStyle;
+	}
+
+	// This is the new one used in RL now that weapon style is a global enum
+	public static int getPlayerWeaponType()
+	{
+		final int equippedWeaponType = client.getVarbitValue(Varbits.EQUIPPED_WEAPON_TYPE);
+		final int attackStyle = client.getVarpValue(VarPlayer.ATTACK_STYLE);
+		final int castingMode = client.getVarbitValue(Varbits.DEFENSIVE_CASTING_MODE);
+
+		int weaponStyleEnum = client.getEnum(EnumID.WEAPON_STYLES).getIntValue(equippedWeaponType);
+		//	This is to capture if the equipped weapon type isn't in the weapon styles enum.
+		if (weaponStyleEnum == -1)
+		{
+			return -1;
+		}
+		int[] weaponStyleStructs = client.getEnum(weaponStyleEnum).getIntVals();
+
+		StructComposition attackStyleStruct = client.getStructComposition(weaponStyleStructs[attackStyle]);
+		String attackStyleName = attackStyleStruct.getStringValue(ParamID.ATTACK_STYLE_NAME).toLowerCase();
+
+		switch (attackStyleName)
+		{
+			case "accurate":
+			case "aggressive":
+			case "controlled":
+				return 0;
+			case "ranging":
+			case "longrange":
+				return 1;
+			case "casting":
+				return 2;
+			case "defensive":
+				if (attackStyle == 4 && castingMode == 1)
+				{
+					return 2;
+				}
+				else
+				{
+					return 0;
+				}
+			case "other":
+			default:
+				return -1;
+		}
 	}
 
 	public static boolean boostedSkillEqualGreater(Skill skill, int level)
