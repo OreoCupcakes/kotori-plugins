@@ -6,6 +6,7 @@ import net.runelite.api.*;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.RuneLite;
+import net.runelite.client.callback.ClientThread;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -16,6 +17,7 @@ import java.util.Collection;
 public class ReflectionLibrary
 {
 	private final static Client client = RuneLite.getInjector().getInstance(Client.class);
+	private final static ClientThread clientThread = RuneLite.getInjector().getInstance(ClientThread.class);
 	
 	// Invoking Hooks
 	@Setter
@@ -309,29 +311,31 @@ public class ReflectionLibrary
 					"\". Check if obfuscated method name is correct.", e);
 			return;
 		}
-		
-		try
-		{
-			method.setAccessible(true);
-			if (isJunkValueAByte)
+
+		clientThread.invoke(() -> {
+			try
 			{
-				method.invoke(null, param0, param1, opcode, identifier, itemId, option, target, x, y, (byte) invokeMenuActionJunkValue);
+				method.setAccessible(true);
+				if (isJunkValueAByte)
+				{
+					method.invoke(null, param0, param1, opcode, identifier, itemId, option, target, x, y, (byte) invokeMenuActionJunkValue);
+				}
+				else
+				{
+					method.invoke(null, param0, param1, opcode, identifier, itemId, option, target, x, y, invokeMenuActionJunkValue);
+				}
+				method.setAccessible(false);
 			}
-			else
+			catch (Exception e)
 			{
-				method.invoke(null, param0, param1, opcode, identifier, itemId, option, target, x, y, invokeMenuActionJunkValue);
+				log.error("Kotori Plugin Utils - Unable to invoke the method invokeMenuAction.", e);
 			}
-			method.setAccessible(false);
-		}
-		catch (Exception e)
-		{
-			log.error("Kotori Plugin Utils - Unable to invoke the method invokeMenuAction.", e);
-		}
+		});
 	}
 	
 	public static void invokeMenuAction(int param0, int param1, int opcode, int identifier, int itemId)
 	{
-		invokeMenuAction(param0, param1, opcode, identifier, itemId, "", "", 0, 0);
+		invokeMenuAction(param0, param1, opcode, identifier, itemId, "", "", -1, -1);
 	}
 	
 	//Walking Methods
@@ -463,9 +467,11 @@ public class ReflectionLibrary
 
 	public static void setSelectedWidgetHooks(int spellWidgetId, int spellChildIndex, int spellItemId)
 	{
-		setSelectedSpellWidget(spellWidgetId);
-		setSelectedSpellChildIndex(spellChildIndex);
-		setSelectedSpellItemId(spellItemId);
+		clientThread.invoke(() -> {
+			setSelectedSpellWidget(spellWidgetId);
+			setSelectedSpellChildIndex(spellChildIndex);
+			setSelectedSpellItemId(spellItemId);
+		});
 	}
 	
 	//Actor Hook Methods
@@ -627,12 +633,14 @@ public class ReflectionLibrary
 	
 	public static void insertMenuEntry(int index, String option, String target, int opcode, int id, int param0, int param1, int itemId)
 	{
-		setMenuOption(index, option);
-		setMenuTarget(index, target);
-		setMenuOpcode(index, opcode);
-		setMenuIdentifier(index, id);
-		setMenuParam0(index, param0);
-		setMenuParam1(index, param1);
-		setMenuItemId(index, itemId);
+		clientThread.invoke(() -> {
+			setMenuOption(index, option);
+			setMenuTarget(index, target);
+			setMenuOpcode(index, opcode);
+			setMenuIdentifier(index, id);
+			setMenuParam0(index, param0);
+			setMenuParam1(index, param1);
+			setMenuItemId(index, itemId);
+		});
 	}
 }
