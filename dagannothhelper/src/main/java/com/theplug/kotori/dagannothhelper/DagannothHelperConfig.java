@@ -158,6 +158,19 @@ public interface DagannothHelperConfig extends Config
 
 	@ConfigItem(
 			position = 2,
+			keyName = "ignoreRexNonAttackingProtectionPrayer",
+			name = "If Rex isn't attacking, Don't Protect Melee",
+			description = "If Dagannoth Rex isn't actively attacking you, then ignore him." +
+					"<br>Protect Melee will not be automatically turned on.",
+			section = prayerHelper
+	)
+	default boolean ignoreRexNonAttackingProtectionPrayer()
+    {
+        return false;
+    }
+
+	@ConfigItem(
+			position = 3,
 			keyName = "autoOffensiveMeleePrayer",
 			name = "Melee: Auto Offensive Prayer",
 			description = "Automatically turn on your offensive melee prayer when you equip a melee weapon." +
@@ -171,7 +184,7 @@ public interface DagannothHelperConfig extends Config
 	}
 
 	@ConfigItem(
-			position = 3,
+			position = 4,
 			keyName = "autoOffensiveRangedPrayer",
 			name = "Ranged: Auto Offensive Prayer",
 			description = "Automatically turn on your offensive ranged prayer when you equip a ranged weapon." +
@@ -185,7 +198,7 @@ public interface DagannothHelperConfig extends Config
 	}
 
 	@ConfigItem(
-			position = 4,
+			position = 5,
 			keyName = "autoOffensiveMagicPrayer",
 			name = "Magic: Auto Offensive Prayer",
 			description = "Automatically turn on your offensive magic prayer when you equip a magic weapon." +
@@ -199,7 +212,7 @@ public interface DagannothHelperConfig extends Config
 	}
 
 	@ConfigItem(
-			position = 5,
+			position = 6,
 			keyName = "autoPreservePrayer",
 			name = "Turn/Keep Preserve Prayer On",
 			description = "Turn and keep the Preserve prayer on as long as you are in the lair.",

@@ -481,6 +481,10 @@ public class DagannothHelperPlugin extends Plugin
 			}
 			else if (ticksUntilAttack == 0)
 			{
+				if (attackStyle == DagannothKing.AttackStyle.MELEE && config.ignoreRexNonAttackingProtectionPrayer())
+				{
+					continue;
+				}
 				attacksWithTicksAtZero.add(attackStyle);
 			}
 		}
