@@ -495,7 +495,29 @@ public class ReflectionLibrary
 			return null;
 		}
 
-		/*
+		Field overheads = getField(npcOverheadIconClassName, npcOverheadIconFieldName);
+		if (overheads == null)
+		{
+			return null;
+		}
+
+		try
+		{
+			overheads.setAccessible(true);
+			Object headIconShortArray = overheads.get(npcComposition);
+			if (headIconShortArray == null)
+			{
+				return null;
+			}
+			short overheadIconShortValue = Array.getShort(headIconShortArray, 0);
+			overheads.setAccessible(false);
+			return HeadIcon.values()[overheadIconShortValue];
+		}
+		catch (Exception e)
+		{
+			log.error("Kotori Plugin Utils - Unable to get NPC Composition's overhead icon via field.", e);
+		}
+
 		Method getHeadIconArrayMethod = null;
 		try
 		{
@@ -518,37 +540,9 @@ public class ReflectionLibrary
 		catch (Exception e)
 		{
 			log.error("Kotori Plugin Utils - Unable to get NPC Composition's overhead icon.", e);
-			return null;
 		}
 
 		return null;
-
-		 */
-
-
-		Field overheads = getField(npcOverheadIconClassName, npcOverheadIconFieldName);
-		if (overheads == null)
-		{
-			return null;
-		}
-		
-		try
-		{
-			overheads.setAccessible(true);
-			Object headIconShortArray = overheads.get(npcComposition);
-			if (headIconShortArray == null)
-			{
-				return null;
-			}
-			short overheadIconShortValue = Array.getShort(headIconShortArray, 0);
-			overheads.setAccessible(false);
-			return HeadIcon.values()[overheadIconShortValue];
-		}
-		catch (Exception e)
-		{
-			log.error("Kotori Plugin Utils - Unable to get NPC Composition's overhead icon.", e);
-			return null;
-		}
 	}
 	
 	public static int getActorPathLength(Actor actor)

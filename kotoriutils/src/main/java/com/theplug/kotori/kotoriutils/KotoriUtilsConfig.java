@@ -9,7 +9,7 @@ import net.runelite.client.config.ConfigSection;
 public interface KotoriUtilsConfig extends Config
 {
     @ConfigSection(
-            name = "<html>Kotori Plugin Utils<br>Version 1.3.11</html>",
+            name = "<html>Kotori Plugin Utils<br>Version 1.3.12</html>",
             description = "",
             position = -1
     )
