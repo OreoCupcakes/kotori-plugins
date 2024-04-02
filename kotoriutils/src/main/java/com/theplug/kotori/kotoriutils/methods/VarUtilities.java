@@ -125,21 +125,19 @@ public class VarUtilities
 		 */
 		int currentStyle = -1;
 
-		/*
-			Jagex "removed" type 22. They incremented everything up by 1, so old 22 became 23 and so on.
-		 */
 		switch (weaponType)
 		{
 			//Ranged
-			case 3:		//Bows
-			case 5:		//Crossbows/Ballista
-			case 7:		//Chinchompas
-			case 19:	//Darts/Knives/Throwing axes/Blowpipe
+			case 3://Bows
+			case 5://Crossbows/Ballista
+			case 7://Chinchompas
+			case 19://Thrown weapons, Darts/Knives/Throwing axes/Blowpipe
 				currentStyle = 1;
 				break;
 			//Magic
 			case 18://Regular staves
-			case 21://SOTD
+			case 21://Bladed staves, SOTD
+			case 22://Blue moon spear
 				if (castingMode == 1)
 				{
 					currentStyle = 2;
@@ -154,10 +152,10 @@ public class VarUtilities
 				}
 				break;
 			case 24://Powered staves (Tridents)
-			case 29://Shadow
+			case 29://Powered wands (Beta shadow)
 				currentStyle = 2;
 				break;
-			case 6:		//Salamanders
+			case 6://Salamanders
 				switch (attackStyle)
 				{
 					case 0:
@@ -172,26 +170,26 @@ public class VarUtilities
 				}
 				break;
 			//Melee
-			case 0:
-			case 1:
-			case 2:
-			case 4:
-			case 8:
-			case 9:
-			case 10:
-			case 11:
-			case 12:
-			case 13:
-			case 14:
-			case 15:
-			case 16:
-			case 17:
-			case 20:
+			case 0://Fists, no weapon
+			case 1://Axe
+			case 2://Mauls, warhammers, dual wield hammers
+			case 4://Claws
+			case 8://Gun (fixed device)
+			case 9://Longsword and scimitar
+			case 10://2h swords
+			case 11://Pickaxes
+			case 12://Polearms, Halberds
+			case 13://Polestaff
+			case 14://Scythe
+			case 15://Spear
+			case 16://Mace
+			case 17://Dagger and normal swords
+			case 20://Whip
 			case 23://Godswords
-			case 25:
-			case 26:
-			case 27:
-			case 28:
+			case 25://Banner
+			case 26://Some discontinued halberd like weapon?
+			case 27://Bludgeon
+			case 28://Bulwark
 			case 30://Keris Partisan
 				currentStyle = 0;
 				break;
