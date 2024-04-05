@@ -40,7 +40,7 @@
     {
       "n": "getNpcOverheadIcon",
       "c": "hk",
-      "p": "bi",
+      "p": "ak",
       "m": 1
     },
     {
@@ -106,13 +106,13 @@
     {
       "n": "isMoving",
       "c": "de",
-      "p": "dn",
+      "p": "dk",
       "m": -1259578643
     },
     {
       "n": "getActorAnimationId",
       "c": "de",
-      "p": "cr",
+      "p": "cq",
       "m": -1037212889
     }
   ]
