@@ -523,7 +523,7 @@ public class ReflectionLibrary
 		{
 			for (Method declaredMethod : npcComposition.getClass().getDeclaredMethods())
 			{
-				if (declaredMethod.getReturnType() == short[].class && declaredMethod.getParameterTypes().length == 0)
+				if (declaredMethod.getReturnType() == short[].class && declaredMethod.getParameterTypes().length == 1)
 				{
 					getHeadIconArrayMethod = declaredMethod;
 					getHeadIconArrayMethod.setAccessible(true);
