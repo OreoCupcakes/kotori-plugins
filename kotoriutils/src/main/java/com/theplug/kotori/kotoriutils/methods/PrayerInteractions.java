@@ -174,6 +174,7 @@ public class PrayerInteractions
 				active++;
 			}
 		}
+		//	The way flicking works is you need to send a deactivation then activation within the same game tick.
 		if (active > 0)
 		{
 			deactivatePrayers(false, 4);
