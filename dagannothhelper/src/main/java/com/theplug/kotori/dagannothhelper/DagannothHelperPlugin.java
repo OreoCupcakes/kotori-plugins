@@ -308,18 +308,32 @@ public class DagannothHelperPlugin extends Plugin
 			if (config.autoFlickPrayers() && !config.autoPreservePrayer())
 			{
 				//Create a copy of last offensive prayers then add the protection prayer to use as well to it before converting into an array for the function
-				Set<Prayer> prayersToUse = lastOffensivePrayers;
-				prayersToUse.add(lastProtectionPrayer);
+                Set<Prayer> prayersToUse = new HashSet<>();
+				if ((config.autoOffensiveMagicPrayer() || config.autoOffensiveRangedPrayer() || config.autoOffensiveMeleePrayer())
+						&& lastOffensivePrayers != null)
+				{
+					prayersToUse.addAll(lastOffensivePrayers);
+				}
+				if (config.autoProtectionPrayers() && lastProtectionPrayer != null)
+				{
+					prayersToUse.add(lastProtectionPrayer);
+				}
 				PrayerInteractions.oneTickFlickPrayers(prayersToUse.toArray(Prayer[]::new));
 			}
 			else
 			{
-				PrayerInteractions.activatePrayer(lastProtectionPrayer);
-				if (lastOffensivePrayers != null)
+				if (config.autoProtectionPrayers() && !dagannothKings.isEmpty())
 				{
-					for (Prayer off : lastOffensivePrayers)
+					PrayerInteractions.activatePrayer(lastProtectionPrayer);
+				}
+				if (config.autoOffensiveMagicPrayer() || config.autoOffensiveRangedPrayer() || config.autoOffensiveMeleePrayer())
+				{
+					if (lastOffensivePrayers != null)
 					{
-						PrayerInteractions.activatePrayer(off);
+						for (Prayer off : lastOffensivePrayers)
+						{
+							PrayerInteractions.activatePrayer(off);
+						}
 					}
 				}
 			}
@@ -472,6 +486,7 @@ public class DagannothHelperPlugin extends Plugin
 			if (dagannothKings.stream().anyMatch(dk -> dk.getAttackStyle() == DagannothKing.AttackStyle.MELEE))
 			{
 				PrayerInteractions.deactivatePrayer(lastProtectionPrayer);
+				lastProtectionPrayer = null;
 				return;
 			}
 		}
