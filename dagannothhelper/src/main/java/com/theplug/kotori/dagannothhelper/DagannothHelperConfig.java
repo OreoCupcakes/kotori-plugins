@@ -146,7 +146,7 @@ public interface DagannothHelperConfig extends Config
 	@ConfigItem(
 			position = 1,
 			keyName = "ignoreRexProtectionPrayer",
-			name = "If Only Rex, No Protection Prayer",
+			name = "Ignore Rex Protection Prayer",
 			description = "If Dagannoth Rex is the only king alive or it is not targeting you, then ignore him." +
 					"<br>No protection prayers will be automatically turned on.",
 			section = prayerHelper
