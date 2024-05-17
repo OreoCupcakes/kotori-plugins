@@ -51,9 +51,7 @@ import net.runelite.client.util.HotkeyListener;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Singleton
 @PluginDependency(KotoriUtils.class)
@@ -306,6 +304,25 @@ public class DagannothHelperPlugin extends Plugin
 
 			prayProtectionPrayers();
 			prayOffensivePrayers();
+
+			if (config.autoFlickPrayers() && !config.autoPreservePrayer())
+			{
+				//Create a copy of last offensive prayers then add the protection prayer to use as well to it before converting into an array for the function
+				Set<Prayer> prayersToUse = lastOffensivePrayers;
+				prayersToUse.add(lastProtectionPrayer);
+				PrayerInteractions.oneTickFlickPrayers(prayersToUse.toArray(Prayer[]::new));
+			}
+			else
+			{
+				PrayerInteractions.activatePrayer(lastProtectionPrayer);
+				if (lastOffensivePrayers != null)
+				{
+					for (Prayer off : lastOffensivePrayers)
+					{
+						PrayerInteractions.activatePrayer(off);
+					}
+				}
+			}
 		}
 
 		prayPreservePrayer();
@@ -503,11 +520,13 @@ public class DagannothHelperPlugin extends Plugin
 		//If still no prayer set, then just don't pray
 		if (prayerToUse == null)
 		{
+			PrayerInteractions.deactivatePrayer(lastProtectionPrayer);
+			lastProtectionPrayer = null;
 			return;
 		}
 
 		lastProtectionPrayer = prayerToUse;
-		PrayerInteractions.activatePrayer(prayerToUse);
+	//	PrayerInteractions.activatePrayer(prayerToUse);
 	}
 
 	private void prayOffensivePrayers()
@@ -555,10 +574,12 @@ public class DagannothHelperPlugin extends Plugin
 		if (prayersToUse != null && !prayersToUse.isEmpty())
 		{
 			lastOffensivePrayers = prayersToUse;
+			/*
 			for (Prayer prayer : prayersToUse)
 			{
 				PrayerInteractions.activatePrayer(prayer);
 			}
+			 */
 		}
 		//This deactivates offensive prayers after weapon switches if an offensive prayer is not needed
 		else if (lastOffensivePrayers != null && !lastOffensivePrayers.isEmpty())
@@ -566,8 +587,8 @@ public class DagannothHelperPlugin extends Plugin
 			for (Prayer prayer : lastOffensivePrayers)
 			{
 				PrayerInteractions.deactivatePrayer(prayer);
-				lastOffensivePrayers = null;
 			}
+			lastOffensivePrayers = null;
 		}
 	}
 

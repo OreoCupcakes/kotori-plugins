@@ -210,6 +210,20 @@ public interface DagannothHelperConfig extends Config
 		return false;
 	}
 
+	@ConfigItem(
+			position = 6,
+			keyName = "autoFlickPrayers",
+			name = "1-Tick Flick Prayers?",
+			description = "Turns on 1-tick prayer flicking mode to conserve prayer." +
+					"<br>This does not work if you have Turn/Keep Preserve Prayer turned on!" +
+					"<br>You'll still lose prayer points when it switches to a different prayer.",
+			section = prayerHelper
+	)
+	default boolean autoFlickPrayers()
+	{
+		return false;
+	}
+
 
 
 
