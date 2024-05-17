@@ -508,6 +508,12 @@ public class DagannothHelperPlugin extends Plugin
 		{
 			for (DagannothKing.AttackStyle attack : attacksWithTicksAtZero)
 			{
+				//If configured, then ignore Rex when he is roaming the room and not targeting you.
+				if (config.ignoreRexProtectionPrayer() && attack == DagannothKing.AttackStyle.MELEE)
+				{
+					continue;
+				}
+
 				int attackPriority = attack.getPriority();
 				if (attackPriority > priority)
 				{
