@@ -121,7 +121,7 @@ public class PrayerInteractions
 		return true;
 	}
 	
-	public static boolean deactivatePrayers(boolean keepPreserveOn)
+	public static boolean deactivatePrayers(boolean keepPreserveOn, int actionsToDo)
 	{
 		int actionsTaken = 0;
 		for (Prayer prayer : Prayer.values())
@@ -132,7 +132,7 @@ public class PrayerInteractions
 				continue;
 			}
 
-			if (actionsTaken > 3)
+			if (actionsTaken > actionsToDo)
 			{
 				return false;
 			}
@@ -152,8 +152,14 @@ public class PrayerInteractions
 		return true;
 	}
 
+	public static boolean deactivatePrayers(boolean keepPreserveOn)
+	{
+		return deactivatePrayers(keepPreserveOn, 3);
+	}
+
 	public static void oneTickFlickPrayers(Prayer... prayers)
 	{
+		//This is to check if there are any active prayers when you first start flicking.
 		int active = 0;
 		for (Prayer prayer : Prayer.values())
 		{
@@ -170,10 +176,7 @@ public class PrayerInteractions
 		}
 		if (active > 0)
 		{
-			for (Prayer p : prayers)
-			{
-				deactivatePrayer(p);
-			}
+			deactivatePrayers(false, 4);
 		}
 		for (Prayer p2 : prayers)
 		{
