@@ -304,39 +304,6 @@ public class DagannothHelperPlugin extends Plugin
 
 			prayProtectionPrayers();
 			prayOffensivePrayers();
-
-			if (config.autoFlickPrayers() && !config.autoPreservePrayer())
-			{
-				//Create a copy of last offensive prayers then add the protection prayer to use as well to it before converting into an array for the function
-                Set<Prayer> prayersToUse = new HashSet<>();
-				if ((config.autoOffensiveMagicPrayer() || config.autoOffensiveRangedPrayer() || config.autoOffensiveMeleePrayer())
-						&& lastOffensivePrayers != null)
-				{
-					prayersToUse.addAll(lastOffensivePrayers);
-				}
-				if (config.autoProtectionPrayers() && lastProtectionPrayer != null)
-				{
-					prayersToUse.add(lastProtectionPrayer);
-				}
-				PrayerInteractions.oneTickFlickPrayers(prayersToUse.toArray(Prayer[]::new));
-			}
-			else
-			{
-				if (config.autoProtectionPrayers() && !dagannothKings.isEmpty())
-				{
-					PrayerInteractions.activatePrayer(lastProtectionPrayer);
-				}
-				if (config.autoOffensiveMagicPrayer() || config.autoOffensiveRangedPrayer() || config.autoOffensiveMeleePrayer())
-				{
-					if (lastOffensivePrayers != null)
-					{
-						for (Prayer off : lastOffensivePrayers)
-						{
-							PrayerInteractions.activatePrayer(off);
-						}
-					}
-				}
-			}
 		}
 
 		prayPreservePrayer();
@@ -538,16 +505,21 @@ public class DagannothHelperPlugin extends Plugin
 			}
 		}
 
-		//If still no prayer set, then just don't pray
+		//If still no prayer set, then just don't change prayers
 		if (prayerToUse == null)
 		{
-			PrayerInteractions.deactivatePrayer(lastProtectionPrayer);
-			lastProtectionPrayer = null;
 			return;
 		}
 
 		lastProtectionPrayer = prayerToUse;
-	//	PrayerInteractions.activatePrayer(prayerToUse);
+		if (config.autoFlickPrayers() && !config.autoPreservePrayer())
+		{
+			PrayerInteractions.oneTickFlickPrayers(false, prayerToUse);
+		}
+		else
+		{
+			PrayerInteractions.activatePrayer(prayerToUse);
+		}
 	}
 
 	private void prayOffensivePrayers()
@@ -595,12 +567,17 @@ public class DagannothHelperPlugin extends Plugin
 		if (prayersToUse != null && !prayersToUse.isEmpty())
 		{
 			lastOffensivePrayers = prayersToUse;
-			/*
-			for (Prayer prayer : prayersToUse)
+			if (config.autoFlickPrayers() && !config.autoPreservePrayer())
 			{
-				PrayerInteractions.activatePrayer(prayer);
+				PrayerInteractions.oneTickFlickPrayers(false, prayersToUse.toArray(Prayer[]::new));
 			}
-			 */
+			else
+			{
+				for (Prayer prayer : prayersToUse)
+				{
+					PrayerInteractions.activatePrayer(prayer);
+				}
+			}
 		}
 		//This deactivates offensive prayers after weapon switches if an offensive prayer is not needed
 		else if (lastOffensivePrayers != null && !lastOffensivePrayers.isEmpty())
