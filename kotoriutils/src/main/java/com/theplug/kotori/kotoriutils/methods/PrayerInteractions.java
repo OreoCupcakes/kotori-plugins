@@ -157,7 +157,7 @@ public class PrayerInteractions
 		return deactivatePrayers(keepPreserveOn, 3);
 	}
 
-	public static void oneTickFlickPrayers(Prayer... prayers)
+	public static void oneTickFlickPrayers(boolean disableAll, Prayer... prayers)
 	{
 		//This is to check if there are any active prayers when you first start flicking.
 		int active = 0;
@@ -177,11 +177,26 @@ public class PrayerInteractions
 		//	The way flicking works is you need to send a deactivation then activation within the same game tick.
 		if (active > 0)
 		{
-			deactivatePrayers(false, 4);
+			if (disableAll)
+			{
+				deactivatePrayers(false, 4);
+			}
+			else
+			{
+				for (Prayer p : prayers)
+				{
+					deactivatePrayer(p);
+				}
+			}
 		}
 		for (Prayer p2 : prayers)
 		{
 			activatePrayer(p2);
 		}
+	}
+
+	public static void oneTickFlickPrayers(Prayer... prayers)
+	{
+		oneTickFlickPrayers(true, prayers);
 	}
 }
