@@ -49,7 +49,7 @@ public class EffectTimersOverlay extends Overlay
 	private Client client;
 
 	@Inject
-	private final EffectTimersConfig config;
+	private EffectTimersConfig config;
 
 	private final Font timerFont = FontManager.getRunescapeBoldFont().deriveFont(14.0f);
 
