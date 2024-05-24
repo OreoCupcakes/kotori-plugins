@@ -10,11 +10,11 @@ import net.runelite.api.coords.LocalPoint;
 @Getter(AccessLevel.PACKAGE)
 class ProjectileContainer
 {
-	private Projectile projectile;
-	private Instant startTime;
-	private AoeProjectileInfo aoeProjectileInfo;
-	private int lifetime;
-	private int finalTick;
+	private final Projectile projectile;
+	private final Instant startTime;
+	private final AoeProjectileInfo aoeProjectileInfo;
+	private final int lifetime;
+	private final int finalTick;
 	@Setter(AccessLevel.PACKAGE)
 	private LocalPoint targetPoint;
 

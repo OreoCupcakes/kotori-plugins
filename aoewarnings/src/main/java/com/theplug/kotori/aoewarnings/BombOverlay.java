@@ -41,12 +41,12 @@ import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.Perspective;
 import net.runelite.api.Point;
+import net.runelite.api.WorldView;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
-import net.runelite.client.ui.overlay.OverlayPriority;
 import net.runelite.client.ui.overlay.OverlayUtil;
 
 @Slf4j
@@ -82,7 +82,6 @@ public class BombOverlay extends Overlay
 		this.config = config;
 		setPosition(OverlayPosition.DYNAMIC);
 		setLayer(OverlayLayer.ABOVE_SCENE);
-		setPriority(OverlayPriority.MED);
 	}
 
 	@Override
@@ -98,10 +97,11 @@ public class BombOverlay extends Overlay
 	private void drawDangerZone(Graphics2D graphics)
 	{
 		final WorldPoint loc = client.getLocalPlayer().getWorldLocation();
+		final WorldView wv = client.getTopLevelWorldView();
 		Map<WorldPoint, Integer> aoeTiles = new HashMap<>();
 		plugin.getBombs().forEach(bomb ->
 		{
-			final LocalPoint localLoc = LocalPoint.fromWorld(client, bomb.getWorldLocation());
+			final LocalPoint localLoc = LocalPoint.fromWorld(wv, bomb.getWorldLocation());
 			final WorldPoint worldLoc = bomb.getWorldLocation();
 
 			if (localLoc == null)
@@ -130,7 +130,7 @@ public class BombOverlay extends Overlay
 			{
 				color_code = Color.decode(CAUTION);
 			}
-			final LocalPoint CenterPoint = new LocalPoint(localLoc.getX(), localLoc.getY());
+			final LocalPoint CenterPoint = new LocalPoint(localLoc.getX(), localLoc.getY(), wv);
 			final Polygon poly = Perspective.getCanvasTileAreaPoly(client, CenterPoint, BOMB_AOE);
 
 			if (config.bombHeatmap())
@@ -189,7 +189,7 @@ public class BombOverlay extends Overlay
 
 		aoeTiles.forEach((tile, count) ->
 		{
-			LocalPoint localPoint = LocalPoint.fromWorld(client, tile);
+			LocalPoint localPoint = LocalPoint.fromWorld(wv, tile);
 
 			if (localPoint == null)
 				return;

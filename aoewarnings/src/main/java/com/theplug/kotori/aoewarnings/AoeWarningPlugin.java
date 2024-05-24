@@ -255,7 +255,7 @@ public class AoeWarningPlugin extends Plugin
 
 		if (config.LightningTrail())
 		{
-			client.getGraphicsObjects().forEach(o ->
+			client.getTopLevelWorldView().getGraphicsObjects().forEach(o ->
 			{
 				if (o.getId() == GraphicIDPlus.OLM_LIGHTNING)
 				{
@@ -389,6 +389,6 @@ public class AoeWarningPlugin extends Plugin
 
 	private boolean regionCheck(int region)
 	{
-		return ArrayUtils.contains(client.getMapRegions(), region);
+		return client.getLocalPlayer().getWorldLocation().getRegionID() == region;
 	}
 }
