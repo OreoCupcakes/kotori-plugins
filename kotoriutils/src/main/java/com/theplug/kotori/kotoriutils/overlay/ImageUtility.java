@@ -1,16 +1,18 @@
-package com.theplug.kotori.alchemicalhelper.overlay;
+package com.theplug.kotori.kotoriutils.overlay;
 
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
+import net.runelite.api.IndexDataBase;
 import net.runelite.api.SpritePixels;
 
+import java.awt.image.BufferedImage;
 import java.util.Arrays;
 
 /**
  * Various Image/BufferedImage utilities.
  */
 @Slf4j
-public class ImageUtil
+public class ImageUtility
 {
 
     /**
@@ -47,5 +49,39 @@ public class ImageUtil
         }
 
         return result;
+    }
+
+    public static SpritePixels getSprite(Client client, int spriteId)
+    {
+        final IndexDataBase spriteDatabase = client.getIndexSprites();
+
+        if (spriteDatabase == null)
+        {
+            return null;
+        }
+
+        final SpritePixels[] sprites = client.getSprites(spriteDatabase, spriteId, 0);
+
+        if (sprites == null)
+        {
+            return null;
+        }
+
+        return sprites[0];
+    }
+
+    public static BufferedImage combineSprites(Client client, int spriteId1, int spriteId2)
+    {
+        final SpritePixels root = getSprite(client, spriteId1);
+        final SpritePixels mark = getSprite(client, spriteId2);
+
+        if (mark == null || root == null)
+        {
+            return null;
+        }
+
+        final SpritePixels sprite = mergeSprites(client, root, mark);
+
+        return sprite.toBufferedImage();
     }
 }

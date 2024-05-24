@@ -29,7 +29,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
 import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -37,15 +36,13 @@ import javax.inject.Singleton;
 import com.theplug.kotori.alchemicalhelper.AlchemicalHelperConfig;
 import com.theplug.kotori.alchemicalhelper.AlchemicalHelperPlugin;
 import com.theplug.kotori.alchemicalhelper.entity.Hydra;
-import com.theplug.kotori.alchemicalhelper.entity.HydraPhase;
+import com.theplug.kotori.kotoriutils.overlay.ImageUtility;
 import com.theplug.kotori.kotoriutils.overlay.OverlayUtility;
 import net.runelite.api.*;
-import net.runelite.client.callback.ClientThread;
 import net.runelite.client.game.SpriteManager;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
-import net.runelite.client.ui.overlay.OverlayPriority;
 import static net.runelite.client.ui.overlay.components.ComponentConstants.STANDARD_BACKGROUND_COLOR;
 import net.runelite.client.ui.overlay.components.ComponentOrientation;
 import net.runelite.client.ui.overlay.components.InfoBoxComponent;
@@ -80,7 +77,6 @@ public class AttackOverlay extends Overlay
 	}
 
 	private final Client client;
-	private final ClientThread clientThread;
 
 	private final AlchemicalHelperPlugin plugin;
 	private final AlchemicalHelperConfig config;
@@ -92,18 +88,16 @@ public class AttackOverlay extends Overlay
 	private Hydra hydra;
 
 	@Inject
-	AttackOverlay(final Client client, final ClientThread clientThread, final AlchemicalHelperPlugin plugin, final AlchemicalHelperConfig config, final SpriteManager spriteManager)
+	AttackOverlay(final Client client, final AlchemicalHelperPlugin plugin, final AlchemicalHelperConfig config, final SpriteManager spriteManager)
 	{
 		this.client = client;
-		this.clientThread = clientThread;
 		this.plugin = plugin;
 		this.config = config;
 		this.spriteManager = spriteManager;
 
 		stunComponent.setBackgroundColor(config.dangerColor());
-		stunComponent.setImage(createStunImage());
+		stunComponent.setImage(ImageUtility.combineSprites(client, AlchemicalHelperPlugin.BIG_ASS_GREY_ENTANGLE, SpriteID.TRADE_EXCLAMATION_MARK_ITEM_REMOVAL_WARNING));
 
-		setPriority(OverlayPriority.HIGH);
 		setPosition(OverlayPosition.BOTTOM_RIGHT);
 		setLayer(OverlayLayer.UNDER_WIDGETS);
 	}
@@ -229,41 +223,5 @@ public class AttackOverlay extends Overlay
 		final Prayer prayer = hydra.getNextAttack().getPrayer();
 
 		OverlayUtility.renderPrayerOverlay(graphics2D, client, prayer, prayer == Prayer.PROTECT_FROM_MAGIC ? Color.CYAN : Color.GREEN);
-	}
-
-	private BufferedImage createStunImage()
-	{
-		final SpritePixels root = getSprite(AlchemicalHelperPlugin.BIG_ASS_GREY_ENTANGLE);
-		final SpritePixels mark = getSprite(SpriteID.TRADE_EXCLAMATION_MARK_ITEM_REMOVAL_WARNING);
-
-		if (mark == null || root == null)
-		{
-			return null;
-		}
-
-		final SpritePixels sprite = ImageUtil.mergeSprites(client, root, mark);
-
-		return sprite.toBufferedImage();
-	}
-
-	private SpritePixels getSprite(final int spriteId)
-	{
-		final IndexDataBase spriteDatabase = client.getIndexSprites();
-
-		if (spriteDatabase == null)
-		{
-			return null;
-		}
-
-		final SpritePixels[][] sprites = new SpritePixels[1][1];
-
-		clientThread.invoke(() -> { sprites[0] = client.getSprites(spriteDatabase, spriteId, 0); });
-
-		if (sprites[0] == null)
-		{
-			return null;
-		}
-
-		return sprites[0][0];
 	}
 }

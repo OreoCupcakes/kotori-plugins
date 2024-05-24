@@ -96,11 +96,11 @@ public class Hydra
 		{
 			if (projectileId == lastAttack.getProjectileID())
 			{
-				// If the current attack isn't what was expected and we accidentally counted 1 too much
+				// If the current attack isn't what was expected, we accidentally counted 1 too much
 				return;
 			}
 
-			// If the current attack isn't what was expected and we should have switched prayers
+			// If the current attack isn't what was expected, we should have switched prayers
 			switchStyles();
 
 			nextSwitch = phase.getAttacksPerSwitch() - 1;
@@ -134,6 +134,11 @@ public class Hydra
 
 	private int getHp()
 	{
+		if (npc == null)
+		{
+			return -1;
+		}
+
 		final int ratio = npc.getHealthRatio();
 		final int health = npc.getHealthScale();
 
