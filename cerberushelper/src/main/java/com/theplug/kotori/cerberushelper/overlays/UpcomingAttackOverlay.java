@@ -44,7 +44,6 @@ import net.runelite.client.ui.FontManager;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
-import net.runelite.client.ui.overlay.OverlayPriority;
 import net.runelite.client.ui.overlay.components.ComponentOrientation;
 import net.runelite.client.ui.overlay.components.PanelComponent;
 
@@ -74,7 +73,6 @@ public final class UpcomingAttackOverlay extends Overlay
 		PANEL_COMPONENT.setBackgroundColor(null);
 		PANEL_COMPONENT.setBorder(new Rectangle(0, 0, 0, 0));
 
-		setPriority(OverlayPriority.HIGH);
 		setPosition(OverlayPosition.BOTTOM_RIGHT);
 		setLayer(OverlayLayer.ABOVE_WIDGETS);
 	}

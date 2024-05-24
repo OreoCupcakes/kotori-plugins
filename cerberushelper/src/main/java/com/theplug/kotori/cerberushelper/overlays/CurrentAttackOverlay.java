@@ -47,7 +47,6 @@ import net.runelite.client.ui.FontManager;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
-import net.runelite.client.ui.overlay.OverlayPriority;
 
 @Singleton
 public final class CurrentAttackOverlay extends Overlay
@@ -74,7 +73,6 @@ public final class CurrentAttackOverlay extends Overlay
 		infoBoxComponent = new InfoBoxComponent();
 		infoBoxComponent.setTextColor(Color.WHITE);
 
-		setPriority(OverlayPriority.HIGHEST);
 		setPosition(OverlayPosition.BOTTOM_RIGHT);
 		setLayer(OverlayLayer.ABOVE_WIDGETS);
 	}

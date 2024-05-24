@@ -49,7 +49,6 @@ import net.runelite.api.widgets.Widget;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
-import net.runelite.client.ui.overlay.OverlayPriority;
 
 @Singleton
 public class PrayerOverlay extends Overlay
@@ -71,7 +70,6 @@ public class PrayerOverlay extends Overlay
 		this.plugin = plugin;
 		this.config = config;
 
-		setPriority(OverlayPriority.HIGHEST);
 		setPosition(OverlayPosition.DYNAMIC);
 		setLayer(OverlayLayer.ABOVE_WIDGETS);
 	}

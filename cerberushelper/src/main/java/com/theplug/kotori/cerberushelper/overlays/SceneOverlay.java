@@ -44,7 +44,6 @@ import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
-import net.runelite.client.ui.overlay.OverlayPriority;
 import net.runelite.client.util.ColorUtil;
 
 @Singleton
@@ -74,7 +73,6 @@ public final class SceneOverlay extends Overlay
 		this.plugin = plugin;
 		this.config = config;
 
-		setPriority(OverlayPriority.HIGHEST);
 		setPosition(OverlayPosition.DYNAMIC);
 		setLayer(OverlayLayer.ABOVE_SCENE);
 	}
@@ -159,7 +157,7 @@ public final class SceneOverlay extends Overlay
 
 	private void renderGhostTileAttackTime(final Graphics2D graphics2D, final WorldPoint ghostTile, final int tileIndex)
 	{
-		final LocalPoint localPoint = LocalPoint.fromWorld(client, ghostTile);
+		final LocalPoint localPoint = LocalPoint.fromWorld(client.getTopLevelWorldView(), ghostTile);
 
 		if (localPoint == null)
 		{
@@ -179,10 +177,10 @@ public final class SceneOverlay extends Overlay
 		final int lastGhostsTick = cerberus.getLastGhostYellTick();
 
 		//Update and get the time when the ghosts were summoned
-		final long lastGhostsTime = Math.min(cerberus.getLastGhostYellTime(), time - (600 * (tick - lastGhostsTick)));
+		final long lastGhostsTime = Math.min(cerberus.getLastGhostYellTime(), time - (600L * (tick - lastGhostsTick)));
 		cerberus.setLastGhostYellTime(lastGhostsTime);
 
-		final double timeUntilGhostAttack = Math.max((double) ((lastGhostsTime + 600 * (13 + tileIndex * 2)) - System.currentTimeMillis()) / 1000, 0);
+		final double timeUntilGhostAttack = Math.max((double) ((lastGhostsTime + 600 * (13 + tileIndex * 2L)) - System.currentTimeMillis()) / 1000, 0);
 
 		final Color textColor = timeUntilGhostAttack <= GHOST_TIME_WARNING ? Color.RED : Color.WHITE;
 

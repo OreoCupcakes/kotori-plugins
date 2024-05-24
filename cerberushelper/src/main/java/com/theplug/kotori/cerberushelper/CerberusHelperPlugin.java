@@ -189,7 +189,7 @@ public class CerberusHelperPlugin extends Plugin
 			/*
 			This is for Leagues, as when you last recall back into the arena, the NpcSpawned event does not actually trigger causing cerberus to be null.
 			 */
-			for (NPC npc : client.getNpcs())
+			for (NPC npc : client.getTopLevelWorldView().npcs())
 			{
 				if (CERBERUS_IDS.contains(npc.getId()))
 				{
@@ -598,6 +598,11 @@ public class CerberusHelperPlugin extends Plugin
 	{
 		upcomingAttacks.clear();
 
+		if (cerberus == null)
+		{
+			return;
+		}
+
 		final Cerberus.Attack lastCerberusAttack = cerberus.getLastAttack();
 
 		if (lastCerberusAttack == null)
@@ -764,6 +769,11 @@ public class CerberusHelperPlugin extends Plugin
 		if (player != null)
 		{
 			final WorldPoint worldPointPlayer = client.getLocalPlayer().getWorldLocation();
+			if (cerberus == null)
+			{
+				defaultPrayer = Prayer.PROTECT_FROM_MAGIC;
+				return;
+			}
 			final WorldPoint worldPointCerberus = cerberus.getNpc().getWorldLocation();
 
 			if (worldPointPlayer.getX() < worldPointCerberus.getX() - 1
