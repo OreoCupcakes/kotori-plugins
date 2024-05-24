@@ -68,7 +68,7 @@ public class PrayerInteractions
 
 		int param1 = prayerExtended.getWidgetInfoPlus().getId();
 
-		ReflectionLibrary.invokeMenuAction(-1, param1, MenuAction.CC_OP.getId(), 1, -1, "", "", 0, 0);
+		ReflectionLibrary.invokeMenuAction(-1, param1, MenuAction.CC_OP.getId(), 1, -1);
 		return true;
 	}
 	
