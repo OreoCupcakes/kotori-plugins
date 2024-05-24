@@ -96,7 +96,6 @@ public class AttackOverlay extends Overlay
 		this.spriteManager = spriteManager;
 
 		stunComponent.setBackgroundColor(config.dangerColor());
-		stunComponent.setImage(ImageUtility.combineSprites(client, AlchemicalHelperPlugin.BIG_ASS_GREY_ENTANGLE, SpriteID.TRADE_EXCLAMATION_MARK_ITEM_REMOVAL_WARNING));
 
 		setPosition(OverlayPosition.BOTTOM_RIGHT);
 		setLayer(OverlayLayer.UNDER_WIDGETS);
@@ -166,6 +165,7 @@ public class AttackOverlay extends Overlay
 			return;
 		}
 
+		stunComponent.setImage(ImageUtility.combineSprites(client, AlchemicalHelperPlugin.BIG_ASS_GREY_ENTANGLE, SpriteID.TRADE_EXCLAMATION_MARK_ITEM_REMOVAL_WARNING));
 		stunComponent.setText(INFO_BOX_TEXT_PADDING + stunTicks);
 
 		panelComponent.getChildren().add(stunComponent);
