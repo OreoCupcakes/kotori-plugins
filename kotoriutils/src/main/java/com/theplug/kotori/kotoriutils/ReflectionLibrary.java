@@ -281,7 +281,7 @@ public class ReflectionLibrary
 	}
 	
 	//Invoke Menu Action Method
-	public static void invokeMenuAction(int param0, int param1, int opcode, int identifier, int itemId, String option, String target, int x, int y)
+	public static void invokeMenuAction(int param0, int param1, int opcode, int identifier, int itemId, int worldViewId, String option, String target, int x, int y)
 	{
 		Class<?> clazz = getClass(invokeMenuActionClassName);
 		Method method;
@@ -296,12 +296,12 @@ public class ReflectionLibrary
 		{
 			if (isJunkValueAByte)
 			{
-				method = clazz.getDeclaredMethod(invokeMenuActionMethodName, int.class, int.class, int.class, int.class, int.class, String.class, String.class,
+				method = clazz.getDeclaredMethod(invokeMenuActionMethodName, int.class, int.class, int.class, int.class, int.class, int.class, String.class, String.class,
 						int.class, int.class, byte.class);
 			}
 			else
 			{
-				method = clazz.getDeclaredMethod(invokeMenuActionMethodName, int.class, int.class, int.class, int.class, int.class, String.class, String.class,
+				method = clazz.getDeclaredMethod(invokeMenuActionMethodName, int.class, int.class, int.class, int.class, int.class, int.class, String.class, String.class,
 						int.class, int.class, int.class);
 			}
 		}
@@ -318,11 +318,13 @@ public class ReflectionLibrary
 				method.setAccessible(true);
 				if (isJunkValueAByte)
 				{
-					method.invoke(null, param0, param1, opcode, identifier, itemId, option, target, x, y, (byte) invokeMenuActionJunkValue);
+					//-1 is the id for the WorldView.
+					method.invoke(null, param0, param1, opcode, identifier, itemId, worldViewId, option, target, x, y, (byte) invokeMenuActionJunkValue);
 				}
 				else
 				{
-					method.invoke(null, param0, param1, opcode, identifier, itemId, option, target, x, y, invokeMenuActionJunkValue);
+					//-1 is the id for the WorldView.
+					method.invoke(null, param0, param1, opcode, identifier, itemId, worldViewId, option, target, x, y, invokeMenuActionJunkValue);
 				}
 				method.setAccessible(false);
 			}
@@ -335,7 +337,12 @@ public class ReflectionLibrary
 	
 	public static void invokeMenuAction(int param0, int param1, int opcode, int identifier, int itemId)
 	{
-		invokeMenuAction(param0, param1, opcode, identifier, itemId, "", "", -1, -1);
+		invokeMenuAction(param0, param1, opcode, identifier, itemId, "", "");
+	}
+
+	public static void invokeMenuAction(int param0, int param1, int opcode, int identifier, int itemId, String option, String target)
+	{
+		invokeMenuAction(param0, param1, opcode, identifier, itemId, -1, option, target, -1, -1);
 	}
 	
 	//Walking Methods
