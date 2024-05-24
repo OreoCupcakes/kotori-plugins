@@ -3,6 +3,7 @@ package com.theplug.kotori.kotoriutils.rlapi;
 import net.runelite.api.Client;
 import net.runelite.api.Constants;
 import net.runelite.api.Point;
+import net.runelite.api.WorldView;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
@@ -49,6 +50,8 @@ public class WorldAreaExtended
 	public static WorldArea calculateNextTravellingPoint(Client client, WorldArea original, WorldArea target, boolean stopAtMeleeDistance,
 												   Predicate<? super WorldPoint> extraCondition)
 	{
+		WorldView topWorldView = client.getTopLevelWorldView();
+
 		int z1 = original.getPlane();
 		int z2 = target.getPlane();
 		
@@ -88,7 +91,7 @@ public class WorldAreaExtended
 			return original;
 		}
 		
-		LocalPoint lp = LocalPoint.fromWorld(client, x1, y1);
+		LocalPoint lp = LocalPoint.fromWorld(topWorldView, x1, y1);
 		if (lp == null)
 		{
 			return null;
@@ -112,22 +115,22 @@ public class WorldAreaExtended
 			// When it needs to stop at melee distance, it will only attempt
 			// to travel along the x-axis when it is standing diagonally
 			// from the target
-			if (original.canTravelInDirection(client, dxSig, 0, extraCondition))
+			if (original.canTravelInDirection(topWorldView, dxSig, 0, extraCondition))
 			{
 				return new WorldArea(x1 + dxSig, y1, w1, h1, z1);
 			}
 		}
 		else
 		{
-			if (original.canTravelInDirection(client, dxSig, dySig, extraCondition))
+			if (original.canTravelInDirection(topWorldView, dxSig, dySig, extraCondition))
 			{
 				return new WorldArea(x1 + dxSig, y1 + dySig, w1, h1, z1);
 			}
-			else if (dx != 0 && original.canTravelInDirection(client, dxSig, 0, extraCondition))
+			else if (dx != 0 && original.canTravelInDirection(topWorldView, dxSig, 0, extraCondition))
 			{
 				return new WorldArea(x1 + dxSig, y1, w1, h1, z1);
 			}
-			else if (dy != 0 && Math.max(Math.abs(dx), Math.abs(dy)) > 1 && original.canTravelInDirection(client, 0, dy, extraCondition))
+			else if (dy != 0 && Math.max(Math.abs(dx), Math.abs(dy)) > 1 && original.canTravelInDirection(topWorldView, 0, dy, extraCondition))
 			{
 				// Note that NPCs don't attempt to travel along the y-axis
 				// if the target is <= 1 tile distance away

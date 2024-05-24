@@ -4,13 +4,12 @@ import com.theplug.kotori.kotoriutils.ReflectionLibrary;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.api.kit.KitType;
+import net.runelite.api.widgets.ComponentID;
 import net.runelite.api.widgets.Widget;
-import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.RuneLite;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 @Slf4j
 public class InventoryInteractions
@@ -72,7 +71,7 @@ public class InventoryInteractions
 		}
 
 		int numItemEquippedAtOnce = 0;
-		Widget inventoryWidget = client.getWidget(WidgetInfo.INVENTORY.getId());
+		Widget inventoryWidget = client.getWidget(ComponentID.INVENTORY_CONTAINER);
 		if (inventoryWidget == null)
 		{
 			return true;
@@ -123,7 +122,7 @@ public class InventoryInteractions
 			{
 				if (itemWidget.getItemId() == itemId)
 				{
-					ReflectionLibrary.invokeMenuAction(slot, WidgetInfo.INVENTORY.getId(), MenuAction.CC_OP.getId(), index, itemId);
+					ReflectionLibrary.invokeMenuAction(slot, ComponentID.INVENTORY_CONTAINER, MenuAction.CC_OP.getId(), index, itemId);
 					numItemEquippedAtOnce++;
 					if (numItemEquippedAtOnce >= numEquips)
 					{
@@ -155,7 +154,7 @@ public class InventoryInteractions
 		{
 			return false;
 		}
-		ReflectionLibrary.invokeMenuAction(slot, WidgetInfo.INVENTORY.getId(), MenuAction.CC_OP.getId(), 2, itemID);
+		ReflectionLibrary.invokeMenuAction(slot, ComponentID.INVENTORY_CONTAINER, MenuAction.CC_OP.getId(), 2, itemID);
 		return true;
 	}
 	

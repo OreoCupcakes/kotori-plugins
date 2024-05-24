@@ -51,7 +51,7 @@ public class NPCInteractions
             else
             {
                 // If healthScale is 1, healthRatio will always be 1 unless health = 0
-                // so we know nothing about the upper limit except that it can't be higher than maxHealth
+                // , so we know nothing about the upper limit except that it can't be higher than maxHealth
                 maxHealth = maxHp;
             }
             // Take the average of min and max possible healths

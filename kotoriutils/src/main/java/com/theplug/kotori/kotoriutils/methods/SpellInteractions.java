@@ -2,7 +2,6 @@ package com.theplug.kotori.kotoriutils.methods;
 
 import com.theplug.kotori.kotoriutils.ReflectionLibrary;
 import com.theplug.kotori.kotoriutils.rlapi.Spells;
-import com.theplug.kotori.kotoriutils.rlapi.WidgetInfoPlus;
 import net.runelite.api.*;
 import net.runelite.client.RuneLite;
 

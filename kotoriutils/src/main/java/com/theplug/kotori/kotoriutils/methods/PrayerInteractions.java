@@ -7,12 +7,6 @@ import net.runelite.api.MenuAction;
 import net.runelite.api.Prayer;
 import net.runelite.api.Skill;
 import net.runelite.client.RuneLite;
-import net.runelite.client.callback.ClientThread;
-
-import java.util.Random;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class PrayerInteractions
 {

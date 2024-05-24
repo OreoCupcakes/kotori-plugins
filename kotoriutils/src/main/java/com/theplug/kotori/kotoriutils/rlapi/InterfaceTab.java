@@ -40,7 +40,7 @@ public enum InterfaceTab
     PRAYER(5),
     SPELLBOOK(6),
     CLAN(7),
-    ACCOUNT_MANAGMENT(8),
+    ACCOUNT_MANAGEMENT(8),
     FRIENDS(9),
     LOGOUT(10),
     OPTIONS(11),

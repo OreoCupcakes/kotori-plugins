@@ -1,6 +1,5 @@
 package com.theplug.kotori.kotoriutils.overlay;
 
-import com.google.common.base.Strings;
 import com.theplug.kotori.kotoriutils.rlapi.InterfaceTab;
 import com.theplug.kotori.kotoriutils.rlapi.PrayerExtended;
 import net.runelite.api.Point;
@@ -8,13 +7,9 @@ import net.runelite.api.*;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.widgets.Widget;
-import net.runelite.client.ui.components.IconTextField;
 import net.runelite.client.ui.overlay.OverlayUtil;
-import net.runelite.client.util.ColorUtil;
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
 
 public class OverlayUtility
 {
@@ -113,7 +108,7 @@ public class OverlayUtility
 
 	public static void renderTextLocation(Graphics2D graphics2D, Client client, WorldPoint worldPoint, String text, Color textColor, int zOffset, int fontSize)
 	{
-		LocalPoint localPoint = LocalPoint.fromWorld(client, worldPoint);
+		LocalPoint localPoint = LocalPoint.fromWorld(client.getTopLevelWorldView(), worldPoint);
 		if (localPoint == null)
 		{
 			return;
@@ -138,7 +133,7 @@ public class OverlayUtility
 		{
 			return;
 		}
-		LocalPoint lp = LocalPoint.fromWorld(client, point);
+		LocalPoint lp = LocalPoint.fromWorld(client.getTopLevelWorldView(), point);
 		drawTiles(graphics, client, lp, color, fillColor, strokeWidth);
 	}
 
@@ -207,7 +202,7 @@ public class OverlayUtility
 			return;
 		}
 
-		LocalPoint localPoint = LocalPoint.fromWorld(client, worldPoint);
+		LocalPoint localPoint = LocalPoint.fromWorld(client.getTopLevelWorldView(), worldPoint);
 
 		if (localPoint == null)
 		{

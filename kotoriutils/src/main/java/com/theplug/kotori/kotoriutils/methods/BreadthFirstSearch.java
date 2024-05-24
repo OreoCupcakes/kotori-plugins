@@ -9,19 +9,21 @@ public class BreadthFirstSearch
 {
     public static WorldPoint dodgeAoeAttack(Client client, Set<WorldPoint> dangerousTiles, NPC npc, boolean usingMelee, boolean preferMeleeDistance, boolean meleeDistanceCondition)
     {
+        WorldView wv = client.getTopLevelWorldView();
+
         //Breadth First Search of the scene's tiles
         //Get the tiles and its collision flags in the current plane
-        Tile[][] tiles = client.getScene().getTiles()[client.getPlane()];
-        CollisionData[] collisionData = client.getCollisionMaps();
+        Tile[][] tiles = wv.getScene().getTiles()[wv.getPlane()];
+        CollisionData[] collisionData = wv.getCollisionMaps();
         if (collisionData == null)
         {
             return null;
         }
-        int[][] flags = collisionData[client.getPlane()].getFlags();
+        int[][] flags = collisionData[wv.getPlane()].getFlags();
 
         //Use the player's current location as the first point of the search
         WorldPoint playerWorldLoc = client.getLocalPlayer().getWorldLocation();
-        Tile firstPoint = tiles[playerWorldLoc.getX() - client.getBaseX()][playerWorldLoc.getY() - client.getBaseY()];
+        Tile firstPoint = tiles[playerWorldLoc.getX() - wv.getBaseX()][playerWorldLoc.getY() - wv.getBaseY()];
 
         //Initialize the queue and visited array
         HashSet<Tile> visitedTiles = new HashSet<>();
