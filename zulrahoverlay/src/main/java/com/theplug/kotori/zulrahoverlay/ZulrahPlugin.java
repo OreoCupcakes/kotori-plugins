@@ -23,8 +23,6 @@ import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.infobox.Counter;
 import net.runelite.client.ui.overlay.infobox.InfoBoxManager;
 import net.runelite.client.util.ImageUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -259,7 +257,7 @@ public class ZulrahPlugin extends Plugin implements KeyListener
 		}
 		if (config.snakelingSetting() == ZulrahConfig.SnakelingSettings.ENTITY) 
 		{
-			snakelings.addAll(client.getNpcs().stream().filter(npc -> npc != null && npc.getName() != null && npc.getName().equalsIgnoreCase("snakeling") && npc.getCombatLevel() == 90).collect(Collectors.toList()));
+			snakelings.addAll(client.getTopLevelWorldView().npcs().stream().filter(npc -> npc != null && npc.getName() != null && npc.getName().equalsIgnoreCase("snakeling") && npc.getCombatLevel() == 90).collect(Collectors.toList()));
 			snakelings.forEach(npc -> ZulrahPlugin.setHidden(npc, true));
 		}
 	}
@@ -384,7 +382,7 @@ public class ZulrahPlugin extends Plugin implements KeyListener
 		}
 		if (!holdingSnakelingHotkey && event.getTarget().contains("Snakeling") && event.getOption().equalsIgnoreCase("attack")) 
 		{
-			NPC npc = client.getCachedNPCs()[event.getIdentifier()];
+			NPC npc = client.getTopLevelWorldView().npcs().getSparse()[event.getIdentifier()];
 			if (npc == null) 
 			{
 				return;
@@ -555,13 +553,6 @@ public class ZulrahPlugin extends Plugin implements KeyListener
 	
 	private boolean inZulrahRegion()
 	{
-		for (final int regionId : client.getMapRegions())
-		{
-			if (ZULRAH_REGION_IDS.contains(regionId))
-			{
-				return true;
-			}
-		}
-		return false;
+		return ZULRAH_REGION_IDS.contains(client.getLocalPlayer().getWorldLocation().getRegionID());
 	}
 }

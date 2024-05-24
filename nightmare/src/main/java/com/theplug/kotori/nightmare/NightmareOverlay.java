@@ -28,7 +28,6 @@ import net.runelite.api.geometry.Geometry;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
-import net.runelite.client.ui.overlay.OverlayPriority;
 import net.runelite.client.ui.overlay.OverlayUtil;
 import net.runelite.client.ui.overlay.outline.ModelOutlineRenderer;
 
@@ -52,13 +51,13 @@ class NightmareOverlay extends Overlay
 		this.outliner = outliner;
 		setPosition(OverlayPosition.DYNAMIC);
 		setLayer(OverlayLayer.ABOVE_SCENE);
-		setPriority(OverlayPriority.LOW);
+		setPriority(Overlay.PRIORITY_HIGHEST);
 	}
 
 	@Override
 	public Dimension render(Graphics2D graphics)
 	{
-		if (!client.isInInstancedRegion() || !plugin.isInFight())
+		if (!client.getTopLevelWorldView().getScene().isInstance() || !plugin.isInFight())
 		{
 			return null;
 		}
@@ -211,7 +210,7 @@ class NightmareOverlay extends Overlay
 
 	private void drawPoisonArea(Graphics2D graphics, Map<LocalPoint, GameObject> spores)
 	{
-		if (spores.size() < 1)
+		if (spores.isEmpty())
 		{
 			return;
 		}
@@ -317,11 +316,11 @@ class NightmareOverlay extends Overlay
 		graphics.setStroke(new BasicStroke(1));
 
 		path = Geometry.filterPath(path, (p1, p2) ->
-			Perspective.localToCanvas(client, new LocalPoint((int) p1[0], (int) p1[1]), client.getPlane()) != null &&
-				Perspective.localToCanvas(client, new LocalPoint((int) p2[0], (int) p2[1]), client.getPlane()) != null);
+			Perspective.localToCanvas(client, new LocalPoint((int) p1[0], (int) p1[1], -1), client.getTopLevelWorldView().getPlane()) != null &&
+				Perspective.localToCanvas(client, new LocalPoint((int) p2[0], (int) p2[1], -1), client.getTopLevelWorldView().getPlane()) != null);
 		path = Geometry.transformPath(path, coords ->
 		{
-			Point point = Perspective.localToCanvas(client, new LocalPoint((int) coords[0], (int) coords[1]), client.getPlane());
+			Point point = Perspective.localToCanvas(client, new LocalPoint((int) coords[0], (int) coords[1], -1), client.getTopLevelWorldView().getPlane());
 			if (point != null)
 			{
 				coords[0] = point.getX();
@@ -337,7 +336,7 @@ class NightmareOverlay extends Overlay
 
 	private void renderHuskHighlights(Graphics2D graphics)
 	{
-		client.getNpcs().forEach((npc) ->
+		client.getTopLevelWorldView().npcs().forEach((npc) ->
 		{
 			int id = npc.getId();
 			Color color;
@@ -364,7 +363,7 @@ class NightmareOverlay extends Overlay
 
 	private void drawHuskTarget(Graphics2D graphics, Map<Polygon, Player> huskTarget)
 	{
-		if (huskTarget.size() < 1)
+		if (huskTarget.isEmpty())
 		{
 			return;
 		}

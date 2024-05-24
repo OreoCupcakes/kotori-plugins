@@ -89,7 +89,7 @@ public class VorkathOverlay extends Overlay
 			final LocalPoint localLocation = vorkath.getVorkath().getLocalLocation();
 			if (localLocation != null)
 			{
-				Point point = Perspective.localToCanvas(client, localLocation, client.getPlane(), vorkath.getVorkath().getLogicalHeight() + 16);
+				Point point = Perspective.localToCanvas(client, localLocation, client.getTopLevelWorldView().getPlane(), vorkath.getVorkath().getLogicalHeight() + 16);
 				if (point != null)
 				{
 					point = new Point(point.getX(), point.getY());

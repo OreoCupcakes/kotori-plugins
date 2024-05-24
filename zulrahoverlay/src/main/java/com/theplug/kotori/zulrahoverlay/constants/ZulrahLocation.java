@@ -14,7 +14,7 @@ public enum ZulrahLocation
 
 	public LocalPoint toLocalPoint()
 	{
-		return new LocalPoint(this.localX, this.localY);
+		return new LocalPoint(this.localX, this.localY, -1);
 	}
 
 	public static ZulrahLocation valueOf(final LocalPoint localPoint)

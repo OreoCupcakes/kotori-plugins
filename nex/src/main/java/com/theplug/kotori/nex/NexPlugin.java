@@ -481,7 +481,7 @@ public class NexPlugin extends Plugin
 			return shouldRemove;
 		});
 
-		var players = client.getPlayers();
+		var players = client.getTopLevelWorldView().players().stream().collect(Collectors.toCollection(ArrayList::new));
 
 		// Sick players have changed, update list of healthy players
 		if (coughingPlayersChanged || teamSize != players.size())
@@ -695,7 +695,7 @@ public class NexPlugin extends Plugin
 		if (lastActive == null)
 		{
 			var currentMinionId = NexPhase.getMinionId(getCurrentPhase());
-			var active = client.getNpcs().stream().filter(npc -> npc.getId() == currentMinionId).findFirst().orElse(null);
+			var active = client.getTopLevelWorldView().npcs().stream().filter(npc -> npc.getId() == currentMinionId).findFirst().orElse(null);
 			lastActive = active;
 			return active;
 		}
@@ -791,12 +791,12 @@ public class NexPlugin extends Plugin
 
 		var currentTile = centerTile.dx(0).dy(0);
 
-		dashLaneTiles.add(LocalPoint.fromWorld(client, centerTile));
+		dashLaneTiles.add(LocalPoint.fromWorld(client.getTopLevelWorldView(), centerTile));
 
 		while (currentTile.getX() != selectedWingTile.getX() || currentTile.getY() != selectedWingTile.getY())
 		{
 			var newTile = currentTile.dx(dx).dy(dy);
-			dashLaneTiles.add(LocalPoint.fromWorld(client, newTile));
+			dashLaneTiles.add(LocalPoint.fromWorld(client.getTopLevelWorldView(), newTile));
 			currentTile = newTile;
 		}
 	}
@@ -839,6 +839,6 @@ public class NexPlugin extends Plugin
 	
 	private boolean isInNexRegion()
 	{
-		return Arrays.stream(client.getMapRegions()).anyMatch(r -> r == NEX_REGION_ID);
+		return client.getLocalPlayer().getWorldLocation().getRegionID() == NEX_REGION_ID;
 	}
 }

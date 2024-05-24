@@ -8,7 +8,6 @@ import net.runelite.api.Prayer;
 import net.runelite.client.game.SpriteManager;
 import net.runelite.client.ui.overlay.OverlayPanel;
 import net.runelite.client.ui.overlay.OverlayPosition;
-import net.runelite.client.ui.overlay.OverlayPriority;
 import net.runelite.client.ui.overlay.components.InfoBoxComponent;
 
 import javax.inject.Inject;
@@ -31,7 +30,7 @@ public class PrayerHelperOverlay extends OverlayPanel
 		this.config = config;
 		this.spriteManager = spriteManager;
 		setResizable(false);
-		setPriority(OverlayPriority.HIGH);
+		setPriority(PrayerHelperOverlay.PRIORITY_HIGHEST);
 		setPosition(OverlayPosition.ABOVE_CHATBOX_RIGHT);
 	}
 
@@ -45,7 +44,7 @@ public class PrayerHelperOverlay extends OverlayPanel
 		Prayer prayer = null;
 		for (ZulrahData data : plugin.getZulrahData())
 		{
-			if (!data.getCurrentPhasePrayer().isPresent()) continue;
+			if (data.getCurrentPhasePrayer().isEmpty()) continue;
 			prayer = data.getCurrentPhasePrayer().get();
 		}
 		if (prayer == null)

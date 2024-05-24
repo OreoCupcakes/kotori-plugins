@@ -28,8 +28,6 @@ import javax.inject.Inject;
 import net.runelite.api.Client;
 import net.runelite.api.events.ClientTick;
 import net.runelite.api.widgets.Widget;
-import net.runelite.api.widgets.WidgetPositionMode;
-import net.runelite.api.widgets.WidgetSizeMode;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;

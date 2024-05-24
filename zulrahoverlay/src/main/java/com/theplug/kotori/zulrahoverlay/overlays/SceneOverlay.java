@@ -20,7 +20,6 @@ import net.runelite.client.game.SkillIconManager;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
-import net.runelite.client.ui.overlay.OverlayPriority;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -46,7 +45,7 @@ public class SceneOverlay extends Overlay
 		this.plugin = plugin;
 		this.config = config;
 		this.skillIconManager = skillIconManager;
-		setPriority(OverlayPriority.HIGH);
+		setPriority(Overlay.PRIORITY_HIGHEST);
 		setPosition(OverlayPosition.DYNAMIC);
 		setLayer(OverlayLayer.ABOVE_SCENE);
 	}
@@ -130,7 +129,7 @@ public class SceneOverlay extends Overlay
 			LocalPoint localPoint = zulrahNpc.getZulrahLocation().toLocalPoint();
 			Polygon tileAreaPoly = Perspective.getCanvasTileAreaPoly(client, localPoint, 5);
 			OverlayUtils.renderPolygon(graphics, tileAreaPoly, zulrahNpc.getType().getColor(), config.outlineWidth(), config.fillAlpha());
-			Point basePoint = Perspective.localToCanvas(client, localPoint, client.getPlane(), 0);
+			Point basePoint = Perspective.localToCanvas(client, localPoint, client.getTopLevelWorldView().getPlane(), 0);
 			if (basePoint != null)
 			{
 				int bx = basePoint.getX();

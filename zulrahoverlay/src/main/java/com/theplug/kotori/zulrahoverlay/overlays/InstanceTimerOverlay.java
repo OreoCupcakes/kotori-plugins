@@ -3,7 +3,6 @@ package com.theplug.kotori.zulrahoverlay.overlays;
 import com.theplug.kotori.zulrahoverlay.ZulrahConfig;
 import net.runelite.client.ui.overlay.OverlayPanel;
 import net.runelite.client.ui.overlay.OverlayPosition;
-import net.runelite.client.ui.overlay.OverlayPriority;
 import net.runelite.client.ui.overlay.components.LineComponent;
 
 import javax.inject.Inject;
@@ -20,7 +19,7 @@ public class InstanceTimerOverlay extends OverlayPanel
 	private InstanceTimerOverlay(ZulrahConfig config)
 	{
 		this.config = config;
-		setPriority(OverlayPriority.HIGH);
+		setPriority(InstanceTimerOverlay.PRIORITY_HIGH);
 		setPosition(OverlayPosition.ABOVE_CHATBOX_RIGHT);
 	}
 

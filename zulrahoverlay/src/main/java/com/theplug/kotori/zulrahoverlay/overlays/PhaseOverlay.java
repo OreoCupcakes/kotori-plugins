@@ -8,7 +8,6 @@ import com.theplug.kotori.zulrahoverlay.ZulrahPlugin;
 import com.theplug.kotori.zulrahoverlay.constants.ZulrahType;
 import net.runelite.client.ui.overlay.OverlayPanel;
 import net.runelite.client.ui.overlay.OverlayPosition;
-import net.runelite.client.ui.overlay.OverlayPriority;
 import net.runelite.client.ui.overlay.components.ComponentOrientation;
 import net.runelite.client.ui.overlay.components.InfoBoxComponent;
 import net.runelite.client.ui.overlay.components.TextComponent;
@@ -34,7 +33,7 @@ public class PhaseOverlay
 		this.plugin = plugin;
 		this.config = config;
 		this.setPosition(OverlayPosition.ABOVE_CHATBOX_RIGHT);
-		this.setPriority(OverlayPriority.HIGH);
+		this.setPriority(PhaseOverlay.PRIORITY_HIGHEST);
 		this.setResizable(false);
 		this.panelComponent.setPreferredSize(new Dimension(56, 56));
 		this.panelComponent.setBorder(new Rectangle());

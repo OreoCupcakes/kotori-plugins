@@ -31,6 +31,6 @@ public enum StandLocation
 
 	public LocalPoint toLocalPoint()
 	{
-		return new LocalPoint(this.localX, this.localY);
+		return new LocalPoint(this.localX, this.localY, -1);
 	}
 }

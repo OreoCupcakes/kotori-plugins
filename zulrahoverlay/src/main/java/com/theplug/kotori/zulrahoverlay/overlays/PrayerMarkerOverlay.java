@@ -11,7 +11,6 @@ import net.runelite.api.widgets.Widget;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
-import net.runelite.client.ui.overlay.OverlayPriority;
 
 import javax.inject.Inject;
 import java.awt.*;
@@ -30,7 +29,7 @@ public class PrayerMarkerOverlay extends Overlay
 		this.config = config;
 		this.setPosition(OverlayPosition.DYNAMIC);
 		this.setLayer(OverlayLayer.ABOVE_WIDGETS);
-		this.setPriority(OverlayPriority.HIGH);
+		this.setPriority(Overlay.PRIORITY_HIGHEST);
 	}
 
 	@Override
@@ -38,7 +37,7 @@ public class PrayerMarkerOverlay extends Overlay
 	{
 		if (config.prayerMarker() && plugin.getZulrahNpc() != null && !plugin.getZulrahNpc().isDead())
 		{
-			plugin.getZulrahData().forEach((data) -> {
+			plugin.getZulrahData().forEach((data) ->
 				data.getCurrentPhasePrayer().ifPresent((prayer) -> {
 					if (client.getVarcIntValue(VarClientInt.INVENTORY_TAB) == 5)
 					{
@@ -46,9 +45,7 @@ public class PrayerMarkerOverlay extends Overlay
 						Color color = !client.isPrayerActive(prayer) ? Color.RED : Color.GREEN;
 						OverlayUtils.renderWidgetPolygon(graphics, widget, color, true, false);
 					}
-
-				});
-			});
+				}));
 			return null;
 		}
 		else

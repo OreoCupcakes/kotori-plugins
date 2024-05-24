@@ -94,7 +94,7 @@ public class SireHelperSceneOverlay extends Overlay
             LocalPoint localPoint = miasmaEntry.getKey();
 
             WorldPoint worldPoint = WorldPoint.fromLocal(client, localPoint);
-            if (worldPoint.getPlane() != client.getPlane())
+            if (worldPoint.getPlane() != client.getTopLevelWorldView().getPlane())
             {
                 continue;
             }
@@ -124,7 +124,7 @@ public class SireHelperSceneOverlay extends Overlay
 
         for (Map.Entry<WorldPoint, RespiratorySystem> respEntry : plugin.getRespiratorsMap().entrySet())
         {
-            LocalPoint localPoint = LocalPoint.fromWorld(client, respEntry.getKey());
+            LocalPoint localPoint = LocalPoint.fromWorld(client.getTopLevelWorldView(), respEntry.getKey());
             String infoText = "";
 
             if (config.showStunTimerOnRespirators())
@@ -218,7 +218,7 @@ public class SireHelperSceneOverlay extends Overlay
     {
         for (WorldPoint worldPoint : pointSet)
         {
-            if (worldPoint.getPlane() != client.getPlane() && !worldPoint.isInScene(client))
+            if (worldPoint.getPlane() != client.getTopLevelWorldView().getPlane() && !worldPoint.isInScene(client.getTopLevelWorldView()))
             {
                 continue;
             }

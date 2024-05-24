@@ -18,7 +18,6 @@ import net.runelite.api.widgets.Widget;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
-import net.runelite.client.ui.overlay.OverlayPriority;
 import static net.runelite.client.ui.overlay.OverlayUtil.renderPolygon;
 
 @Singleton
@@ -37,7 +36,7 @@ class NightmarePrayerOverlay extends Overlay
 		this.config = config;
 		setPosition(OverlayPosition.DYNAMIC);
 		setLayer(OverlayLayer.ABOVE_WIDGETS);
-		setPriority(OverlayPriority.LOW);
+		setPriority(Overlay.PRIORITY_HIGHEST);
 	}
 
 	@Override

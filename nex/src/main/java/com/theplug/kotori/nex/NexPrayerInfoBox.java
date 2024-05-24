@@ -37,7 +37,7 @@ public class NexPrayerInfoBox extends Overlay
 		this.config = config;
 
 		setLayer(OverlayLayer.ABOVE_WIDGETS);
-		setPriority(OverlayPriority.HIGH);
+		setPriority(Overlay.PRIORITY_HIGHEST);
 		setPosition(OverlayPosition.BOTTOM_RIGHT);
 	}
 

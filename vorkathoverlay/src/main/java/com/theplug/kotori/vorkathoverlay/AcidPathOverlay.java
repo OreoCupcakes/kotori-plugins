@@ -75,7 +75,7 @@ public class AcidPathOverlay extends Overlay
 		{
 			for (WorldPoint acidWorldPoint : plugin.getAcidSpots())
 			{
-				LocalPoint acidLocalPoint = LocalPoint.fromWorld(client, acidWorldPoint);
+				LocalPoint acidLocalPoint = LocalPoint.fromWorld(client.getTopLevelWorldView(), acidWorldPoint);
 				if (acidLocalPoint == null)
 				{
 					continue;
@@ -90,7 +90,7 @@ public class AcidPathOverlay extends Overlay
 		{
 			for (WorldPoint acidFreeWorldPoint : plugin.getAcidFreePath())
 			{
-				LocalPoint acidFreeLocalPoint = LocalPoint.fromWorld(client, acidFreeWorldPoint);
+				LocalPoint acidFreeLocalPoint = LocalPoint.fromWorld(client.getTopLevelWorldView(), acidFreeWorldPoint);
 				if (acidFreeLocalPoint == null)
 				{
 					continue;
@@ -104,8 +104,8 @@ public class AcidPathOverlay extends Overlay
 		if (config.indicateWooxWalkPath() && plugin.getWooxWalkPath()[0] != null
 			&& plugin.getWooxWalkPath()[1] != null)
 		{
-			LocalPoint attackLocalPoint = LocalPoint.fromWorld(client, plugin.getWooxWalkPath()[0]);
-			LocalPoint outOfReachLocalPoint = LocalPoint.fromWorld(client, plugin.getWooxWalkPath()[1]);
+			LocalPoint attackLocalPoint = LocalPoint.fromWorld(client.getTopLevelWorldView(), plugin.getWooxWalkPath()[0]);
+			LocalPoint outOfReachLocalPoint = LocalPoint.fromWorld(client.getTopLevelWorldView(), plugin.getWooxWalkPath()[1]);
 
 			if (attackLocalPoint != null && outOfReachLocalPoint != null)
 			{

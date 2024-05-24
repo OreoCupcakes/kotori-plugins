@@ -53,15 +53,14 @@ import net.runelite.api.events.GameTick;
 import net.runelite.api.events.NpcDespawned;
 import net.runelite.api.events.NpcSpawned;
 import net.runelite.api.events.ProjectileMoved;
+import net.runelite.api.widgets.ComponentID;
 import net.runelite.api.widgets.Widget;
-import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
-import org.apache.commons.lang3.ArrayUtils;
 
 @PluginDependency(KotoriUtils.class)
 @PluginDescriptor(
@@ -387,7 +386,7 @@ public class VorkathPlugin extends Plugin
 		
 		if (acidSpots.size() != lastAcidSpotsSize)
 		{
-			if (acidSpots.size() == 0)
+			if (acidSpots.isEmpty())
 			{
 				overlayManager.remove(acidPathOverlay);
 				acidFreePath.clear();
@@ -417,7 +416,7 @@ public class VorkathPlugin extends Plugin
 	 */
 	private boolean isAtVorkath()
 	{
-		return ArrayUtils.contains(client.getMapRegions(), VORKATH_REGION);
+		return client.getLocalPlayer().getWorldLocation().getRegionID() == VORKATH_REGION;
 	}
 
 	private void addAcidSpot(WorldPoint acidSpotLocation)
@@ -592,7 +591,7 @@ public class VorkathPlugin extends Plugin
 	{
 		// Update the WooxWalk tick indicator's dimensions
 		// based on the canvas dimensions
-		final Widget exp = client.getWidget(WidgetInfo.EXPERIENCE_TRACKER);
+		final Widget exp = client.getWidget(ComponentID.EXPERIENCE_TRACKER_WIDGET);
 
 		if (exp == null)
 		{

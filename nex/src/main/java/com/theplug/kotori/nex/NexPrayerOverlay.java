@@ -34,7 +34,7 @@ class NexPrayerOverlay extends Overlay
 
 		setPosition(OverlayPosition.DYNAMIC);
 		setLayer(OverlayLayer.ABOVE_WIDGETS);
-		setPriority(OverlayPriority.HIGHEST);
+		setPriority(Overlay.PRIORITY_HIGHEST);
 	}
 
 	@Override

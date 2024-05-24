@@ -73,8 +73,8 @@ public class NightmarePlugin extends Plugin
 	private static final int NIGHTMARE_SHADOW = 1767;   // graphics object
 	private static final int NIGHTMARE_REGION_ID = 15515;
 
-	private static final LocalPoint MIDDLE_LOCATION = new LocalPoint(6208, 8128);
-	private static final Set<LocalPoint> PHOSANIS_MIDDLE_LOCATIONS = ImmutableSet.of(new LocalPoint(6208, 7104), new LocalPoint(7232, 7104));
+	private static final LocalPoint MIDDLE_LOCATION = new LocalPoint(6208, 8128, -1);
+	private static final Set<LocalPoint> PHOSANIS_MIDDLE_LOCATIONS = ImmutableSet.of(new LocalPoint(6208, 7104, -1), new LocalPoint(7232, 7104, -1));
 	private static final List<Integer> INACTIVE_TOTEMS = Arrays.asList(9435, 9438, 9441, 9444);
 	private static final List<Integer> ACTIVE_TOTEMS = Arrays.asList(9436, 9439, 9442, 9445);
 	@Getter(AccessLevel.PACKAGE)
@@ -126,7 +126,7 @@ public class NightmarePlugin extends Plugin
 	@Setter
 	private boolean flash = false;
 
-	private ArrayList<Projectile> nightmareProjectiles = new ArrayList<>();
+	private final ArrayList<Projectile> nightmareProjectiles = new ArrayList<>();
 
 	public NightmarePlugin()
 	{
@@ -579,9 +579,9 @@ public class NightmarePlugin extends Plugin
 
 		if ((target.contains("the nightmare") || target.contains("phosani's nightmare"))
 			&& ((config.hideAttackNightmareTotems() && totemsAlive > 0)
-			|| (config.hideAttackNightmareParasites() && parasites.size() > 0)
-			|| (config.hideAttackNightmareHusk() && husks.size() > 0)
-			|| (config.hideAttackNightmareSleepwalkers() && nm.getId() != 11154 && sleepwalkers.size() > 0))
+			|| (config.hideAttackNightmareParasites() && !parasites.isEmpty())
+			|| (config.hideAttackNightmareHusk() && !husks.isEmpty())
+			|| (config.hideAttackNightmareSleepwalkers() && nm.getId() != 11154 && !sleepwalkers.isEmpty()))
 			|| (config.hideAttackSleepwalkers() && nm.getId() == 11154 && target.contains("sleepwalker")))
 		{
 			removeNPCMenuEntry(target);
@@ -591,7 +591,7 @@ public class NightmarePlugin extends Plugin
 	private void removeNPCMenuEntry(String target)
 	{
 		MenuEntry[] menuEntries = client.getMenuEntries();
-		MenuEntry[] newEntries = Arrays.stream(menuEntries).filter(e -> e.getNpc() == null || e.getNpc().getName().equalsIgnoreCase(target)).toArray(MenuEntry[]::new);
+		MenuEntry[] newEntries = Arrays.stream(menuEntries).filter(e -> e.getNpc() == null || Objects.requireNonNull(e.getNpc().getName()).equalsIgnoreCase(target)).toArray(MenuEntry[]::new);
 		if (menuEntries.length != newEntries.length)
 		{
 			client.setMenuEntries(newEntries);
@@ -605,6 +605,6 @@ public class NightmarePlugin extends Plugin
 	
 	private boolean inNightmareRegion()
 	{
-		return Arrays.stream(client.getMapRegions()).anyMatch(r -> r == NIGHTMARE_REGION_ID);
+		return client.getLocalPlayer().getWorldLocation().getRegionID() == NIGHTMARE_REGION_ID;
 	}
 }
