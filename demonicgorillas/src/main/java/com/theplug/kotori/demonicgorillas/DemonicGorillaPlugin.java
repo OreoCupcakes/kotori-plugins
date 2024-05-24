@@ -31,7 +31,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
 
-import com.google.inject.Provides;
 import com.theplug.kotori.kotoriutils.rlapi.GraphicIDPlus;
 import com.theplug.kotori.kotoriutils.rlapi.WorldAreaExtended;
 import com.theplug.kotori.kotoriutils.KotoriUtils;
@@ -49,7 +48,6 @@ import net.runelite.api.events.PlayerDespawned;
 import net.runelite.api.events.PlayerSpawned;
 import net.runelite.api.events.ProjectileMoved;
 import net.runelite.client.callback.ClientThread;
-import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDependency;
@@ -71,9 +69,6 @@ public class DemonicGorillaPlugin extends Plugin
 	private Client client;
 
 	@Inject
-	private DemonicGorillaConfig demonicGorillaConfig;
-
-	@Inject
 	private OverlayManager overlayManager;
 
 	@Inject
@@ -93,12 +88,6 @@ public class DemonicGorillaPlugin extends Plugin
 	private ArrayList<Projectile> gorillaProjectiles;
 	private static final Set<Integer> REGION_IDS = Set.of(8280, 8536);
 	private boolean atGorillas;
-
-	@Provides
-	DemonicGorillaConfig provideConfig(ConfigManager configManager)
-	{
-		return configManager.getConfig(DemonicGorillaConfig.class);
-	}
 
 	@Override
 	protected void startUp()
@@ -156,7 +145,7 @@ public class DemonicGorillaPlugin extends Plugin
 	private void resetGorillas()
 	{
 		gorillas.clear();
-		for (NPC npc : client.getNpcs())
+		for (NPC npc : client.getTopLevelWorldView().npcs())
 		{
 			if (isNpcGorilla(npc.getId()))
 			{
@@ -168,7 +157,7 @@ public class DemonicGorillaPlugin extends Plugin
 	private void resetPlayers()
 	{
 		memorizedPlayers.clear();
-		for (Player player : client.getPlayers())
+		for (Player player : client.getTopLevelWorldView().players())
 		{
 			memorizedPlayers.put(player, new MemorizedPlayer(player));
 		}
@@ -483,7 +472,7 @@ public class DemonicGorillaPlugin extends Plugin
 					{
 						int distance = gorilla.getNpc().getWorldArea().distanceTo(mp.getLastWorldArea());
 						WorldPoint predictedMovement = predictedNewArea.toWorldPoint();
-						if (distance <= DemonicGorilla.MAX_ATTACK_RANGE && mp.getLastWorldArea().hasLineOfSightTo(client, gorilla.getLastWorldArea()))
+						if (distance <= DemonicGorilla.MAX_ATTACK_RANGE && mp.getLastWorldArea().hasLineOfSightTo(client.getTopLevelWorldView(), gorilla.getLastWorldArea()))
 						{
 							if (predictedMovement.distanceTo(gorilla.getLastWorldArea().toWorldPoint()) != 0)
 							{
@@ -576,7 +565,7 @@ public class DemonicGorillaPlugin extends Plugin
 		}
 		gorillaProjectiles.add(projectile);
 
-		final WorldPoint loc = WorldPoint.fromLocal(client, projectile.getX1(), projectile.getY1(), client.getPlane());
+		final WorldPoint loc = WorldPoint.fromLocal(client.getTopLevelWorldView(), projectile.getX1(), projectile.getY1(), client.getTopLevelWorldView().getPlane());
 
 		if (projectileId == GraphicIDPlus.DEMONIC_GORILLA_BOULDER)
 		{
@@ -664,7 +653,7 @@ public class DemonicGorillaPlugin extends Plugin
 		}
 		else if (event.getActor() instanceof NPC)
 		{
-			DemonicGorilla gorilla = gorillas.get(event.getActor());
+			DemonicGorilla gorilla = gorillas.get((NPC) event.getActor());
 			int hitsplatType = event.getHitsplat().getHitsplatType();
 			if (gorilla != null && (hitsplatType == HitsplatID.BLOCK_ME ||
 				hitsplatType == HitsplatID.DAMAGE_ME))
@@ -789,13 +778,6 @@ public class DemonicGorillaPlugin extends Plugin
 	
 	private boolean atDemonicGorillas()
 	{
-		for (final int regionId : client.getMapRegions())
-		{
-			if (REGION_IDS.contains(regionId))
-			{
-				return true;
-			}
-		}
-		return false;
+		return REGION_IDS.contains(client.getLocalPlayer().getWorldLocation().getRegionID());
 	}
 }

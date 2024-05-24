@@ -61,9 +61,9 @@ class DemonicGorilla
 		BOULDER
 	}
 
-	private Client client;
+	private final Client client;
 	@Getter(AccessLevel.PACKAGE)
-	private NPC npc;
+	private final NPC npc;
 
 	@Getter(AccessLevel.PACKAGE)
 	@Setter(AccessLevel.PACKAGE)
