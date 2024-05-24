@@ -350,28 +350,28 @@ public class ReflectionLibrary
 	{
 		Field xField = getField(sceneSelectedXClassName, sceneSelectedXFieldName);
 		String errorMsg = "Kotori Plugin Utils - Failed to set scene selected X coordinate.";
-		setFieldIntValue(xField, client.getScene(), x, 1, errorMsg);
+		setFieldIntValue(xField, client.getTopLevelWorldView().getScene(), x, 1, errorMsg);
 	}
 	
 	private static void setYCoordinate(int y)
 	{
 		Field yField = getField(sceneSelectedYClassName, sceneSelectedYFieldName);
 		String errorMsg = "Kotori Plugin Utils - Failed to set scene selected Y coordinate.";
-		setFieldIntValue(yField, client.getScene(), y, 1, errorMsg);
+		setFieldIntValue(yField, client.getTopLevelWorldView().getScene(), y, 1, errorMsg);
 	}
 
 	private static void setCheckClick()
 	{
 		Field checkClick = getField(checkClickClassName, checkClickFieldName);
 		String errorMsg = "Kotori Plugin Utils - Failed to set check click walking boolean.";
-		setFieldBooleanValue(checkClick, client.getScene(), false, errorMsg);
+		setFieldBooleanValue(checkClick, client.getTopLevelWorldView().getScene(), false, errorMsg);
 	}
 	
 	private static void setViewportWalking()
 	{
 		Field viewport = getField(viewportWalkingClassName, viewportWalkingFieldName);
 		String errorMsg = "Kotori Plugin Utils - Failed to set scene viewport walking boolean.";
-		setFieldBooleanValue(viewport, client.getScene(), true, errorMsg);
+		setFieldBooleanValue(viewport, client.getTopLevelWorldView().getScene(), true, errorMsg);
 	}
 	
 	public static void sceneWalk(WorldPoint worldPoint, boolean convertForInstance)
@@ -381,9 +381,11 @@ public class ReflectionLibrary
 			return;
 		}
 
+		WorldView wv = client.getTopLevelWorldView();
+
 		if (convertForInstance)
 		{
-			Collection<WorldPoint> localWorldPoints = WorldPoint.toLocalInstance(client, worldPoint);
+			Collection<WorldPoint> localWorldPoints = WorldPoint.toLocalInstance(wv.getScene(), worldPoint);
 			if (localWorldPoints.size() != 1)
 			{
 				return;
@@ -391,13 +393,13 @@ public class ReflectionLibrary
 
 			for (WorldPoint localWorld : localWorldPoints)
 			{
-				sceneWalk(LocalPoint.fromWorld(client, localWorld));
+				sceneWalk(LocalPoint.fromWorld(wv, localWorld));
 				return;
 			}
 		}
 		else
 		{
-			sceneWalk(LocalPoint.fromWorld(client, worldPoint));
+			sceneWalk(LocalPoint.fromWorld(wv, worldPoint));
 		}
 	}
 
@@ -525,17 +527,15 @@ public class ReflectionLibrary
 			log.error("Kotori Plugin Utils - Unable to get NPC Composition's overhead icon via field.", e);
 		}
 
-		Method getHeadIconArrayMethod = null;
 		try
 		{
 			for (Method declaredMethod : npcComposition.getClass().getDeclaredMethods())
 			{
 				if (declaredMethod.getReturnType() == short[].class && declaredMethod.getParameterTypes().length == 1)
 				{
-					getHeadIconArrayMethod = declaredMethod;
-					getHeadIconArrayMethod.setAccessible(true);
-					short[] headIconArray = (short[]) getHeadIconArrayMethod.invoke(npcComposition);
-					getHeadIconArrayMethod.setAccessible(false);
+					declaredMethod.setAccessible(true);
+					short[] headIconArray = (short[]) declaredMethod.invoke(npcComposition);
+					declaredMethod.setAccessible(false);
 					if (headIconArray == null || headIconArray.length == 0)
 					{
 						continue;
