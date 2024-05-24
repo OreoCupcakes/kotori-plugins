@@ -35,7 +35,6 @@ import net.runelite.api.*;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
-import net.runelite.client.ui.overlay.OverlayPriority;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -63,7 +62,6 @@ public class SceneOverlay extends Overlay
 		this.client = client;
 
 		setPosition(OverlayPosition.DYNAMIC);
-		setPriority(OverlayPriority.HIGH);
 		setLayer(OverlayLayer.UNDER_WIDGETS);
 	}
 

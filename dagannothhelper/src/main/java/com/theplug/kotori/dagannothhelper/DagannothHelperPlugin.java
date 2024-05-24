@@ -187,7 +187,7 @@ public class DagannothHelperPlugin extends Plugin
 		atDks = true;
 
 		addOverlays();
-		for (final NPC npc : client.getNpcs())
+		for (final NPC npc : client.getTopLevelWorldView().npcs())
 		{
 			addNpc(npc);
 		}
