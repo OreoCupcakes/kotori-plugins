@@ -364,7 +364,7 @@ public class ReflectionLibrary
 	{
 		Field checkClick = getField(checkClickClassName, checkClickFieldName);
 		String errorMsg = "Kotori Plugin Utils - Failed to set check click walking boolean.";
-		setFieldBooleanValue(checkClick, client.getTopLevelWorldView().getScene(), false, errorMsg);
+		setFieldBooleanValue(checkClick, client.getTopLevelWorldView().getScene(), true, errorMsg);
 	}
 	
 	private static void setViewportWalking()
