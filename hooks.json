@@ -3,117 +3,117 @@
   [
     {
       "n": "invokeMenuAction",
-      "c": "ix",
-      "p": "lg",
-      "m": 797487725
+      "c": "el",
+      "p": "mb",
+      "m": 25
     },
     {
       "n": "setViewportWalking",
-      "c": "jp",
-      "p": "bs",
+      "c": "jy",
+      "p": "bh",
       "m": 1
     },
     {
       "n": "setCheckClick",
-      "c": "jp",
+      "c": "jy",
       "p": "bn",
       "m": 1
     },
     {
       "n": "setSelectedSpellWidget",
-      "c": "df",
-      "p": "oq",
-      "m": 2006042877
+      "c": "on",
+      "p": "ov",
+      "m": 247492197
     },
     {
       "n": "setSelectedSpellChildIndex",
       "c": "client",
-      "p": "ov",
-      "m": -995238887
+      "p": "om",
+      "m": 9654463
     },
     {
       "n": "setSelectedSpellItemId",
       "c": "client",
-      "p": "op",
-      "m": -337671651
+      "p": "ot",
+      "m": -1454428753
     },
     {
       "n": "getNpcOverheadIcon",
-      "c": "hk",
-      "p": "bi",
+      "c": "iq",
+      "p": "bj",
       "m": 1
     },
     {
       "n": "menuOptionsCount",
       "c": "client",
-      "p": "nk",
-      "m": 1393357457
+      "p": "nb",
+      "m": 1214762271
     },
     {
       "n": "menuIdentifiersArray",
       "c": "client",
-      "p": "nb",
+      "p": "nx",
       "m": 1
     },
     {
       "n": "menuItemIdsArray",
       "c": "client",
-      "p": "nv",
+      "p": "ni",
       "m": 1
     },
     {
       "n": "menuOptionsArray",
       "c": "client",
-      "p": "nh",
+      "p": "of",
       "m": 1
     },
     {
       "n": "menuParam0Array",
       "c": "client",
-      "p": "nl",
+      "p": "nf",
       "m": 1
     },
     {
       "n": "menuParam1Array",
       "c": "client",
-      "p": "ni",
+      "p": "nd",
       "m": 1
     },
     {
       "n": "menuTargetsArray",
       "c": "client",
-      "p": "nd",
+      "p": "oo",
       "m": 1
     },
     {
       "n": "menuTypesArray",
       "c": "client",
-      "p": "ns",
+      "p": "na",
       "m": 1
     },
     {
       "n": "setSelectedSceneTileX",
-      "c": "jp",
-      "p": "bl",
+      "c": "jy",
+      "p": "bg",
       "m": 1
     },
     {
       "n": "setSelectedSceneTileY",
-      "c": "jp",
-      "p": "bh",
+      "c": "jy",
+      "p": "bu",
       "m": 1
     },
     {
       "n": "isMoving",
-      "c": "de",
-      "p": "dk",
-      "m": -1259578643
+      "c": "dh",
+      "p": "dp",
+      "m": 443603663
     },
     {
       "n": "getActorAnimationId",
-      "c": "de",
-      "p": "cq",
-      "m": -1037212889
+      "c": "dh",
+      "p": "cx",
+      "m": 2002995319
     }
   ]
 }
