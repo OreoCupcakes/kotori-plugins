@@ -71,6 +71,7 @@ public class PrayerOverlay extends Overlay
 
 		setPosition(OverlayPosition.DYNAMIC);
 		setLayer(OverlayLayer.ABOVE_WIDGETS);
+		setPriority(Overlay.PRIORITY_HIGHEST);
 	}
 
 	@Override

@@ -492,7 +492,7 @@ public class InfernoPlugin extends Plugin
 
 	private boolean isInInferno()
 	{
-		return ArrayUtils.contains(client.getMapRegions(), INFERNO_REGION);
+		return client.getLocalPlayer().getWorldLocation().getRegionID() == INFERNO_REGION;
 	}
 
 	int getNextWaveNumber()
@@ -899,7 +899,7 @@ public class InfernoPlugin extends Plugin
 		{
 			for (int y = yCoord - 4; y <= yCoord - 2; y++)
 			{
-				safeSpotMap.put(new WorldPoint(x, y, client.getPlane()), colorSafeSpotId);
+				safeSpotMap.put(new WorldPoint(x, y, client.getTopLevelWorldView().getPlane()), colorSafeSpotId);
 			}
 		}
 	}
@@ -924,7 +924,7 @@ public class InfernoPlugin extends Plugin
 
 	private void calculateObstacles()
 	{
-		for (NPC npc : client.getNpcs())
+		for (NPC npc : client.getTopLevelWorldView().npcs())
 		{
 			obstacles.addAll(npc.getWorldArea().toWorldPointList());
 		}

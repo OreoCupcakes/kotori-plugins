@@ -133,7 +133,7 @@ public class GrotesqueGuardiansPlugin extends Plugin
 	{
 		onRoof = true;
 
-		for (final NPC npc : client.getNpcs())
+		for (final NPC npc : client.getTopLevelWorldView().npcs())
 		{
 			addNpc(npc);
 		}
@@ -322,6 +322,6 @@ public class GrotesqueGuardiansPlugin extends Plugin
 
 	private boolean isInRegion()
 	{
-		return client.isInInstancedRegion() && client.getMapRegions()[0] == REGION_ID;
+		return client.getTopLevelWorldView().getScene().isInstance() && client.getLocalPlayer().getWorldLocation().getRegionID() == REGION_ID;
 	}
 }

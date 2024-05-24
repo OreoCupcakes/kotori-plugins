@@ -28,7 +28,6 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import net.runelite.client.config.ConfigManager;
 import net.runelite.client.util.ImageUtil;
 
 @Getter

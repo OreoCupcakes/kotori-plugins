@@ -49,7 +49,6 @@ import com.theplug.kotori.grotesqueguardians.entity.Dusk;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
-import net.runelite.client.ui.overlay.OverlayPriority;
 import static net.runelite.client.ui.overlay.OverlayUtil.renderPolygon;
 
 public class PrayerOverlay extends Overlay
@@ -73,7 +72,7 @@ public class PrayerOverlay extends Overlay
 		this.config = config;
 
 		setPosition(OverlayPosition.DYNAMIC);
-		setPriority(OverlayPriority.HIGH);
+		setPriority(Overlay.PRIORITY_HIGHEST);
 		setLayer(OverlayLayer.ABOVE_WIDGETS);
 	}
 

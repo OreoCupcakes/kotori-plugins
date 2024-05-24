@@ -45,11 +45,11 @@ class PrayerTracker
 		lastTick.clear();
 		lastTick.putAll(newTick);
 		newTick.clear();
-		for (Player p : client.getPlayers())
+		for (Player p : client.getTopLevelWorldView().players())
 		{
 			processActor(p);
 		}
-		for (NPC npc : client.getNpcs())
+		for (NPC npc : client.getTopLevelWorldView().npcs())
 		{
 			processActor(npc);
 		}

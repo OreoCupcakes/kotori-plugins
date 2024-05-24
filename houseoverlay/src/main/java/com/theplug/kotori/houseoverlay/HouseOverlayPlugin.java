@@ -6,7 +6,6 @@ import com.google.inject.Provides;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.api.events.*;
-import net.runelite.api.kit.KitType;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
@@ -261,14 +260,7 @@ public class HouseOverlayPlugin extends Plugin
     
     private boolean isInHouse()
     {
-        for (int regionId : client.getMapRegions())
-        {
-            if (REGION_IDS.contains(regionId))
-            {
-                return true;
-            }
-        }
-        return false;
+        return REGION_IDS.contains(client.getLocalPlayer().getWorldLocation().getRegionID());
     }
     
     private void checkWeaponSlot()

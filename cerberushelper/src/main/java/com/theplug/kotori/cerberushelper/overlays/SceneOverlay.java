@@ -75,6 +75,7 @@ public final class SceneOverlay extends Overlay
 
 		setPosition(OverlayPosition.DYNAMIC);
 		setLayer(OverlayLayer.ABOVE_SCENE);
+		setPriority(Overlay.PRIORITY_HIGHEST);
 	}
 
 	@Override

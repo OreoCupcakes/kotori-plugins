@@ -38,7 +38,6 @@ import net.runelite.api.Point;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
-import net.runelite.client.ui.overlay.OverlayPriority;
 import net.runelite.client.ui.overlay.OverlayUtil;
 
 @Singleton
@@ -62,7 +61,7 @@ class MinimapOverlay extends Overlay
 		this.resourceManager = resourceManager;
 
 		setPosition(OverlayPosition.DYNAMIC);
-		setPriority(OverlayPriority.HIGH);
+		setPriority(Overlay.PRIORITY_HIGHEST);
 		setLayer(OverlayLayer.ABOVE_WIDGETS);
 	}
 

@@ -65,6 +65,7 @@ public class DemonicGorillaOverlay extends Overlay
 		this.client = client;
 		this.plugin = plugin;
 		setPosition(OverlayPosition.DYNAMIC);
+		setPriority(Overlay.PRIORITY_HIGHEST);
 		setLayer(OverlayLayer.ABOVE_SCENE);
 	}
 

@@ -80,6 +80,7 @@ public class SceneOverlay extends Overlay
 		this.modelOutlineRenderer = modelOutlineRenderer;
 
 		setPosition(OverlayPosition.DYNAMIC);
+		setPriority(Overlay.PRIORITY_HIGHEST);
 		setLayer(OverlayLayer.UNDER_WIDGETS);
 	}
 

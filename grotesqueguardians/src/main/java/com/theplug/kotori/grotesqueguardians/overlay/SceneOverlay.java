@@ -50,7 +50,6 @@ import com.theplug.kotori.grotesqueguardians.entity.Dusk;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
-import net.runelite.client.ui.overlay.OverlayPriority;
 import net.runelite.client.ui.overlay.OverlayUtil;
 import net.runelite.client.ui.overlay.outline.ModelOutlineRenderer;
 
@@ -76,7 +75,7 @@ public class SceneOverlay extends Overlay
 		this.modelOutlineRenderer = modelOutlineRenderer;
 
 		setPosition(OverlayPosition.DYNAMIC);
-		setPriority(OverlayPriority.HIGH);
+		setPriority(Overlay.PRIORITY_HIGHEST);
 		setLayer(OverlayLayer.UNDER_WIDGETS);
 	}
 
@@ -190,7 +189,7 @@ public class SceneOverlay extends Overlay
 
 	private void renderGraphicsObjectsOutline(final Graphics2D graphics2D)
 	{
-		for (final GraphicsObject graphicsObject : client.getGraphicsObjects())
+		for (final GraphicsObject graphicsObject : client.getTopLevelWorldView().getGraphicsObjects())
 		{
 			if (!GrotesqueGuardiansPlugin.isValidGraphicsObject(graphicsObject))
 			{

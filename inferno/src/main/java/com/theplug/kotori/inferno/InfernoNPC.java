@@ -25,12 +25,8 @@
 package com.theplug.kotori.inferno;
 
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import com.theplug.kotori.kotoriutils.KotoriUtils;
 import com.theplug.kotori.kotoriutils.ReflectionLibrary;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -80,7 +76,7 @@ class InfernoNPC
 	{
 		this.npc = npc;
 		this.type = Type.typeFromId(npc.getId());
-		this.nextAttack = type.getDefaultAttack();
+		this.nextAttack = Objects.requireNonNull(type).getDefaultAttack();
 		this.ticksTillNextAttack = 0;
 		this.lastAnimation = -1;
 		this.lastCanAttack = false;
@@ -107,7 +103,7 @@ class InfernoNPC
 			return safeSpotCache.get(target) == 2;
 		}
 
-		boolean hasLos = new WorldArea(target, 1, 1).hasLineOfSightTo(client, this.getNpc().getWorldArea());
+		boolean hasLos = new WorldArea(target, 1, 1).hasLineOfSightTo(client.getTopLevelWorldView(), this.getNpc().getWorldArea());
 		boolean hasRange = this.getType().getDefaultAttack() == Attack.MELEE ? this.getNpc().getWorldArea().isInMeleeDistance(target)
 			: this.getNpc().getWorldArea().distanceTo(target) <= this.getType().getRange();
 
@@ -175,7 +171,7 @@ class InfernoNPC
 				return false;
 			}
 
-			boolean hasLos = new WorldArea(target, 1, 1).hasLineOfSightTo(client, predictedWorldArea);
+			boolean hasLos = new WorldArea(target, 1, 1).hasLineOfSightTo(client.getTopLevelWorldView(), predictedWorldArea);
 			boolean hasRange = this.getType().getDefaultAttack() == Attack.MELEE ? predictedWorldArea.isInMeleeDistance(target)
 				: predictedWorldArea.distanceTo(target) <= this.getType().getRange();
 
@@ -191,7 +187,7 @@ class InfernoNPC
 
 	private boolean couldAttackPrevTick(Client client, WorldPoint lastPlayerLocation)
 	{
-		return new WorldArea(lastPlayerLocation, 1, 1).hasLineOfSightTo(client, this.getNpc().getWorldArea());
+		return new WorldArea(lastPlayerLocation, 1, 1).hasLineOfSightTo(client.getTopLevelWorldView(), this.getNpc().getWorldArea());
 	}
 
 	void gameTick(Client client, WorldPoint lastPlayerLocation, boolean finalPhase, int ticksSinceFinalPhase)

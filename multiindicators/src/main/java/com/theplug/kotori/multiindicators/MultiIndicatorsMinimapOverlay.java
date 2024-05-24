@@ -30,12 +30,11 @@ import net.runelite.api.Perspective;
 import net.runelite.api.Point;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.geometry.Geometry;
+import net.runelite.api.widgets.ComponentID;
 import net.runelite.api.widgets.Widget;
-import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
-import net.runelite.client.ui.overlay.OverlayPriority;
 
 import javax.inject.Inject;
 import java.awt.*;
@@ -62,7 +61,7 @@ public class MultiIndicatorsMinimapOverlay extends Overlay
 		this.config = config;
 		setPosition(OverlayPosition.DYNAMIC);
 		setLayer(OverlayLayer.ALWAYS_ON_TOP);
-		setPriority(OverlayPriority.LOW);
+		setPriority(Overlay.PRIORITY_LOW);
 	}
 
 	private Color getTransparentColorVersion(Color c)
@@ -88,11 +87,11 @@ public class MultiIndicatorsMinimapOverlay extends Overlay
 
 		path = Geometry.clipPath(path, viewArea);
 		path = Geometry.filterPath(path, (p1, p2) ->
-			Perspective.localToMinimap(client, new LocalPoint((int) p1[0], (int) p1[1])) != null &&
-				Perspective.localToMinimap(client, new LocalPoint((int) p2[0], (int) p2[1])) != null);
+			Perspective.localToMinimap(client, new LocalPoint((int) p1[0], (int) p1[1], -1)) != null &&
+				Perspective.localToMinimap(client, new LocalPoint((int) p2[0], (int) p2[1], -1)) != null);
 		path = Geometry.transformPath(path, coords ->
 		{
-			final Point point = Perspective.localToMinimap(client, new LocalPoint((int) coords[0], (int) coords[1]));
+			final Point point = Perspective.localToMinimap(client, new LocalPoint((int) coords[0], (int) coords[1], -1));
 			if (point != null)
 			{
 				coords[0] = point.getX();
@@ -112,13 +111,13 @@ public class MultiIndicatorsMinimapOverlay extends Overlay
 		}
 
 		final Widget widget;
-		if (client.getWidget(WidgetInfo.FIXED_VIEWPORT_MINIMAP_DRAW_AREA) != null)
+		if (client.getWidget(ComponentID.FIXED_VIEWPORT_MINIMAP_DRAW_AREA) != null)
 		{
-			widget = client.getWidget(WidgetInfo.FIXED_VIEWPORT_MINIMAP_DRAW_AREA);
+			widget = client.getWidget(ComponentID.FIXED_VIEWPORT_MINIMAP_DRAW_AREA);
 		}
 		else
 		{
-			widget = client.getWidget(WidgetInfo.RESIZABLE_MINIMAP_STONES_DRAW_AREA);
+			widget = client.getWidget(ComponentID.RESIZABLE_VIEWPORT_MINIMAP_DRAW_AREA);
 		}
 
 		if (widget == null)
@@ -130,10 +129,10 @@ public class MultiIndicatorsMinimapOverlay extends Overlay
 
 		graphics.setClip(minimapClip);
 
-		final GeneralPath multicombatPath = plugin.getMulticombatPathToDisplay()[client.getPlane()];
-		final GeneralPath pvpPath = plugin.getPvpPathToDisplay()[client.getPlane()];
-		final GeneralPath wildernessLevelLinesPath = plugin.getWildernessLevelLinesPathToDisplay()[client.getPlane()];
-		final GeneralPath wildernessTeleportLinesPath = plugin.getWildernessTeleportLinesPathToDisplay()[client.getPlane()];
+		final GeneralPath multicombatPath = plugin.getMulticombatPathToDisplay()[client.getTopLevelWorldView().getPlane()];
+		final GeneralPath pvpPath = plugin.getPvpPathToDisplay()[client.getTopLevelWorldView().getPlane()];
+		final GeneralPath wildernessLevelLinesPath = plugin.getWildernessLevelLinesPathToDisplay()[client.getTopLevelWorldView().getPlane()];
+		final GeneralPath wildernessTeleportLinesPath = plugin.getWildernessTeleportLinesPathToDisplay()[client.getTopLevelWorldView().getPlane()];
 
 		if (config.multicombatZoneVisibility() != ZoneVisibility.HIDE && multicombatPath != null)
 		{

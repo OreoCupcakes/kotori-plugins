@@ -378,7 +378,7 @@ class HouseOverlayOverlay extends Overlay {
                         if(getter.toLowerCase().contains("last"))
                         {
                             lastaction = getter.replace(")", "").replace("(", "!");
-                            lastaction = lastaction = "Last: " + plugin.get_fairy_ring_name(lastaction.split("!")[1]);
+                            lastaction = "Last: " + plugin.get_fairy_ring_name(lastaction.split("!")[1]);
                             break;
                         }
                     }

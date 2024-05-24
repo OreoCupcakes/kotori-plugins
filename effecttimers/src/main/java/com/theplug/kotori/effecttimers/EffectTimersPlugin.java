@@ -34,7 +34,6 @@ import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.*;
-import net.runelite.api.kit.KitType;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.input.KeyManager;
@@ -142,7 +141,7 @@ public class EffectTimersPlugin extends Plugin
 
 		EnumSet<WorldType> worldTypes = client.getWorldType();
 
-		for (Actor actor : client.getPlayers())
+		for (Actor actor : client.getTopLevelWorldView().players())
 		{
 			if (!timerManager.hasTimerActive(actor, TimerType.TELEBLOCK))
 			{
@@ -225,7 +224,7 @@ public class EffectTimersPlugin extends Plugin
 
 	private boolean isAtVorkath()
 	{
-		return ArrayUtils.contains(client.getMapRegions(), VORKATH_REGION);
+		return client.getLocalPlayer().getWorldLocation().getRegionID() == VORKATH_REGION;
 	}
 	
 	@Subscribe

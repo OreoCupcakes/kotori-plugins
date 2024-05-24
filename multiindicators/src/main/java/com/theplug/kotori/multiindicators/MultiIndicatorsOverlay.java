@@ -33,7 +33,6 @@ import net.runelite.api.geometry.Geometry;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
-import net.runelite.client.ui.overlay.OverlayPriority;
 
 import javax.inject.Inject;
 import java.awt.*;
@@ -60,7 +59,7 @@ public class MultiIndicatorsOverlay extends Overlay
 		this.config = config;
 		setPosition(OverlayPosition.DYNAMIC);
 		setLayer(OverlayLayer.ABOVE_SCENE);
-		setPriority(OverlayPriority.LOW);
+		setPriority(Overlay.PRIORITY_LOW);
 	}
 
 	private Color getTransparentColorVersion(Color c)
@@ -95,11 +94,11 @@ public class MultiIndicatorsOverlay extends Overlay
 		}
 		path = Geometry.clipPath(path, viewArea);
 		path = Geometry.filterPath(path, (p1, p2) ->
-			Perspective.localToCanvas(client, new LocalPoint((int) p1[0], (int) p1[1]), client.getPlane()) != null &&
-				Perspective.localToCanvas(client, new LocalPoint((int) p2[0], (int) p2[1]), client.getPlane()) != null);
+			Perspective.localToCanvas(client, new LocalPoint((int) p1[0], (int) p1[1], -1), client.getTopLevelWorldView().getPlane()) != null &&
+				Perspective.localToCanvas(client, new LocalPoint((int) p2[0], (int) p2[1], -1), client.getTopLevelWorldView().getPlane()) != null);
 		path = Geometry.transformPath(path, coords ->
 		{
-			Point point = Perspective.localToCanvas(client, new LocalPoint((int) coords[0], (int) coords[1]), client.getPlane());
+			Point point = Perspective.localToCanvas(client, new LocalPoint((int) coords[0], (int) coords[1], -1), client.getTopLevelWorldView().getPlane());
 			if (point != null)
 			{
 				coords[0] = point.getX();
@@ -113,10 +112,10 @@ public class MultiIndicatorsOverlay extends Overlay
 	@Override
 	public Dimension render(Graphics2D graphics)
 	{
-		GeneralPath multicombatPath = plugin.getMulticombatPathToDisplay()[client.getPlane()];
-		GeneralPath pvpPath = plugin.getPvpPathToDisplay()[client.getPlane()];
-		GeneralPath wildernessLevelLinesPath = plugin.getWildernessLevelLinesPathToDisplay()[client.getPlane()];
-		GeneralPath wildernessTeleportLinesPath = plugin.getWildernessTeleportLinesPathToDisplay()[client.getPlane()];
+		GeneralPath multicombatPath = plugin.getMulticombatPathToDisplay()[client.getTopLevelWorldView().getPlane()];
+		GeneralPath pvpPath = plugin.getPvpPathToDisplay()[client.getTopLevelWorldView().getPlane()];
+		GeneralPath wildernessLevelLinesPath = plugin.getWildernessLevelLinesPathToDisplay()[client.getTopLevelWorldView().getPlane()];
+		GeneralPath wildernessTeleportLinesPath = plugin.getWildernessTeleportLinesPathToDisplay()[client.getTopLevelWorldView().getPlane()];
 
 		if (config.multicombatZoneVisibility() != ZoneVisibility.HIDE && multicombatPath != null)
 		{

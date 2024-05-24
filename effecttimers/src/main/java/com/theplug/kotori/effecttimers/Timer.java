@@ -26,17 +26,12 @@ package com.theplug.kotori.effecttimers;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 import com.theplug.kotori.kotoriutils.methods.InventoryInteractions;
 import lombok.EqualsAndHashCode;
 import lombok.Setter;
 import lombok.ToString;
 import net.runelite.api.*;
-import net.runelite.api.kit.KitType;
 
 @ToString
 @EqualsAndHashCode

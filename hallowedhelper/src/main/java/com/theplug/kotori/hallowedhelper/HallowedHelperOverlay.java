@@ -137,13 +137,13 @@ class HallowedHelperOverlay extends Overlay
         }
         else if(plugin.currentfloor == 5)
         {
-            if(client.getPlane() == 2) {
+            if(client.getTopLevelWorldView().getPlane() == 2) {
                 render_floor5_statues(graphics);
             }
-            else if(client.getPlane() == 1) {
+            else if(client.getTopLevelWorldView().getPlane() == 1) {
                 render_floor5_2A_statues(graphics);
             }
-            else if(client.getPlane() == 0) {
+            else if(client.getTopLevelWorldView().getPlane() == 0) {
                 render_floor5_4_statues(graphics);
             }
         }
@@ -403,7 +403,7 @@ class HallowedHelperOverlay extends Overlay
     public void render_statue_ticks_floor_4_5_tile(Graphics2D graphics, WorldPoint worldPoint, Color color, String text, int offsetx, int offsety)
     {
         WorldPoint w = new WorldPoint(worldPoint.getX() + offsetx, worldPoint.getY() + offsety, worldPoint.getPlane());
-        final LocalPoint localPoint = LocalPoint.fromWorld(client, w);
+        final LocalPoint localPoint = LocalPoint.fromWorld(client.getTopLevelWorldView(), w);
     
         if (localPoint == null)
         {
@@ -428,14 +428,9 @@ class HallowedHelperOverlay extends Overlay
         {
             if(plugin.subfloor == 3)
             {
-                if(client.getPlane() == 2)
+                if(client.getTopLevelWorldView().getPlane() == 2)
                 {
-                    LocalPoint lp = new LocalPoint(4159, 7103);
-                    if (lp == null)
-                    {
-                        return;
-                    }
-
+                    LocalPoint lp = new LocalPoint(4159, 7103, -1);
                     if(WorldPoint.fromLocal(client, lp).getPlane() != 2)
                     {
                         return;
@@ -487,7 +482,7 @@ class HallowedHelperOverlay extends Overlay
     {
         for(NPC arrow : plugin.getArrows())
         {
-            if (arrow.getWorldLocation().getPlane() != client.getPlane())
+            if (arrow.getWorldLocation().getPlane() != client.getTopLevelWorldView().getPlane())
             {
                 continue;
             }
@@ -521,7 +516,7 @@ class HallowedHelperOverlay extends Overlay
         for(HallowedSepulchreSword SWORDCLASS : plugin.getSwords())
         {
             NPC sword = SWORDCLASS.getNpc();
-            if (sword.getWorldLocation().getPlane() != client.getPlane())
+            if (sword.getWorldLocation().getPlane() != client.getTopLevelWorldView().getPlane())
             {
                 continue;
             }
@@ -746,7 +741,7 @@ class HallowedHelperOverlay extends Overlay
     public void render_object_server_tile(Graphics2D graphics, WorldPoint worldlocation, Color color, int offsetx, int offsety)
     {
         WorldPoint w = new WorldPoint(worldlocation.getX() + offsetx, worldlocation.getY() + offsety, worldlocation.getPlane());
-        final LocalPoint localPoint = LocalPoint.fromWorld(client, w);
+        final LocalPoint localPoint = LocalPoint.fromWorld(client.getTopLevelWorldView(), w);
 
         if (localPoint == null)
         {
@@ -766,7 +761,7 @@ class HallowedHelperOverlay extends Overlay
     public void render_object_server_tile_group(Graphics2D graphics, WorldPoint worldlocation, Color color, int offsetx, int offsety)
     {
         WorldPoint w = new WorldPoint(worldlocation.getX() + offsetx, worldlocation.getY() + offsety, worldlocation.getPlane());
-        final LocalPoint localPoint = LocalPoint.fromWorld(client, w);
+        final LocalPoint localPoint = LocalPoint.fromWorld(client.getTopLevelWorldView(), w);
 
         if (localPoint == null)
         {
@@ -790,7 +785,7 @@ class HallowedHelperOverlay extends Overlay
         //HIER FIXEN DAT ALLEEN DE EERSTE GESHOWED WORDT
         for(GroundObject bridge : plugin.getBridges())
         {
-            if (bridge.getPlane() != client.getPlane())
+            if (bridge.getPlane() != client.getTopLevelWorldView().getPlane())
             {
                 continue;
             }
@@ -832,7 +827,7 @@ class HallowedHelperOverlay extends Overlay
     {
         for(GameObject portal : plugin.getPortals())
         {
-            if (portal.getPlane() != client.getPlane())
+            if (portal.getPlane() != client.getTopLevelWorldView().getPlane())
             {
                 continue;
             }
@@ -883,7 +878,7 @@ class HallowedHelperOverlay extends Overlay
     {
         for(GameObject chest : plugin.getChests())
         {
-            if (chest.getPlane() != client.getPlane())
+            if (chest.getPlane() != client.getTopLevelWorldView().getPlane())
             {
                 continue;
             }
@@ -934,7 +929,7 @@ class HallowedHelperOverlay extends Overlay
 
     public void render_floor_2(Graphics2D graphics)
     {
-        if(plugin.getFloor_gates().size() == 0)
+        if(plugin.getFloor_gates().isEmpty())
         {
             return;
         }
@@ -975,7 +970,7 @@ class HallowedHelperOverlay extends Overlay
 
         Player local = client.getLocalPlayer();
 
-        int clientplane = client.getPlane();
+        int clientplane = client.getTopLevelWorldView().getPlane();
         for(GameObject stairs : plugin.getFloor_gates())
         {
             if (stairs.getPlane() != clientplane)
@@ -1049,7 +1044,7 @@ class HallowedHelperOverlay extends Overlay
         for(GameObject stairs : plugin.getStairs())
         {
 
-            if (stairs.getPlane() != client.getPlane())
+            if (stairs.getPlane() != client.getTopLevelWorldView().getPlane())
             {
                 continue;
             }
@@ -1087,7 +1082,7 @@ class HallowedHelperOverlay extends Overlay
             return;
         }
 
-        final LocalPoint localPoint = LocalPoint.fromWorld(client, worldPoint);
+        final LocalPoint localPoint = LocalPoint.fromWorld(client.getTopLevelWorldView(), worldPoint);
 
         if (localPoint == null)
         {
@@ -1107,14 +1102,14 @@ class HallowedHelperOverlay extends Overlay
 
     public Polygon TileOffsetter(LocalPoint point, int offsetx, int offsety)
     {
-        return Perspective.getCanvasTilePoly(client, new LocalPoint(point.getX() + (offsetx * Perspective.LOCAL_TILE_SIZE), point.getY() + (offsety * Perspective.LOCAL_TILE_SIZE)));
+        return Perspective.getCanvasTilePoly(client, new LocalPoint(point.getX() + (offsetx * Perspective.LOCAL_TILE_SIZE), point.getY() + (offsety * Perspective.LOCAL_TILE_SIZE), -1));
     }
 
     public void OverlayText(Graphics2D graphics, LocalPoint lp, String text, Color color, int offsetx, int offsety)
     {
         final Point textPoint = Perspective.getCanvasTextLocation(client,
                 graphics,
-                new LocalPoint(lp.getX() + (offsetx * Perspective.LOCAL_TILE_SIZE), lp.getY() + (offsety * Perspective.LOCAL_TILE_SIZE)),
+                new LocalPoint(lp.getX() + (offsetx * Perspective.LOCAL_TILE_SIZE), lp.getY() + (offsety * Perspective.LOCAL_TILE_SIZE), -1),
                 text,
                 0);
 
@@ -1150,7 +1145,7 @@ class HallowedHelperOverlay extends Overlay
 
     public LocalPoint localpointoffset(LocalPoint lp, int offsetx, int offsety)
     {
-        return new LocalPoint(lp.getX() + (offsetx * Perspective.LOCAL_TILE_SIZE), lp.getY() + (offsety * Perspective.LOCAL_TILE_SIZE));
+        return new LocalPoint(lp.getX() + (offsetx * Perspective.LOCAL_TILE_SIZE), lp.getY() + (offsety * Perspective.LOCAL_TILE_SIZE), -1);
     }
 
     private static final int CROSSBOW_STATUE_ANIM_DEFAULT = 8681;
@@ -1164,7 +1159,7 @@ class HallowedHelperOverlay extends Overlay
 
         for (final GameObject gameObject : plugin.getCrossbowStatues())
         {
-            if (!gameObject.getWorldLocation().isInScene(client) || isOutsideRenderDistance(gameObject.getLocalLocation()))
+            if (!gameObject.getWorldLocation().isInScene(client.getTopLevelWorldView()) || isOutsideRenderDistance(gameObject.getLocalLocation()))
             {
                 continue;
             }
@@ -1197,7 +1192,7 @@ class HallowedHelperOverlay extends Overlay
 
         for (final GameObject gameObject : plugin.getSwordStatues())
         {
-            if (!gameObject.getWorldLocation().isInScene(client) || isOutsideRenderDistance(gameObject.getLocalLocation()))
+            if (!gameObject.getWorldLocation().isInScene(client.getTopLevelWorldView()) || isOutsideRenderDistance(gameObject.getLocalLocation()))
             {
                 continue;
             }
@@ -1240,7 +1235,7 @@ class HallowedHelperOverlay extends Overlay
                     log.info("Wtf GameOBJECT is NULL");
                 return;
             }
-            if (!gameObject.getWorldLocation().isInScene(client) || isOutsideRenderDistance(gameObject.getLocalLocation()))
+            if (!gameObject.getWorldLocation().isInScene(client.getTopLevelWorldView()) || isOutsideRenderDistance(gameObject.getLocalLocation()))
             {
                 continue;
             }
@@ -1315,7 +1310,7 @@ class HallowedHelperOverlay extends Overlay
                 int diffrenceinticks = Math.abs(ticks - maxTick);
                 int ticksuntillunsafe = -1;
                 if(config.ShowValues()) {
-                    OverlayUtil.renderTileOverlay(graphics, statue.getGameObject(), "" + statue.getTicksUntilNextAnimation() + "/" + maxTick, color);
+                    OverlayUtil.renderTileOverlay(graphics, statue.getGameObject(), statue.getTicksUntilNextAnimation() + "/" + maxTick, color);
                 }
                 else
                 {
@@ -1340,7 +1335,7 @@ class HallowedHelperOverlay extends Overlay
     public boolean checkarrow_in_line(WorldPoint point, boolean x)
     {
         for(NPC arrow : plugin.getArrows()) {
-            if (arrow.getWorldLocation().getPlane() != client.getPlane()) {
+            if (arrow.getWorldLocation().getPlane() != client.getTopLevelWorldView().getPlane()) {
                 continue;
             }
             if (isOutsideRenderDistance(arrow.getLocalLocation())) {
@@ -1378,7 +1373,7 @@ class HallowedHelperOverlay extends Overlay
             }
 
             WorldPoint w = WorldPoint.fromLocal(client, l);
-            if(w.getPlane() != client.getPlane())
+            if(w.getPlane() != client.getTopLevelWorldView().getPlane())
             {
                 continue;
             }
@@ -1420,7 +1415,7 @@ class HallowedHelperOverlay extends Overlay
             }
             
             WorldPoint w = WorldPoint.fromLocal(client, l);
-            if(w.getPlane() != client.getPlane())
+            if(w.getPlane() != client.getTopLevelWorldView().getPlane())
             {
                 continue;
             }
@@ -1441,7 +1436,7 @@ class HallowedHelperOverlay extends Overlay
     {
         int or = (gameObject.getOrientation() / 512);
         WorldPoint point = gameObject.getWorldLocation();
-        LocalPoint lp = LocalPoint.fromWorld(client, point);
+        LocalPoint lp = LocalPoint.fromWorld(client.getTopLevelWorldView(), point);
 
 
         if(or == 1 || or == 3)
@@ -1460,7 +1455,7 @@ class HallowedHelperOverlay extends Overlay
             offset++;
             offset2++;
 
-            if(!overlaytext.equals("")) {
+            if(!overlaytext.isEmpty()) {
                 if (plugin.currentfloor != 4 || !plugin.isFloor4ComplicatedWizardStatues)
                 {
                     OverlayText(graphics, lp, overlaytext, color, offset, offset2);
@@ -1470,7 +1465,7 @@ class HallowedHelperOverlay extends Overlay
 
 
             //int distance = gameObject.getWorldLocation().distanceTo2D(client.getLocalPlayer().getWorldLocation());
-            LocalPoint pointoffset1 = localpointoffset(lp, (base * 1) + offset, offset2);
+            LocalPoint pointoffset1 = localpointoffset(lp, (base) + offset, offset2);
             LocalPoint pointoffset2 = localpointoffset(lp, (base * 2) + offset, offset2);
             LocalPoint pointoffset3 = localpointoffset(lp, (base * 3) + offset, offset2);
             Color color1 = color;
@@ -1515,17 +1510,17 @@ class HallowedHelperOverlay extends Overlay
 
             if(config.ShowValues()) {
                 int distance = WorldPoint.fromLocal(client, pointoffset1).distanceTo2D(client.getLocalPlayer().getWorldLocation());
-                OverlayText(graphics, lp, "" + distance + " (" + (Math.abs(distance - diffrenceinticks)) + ")", Color.ORANGE, (base * 1) + offset, offset2);
+                OverlayText(graphics, lp, distance + " (" + (Math.abs(distance - diffrenceinticks)) + ")", Color.ORANGE, (base) + offset, offset2);
                 int distance2 = WorldPoint.fromLocal(client, pointoffset2).distanceTo2D(client.getLocalPlayer().getWorldLocation());
-                OverlayText(graphics, lp, "" + distance2 + " (" + (Math.abs(distance - diffrenceinticks)) + ")", Color.ORANGE, (base * 2) + offset, offset2);
+                OverlayText(graphics, lp, distance2 + " (" + (Math.abs(distance - diffrenceinticks)) + ")", Color.ORANGE, (base * 2) + offset, offset2);
                 int distance3 = WorldPoint.fromLocal(client, pointoffset3).distanceTo2D(client.getLocalPlayer().getWorldLocation());
-                OverlayText(graphics, lp, "" + distance3 + " (" + (Math.abs(distance - diffrenceinticks)) + ")", Color.ORANGE, (base * 3) + offset, offset2);
+                OverlayText(graphics, lp, distance3 + " (" + (Math.abs(distance - diffrenceinticks)) + ")", Color.ORANGE, (base * 3) + offset, offset2);
             }
             if ((plugin.currentfloor == 4 && plugin.gameticksOnFloor4Plane2SouthSide < 20) || plugin.currentfloor == 5)
             {
                 return;
             }
-            Polygon pl  = TileOffsetter(lp, (base * 1) + offset, offset2);
+            Polygon pl  = TileOffsetter(lp, (base) + offset, offset2);
             if(pl == null)
             {
                 return;
@@ -1558,14 +1553,14 @@ class HallowedHelperOverlay extends Overlay
             offset++;
             offset2++;
 
-            if(!overlaytext.equals("")) {
+            if(!overlaytext.isEmpty()) {
                 if (plugin.currentfloor != 4 || !plugin.isFloor4ComplicatedWizardStatues)
                 {
                     OverlayText(graphics, lp, overlaytext, color, offset, offset2);
                 }
             }
 
-            LocalPoint pointoffset1 = localpointoffset(lp, offset2, (base * 1) + offset);
+            LocalPoint pointoffset1 = localpointoffset(lp, offset2, (base) + offset);
             LocalPoint pointoffset2 = localpointoffset(lp, offset2, (base * 2) + offset);
             LocalPoint pointoffset3 = localpointoffset(lp, offset2, (base * 3) + offset2);
             Color color1 = color;
@@ -1589,17 +1584,17 @@ class HallowedHelperOverlay extends Overlay
 
             if(config.ShowValues()) {
                 int distance = WorldPoint.fromLocal(client, pointoffset1).distanceTo2D(client.getLocalPlayer().getWorldLocation());
-                OverlayText(graphics, lp, "" + distance + " (" + (Math.abs(distance - diffrenceinticks)) + ")", Color.ORANGE, offset2, (base * 1) + offset);
+                OverlayText(graphics, lp, distance + " (" + (Math.abs(distance - diffrenceinticks)) + ")", Color.ORANGE, offset2, (base) + offset);
                 int distance2 = WorldPoint.fromLocal(client, pointoffset2).distanceTo2D(client.getLocalPlayer().getWorldLocation());
-                OverlayText(graphics, lp, "" + distance2 + " (" + (Math.abs(distance - diffrenceinticks)) + ")", Color.ORANGE, offset2, (base * 2) + offset);
+                OverlayText(graphics, lp, distance2 + " (" + (Math.abs(distance - diffrenceinticks)) + ")", Color.ORANGE, offset2, (base * 2) + offset);
                 int distance3 = WorldPoint.fromLocal(client, pointoffset3).distanceTo2D(client.getLocalPlayer().getWorldLocation());
-                OverlayText(graphics, lp, "" + distance3 + " (" + (Math.abs(distance - diffrenceinticks)) + ")", Color.ORANGE, offset2, (base * 3) + offset);
+                OverlayText(graphics, lp, distance3 + " (" + (Math.abs(distance - diffrenceinticks)) + ")", Color.ORANGE, offset2, (base * 3) + offset);
             }
             if ((plugin.currentfloor == 4 && plugin.gameticksOnFloor4Plane2SouthSide < 20) || plugin.currentfloor == 5)
             {
                 return;
             }
-            Polygon pl  = TileOffsetter(lp, offset2, (base * 1) + offset);
+            Polygon pl  = TileOffsetter(lp, offset2, (base) + offset);
             if(pl == null)
             {
                 return;
@@ -1654,6 +1649,6 @@ class HallowedHelperOverlay extends Overlay
         }
 
         LocalPoint playerpoint = player.getLocalLocation();
-        return (int)Math.hypot((double)(x - playerpoint.getX()), (double)(y - playerpoint.getY())) >= maxDistance;
+        return (int)Math.hypot(x - playerpoint.getX(), y - playerpoint.getY()) >= maxDistance;
     }
 }

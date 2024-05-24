@@ -156,7 +156,7 @@ public class MultiIndicatorsPlugin extends Plugin
 
 	private void transformWorldToLocal(float[] coords)
 	{
-		LocalPoint lp = LocalPoint.fromWorld(client, (int) coords[0], (int) coords[1]);
+		LocalPoint lp = LocalPoint.fromWorld(client.getTopLevelWorldView(), (int) coords[0], (int) coords[1]);
 		if (lp != null)
 		{
 			coords[0] = lp.getX() - Perspective.LOCAL_TILE_SIZE / 2;
@@ -166,10 +166,10 @@ public class MultiIndicatorsPlugin extends Plugin
 
 	private boolean isOpenableAt(WorldPoint wp)
 	{
-		int sceneX = wp.getX() - client.getBaseX();
-		int sceneY = wp.getY() - client.getBaseY();
+		int sceneX = wp.getX() - client.getTopLevelWorldView().getBaseX();
+		int sceneY = wp.getY() - client.getTopLevelWorldView().getBaseY();
 
-		Tile tile = client.getScene().getTiles()[wp.getPlane()][sceneX][sceneY];
+		Tile tile = client.getTopLevelWorldView().getScene().getTiles()[wp.getPlane()][sceneX][sceneY];
 		if (tile == null)
 		{
 			return false;
@@ -194,7 +194,7 @@ public class MultiIndicatorsPlugin extends Plugin
 			return false;
 		}
 
-		return Arrays.stream(actions).anyMatch(x -> x != null && x.toLowerCase().equals("open"));
+		return Arrays.stream(actions).anyMatch(x -> x != null && x.equalsIgnoreCase("open"));
 	}
 
 	private boolean collisionFilter(float[] p1, float[] p2)
@@ -232,8 +232,8 @@ public class MultiIndicatorsPlugin extends Plugin
 			return true;
 		}
 
-		boolean b1 = wa1.canTravelInDirection(client, -dy, -dx);
-		boolean b2 = wa2.canTravelInDirection(client, dy, dx);
+		boolean b1 = wa1.canTravelInDirection(client.getTopLevelWorldView(), -dy, -dx);
+		boolean b2 = wa2.canTravelInDirection(client.getTopLevelWorldView(), dy, dx);
 		return b1 && b2;
 	}
 
@@ -245,7 +245,7 @@ public class MultiIndicatorsPlugin extends Plugin
 			x == WorldType.PVP);
 
 		Rectangle sceneRect = new Rectangle(
-			client.getBaseX() + 1, client.getBaseY() + 1,
+			client.getTopLevelWorldView().getBaseX() + 1, client.getTopLevelWorldView().getBaseY() + 1,
 			Constants.SCENE_SIZE - 2, Constants.SCENE_SIZE - 2);
 
 		// Generate lines for multicombat zones

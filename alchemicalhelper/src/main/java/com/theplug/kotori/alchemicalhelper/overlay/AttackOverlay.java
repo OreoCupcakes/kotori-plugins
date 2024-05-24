@@ -100,6 +100,7 @@ public class AttackOverlay extends Overlay
 
 		setPosition(OverlayPosition.BOTTOM_RIGHT);
 		setLayer(OverlayLayer.UNDER_WIDGETS);
+		setPriority(Overlay.PRIORITY_HIGHEST);
 	}
 
 	@Override

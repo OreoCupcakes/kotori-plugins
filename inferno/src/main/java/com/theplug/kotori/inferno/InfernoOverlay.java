@@ -30,7 +30,6 @@ import com.theplug.kotori.inferno.displaymodes.InfernoSafespotDisplayMode;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
-import net.runelite.client.ui.overlay.OverlayPriority;
 import net.runelite.client.ui.overlay.OverlayUtil;
 
 public class InfernoOverlay extends Overlay
@@ -51,7 +50,7 @@ public class InfernoOverlay extends Overlay
 		this.config = config;
 		setPosition(OverlayPosition.DYNAMIC);
 		setLayer(OverlayLayer.ABOVE_WIDGETS);
-		setPriority(OverlayPriority.HIGHEST);
+		setPriority(Overlay.PRIORITY_HIGHEST);
 	}
 
 	@Override
@@ -171,7 +170,7 @@ public class InfernoOverlay extends Overlay
 	{
 		for (WorldPoint worldPoint : plugin.getObstacles())
 		{
-			final LocalPoint localPoint = LocalPoint.fromWorld(client, worldPoint);
+			final LocalPoint localPoint = LocalPoint.fromWorld(client.getTopLevelWorldView(), worldPoint);
 
 			if (localPoint == null)
 			{
@@ -245,7 +244,7 @@ public class InfernoOverlay extends Overlay
 
 			for (WorldPoint worldPoint : plugin.getSafeSpotAreas().get(safeSpotId))
 			{
-				final LocalPoint localPoint = LocalPoint.fromWorld(client, worldPoint);
+				final LocalPoint localPoint = LocalPoint.fromWorld(client.getTopLevelWorldView(), worldPoint);
 
 				if (localPoint == null)
 				{
@@ -259,19 +258,20 @@ public class InfernoOverlay extends Overlay
 					continue;
 				}
 
-				renderAreaTilePolygon(graphics, tilePoly, colorFill);
+                assert colorFill != null;
+                renderAreaTilePolygon(graphics, tilePoly, colorFill);
 
 				final int[][] edge1 = new int[][]{{tilePoly.xpoints[0], tilePoly.ypoints[0]}, {tilePoly.xpoints[1], tilePoly.ypoints[1]}};
-				edgeSizeSquared += Math.pow(tilePoly.xpoints[0] - tilePoly.xpoints[1], 2) + Math.pow(tilePoly.ypoints[0] - tilePoly.ypoints[1], 2);
+				edgeSizeSquared += (int) (Math.pow(tilePoly.xpoints[0] - tilePoly.xpoints[1], 2) + Math.pow(tilePoly.ypoints[0] - tilePoly.ypoints[1], 2));
 				allEdges.add(edge1);
 				final int[][] edge2 = new int[][]{{tilePoly.xpoints[1], tilePoly.ypoints[1]}, {tilePoly.xpoints[2], tilePoly.ypoints[2]}};
-				edgeSizeSquared += Math.pow(tilePoly.xpoints[1] - tilePoly.xpoints[2], 2) + Math.pow(tilePoly.ypoints[1] - tilePoly.ypoints[2], 2);
+				edgeSizeSquared += (int) (Math.pow(tilePoly.xpoints[1] - tilePoly.xpoints[2], 2) + Math.pow(tilePoly.ypoints[1] - tilePoly.ypoints[2], 2));
 				allEdges.add(edge2);
 				final int[][] edge3 = new int[][]{{tilePoly.xpoints[2], tilePoly.ypoints[2]}, {tilePoly.xpoints[3], tilePoly.ypoints[3]}};
-				edgeSizeSquared += Math.pow(tilePoly.xpoints[2] - tilePoly.xpoints[3], 2) + Math.pow(tilePoly.ypoints[2] - tilePoly.ypoints[3], 2);
+				edgeSizeSquared += (int) (Math.pow(tilePoly.xpoints[2] - tilePoly.xpoints[3], 2) + Math.pow(tilePoly.ypoints[2] - tilePoly.ypoints[3], 2));
 				allEdges.add(edge3);
 				final int[][] edge4 = new int[][]{{tilePoly.xpoints[3], tilePoly.ypoints[3]}, {tilePoly.xpoints[0], tilePoly.ypoints[0]}};
-				edgeSizeSquared += Math.pow(tilePoly.xpoints[3] - tilePoly.xpoints[0], 2) + Math.pow(tilePoly.ypoints[3] - tilePoly.ypoints[0], 2);
+				edgeSizeSquared += (int) (Math.pow(tilePoly.xpoints[3] - tilePoly.xpoints[0], 2) + Math.pow(tilePoly.ypoints[3] - tilePoly.ypoints[0], 2));
 				allEdges.add(edge4);
 			}
 
@@ -283,7 +283,7 @@ public class InfernoOverlay extends Overlay
 			edgeSizeSquared /= allEdges.size();
 
 			//Find and indicate unique edges
-			final int toleranceSquared = (int) Math.ceil(edgeSizeSquared / 6);
+			final int toleranceSquared = (int) (double) (edgeSizeSquared / 6);
 
 			for (int i = 0; i < allEdges.size(); i++)
 			{
@@ -390,7 +390,7 @@ public class InfernoOverlay extends Overlay
 				continue;
 			}
 
-			final LocalPoint localPoint = LocalPoint.fromWorld(client, worldPoint);
+			final LocalPoint localPoint = LocalPoint.fromWorld(client.getTopLevelWorldView(), worldPoint);
 
 			if (localPoint == null)
 			{
@@ -452,7 +452,7 @@ public class InfernoOverlay extends Overlay
 
 	private void renderNpcLocation(Graphics2D graphics, InfernoNPC infernoNPC)
 	{
-		final LocalPoint localPoint = LocalPoint.fromWorld(client, infernoNPC.getNpc().getWorldLocation());
+		final LocalPoint localPoint = LocalPoint.fromWorld(client.getTopLevelWorldView(), infernoNPC.getNpc().getWorldLocation());
 
 		if (localPoint != null)
 		{
@@ -494,11 +494,11 @@ public class InfernoOverlay extends Overlay
 				}
 
 				int baseX = (int) prayerWidget.getBounds().getX();
-				baseX += prayerWidget.getBounds().getWidth() / 2;
+				baseX += (int) (prayerWidget.getBounds().getWidth() / 2);
 				baseX -= BOX_WIDTH / 2;
 
 				int baseY = (int) prayerWidget.getBounds().getY() - tick * TICK_PIXEL_SIZE - BOX_HEIGHT;
-				baseY += TICK_PIXEL_SIZE - ((plugin.getLastTick() + 600 - System.currentTimeMillis()) / 600.0 * TICK_PIXEL_SIZE);
+				baseY += (int) (TICK_PIXEL_SIZE - ((plugin.getLastTick() + 600 - System.currentTimeMillis()) / 600.0 * TICK_PIXEL_SIZE));
 
 				final Rectangle boxRectangle = new Rectangle(BOX_WIDTH, BOX_HEIGHT);
 				boxRectangle.translate(baseX, baseY);

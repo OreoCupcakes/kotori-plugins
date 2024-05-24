@@ -37,7 +37,7 @@ class PrayerWidgetOverlay extends Overlay
         this.bossModule = bossModule;
 
         setPosition(OverlayPosition.DYNAMIC);
-        setPriority(OverlayPriority.HIGH);
+        setPriority(Overlay.PRIORITY_HIGHEST);
         setLayer(OverlayLayer.ABOVE_WIDGETS);
     }
 

@@ -86,6 +86,7 @@ public class InfoboxOverlay extends Overlay
 		this.spriteManager = spriteManager;
 
 		setPosition(OverlayPosition.BOTTOM_RIGHT);
+		setPriority(Overlay.PRIORITY_HIGHEST);
 		setLayer(OverlayLayer.ABOVE_WIDGETS);
 	}
 

@@ -35,7 +35,6 @@ import javax.inject.Inject;
 import net.runelite.api.Actor;
 import net.runelite.api.Client;
 import net.runelite.api.Point;
-import net.runelite.client.config.ConfigManager;
 import net.runelite.client.ui.FontManager;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
@@ -50,7 +49,7 @@ public class EffectTimersOverlay extends Overlay
 	private Client client;
 
 	@Inject
-	private EffectTimersConfig config;
+	private final EffectTimersConfig config;
 
 	private final Font timerFont = FontManager.getRunescapeBoldFont().deriveFont(14.0f);
 
@@ -60,6 +59,7 @@ public class EffectTimersOverlay extends Overlay
 		super();
 		this.config = config;
 		setPosition(OverlayPosition.DYNAMIC);
+		setPriority(Overlay.PRIORITY_HIGHEST);
 		setLayer(OverlayLayer.UNDER_WIDGETS);
 	}
 
@@ -72,12 +72,12 @@ public class EffectTimersOverlay extends Overlay
 
 		if (config.showNpcs())
 		{
-			client.getNpcs().forEach((a) -> renderActor(g, a));
+			client.getTopLevelWorldView().npcs().forEach((a) -> renderActor(g, a));
 		}
 
 		if (config.showPlayers())
 		{
-			client.getPlayers().forEach((a) -> renderActor(g, a));
+			client.getTopLevelWorldView().players().forEach((a) -> renderActor(g, a));
 		}
 
 		g.setFont(oldFont);
@@ -161,7 +161,7 @@ public class EffectTimersOverlay extends Overlay
 				long minSecondsMillisRemaining = timer.getMillisForRender();
 				if (minSecondsMillisRemaining == -1)
 				{
-					return false; // this shouldnt happen but just in case
+					return false; // this shouldn't happen but just in case
 				}
 				text = formatTimeMMSSMS(minSecondsMillisRemaining);
 				break;
@@ -169,7 +169,7 @@ public class EffectTimersOverlay extends Overlay
 				long secondsRemaining = timer.getMillisForRender();
 				if (secondsRemaining == -1)
 				{
-					return false; // this shouldnt happen but just in case
+					return false; // this shouldn't happen but just in case
 				}
 				text = formatTimeSS(secondsRemaining);
 				break;
@@ -241,7 +241,7 @@ public class EffectTimersOverlay extends Overlay
 	{
 		if (time > 59999)
 		{
-			return formatSeconds(((int) (time % 60000) / 1000)) + "";
+			return formatSeconds(((int) (time % 60000) / 1000));
 		}
 		else if (time > 9999)
 		{

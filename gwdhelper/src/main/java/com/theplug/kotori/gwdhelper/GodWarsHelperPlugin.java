@@ -46,7 +46,6 @@ import net.runelite.client.util.HotkeyListener;
 
 import javax.inject.Inject;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Slf4j
@@ -191,7 +190,7 @@ public class GodWarsHelperPlugin extends Plugin
 	private void init()
 	{
 		npcContainers.clear();
-		for (NPC npc : client.getNpcs())
+		for (NPC npc : client.getTopLevelWorldView().npcs())
 		{
 			addNpc(npc);
 		}

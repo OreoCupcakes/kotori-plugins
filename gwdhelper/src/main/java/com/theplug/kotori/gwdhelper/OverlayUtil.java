@@ -32,7 +32,7 @@ public class OverlayUtil
 		{
 			return;
 		}
-		LocalPoint lp = LocalPoint.fromWorld(client, point);
+		LocalPoint lp = LocalPoint.fromWorld(client.getTopLevelWorldView(), point);
 		if (lp == null)
 		{
 			return;

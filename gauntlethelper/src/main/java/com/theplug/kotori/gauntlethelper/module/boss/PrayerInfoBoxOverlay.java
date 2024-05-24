@@ -10,7 +10,6 @@ import net.runelite.client.game.SpriteManager;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
-import net.runelite.client.ui.overlay.OverlayPriority;
 import net.runelite.client.ui.overlay.components.ComponentConstants;
 import net.runelite.client.ui.overlay.components.InfoBoxComponent;
 import net.runelite.client.ui.overlay.components.PanelComponent;
@@ -61,7 +60,7 @@ class PrayerInfoBoxOverlay extends Overlay
         panelComponent.setBorder(new Rectangle(0, 0, 0, 0));
 
         setPosition(OverlayPosition.BOTTOM_RIGHT);
-        setPriority(OverlayPriority.HIGH);
+        setPriority(Overlay.PRIORITY_HIGHEST);
         setLayer(OverlayLayer.UNDER_WIDGETS);
     }
 

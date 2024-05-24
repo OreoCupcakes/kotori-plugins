@@ -279,7 +279,7 @@ public class HallowedHelperInfoPanel extends OverlayPanel
 
     public String getSubFloor()
     {
-        if(plugin.getBridges().size() > 0)
+        if(!plugin.getBridges().isEmpty())
         {
             GroundObject bridge = plugin.getBridges().iterator().next();
             int xdistance = (bridge.getX() - client.getLocalPlayer().getLocalLocation().getX());
@@ -287,7 +287,7 @@ public class HallowedHelperInfoPanel extends OverlayPanel
                 return "C";
             }
         }
-        switch(client.getMapRegions()[0])
+        switch(client.getLocalPlayer().getWorldLocation().getRegionID())
         {
             case 8796:
                 return "A";

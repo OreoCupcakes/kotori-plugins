@@ -33,7 +33,6 @@ import net.runelite.api.widgets.Widget;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
-import net.runelite.client.ui.overlay.OverlayPriority;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -60,7 +59,7 @@ public class TimersOverlay extends Overlay
 		this.client = client;
 
 		setPosition(OverlayPosition.DYNAMIC);
-		setPriority(OverlayPriority.HIGHEST);
+		setPriority(Overlay.PRIORITY_HIGHEST);
 		setLayer(OverlayLayer.ALWAYS_ON_TOP);
 	}
 
@@ -180,12 +179,17 @@ public class TimersOverlay extends Overlay
 		final Color color = tick == 1 ? Color.RED : Color.ORANGE;
 		final Widget prayerWidget = client.getWidget(PrayerExtended.getPrayerWidgetId(prayer));
 
+		if (prayerWidget == null)
+		{
+			return;
+		}
+
 		int baseX = (int) prayerWidget.getBounds().getX();
-		baseX += prayerWidget.getBounds().getWidth() / 2;
+		baseX += (int) (prayerWidget.getBounds().getWidth() / 2);
 		baseX -= BOX_WIDTH / 2;
 
 		int baseY = (int) prayerWidget.getBounds().getY() - tick * TICK_PIXEL_SIZE - BOX_HEIGHT;
-		baseY += TICK_PIXEL_SIZE - ((plugin.getLastTickTime() + 600 - System.currentTimeMillis()) / 600.0 * TICK_PIXEL_SIZE);
+		baseY += (int) (TICK_PIXEL_SIZE - ((plugin.getLastTickTime() + 600 - System.currentTimeMillis()) / 600.0 * TICK_PIXEL_SIZE));
 
 		final Rectangle boxRectangle = new Rectangle(BOX_WIDTH, BOX_HEIGHT);
 		boxRectangle.translate(baseX, baseY);

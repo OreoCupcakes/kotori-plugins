@@ -49,7 +49,6 @@ import static net.runelite.client.ui.overlay.OverlayManager.OPTION_CONFIGURE;
 import net.runelite.client.ui.overlay.OverlayMenuEntry;
 import net.runelite.client.ui.overlay.OverlayPanel;
 import net.runelite.client.ui.overlay.OverlayPosition;
-import net.runelite.client.ui.overlay.OverlayPriority;
 import net.runelite.client.ui.overlay.components.LineComponent;
 import net.runelite.client.ui.overlay.components.PanelComponent;
 import net.runelite.client.ui.overlay.components.TitleComponent;
@@ -97,7 +96,7 @@ public final class TimerOverlay extends OverlayPanel
 		setPosition(OverlayPosition.DYNAMIC);
 		setMovable(true);
 		setSnappable(true);
-		setPriority(OverlayPriority.HIGH);
+		setPriority(TimerOverlay.PRIORITY_HIGHEST);
 		setLayer(OverlayLayer.ABOVE_WIDGETS);
 	}
 

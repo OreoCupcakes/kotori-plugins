@@ -56,7 +56,6 @@ import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
-import org.apache.commons.lang3.ArrayUtils;
 
 @PluginDependency(KotoriUtils.class)
 @PluginDescriptor(
@@ -365,6 +364,6 @@ public class FightCavePlugin extends Plugin
 
 	private boolean regionCheck()
 	{
-		return ArrayUtils.contains(client.getMapRegions(), FIGHT_CAVE_REGION);
+		return client.getLocalPlayer().getWorldLocation().getRegionID() == FIGHT_CAVE_REGION;
 	}
 }

@@ -75,6 +75,7 @@ public final class CurrentAttackOverlay extends Overlay
 
 		setPosition(OverlayPosition.BOTTOM_RIGHT);
 		setLayer(OverlayLayer.ABOVE_WIDGETS);
+		setPriority(Overlay.PRIORITY_HIGHEST);
 	}
 
 	@Override

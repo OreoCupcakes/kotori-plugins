@@ -224,7 +224,7 @@ public final class BossModule implements Module
 		overlayManager.add(prayerInfoBoxOverlay);
 		timerOverlay.setHunllefStart();
 
-		for (NPC npc : client.getNpcs())
+		for (NPC npc : client.getTopLevelWorldView().npcs())
 		{
 			if (HUNLLEF_IDS.contains(npc.getId()))
 			{

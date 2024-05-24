@@ -66,6 +66,7 @@ public class AoeWarningOverlay extends Overlay
 		this.config = config;
 		setPosition(OverlayPosition.DYNAMIC);
 		setLayer(OverlayLayer.UNDER_WIDGETS);
+		setPriority(Overlay.PRIORITY_HIGHEST);
 	}
 
 	@Override

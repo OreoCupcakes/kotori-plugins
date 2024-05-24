@@ -11,7 +11,6 @@ import static com.theplug.kotori.inferno.InfernoWaveMappings.addWaveComponent;
 import com.theplug.kotori.inferno.displaymodes.InfernoWaveDisplayMode;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayPosition;
-import net.runelite.client.ui.overlay.OverlayPriority;
 import net.runelite.client.ui.overlay.components.PanelComponent;
 
 @Singleton
@@ -37,7 +36,7 @@ public class InfernoWaveOverlay extends Overlay
 		this.config = config;
 		this.panelComponent = new PanelComponent();
 		setPosition(OverlayPosition.TOP_RIGHT);
-		setPriority(OverlayPriority.HIGH);
+		setPriority(Overlay.PRIORITY_HIGHEST);
 		panelComponent.setPreferredSize(new Dimension(160, 0));
 	}
 

@@ -82,6 +82,7 @@ public class BombOverlay extends Overlay
 		this.config = config;
 		setPosition(OverlayPosition.DYNAMIC);
 		setLayer(OverlayLayer.ABOVE_SCENE);
+		setPriority(Overlay.PRIORITY_HIGHEST);
 	}
 
 	@Override

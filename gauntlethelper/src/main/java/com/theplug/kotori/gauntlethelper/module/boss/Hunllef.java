@@ -4,12 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import net.runelite.api.NPC;
 import net.runelite.api.Prayer;
-import net.runelite.api.Skill;
-import net.runelite.client.game.SkillIconManager;
-import net.runelite.client.util.ImageUtil;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 
 class Hunllef
 {

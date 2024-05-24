@@ -32,9 +32,6 @@ import com.theplug.kotori.gauntlethelper.GauntletHelperConfig.TileOutline;
 import com.theplug.kotori.gauntlethelper.GauntletHelperPlugin;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -43,11 +40,9 @@ import net.runelite.api.*;
 import net.runelite.api.Point;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
-import net.runelite.api.model.Jarvis;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
-import net.runelite.client.ui.overlay.OverlayPriority;
 import net.runelite.client.ui.overlay.OverlayUtil;
 import net.runelite.client.ui.overlay.outline.ModelOutlineRenderer;
 
@@ -79,7 +74,7 @@ class BossOverlay extends Overlay
 		this.modelOutlineRenderer = modelOutlineRenderer;
 
 		setPosition(OverlayPosition.DYNAMIC);
-		setPriority(OverlayPriority.HIGH);
+		setPriority(Overlay.PRIORITY_HIGHEST);
 		setLayer(OverlayLayer.UNDER_WIDGETS);
 	}
 
@@ -135,7 +130,7 @@ class BossOverlay extends Overlay
 						continue;
 					}
 
-					final LocalPoint localPoint = LocalPoint.fromWorld(client, worldPoint);
+					final LocalPoint localPoint = LocalPoint.fromWorld(client.getTopLevelWorldView(), worldPoint);
 
 					if (localPoint == null)
 					{

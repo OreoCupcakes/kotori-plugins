@@ -62,7 +62,7 @@ public class InfernoInfoBoxOverlay extends Overlay
 		this.config = config;
 		this.spriteManager = spriteManager;
 		setPosition(OverlayPosition.BOTTOM_RIGHT);
-		setPriority(OverlayPriority.HIGH);
+		setPriority(Overlay.PRIORITY_HIGHEST);
 	}
 
 	@Override
