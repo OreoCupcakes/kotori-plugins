@@ -25,7 +25,6 @@
 package com.theplug.kotori.alchemicalhelper;
 
 import java.awt.Color;
-import java.awt.Font;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import net.runelite.api.Prayer;

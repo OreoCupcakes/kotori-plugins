@@ -50,7 +50,6 @@ import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
-import net.runelite.client.ui.overlay.OverlayPriority;
 import net.runelite.client.ui.overlay.outline.ModelOutlineRenderer;
 
 @Singleton
@@ -80,7 +79,6 @@ public class SceneOverlay extends Overlay
 		this.config = config;
 		this.modelOutlineRenderer = modelOutlineRenderer;
 
-		setPriority(OverlayPriority.HIGH);
 		setPosition(OverlayPosition.DYNAMIC);
 		setLayer(OverlayLayer.UNDER_WIDGETS);
 	}
@@ -188,11 +186,12 @@ public class SceneOverlay extends Overlay
 			return;
 		}
 
+		final WorldView wv = client.getTopLevelWorldView();
 		final WorldPoint fountainWorldPoint = hydra.getPhase().getFountainWorldPoint();
 
 		if (fountainWorldPoint != null)
 		{
-			final Collection<WorldPoint> fountainWorldPoints = WorldPoint.toLocalInstance(client, fountainWorldPoint);
+			final Collection<WorldPoint> fountainWorldPoints = WorldPoint.toLocalInstance(wv.getScene(), fountainWorldPoint);
 
 			if (fountainWorldPoints.size() == 1)
 			{
@@ -203,7 +202,7 @@ public class SceneOverlay extends Overlay
 					worldPoint = wp;
 				}
 
-				final LocalPoint localPoint = LocalPoint.fromWorld(client, worldPoint);
+				final LocalPoint localPoint = LocalPoint.fromWorld(wv, worldPoint);
 
 				if (localPoint != null)
 				{
@@ -239,7 +238,8 @@ public class SceneOverlay extends Overlay
 			return;
 		}
 
-		final Collection<WorldPoint> fountainWorldPoints = WorldPoint.toLocalInstance(client, fountainWorldPoint);
+		final WorldView wv = client.getTopLevelWorldView();
+		final Collection<WorldPoint> fountainWorldPoints = WorldPoint.toLocalInstance(wv.getScene(), fountainWorldPoint);
 
 		if (fountainWorldPoints.size() != 1)
 		{
@@ -253,7 +253,7 @@ public class SceneOverlay extends Overlay
 			worldPoint = wp;
 		}
 
-		final LocalPoint localPoint = LocalPoint.fromWorld(client, worldPoint);
+		final LocalPoint localPoint = LocalPoint.fromWorld(wv, worldPoint);
 
 		if (localPoint == null)
 		{
@@ -279,15 +279,15 @@ public class SceneOverlay extends Overlay
 
 	private void renderFountainTicks(final Graphics2D graphics2D)
 	{
-
 		if (!config.fountainTicks())
 		{
 			return;
 		}
 
-		final Collection<WorldPoint> fountainWorldPoints = WorldPoint.toLocalInstance(client, HydraPhase.POISON.getFountainWorldPoint());
-		fountainWorldPoints.addAll(WorldPoint.toLocalInstance(client, HydraPhase.LIGHTNING.getFountainWorldPoint()));
-		fountainWorldPoints.addAll(WorldPoint.toLocalInstance(client, HydraPhase.FLAME.getFountainWorldPoint()));
+		final WorldView wv = client.getTopLevelWorldView();
+		final Collection<WorldPoint> fountainWorldPoints = WorldPoint.toLocalInstance(wv.getScene(), HydraPhase.POISON.getFountainWorldPoint());
+		fountainWorldPoints.addAll(WorldPoint.toLocalInstance(wv.getScene(), HydraPhase.LIGHTNING.getFountainWorldPoint()));
+		fountainWorldPoints.addAll(WorldPoint.toLocalInstance(wv.getScene(), HydraPhase.FLAME.getFountainWorldPoint()));
 
 		if (fountainWorldPoints.isEmpty())
 		{
@@ -299,7 +299,7 @@ public class SceneOverlay extends Overlay
 		for (final WorldPoint wp : fountainWorldPoints)
 		{
 			worldPoint = wp;
-			final LocalPoint localPoint = LocalPoint.fromWorld(client, worldPoint);
+			final LocalPoint localPoint = LocalPoint.fromWorld(wv, worldPoint);
 
 			if (localPoint == null)
 			{
@@ -367,9 +367,11 @@ public class SceneOverlay extends Overlay
 	{
 		if (config.doLightningSkip() && VarUtilities.getPlayerAttackStyle() != 0 && hydra.getPhase() == HydraPhase.LIGHTNING)
 		{
+			WorldView wv = client.getTopLevelWorldView();
+
 			if (!plugin.inLightningSafeSpot)
 			{
-				Collection<WorldPoint> lightningSkipTile = WorldPoint.toLocalInstance(client, AlchemicalHelperPlugin.LIGHTNING_SAFESPOT_1);
+				Collection<WorldPoint> lightningSkipTile = WorldPoint.toLocalInstance(wv.getScene(), AlchemicalHelperPlugin.LIGHTNING_SAFESPOT_1);
 				if (lightningSkipTile.size() != 1)
 				{
 					return;
@@ -381,7 +383,7 @@ public class SceneOverlay extends Overlay
 			}
 			else
 			{
-				Collection<WorldPoint> lightningSafeTile = WorldPoint.toLocalInstance(client, AlchemicalHelperPlugin.LIGHTNING_SAFESPOT_3);
+				Collection<WorldPoint> lightningSafeTile = WorldPoint.toLocalInstance(wv.getScene(), AlchemicalHelperPlugin.LIGHTNING_SAFESPOT_3);
 				if (lightningSafeTile.size() != 1)
 				{
 					return;
@@ -398,7 +400,8 @@ public class SceneOverlay extends Overlay
 	{
 		if (config.doFlameSkip() && hydra.getPhase() == HydraPhase.FLAME)
 		{
-			Collection<WorldPoint> flameSkipTile = WorldPoint.toLocalInstance(client, AlchemicalHelperPlugin.FLAME_SAFESPOT_1);
+			WorldView wv = client.getTopLevelWorldView();
+			Collection<WorldPoint> flameSkipTile = WorldPoint.toLocalInstance(wv.getScene(), AlchemicalHelperPlugin.FLAME_SAFESPOT_1);
 			if (flameSkipTile.size() != 1)
 			{
 				return;
@@ -428,7 +431,8 @@ public class SceneOverlay extends Overlay
 
 	private void drawTileOverlayWithText(Graphics2D graphics2D, WorldPoint worldPoint, Color borderColor, Color fillColor, float strokeWidth, String text, Color textColor)
 	{
-		LocalPoint localPoint = LocalPoint.fromWorld(client, worldPoint);
+		WorldView wv = client.getTopLevelWorldView();
+		LocalPoint localPoint = LocalPoint.fromWorld(wv, worldPoint);
 		if (localPoint == null)
 		{
 			return;

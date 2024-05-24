@@ -188,7 +188,7 @@ public class AlchemicalHelperPlugin extends Plugin
 
 		addOverlays();
 
-		for (final NPC npc : client.getNpcs())
+		for (final NPC npc : client.getTopLevelWorldView().npcs())
 		{
 			onNpcSpawned(new NpcSpawned(npc));
 		}
@@ -480,7 +480,7 @@ public class AlchemicalHelperPlugin extends Plugin
 	int getAnimation(GameObject gameObject)
 	{
 		final DynamicObject dynamicObject = (DynamicObject) gameObject.getRenderable();
-		return (int) (dynamicObject.getAnimation() == null ? -1 : dynamicObject.getAnimation().getId());
+		return dynamicObject.getAnimation() == null ? -1 : dynamicObject.getAnimation().getId();
 	}
 
 	@Subscribe
@@ -495,7 +495,7 @@ public class AlchemicalHelperPlugin extends Plugin
 		if (npc.getId() == NpcID.ALCHEMICAL_HYDRA)
 		{
 			hydra = new Hydra(npc);
-			if (client.isInInstancedRegion() && fountainTicks == -1) //handles the initial hydra spawn when your in the lobby but havent gone through the main doors
+			if (client.getTopLevelWorldView().getScene().isInstance() && fountainTicks == -1) //handles the initial hydra spawn when your in the lobby but havent gone through the main doors
 			{
 				fountainTicks = 11;
 			}
@@ -584,10 +584,7 @@ public class AlchemicalHelperPlugin extends Plugin
 
 		if (message.equals(MESSAGE_NEUTRALIZE))
 		{
-			clientThread.invokeLater(() ->
-			{
-				hydra.setImmunity(false);
-			});
+			clientThread.invokeLater(() -> hydra.setImmunity(false));
 		}
 		else if (message.equals(MESSAGE_STUN))
 		{
@@ -610,6 +607,7 @@ public class AlchemicalHelperPlugin extends Plugin
 		HydraPhase phase = hydra.getPhase();
 		//WorldLocation returns the "true" tile from the server. LocalLocation is the client tile which is delayed.
 		WorldPoint playerLocation = client.getLocalPlayer().getWorldLocation();
+		WorldView wv = client.getTopLevelWorldView();
 
 		switch (phase)
 		{
@@ -691,9 +689,9 @@ public class AlchemicalHelperPlugin extends Plugin
 						return;
 					}
 
-					Collection<WorldPoint> lightningSafeSpot1LocalWorlds = WorldPoint.toLocalInstance(client, LIGHTNING_SAFESPOT_1);
-					Collection<WorldPoint> lightningSafeSpot2LocalWorlds = WorldPoint.toLocalInstance(client, LIGHTNING_SAFESPOT_2);
-					Collection<WorldPoint> lightningSafeSpot3LocalWorlds = WorldPoint.toLocalInstance(client, LIGHTNING_SAFESPOT_3);
+					Collection<WorldPoint> lightningSafeSpot1LocalWorlds = WorldPoint.toLocalInstance(wv.getScene(), LIGHTNING_SAFESPOT_1);
+					Collection<WorldPoint> lightningSafeSpot2LocalWorlds = WorldPoint.toLocalInstance(wv.getScene(), LIGHTNING_SAFESPOT_2);
+					Collection<WorldPoint> lightningSafeSpot3LocalWorlds = WorldPoint.toLocalInstance(wv.getScene(), LIGHTNING_SAFESPOT_3);
 
 					switch (lightningSkipState)
 					{
@@ -753,8 +751,8 @@ public class AlchemicalHelperPlugin extends Plugin
 						return;
 					}
 
-					Collection<WorldPoint> flameSafeSpot1LocalWorlds = WorldPoint.toLocalInstance(client, FLAME_SAFESPOT_1);
-					Collection<WorldPoint> flameSafeSpot2LocalWorlds = WorldPoint.toLocalInstance(client, FLAME_SAFESPOT_2);
+					Collection<WorldPoint> flameSafeSpot1LocalWorlds = WorldPoint.toLocalInstance(wv.getScene(), FLAME_SAFESPOT_1);
+					Collection<WorldPoint> flameSafeSpot2LocalWorlds = WorldPoint.toLocalInstance(wv.getScene(), FLAME_SAFESPOT_2);
 
 					switch (flameSkipState)
 					{
@@ -912,7 +910,7 @@ public class AlchemicalHelperPlugin extends Plugin
 
 	private boolean isInHydraRegion()
 	{
-		return client.isInInstancedRegion() && Arrays.equals(client.getMapRegions(), HYDRA_REGIONS);
+		return client.getTopLevelWorldView().getScene().isInstance() && Arrays.stream(HYDRA_REGIONS).anyMatch(r -> r == client.getLocalPlayer().getWorldLocation().getRegionID());
 	}
 	
 	private boolean isInHydraLair()
