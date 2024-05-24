@@ -16,6 +16,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.api.coords.LocalPoint;
+import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.*;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
@@ -605,6 +606,6 @@ public class NightmarePlugin extends Plugin
 	
 	private boolean inNightmareRegion()
 	{
-		return client.getLocalPlayer().getWorldLocation().getRegionID() == NIGHTMARE_REGION_ID;
+		return WorldPoint.fromLocalInstance(client, client.getLocalPlayer().getLocalLocation()).getRegionID() == NIGHTMARE_REGION_ID;
 	}
 }

@@ -10,6 +10,7 @@ import com.theplug.kotori.zulrahoverlay.rotationutils.ZulrahPhase;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.api.coords.LocalPoint;
+import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.*;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
@@ -553,6 +554,6 @@ public class ZulrahPlugin extends Plugin implements KeyListener
 	
 	private boolean inZulrahRegion()
 	{
-		return ZULRAH_REGION_IDS.contains(client.getLocalPlayer().getWorldLocation().getRegionID());
+		return ZULRAH_REGION_IDS.contains(WorldPoint.fromLocalInstance(client, client.getLocalPlayer().getLocalLocation()).getRegionID());
 	}
 }

@@ -52,7 +52,7 @@ public class HallowedHelperPlugin extends Plugin {
     public void getFloor()
     {
         //log.info("Getting floor...: " + client.getMapRegions()[0]);
-        switch(client.getLocalPlayer().getWorldLocation().getRegionID())
+        switch(WorldPoint.fromLocalInstance(client, client.getLocalPlayer().getLocalLocation()).getRegionID())
         {
             case 8796:
                 currentfloor = 1;
@@ -499,7 +499,7 @@ public class HallowedHelperPlugin extends Plugin {
 
     private boolean isInSepulchreRegion()
     {
-        return REGION_IDS.contains(client.getLocalPlayer().getWorldLocation().getRegionID());
+        return REGION_IDS.contains(WorldPoint.fromLocalInstance(client, client.getLocalPlayer().getLocalLocation()).getRegionID());
     }
 
 

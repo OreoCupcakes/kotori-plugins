@@ -43,6 +43,7 @@ import net.runelite.api.GraphicsObject;
 import net.runelite.api.NPC;
 import net.runelite.api.Player;
 import net.runelite.api.coords.LocalPoint;
+import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.AnimationChanged;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;
@@ -59,6 +60,8 @@ import com.theplug.kotori.grotesqueguardians.entity.Dusk;
 import com.theplug.kotori.grotesqueguardians.overlay.PrayerOverlay;
 import com.theplug.kotori.grotesqueguardians.overlay.SceneOverlay;
 import net.runelite.client.ui.overlay.OverlayManager;
+
+import java.util.Collection;
 
 @Slf4j
 @PluginDependency(KotoriUtils.class)
@@ -322,6 +325,6 @@ public class GrotesqueGuardiansPlugin extends Plugin
 
 	private boolean isInRegion()
 	{
-		return client.getTopLevelWorldView().getScene().isInstance() && client.getLocalPlayer().getWorldLocation().getRegionID() == REGION_ID;
+		return REGION_ID == WorldPoint.fromLocalInstance(client, client.getLocalPlayer().getLocalLocation()).getRegionID();
 	}
 }

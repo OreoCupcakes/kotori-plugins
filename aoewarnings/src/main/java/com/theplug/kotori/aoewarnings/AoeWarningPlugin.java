@@ -28,10 +28,7 @@ package com.theplug.kotori.aoewarnings;
 
 import com.google.inject.Provides;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import javax.inject.Inject;
 
 import com.theplug.kotori.kotoriutils.KotoriUtils;
@@ -389,6 +386,6 @@ public class AoeWarningPlugin extends Plugin
 
 	private boolean regionCheck(int region)
 	{
-		return client.getLocalPlayer().getWorldLocation().getRegionID() == region;
+		return WorldPoint.fromLocalInstance(client, client.getLocalPlayer().getLocalLocation()).getRegionID() == region;
 	}
 }

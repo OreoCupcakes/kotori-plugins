@@ -5,6 +5,7 @@ package com.theplug.kotori.houseoverlay;
 import com.google.inject.Provides;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
+import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.*;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
@@ -260,7 +261,7 @@ public class HouseOverlayPlugin extends Plugin
     
     private boolean isInHouse()
     {
-        return REGION_IDS.contains(client.getLocalPlayer().getWorldLocation().getRegionID());
+        return REGION_IDS.contains(WorldPoint.fromLocalInstance(client, client.getLocalPlayer().getLocalLocation()).getRegionID());
     }
     
     private void checkWeaponSlot()

@@ -67,7 +67,7 @@ public class AlchemicalHelperPlugin extends Plugin
 	private static final String MESSAGE_NEUTRALIZE = "The chemicals neutralise the Alchemical Hydra's defences!";
 	private static final String MESSAGE_STUN = "The Alchemical Hydra temporarily stuns you.";
 
-	private static final int[] HYDRA_REGIONS = {5279, 5280, 5535, 5536};
+	private static final Set<Integer> HYDRA_REGIONS = Set.of(5279, 5280, 5535, 5536);
 	private static final WorldArea HYDRA_LAIR = new WorldArea(1354, 10254, 28, 28, 0);
 
     public static final WorldPoint LIGHTNING_SAFESPOT_1 = new WorldPoint(1358, 10278, 0);
@@ -910,7 +910,7 @@ public class AlchemicalHelperPlugin extends Plugin
 
 	private boolean isInHydraRegion()
 	{
-		return client.getTopLevelWorldView().getScene().isInstance() && Arrays.stream(HYDRA_REGIONS).anyMatch(r -> r == client.getLocalPlayer().getWorldLocation().getRegionID());
+		return HYDRA_REGIONS.contains(WorldPoint.fromLocalInstance(client, client.getLocalPlayer().getLocalLocation()).getRegionID());
 	}
 	
 	private boolean isInHydraLair()

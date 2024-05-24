@@ -839,6 +839,6 @@ public class NexPlugin extends Plugin
 	
 	private boolean isInNexRegion()
 	{
-		return client.getLocalPlayer().getWorldLocation().getRegionID() == NEX_REGION_ID;
+		return WorldPoint.fromLocalInstance(client, client.getLocalPlayer().getLocalLocation()).getRegionID() == NEX_REGION_ID;
 	}
 }

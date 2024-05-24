@@ -26,12 +26,8 @@
 package com.theplug.kotori.fightcaves;
 
 import com.google.inject.Provides;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.EnumMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.inject.Inject;
@@ -45,6 +41,7 @@ import net.runelite.api.Client;
 import net.runelite.api.GameState;
 import net.runelite.api.NPC;
 import net.runelite.api.NpcID;
+import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;
@@ -364,6 +361,6 @@ public class FightCavePlugin extends Plugin
 
 	private boolean regionCheck()
 	{
-		return client.getLocalPlayer().getWorldLocation().getRegionID() == FIGHT_CAVE_REGION;
+		return FIGHT_CAVE_REGION == WorldPoint.fromLocalInstance(client, client.getLocalPlayer().getLocalLocation()).getRegionID();
 	}
 }

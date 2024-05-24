@@ -416,7 +416,7 @@ public class VorkathPlugin extends Plugin
 	 */
 	private boolean isAtVorkath()
 	{
-		return client.getLocalPlayer().getWorldLocation().getRegionID() == VORKATH_REGION;
+		return WorldPoint.fromLocalInstance(client, client.getLocalPlayer().getLocalLocation()).getRegionID() == VORKATH_REGION;
 	}
 
 	private void addAcidSpot(WorldPoint acidSpotLocation)

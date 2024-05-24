@@ -492,7 +492,7 @@ public class InfernoPlugin extends Plugin
 
 	private boolean isInInferno()
 	{
-		return client.getLocalPlayer().getWorldLocation().getRegionID() == INFERNO_REGION;
+		return WorldPoint.fromLocalInstance(client, client.getLocalPlayer().getLocalLocation()).getRegionID() == INFERNO_REGION;
 	}
 
 	int getNextWaveNumber()

@@ -224,7 +224,7 @@ public class EffectTimersPlugin extends Plugin
 
 	private boolean isAtVorkath()
 	{
-		return client.getLocalPlayer().getWorldLocation().getRegionID() == VORKATH_REGION;
+		return VORKATH_REGION == WorldPoint.fromLocalInstance(client, client.getLocalPlayer().getLocalLocation()).getRegionID();
 	}
 	
 	@Subscribe
