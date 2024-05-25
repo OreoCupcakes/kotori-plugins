@@ -1159,7 +1159,8 @@ class HallowedHelperOverlay extends Overlay
 
         for (final GameObject gameObject : plugin.getCrossbowStatues())
         {
-            if (!gameObject.getWorldLocation().isInScene(client.getTopLevelWorldView()) || isOutsideRenderDistance(gameObject.getLocalLocation()))
+            WorldPoint gowp = gameObject.getWorldLocation();
+            if (!WorldPoint.isInScene(client.getTopLevelWorldView(), gowp.getX(), gowp.getY()) || isOutsideRenderDistance(gameObject.getLocalLocation()))
             {
                 continue;
             }
@@ -1192,7 +1193,8 @@ class HallowedHelperOverlay extends Overlay
 
         for (final GameObject gameObject : plugin.getSwordStatues())
         {
-            if (!gameObject.getWorldLocation().isInScene(client.getTopLevelWorldView()) || isOutsideRenderDistance(gameObject.getLocalLocation()))
+            WorldPoint gowp = gameObject.getWorldLocation();
+            if (!WorldPoint.isInScene(client.getTopLevelWorldView(), gowp.getX(), gowp.getY()) || isOutsideRenderDistance(gameObject.getLocalLocation()))
             {
                 continue;
             }
@@ -1235,7 +1237,8 @@ class HallowedHelperOverlay extends Overlay
                     log.info("Wtf GameOBJECT is NULL");
                 return;
             }
-            if (!gameObject.getWorldLocation().isInScene(client.getTopLevelWorldView()) || isOutsideRenderDistance(gameObject.getLocalLocation()))
+            WorldPoint gowp = gameObject.getWorldLocation();
+            if (!WorldPoint.isInScene(client.getTopLevelWorldView(), gowp.getX(), gowp.getY()) || isOutsideRenderDistance(gameObject.getLocalLocation()))
             {
                 continue;
             }

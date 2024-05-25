@@ -218,7 +218,7 @@ public class SireHelperSceneOverlay extends Overlay
     {
         for (WorldPoint worldPoint : pointSet)
         {
-            if (worldPoint.getPlane() != client.getTopLevelWorldView().getPlane() && !worldPoint.isInScene(client.getTopLevelWorldView()))
+            if (worldPoint.getPlane() != client.getTopLevelWorldView().getPlane() && !WorldPoint.isInScene(client.getTopLevelWorldView(), worldPoint.getX(), worldPoint.getY()))
             {
                 continue;
             }
