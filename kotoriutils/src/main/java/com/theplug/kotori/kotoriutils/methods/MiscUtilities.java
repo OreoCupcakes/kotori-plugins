@@ -1,6 +1,7 @@
 package com.theplug.kotori.kotoriutils.methods;
 
 import net.runelite.api.*;
+import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.RuneLite;
 import net.runelite.client.chat.ChatMessageBuilder;
 import net.runelite.client.chat.ChatMessageManager;
@@ -83,5 +84,10 @@ public class MiscUtilities
 		}
 
 		return null;
+	}
+
+	public static int getPlayerRegionID()
+	{
+		return WorldPoint.fromLocalInstance(client, client.getLocalPlayer().getLocalLocation()).getRegionID();
 	}
 }

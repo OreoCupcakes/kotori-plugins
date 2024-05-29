@@ -1,10 +1,13 @@
 package com.theplug.kotori.kotoriutils.methods;
 
 import com.theplug.kotori.kotoriutils.ReflectionLibrary;
-import net.runelite.api.Client;
-import net.runelite.api.MenuAction;
-import net.runelite.api.NPC;
+import net.runelite.api.*;
 import net.runelite.client.RuneLite;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class NPCInteractions
 {
@@ -59,5 +62,29 @@ public class NPCInteractions
         }
 
         return exactHealth;
+    }
+
+    public static List<NPC> getNpcs()
+    {
+        WorldView wv = client.getTopLevelWorldView();
+        return wv == null ? Collections.emptyList() : wv.npcs().stream().collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public static List<Player> getPlayers()
+    {
+        WorldView wv = client.getTopLevelWorldView();
+        return wv == null ? Collections.emptyList() : wv.players().stream().collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public static NPC[] getCachedNPCs()
+    {
+        WorldView wv = client.getTopLevelWorldView();
+        return wv == null ? null : wv.npcs().getSparse();
+    }
+
+    public static Player[] getCachedPlayers()
+    {
+        WorldView wv = client.getTopLevelWorldView();
+        return wv == null ? null : wv.players().getSparse();
     }
 }
