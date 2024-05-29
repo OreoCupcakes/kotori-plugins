@@ -23,7 +23,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "1.2.4"
+version = "1.2.5"
 
 project.extra["PluginName"] = "<html><font color=#6b8af6>[P]</font> Nex Extended</html>" // This is the name that is used in the external plugin manager panel
 project.extra["PluginDescription"] = "Overlay plugin for the Nex boss." // This is the description that is used in the external plugin manager panel

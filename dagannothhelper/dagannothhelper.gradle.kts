@@ -23,7 +23,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "2.1.4"
+version = "2.1.5"
 
 project.extra["PluginName"] = "<html><font color=#6b8af6>[K]</font> Dagannoth Helper</html>" // This is the name that is used in the external plugin manager panel
 project.extra["PluginDescription"] = "A plugin for the Dagannoth Kings including overlays and helpers." // This is the description that is used in the external plugin manager panel

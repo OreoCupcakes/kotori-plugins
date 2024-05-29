@@ -34,6 +34,7 @@ import javax.inject.Inject;
 
 import com.theplug.kotori.kotoriutils.KotoriUtils;
 import com.theplug.kotori.kotoriutils.ReflectionLibrary;
+import com.theplug.kotori.kotoriutils.methods.MiscUtilities;
 import lombok.AccessLevel;
 import lombok.Getter;
 import net.runelite.api.ChatMessageType;
@@ -361,6 +362,6 @@ public class FightCavePlugin extends Plugin
 
 	private boolean regionCheck()
 	{
-		return FIGHT_CAVE_REGION == WorldPoint.fromLocalInstance(client, client.getLocalPlayer().getLocalLocation()).getRegionID();
+		return FIGHT_CAVE_REGION == MiscUtilities.getPlayerRegionID();
 	}
 }

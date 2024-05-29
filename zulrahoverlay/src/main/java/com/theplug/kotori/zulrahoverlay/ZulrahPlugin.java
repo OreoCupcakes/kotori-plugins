@@ -3,6 +3,7 @@ package com.theplug.kotori.zulrahoverlay;
 import com.google.common.base.Preconditions;
 import com.google.inject.Provides;
 import com.theplug.kotori.kotoriutils.KotoriUtils;
+import com.theplug.kotori.kotoriutils.methods.MiscUtilities;
 import com.theplug.kotori.zulrahoverlay.overlays.*;
 import com.theplug.kotori.zulrahoverlay.rotationutils.RotationType;
 import com.theplug.kotori.zulrahoverlay.rotationutils.ZulrahData;
@@ -554,6 +555,6 @@ public class ZulrahPlugin extends Plugin implements KeyListener
 	
 	private boolean inZulrahRegion()
 	{
-		return ZULRAH_REGION_IDS.contains(WorldPoint.fromLocalInstance(client, client.getLocalPlayer().getLocalLocation()).getRegionID());
+		return ZULRAH_REGION_IDS.contains(MiscUtilities.getPlayerRegionID());
 	}
 }

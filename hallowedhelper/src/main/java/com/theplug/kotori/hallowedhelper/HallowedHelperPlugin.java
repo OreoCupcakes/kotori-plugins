@@ -559,8 +559,8 @@ public class HallowedHelperPlugin extends Plugin {
             addgraphicsobject(graphicsObject);
         }
 
-
-        for (final NPC npc : client.getTopLevelWorldView().npcs())
+        List<NPC> npcs = client.getTopLevelWorldView() == null ? Collections.emptyList() : client.getTopLevelWorldView().npcs().stream().collect(Collectors.toCollection(ArrayList::new));
+        for (final NPC npc : npcs)
         {
             addNpc(npc);
         }

@@ -29,6 +29,7 @@ import com.theplug.kotori.kotoriutils.methods.MiscUtilities;
 import com.theplug.kotori.effecttimers.utils.PvPUtil;
 import com.theplug.kotori.effecttimers.utils.WorldTypeExtended;
 import com.theplug.kotori.kotoriutils.KotoriUtils;
+import com.theplug.kotori.kotoriutils.methods.NPCInteractions;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
@@ -141,7 +142,7 @@ public class EffectTimersPlugin extends Plugin
 
 		EnumSet<WorldType> worldTypes = client.getWorldType();
 
-		for (Actor actor : client.getTopLevelWorldView().players())
+		for (Actor actor : NPCInteractions.getPlayers())
 		{
 			if (!timerManager.hasTimerActive(actor, TimerType.TELEBLOCK))
 			{
@@ -224,7 +225,7 @@ public class EffectTimersPlugin extends Plugin
 
 	private boolean isAtVorkath()
 	{
-		return VORKATH_REGION == WorldPoint.fromLocalInstance(client, client.getLocalPlayer().getLocalLocation()).getRegionID();
+		return VORKATH_REGION == MiscUtilities.getPlayerRegionID();
 	}
 	
 	@Subscribe

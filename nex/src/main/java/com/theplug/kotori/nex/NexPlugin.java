@@ -15,6 +15,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import com.theplug.kotori.kotoriutils.KotoriUtils;
+import com.theplug.kotori.kotoriutils.methods.MiscUtilities;
+import com.theplug.kotori.kotoriutils.methods.NPCInteractions;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -481,7 +483,7 @@ public class NexPlugin extends Plugin
 			return shouldRemove;
 		});
 
-		var players = client.getTopLevelWorldView().players().stream().collect(Collectors.toCollection(ArrayList::new));
+		var players = NPCInteractions.getPlayers();
 
 		// Sick players have changed, update list of healthy players
 		if (coughingPlayersChanged || teamSize != players.size())
@@ -839,6 +841,6 @@ public class NexPlugin extends Plugin
 	
 	private boolean isInNexRegion()
 	{
-		return WorldPoint.fromLocalInstance(client, client.getLocalPlayer().getLocalLocation()).getRegionID() == NEX_REGION_ID;
+		return MiscUtilities.getPlayerRegionID() == NEX_REGION_ID;
 	}
 }

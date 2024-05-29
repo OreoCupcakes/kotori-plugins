@@ -190,7 +190,7 @@ public class GodWarsHelperPlugin extends Plugin
 	private void init()
 	{
 		npcContainers.clear();
-		for (NPC npc : client.getTopLevelWorldView().npcs())
+		for (NPC npc : NPCInteractions.getNpcs())
 		{
 			addNpc(npc);
 		}
@@ -445,13 +445,7 @@ public class GodWarsHelperPlugin extends Plugin
 	private boolean regionCheck()
 	{
 		lastRegion = currentRegion;
-		Player you = client.getLocalPlayer();
-		if (you == null)
-		{
-			return false;
-		}
-		currentRegion = WorldPoint.fromLocalInstance(client, you.getLocalLocation()).getRegionID();
-		
+		currentRegion = MiscUtilities.getPlayerRegionID();
 		return GWD_REGION_IDS.contains(currentRegion);
 	}
 	

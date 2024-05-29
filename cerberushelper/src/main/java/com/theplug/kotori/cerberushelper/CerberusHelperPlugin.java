@@ -189,7 +189,7 @@ public class CerberusHelperPlugin extends Plugin
 			/*
 			This is for Leagues, as when you last recall back into the arena, the NpcSpawned event does not actually trigger causing cerberus to be null.
 			 */
-			for (NPC npc : client.getTopLevelWorldView().npcs())
+			for (NPC npc : NPCInteractions.getNpcs())
 			{
 				if (CERBERUS_IDS.contains(npc.getId()))
 				{
@@ -801,7 +801,7 @@ public class CerberusHelperPlugin extends Plugin
 
 	private boolean inCerberusRegion()
 	{
-		return REGION_IDS.contains(client.getLocalPlayer().getWorldLocation().getRegionID());
+		return REGION_IDS.contains(MiscUtilities.getPlayerRegionID());
 	}
 
 	private void inAreaPastFlames()

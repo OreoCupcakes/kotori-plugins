@@ -27,6 +27,8 @@ package com.theplug.kotori.inferno;
 import com.google.inject.Provides;
 import com.theplug.kotori.kotoriutils.KotoriUtils;
 import com.theplug.kotori.kotoriutils.ReflectionLibrary;
+import com.theplug.kotori.kotoriutils.methods.MiscUtilities;
+import com.theplug.kotori.kotoriutils.methods.NPCInteractions;
 import net.runelite.client.game.NPCManager;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -425,7 +427,7 @@ public class InfernoPlugin extends Plugin
 	@Subscribe
 	private void onAnimationChanged(AnimationChanged event)
 	{
-		if (!isInInferno())
+		if (client.getGameState() != GameState.LOGGED_IN && !isInInferno())
 		{
 			return;
 		}
@@ -492,7 +494,7 @@ public class InfernoPlugin extends Plugin
 
 	private boolean isInInferno()
 	{
-		return WorldPoint.fromLocalInstance(client, client.getLocalPlayer().getLocalLocation()).getRegionID() == INFERNO_REGION;
+		return MiscUtilities.getPlayerRegionID() == INFERNO_REGION;
 	}
 
 	int getNextWaveNumber()
@@ -924,7 +926,7 @@ public class InfernoPlugin extends Plugin
 
 	private void calculateObstacles()
 	{
-		for (NPC npc : client.getTopLevelWorldView().npcs())
+		for (NPC npc : NPCInteractions.getNpcs())
 		{
 			obstacles.addAll(npc.getWorldArea().toWorldPointList());
 		}

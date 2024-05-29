@@ -35,6 +35,7 @@ import java.util.List;
 
 import com.theplug.kotori.kotoriutils.KotoriUtils;
 import com.theplug.kotori.kotoriutils.ReflectionLibrary;
+import com.theplug.kotori.kotoriutils.methods.MiscUtilities;
 import com.theplug.kotori.kotoriutils.rlapi.GraphicIDPlus;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -416,7 +417,7 @@ public class VorkathPlugin extends Plugin
 	 */
 	private boolean isAtVorkath()
 	{
-		return WorldPoint.fromLocalInstance(client, client.getLocalPlayer().getLocalLocation()).getRegionID() == VORKATH_REGION;
+		return MiscUtilities.getPlayerRegionID() == VORKATH_REGION;
 	}
 
 	private void addAcidSpot(WorldPoint acidSpotLocation)

@@ -34,6 +34,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
+import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.*;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
@@ -311,13 +312,6 @@ public class TarnsLairPlugin extends Plugin
 	
 	public boolean isInTarnsLair()
 	{
-		for (int regionId : client.getMapRegions())
-		{
-			if (TARNS_LAIR_REGION_IDS.contains(regionId))
-			{
-				return true;
-			}
-		}
-		return false;
+		return TARNS_LAIR_REGION_IDS.contains(WorldPoint.fromLocalInstance(client, client.getLocalPlayer().getLocalLocation()).getRegionID());
 	}
 }

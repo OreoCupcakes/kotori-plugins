@@ -32,10 +32,7 @@ import com.theplug.kotori.dagannothhelper.overlay.InfoboxOverlay;
 import com.theplug.kotori.dagannothhelper.overlay.PrayerOverlay;
 import com.theplug.kotori.dagannothhelper.overlay.SceneOverlay;
 import com.theplug.kotori.kotoriutils.KotoriUtils;
-import com.theplug.kotori.kotoriutils.methods.InventoryInteractions;
-import com.theplug.kotori.kotoriutils.methods.PrayerInteractions;
-import com.theplug.kotori.kotoriutils.methods.SpellInteractions;
-import com.theplug.kotori.kotoriutils.methods.VarUtilities;
+import com.theplug.kotori.kotoriutils.methods.*;
 import com.theplug.kotori.kotoriutils.rlapi.Spells;
 import lombok.Getter;
 import net.runelite.api.*;
@@ -187,7 +184,7 @@ public class DagannothHelperPlugin extends Plugin
 		atDks = true;
 
 		addOverlays();
-		for (final NPC npc : client.getTopLevelWorldView().npcs())
+		for (final NPC npc : NPCInteractions.getNpcs())
 		{
 			addNpc(npc);
 		}
@@ -414,7 +411,7 @@ public class DagannothHelperPlugin extends Plugin
 
 	private boolean atDks()
 	{
-		return WATERBITH_REGIONS.contains(client.getLocalPlayer().getWorldLocation().getRegionID());
+		return WATERBITH_REGIONS.contains(MiscUtilities.getPlayerRegionID());
 	}
 
 	private void deactivatePrayers()

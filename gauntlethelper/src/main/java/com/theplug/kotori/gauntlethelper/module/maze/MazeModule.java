@@ -180,7 +180,7 @@ public final class MazeModule implements Module
 				case "resourceTrackingMode":
 				case "resourceRemoveAcquired":
 					resourceManager.reset();
-					resourceManager.init(client.getLocalPlayer().getWorldLocation().getRegionID());
+					resourceManager.init(MiscUtilities.getPlayerRegionID());
 					break;
 				default:
 					npcOverlayService.rebuild();

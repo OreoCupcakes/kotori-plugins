@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import com.theplug.kotori.kotoriutils.KotoriUtils;
+import com.theplug.kotori.kotoriutils.methods.MiscUtilities;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -606,6 +607,6 @@ public class NightmarePlugin extends Plugin
 	
 	private boolean inNightmareRegion()
 	{
-		return WorldPoint.fromLocalInstance(client, client.getLocalPlayer().getLocalLocation()).getRegionID() == NIGHTMARE_REGION_ID;
+		return MiscUtilities.getPlayerRegionID() == NIGHTMARE_REGION_ID;
 	}
 }

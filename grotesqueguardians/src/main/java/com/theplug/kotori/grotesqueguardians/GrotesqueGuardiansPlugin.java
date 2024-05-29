@@ -33,6 +33,8 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 
 import com.theplug.kotori.kotoriutils.KotoriUtils;
+import com.theplug.kotori.kotoriutils.methods.MiscUtilities;
+import com.theplug.kotori.kotoriutils.methods.NPCInteractions;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -136,7 +138,7 @@ public class GrotesqueGuardiansPlugin extends Plugin
 	{
 		onRoof = true;
 
-		for (final NPC npc : client.getTopLevelWorldView().npcs())
+		for (final NPC npc : NPCInteractions.getNpcs())
 		{
 			addNpc(npc);
 		}
@@ -325,6 +327,6 @@ public class GrotesqueGuardiansPlugin extends Plugin
 
 	private boolean isInRegion()
 	{
-		return REGION_ID == WorldPoint.fromLocalInstance(client, client.getLocalPlayer().getLocalLocation()).getRegionID();
+		return REGION_ID == MiscUtilities.getPlayerRegionID();
 	}
 }

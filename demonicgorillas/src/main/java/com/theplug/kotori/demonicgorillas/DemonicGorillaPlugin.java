@@ -31,6 +31,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
 
+import com.theplug.kotori.kotoriutils.methods.MiscUtilities;
+import com.theplug.kotori.kotoriutils.methods.NPCInteractions;
 import com.theplug.kotori.kotoriutils.rlapi.GraphicIDPlus;
 import com.theplug.kotori.kotoriutils.rlapi.WorldAreaExtended;
 import com.theplug.kotori.kotoriutils.KotoriUtils;
@@ -145,7 +147,7 @@ public class DemonicGorillaPlugin extends Plugin
 	private void resetGorillas()
 	{
 		gorillas.clear();
-		for (NPC npc : client.getTopLevelWorldView().npcs())
+		for (NPC npc : NPCInteractions.getNpcs())
 		{
 			if (isNpcGorilla(npc.getId()))
 			{
@@ -157,7 +159,7 @@ public class DemonicGorillaPlugin extends Plugin
 	private void resetPlayers()
 	{
 		memorizedPlayers.clear();
-		for (Player player : client.getTopLevelWorldView().players())
+		for (Player player : NPCInteractions.getPlayers())
 		{
 			memorizedPlayers.put(player, new MemorizedPlayer(player));
 		}
@@ -778,6 +780,6 @@ public class DemonicGorillaPlugin extends Plugin
 	
 	private boolean atDemonicGorillas()
 	{
-		return REGION_IDS.contains(client.getLocalPlayer().getWorldLocation().getRegionID());
+		return REGION_IDS.contains(MiscUtilities.getPlayerRegionID());
 	}
 }

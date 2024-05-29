@@ -188,7 +188,7 @@ public class AlchemicalHelperPlugin extends Plugin
 
 		addOverlays();
 
-		for (final NPC npc : client.getTopLevelWorldView().npcs())
+		for (final NPC npc : NPCInteractions.getNpcs())
 		{
 			onNpcSpawned(new NpcSpawned(npc));
 		}
@@ -910,7 +910,7 @@ public class AlchemicalHelperPlugin extends Plugin
 
 	private boolean isInHydraRegion()
 	{
-		return HYDRA_REGIONS.contains(WorldPoint.fromLocalInstance(client, client.getLocalPlayer().getLocalLocation()).getRegionID());
+		return HYDRA_REGIONS.contains(MiscUtilities.getPlayerRegionID());
 	}
 	
 	private boolean isInHydraLair()

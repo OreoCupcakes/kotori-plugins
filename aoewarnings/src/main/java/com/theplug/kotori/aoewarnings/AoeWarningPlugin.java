@@ -32,6 +32,7 @@ import java.util.*;
 import javax.inject.Inject;
 
 import com.theplug.kotori.kotoriutils.KotoriUtils;
+import com.theplug.kotori.kotoriutils.methods.MiscUtilities;
 import com.theplug.kotori.kotoriutils.rlapi.GraphicIDPlus;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -386,6 +387,6 @@ public class AoeWarningPlugin extends Plugin
 
 	private boolean regionCheck(int region)
 	{
-		return WorldPoint.fromLocalInstance(client, client.getLocalPlayer().getLocalLocation()).getRegionID() == region;
+		return MiscUtilities.getPlayerRegionID() == region;
 	}
 }

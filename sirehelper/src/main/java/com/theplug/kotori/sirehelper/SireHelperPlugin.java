@@ -167,7 +167,7 @@ public class SireHelperPlugin extends Plugin
 		//This is for Leagues' Last Recall or when you shut down and turn back on the plugin mid-fight
 		if (abyssalSire == null)
 		{
-			for (NPC npc : client.getTopLevelWorldView().npcs())
+			for (NPC npc : NPCInteractions.getNpcs())
 			{
 				switch (npc.getId())
 				{
@@ -511,7 +511,7 @@ public class SireHelperPlugin extends Plugin
 
 	private boolean checkIfAtSire()
 	{
-		return SIRE_REGIONS.contains(client.getLocalPlayer().getWorldLocation().getRegionID());
+		return SIRE_REGIONS.contains(MiscUtilities.getPlayerRegionID());
 	}
 
 	private void updateSireVariables()

@@ -23,7 +23,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "1.1.5"
+version = "1.1.6"
 
 project.extra["PluginName"] = "<html><font color=#6b8af6>[P]</font> AoE Warnings</html>" // This is the name that is used in the external plugin manager panel
 project.extra["PluginDescription"] = "Shows the final destination for AoE Attack projectiles." // This is the description that is used in the external plugin manager panel
