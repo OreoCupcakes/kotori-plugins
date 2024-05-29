@@ -31,18 +31,14 @@ import com.theplug.kotori.gauntlethelper.GauntletHelperConfig;
 import com.theplug.kotori.gauntlethelper.module.Module;
 import com.theplug.kotori.gauntlethelper.module.overlay.TimerOverlay;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import com.theplug.kotori.kotoriutils.ReflectionLibrary;
-import com.theplug.kotori.kotoriutils.methods.InventoryInteractions;
-import com.theplug.kotori.kotoriutils.methods.PrayerInteractions;
-import com.theplug.kotori.kotoriutils.methods.VarUtilities;
+import com.theplug.kotori.kotoriutils.methods.*;
 import com.theplug.kotori.kotoriutils.rlapi.GraphicIDPlus;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -224,15 +220,7 @@ public final class BossModule implements Module
 		overlayManager.add(prayerInfoBoxOverlay);
 		timerOverlay.setHunllefStart();
 
-		for (NPC npc : client.getTopLevelWorldView().npcs())
-		{
-			if (HUNLLEF_IDS.contains(npc.getId()))
-			{
-				hunllef = new Hunllef(npc);
-				hunllefOverhead = ReflectionLibrary.getNpcOverheadIcon(npc);
-				break;
-			}
-		}
+		createHunllefObject();
 
 		justEnteredArena = true;
 	}
@@ -273,7 +261,6 @@ public final class BossModule implements Module
 	{
 		if (hunllef == null)
 		{
-			System.out.print("Hunllef null?");
 			return;
 		}
 
@@ -712,6 +699,19 @@ public final class BossModule implements Module
 		else if (weaponThree != -1 && weaponThreeStyle != styleToAvoid && InventoryInteractions.inventoryContains(weaponThree))
 		{
 			weaponSwitched = InventoryInteractions.equipItems(weaponThree);
+		}
+	}
+
+	private void createHunllefObject()
+	{
+		for (NPC npc : NPCInteractions.getNpcs())
+		{
+			if (HUNLLEF_IDS.contains(npc.getId()))
+			{
+				hunllef = new Hunllef(npc);
+				hunllefOverhead = ReflectionLibrary.getNpcOverheadIcon(npc);
+				break;
+			}
 		}
 	}
 }

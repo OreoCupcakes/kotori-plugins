@@ -38,6 +38,8 @@ import java.util.Set;
 import java.util.function.Function;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import com.theplug.kotori.kotoriutils.methods.MiscUtilities;
 import lombok.AccessLevel;
 import lombok.Getter;
 import net.runelite.api.ChatMessageType;
@@ -50,6 +52,7 @@ import net.runelite.api.MenuEntry;
 import net.runelite.api.NPC;
 import net.runelite.api.NpcID;
 import net.runelite.api.ObjectID;
+import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.ActorDeath;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.GameObjectDespawned;
@@ -234,7 +237,7 @@ public final class MazeModule implements Module
 	{
 		if (event.getGroupId() == InterfaceID.GAUNTLET_TIMER)
 		{
-			resourceManager.init(client.getLocalPlayer().getWorldLocation().getRegionID());
+			resourceManager.init(MiscUtilities.getPlayerRegionID());
 			timerOverlay.setGauntletStart();
 		}
 	}
