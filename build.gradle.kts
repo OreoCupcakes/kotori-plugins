@@ -47,15 +47,8 @@ subprojects {
         maven {
             url = uri("https://repo.runelite.net")
         }
-        mavenLocal()
         mavenCentral()
-
-        jcenter {
-            content {
-                excludeGroupByRegex("com\\.openosrs.*")
-                excludeGroupByRegex("com\\.runelite.*")
-            }
-        }
+        mavenLocal()
 
         exclusiveContent {
             forRepository {
@@ -97,7 +90,7 @@ subprojects {
     configure<PublishingExtension> {
         repositories {
             maven {
-                url = uri("$buildDir/repo")
+                url = uri("${layout.buildDirectory}/repo")
             }
         }
         publications {
@@ -107,7 +100,7 @@ subprojects {
         }
     }
 
-    configure<JavaPluginConvention> {
+    configure<JavaPluginExtension> {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
@@ -129,8 +122,6 @@ subprojects {
         withType<AbstractArchiveTask> {
             isPreserveFileTimestamps = false
             isReproducibleFileOrder = true
-            dirMode = 493
-            fileMode = 420
         }
 
         register<Copy>("copyDeps") {

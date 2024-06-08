@@ -1,3 +1,5 @@
+import java.util.*
+
 /*
  * Copyright (c) 2019 Owain van Brakel <https://github.com/Owain94>
  * All rights reserved.
@@ -24,5 +26,5 @@
  */
 
 fun nameToId(name: String): String {
-    return name.replace("[^A-Za-z]".toRegex(), "").toLowerCase() + "-plugin"
+    return name.replace("[^A-Za-z]".toRegex(), "").lowercase(Locale.getDefault()) + "-plugin"
 }

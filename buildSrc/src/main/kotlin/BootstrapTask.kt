@@ -1,6 +1,5 @@
+
 import com.savvasdalkitsis.jsonmerger.JsonMerger
-import okhttp3.Call
-import okhttp3.Callback
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.gradle.api.DefaultTask
@@ -14,7 +13,6 @@ import java.nio.file.Paths
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 open class BootstrapTask : DefaultTask() {
 
@@ -23,7 +21,7 @@ open class BootstrapTask : DefaultTask() {
     }
 
     private fun hash(file: ByteArray): String {
-        return MessageDigest.getInstance("SHA-512").digest(file).fold("", { str, it -> str + "%02x".format(it) }).toUpperCase()
+        return MessageDigest.getInstance("SHA-512").digest(file).fold("", { str, it -> str + "%02x".format(it) }).uppercase(Locale.getDefault())
     }
 
     /*

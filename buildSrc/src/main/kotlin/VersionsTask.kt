@@ -5,6 +5,7 @@ import org.gradle.api.tasks.options.Option
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.util.*
 
 open class VersionsTask : DefaultTask() {
 
@@ -72,7 +73,7 @@ open class VersionsTask : DefaultTask() {
         }
 
         project.childProjects.forEach {
-            if (module == "All" || it.key.toLowerCase() == module.toLowerCase()) {
+            if (module == "All" || it.key.lowercase(Locale.getDefault()) == module.lowercase(Locale.getDefault())) {
                 val path = it.value.projectDir.absolutePath
                 val build = Paths.get(path, "${it.key}.gradle.kts")
 

@@ -24,32 +24,32 @@
  */
 
 object ProjectVersions {
-    const val runeliteVersion = "1.9.15.2"
+    const val runeliteVersion = "1.10.31.2"
     const val apiVersion = "^1.0.0"
 }
 
 object Libraries {
     private object Versions {
-        const val annotations = "20.1.0"
-        const val apacheCommonsText = "1.9"
-        const val gson = "2.8.6"
+        const val annotations = "24.1.0"
+        const val apacheCommonsText = "1.12.0"
+        const val gson = "2.11.0"
         const val guice = "4.2.3"
-        const val junit = "4.13.1"
-        const val lombok = "1.18.22"
-        const val mockito = "3.6.0"
-        const val okhttp3 = "4.9.0"
-        const val pf4j = "3.5.0"
-        const val rxjava = "3.0.7"
+        const val junit = "5.10.2"
+        const val lombok = "1.18.32"
+        const val mockito = "5.2.0"
+        const val okhttp3 = "4.12.0"
+        const val pf4j = "3.11.0"
+        const val rxjava = "3.1.8"
         const val findbugs = "3.0.2"
-        const val slf4j = "1.7.30"
+        const val slf4j = "2.0.13"
     }
 
     const val annotations = "org.jetbrains:annotations:${Versions.annotations}"
     const val apacheCommonsText = "org.apache.commons:commons-text:${Versions.apacheCommonsText}"
     const val gson = "com.google.code.gson:gson:${Versions.gson}"
-    const val guice = "com.google.inject:guice:${Versions.guice}:no_aop"
+    const val guice = "com.google.inject:guice:${Versions.guice}"
     const val guiceTestlib = "com.google.inject.extensions:guice-testlib:${Versions.guice}"
-    const val junit = "junit:junit:${Versions.junit}"
+    const val junit = "org.junit.jupiter:junit-jupiter-api:${Versions.junit}"
     const val lombok = "org.projectlombok:lombok:${Versions.lombok}"
     const val mockitoCore = "org.mockito:mockito-core:${Versions.mockito}"
     const val mockitoInline = "org.mockito:mockito-inline:${Versions.mockito}"
