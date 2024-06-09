@@ -25,16 +25,13 @@ class HallowedSepulchreWizardStatue
     private static final int WIZARD_STATUE_ANIM_FIRE_DANGER = 8656;
     private boolean danger = false;
 
-    public int maxTickperfloor(int floor, int subfloor)
+    public int maxTickperfloor(int floor)
     {
         if (floor == 3)
         {
             if (maxTick == -1)
             {
-                //if(subfloor == 1)
-                //{//MID
-                    return -12;
-                //}
+                return -12;
             }
         }
         else if(floor < 3)//2 and 1

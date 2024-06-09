@@ -35,6 +35,7 @@ public class HallowedHelperPlugin extends Plugin {
     private static final String GAME_MESSAGE_ENTER_LOBBY1 = "You make your way back to the lobby of the Hallowed Sepulchre.";
     private static final String GAME_MESSAGE_ENTER_LOBBY2 = "The obelisk teleports you back to the lobby of the Hallowed Sepulchre.";
     private static final String GAME_MESSAGE_ENTER_SEPULCHRE = "You venture further down into the Hallowed Sepulchre.";
+    private static final String GAME_MESSAGE_ENTER_SEPULCHRE2 = "You venture down into the Hallowed Sepulchre.";
     private static final String GAME_MESSAGE_DOOR_CLOSES = "<col=ef1020>You hear a loud rumbling noise as the door to the next floor closes.";
     private static final String GAME_MESSAGE_DOOR_CLOSES2 = "<col=ef1020>You hear the sound of a magical barrier activating.";
 
@@ -52,38 +53,38 @@ public class HallowedHelperPlugin extends Plugin {
     public void getFloor()
     {
         //log.info("Getting floor...: " + client.getMapRegions()[0]);
-        switch(WorldPoint.fromLocalInstance(client, client.getLocalPlayer().getLocalLocation()).getRegionID())
+        System.out.println("Region ID from getfloor(): " + WorldPoint.fromLocalInstance(client, client.getLocalPlayer().getLocalLocation()).getRegionID());
+        System.out.println("Client.getMapRegions[0] = " + client.getMapRegions()[0]);
+        switch (WorldPoint.fromLocalInstance(client, client.getLocalPlayer().getLocalLocation()).getRegionID())
         {
-            case 8796:
+            case 8797:
+            case 9054:
+            case 9052:
+            case 9309:
+            case 9053:
                 currentfloor = 1;
                 subfloor = 1;
                 break;
-            case 8797:
-                currentfloor = 1;
-                subfloor = 2;
-                break;
-            case 9052:
-                currentfloor = 1;
-                subfloor = 3;
-                break;
-            case 9820:
-            case 9821://2nd sub maby?
+            case 9821:
+            case 10077:
+            case 10078:
                 currentfloor = 2;
                 subfloor = 1;
                 break;
-            case 9306:
+            case 9307:
+            case 9563:
                 currentfloor = 3;
                 subfloor = 1;
                 get_third_floor_sub();
                 break;
-            case 9818:
+            case 10074:
+            case 10075:
                 currentfloor = 4;
                 subfloor = 1;
                 get_fourth_floor();
                 break;
-            case 8794:
+            case 9051:
                 currentfloor = 5;
-                subfloor = 1;
                 subfloor = 2;
                 break;
             default:
@@ -102,6 +103,8 @@ public class HallowedHelperPlugin extends Plugin {
                 subfloor = 3;
             }
         }
+
+        System.out.println("Currentfloor: " + currentfloor);
     }
 
     public void get_third_floor_sub()
@@ -626,6 +629,7 @@ public class HallowedHelperPlugin extends Plugin {
                 clearSepulchreGameObjects();
                 break;
             case GAME_MESSAGE_ENTER_SEPULCHRE:
+            case GAME_MESSAGE_ENTER_SEPULCHRE2:
                 doorOpen = true;
                 if (!overlayManager.anyMatch(o -> o instanceof HallowedHelperOverlay))
                 {
@@ -707,10 +711,6 @@ public class HallowedHelperPlugin extends Plugin {
     protected void startUp() {
         Rotation.init(config.SafeTileColor(), config.UnsafeTileColor(), Color.BLUE, Color.YELLOW);
         LocalDateTime l = LocalDateTime.now();
-        /*
-        for (Map.Entry<Integer, Object> entry : client.getVarcMap().entrySet()) {
-            log.info("INT:" + entry.getKey() + ",VAL:" + entry.getValue());
-        }*/
         if (client.getGameState() != GameState.LOGGED_IN || !isInSepulchreRegion())
         {
             return;
@@ -734,7 +734,7 @@ public class HallowedHelperPlugin extends Plugin {
     @Subscribe
     private void onGameStateChanged(final GameStateChanged event)
     {
-        final GameState gameState = event.getGameState();;
+        final GameState gameState = event.getGameState();
         switch (gameState)
         {
             case LOGGED_IN:
