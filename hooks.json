@@ -10,13 +10,13 @@
     {
       "n": "setViewportWalking",
       "c": "jy",
-      "p": "bh",
+      "p": "bn",
       "m": 1
     },
     {
       "n": "setCheckClick",
       "c": "jy",
-      "p": "bn",
+      "p": "bh",
       "m": 1
     },
     {
@@ -94,25 +94,25 @@
     {
       "n": "setSelectedSceneTileX",
       "c": "jy",
-      "p": "bg",
+      "p": "aw",
       "m": 1
     },
     {
       "n": "setSelectedSceneTileY",
       "c": "jy",
-      "p": "bu",
+      "p": "aj",
       "m": 1
     },
     {
       "n": "isMoving",
       "c": "dh",
-      "p": "bm",
+      "p": "dp",
       "m": 443603663
     },
     {
       "n": "getActorAnimationId",
       "c": "dh",
-      "p": "bp",
+      "p": "cx",
       "m": 2002995319
     }
   ]
