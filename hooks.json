@@ -10,13 +10,13 @@
     {
       "n": "setViewportWalking",
       "c": "jy",
-      "p": "bn",
+      "p": "bh",
       "m": 1
     },
     {
       "n": "setCheckClick",
       "c": "jy",
-      "p": "bh",
+      "p": "bn",
       "m": 1
     },
     {
@@ -94,13 +94,13 @@
     {
       "n": "setSelectedSceneTileX",
       "c": "jy",
-      "p": "aw",
+      "p": "bg",
       "m": 1
     },
     {
       "n": "setSelectedSceneTileY",
       "c": "jy",
-      "p": "aj",
+      "p": "bu",
       "m": 1
     },
     {
