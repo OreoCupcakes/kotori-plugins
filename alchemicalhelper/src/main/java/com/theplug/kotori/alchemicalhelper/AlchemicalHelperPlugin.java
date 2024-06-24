@@ -635,8 +635,10 @@ public class AlchemicalHelperPlugin extends Plugin
 								WorldArea splashArea = new WorldArea(poisonLocalWorld.getX() - 1, poisonLocalWorld.getY() - 1, 3, 3, poisonLocalWorld.getPlane());
 								dangerousTiles.addAll(splashArea.toWorldPointList());
 							}
-                            assert hydra.getNpc() != null;
-                            dangerousTiles.add(hydra.getNpc().getWorldArea().toWorldPoint());
+                            if (hydra.getNpc() != null)
+							{
+								dangerousTiles.addAll(hydra.getNpc().getWorldArea().toWorldPointList());
+							}
 
 							poisonSafeTile = BreadthFirstSearch.dodgeAoeAttack(client, dangerousTiles, hydra.getNpc(),
 									VarUtilities.getPlayerAttackStyle() == 0, config.favorMeleeDistanceDuringPoison(), flameObjects.isEmpty());
