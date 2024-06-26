@@ -10,13 +10,13 @@
     {
       "n": "setViewportWalking",
       "c": "kq",
-      "p": "bi",
+      "p": "bu",
       "m": 1
     },
     {
       "n": "setCheckClick",
       "c": "kq",
-      "p": "bu",
+      "p": "bi",
       "m": 1
     },
     {
@@ -94,13 +94,13 @@
     {
       "n": "setSelectedSceneTileX",
       "c": "kq",
-      "p": "hf",
+      "p": "bp",
       "m": 1
     },
     {
       "n": "setSelectedSceneTileY",
       "c": "kq",
-      "p": "ag",
+      "p": "bx",
       "m": 1
     },
     {
