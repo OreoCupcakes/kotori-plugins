@@ -94,13 +94,13 @@
     {
       "n": "setSelectedSceneTileX",
       "c": "kq",
-      "p": "bp",
+      "p": "ps",
       "m": 1
     },
     {
       "n": "setSelectedSceneTileY",
       "c": "kq",
-      "p": "bx",
+      "p": "pg",
       "m": 1
     },
     {
