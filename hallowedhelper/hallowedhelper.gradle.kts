@@ -23,7 +23,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "1.4.8"
+version = "1.4.9"
 
 project.extra["PluginName"] = "<html><font color=#6b8af6>[P]</font> Hallowed Sepulchre</html>" // This is the name that is used in the external plugin manager panel
 project.extra["PluginDescription"] = "Hallowed Sepulchre helper with tons of overlays" // This is the description that is used in the external plugin manager panel

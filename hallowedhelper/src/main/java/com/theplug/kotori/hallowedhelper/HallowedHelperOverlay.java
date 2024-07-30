@@ -170,6 +170,46 @@ class HallowedHelperOverlay extends Overlay
         return null;
     }
 
+    private Color setFloor4or5StatueRotationTileColor(Color currentColor)
+    {
+        if (currentColor == Color.RED)
+        {
+            return config.UnsafeTileColor();
+        }
+        else if (currentColor == Color.GREEN)
+        {
+            return config.SafeTileColor();
+        }
+        else if (currentColor == Color.YELLOW)
+        {
+            return config.RiskyTileColor();
+        }
+        else
+        {
+            return currentColor;
+        }
+    }
+
+    private boolean displayFloor4or5StatueRotationTiles(Color currentColor)
+    {
+        if (currentColor == Color.RED)
+        {
+            return config.ShowUnsafeTiles();
+        }
+        else if (currentColor == Color.GREEN || currentColor == Color.BLUE)
+        {
+            return config.ShowSafeTiles();
+        }
+        else if (currentColor == Color.YELLOW)
+        {
+            return config.ShowRiskyTiles();
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     private int currentpoint = 1;
     WorldPoint w;
     public void render_floor4_statues(Graphics2D g)
@@ -188,6 +228,8 @@ class HallowedHelperOverlay extends Overlay
                 }
                 for(Color current : rotation)
                 {
+                    boolean displayTiles = displayFloor4or5StatueRotationTiles(current);
+                    current = setFloor4or5StatueRotationTileColor(current);
                     if(unreachable)
                     {
                         if (plugin.floor4_fire_rotation < 5)
@@ -196,9 +238,15 @@ class HallowedHelperOverlay extends Overlay
                         }
                     }
                     decrementCurrentpoint();
-                    render_server_line_offsetx(g, current, w, currentpoint);
+                    if (displayTiles)
+                    {
+                        render_server_line_offsetx(g, current, w, currentpoint);
+                    }
                     String ticksText = "" + (7 - plugin.floor_4_ticks_since_statue);
-                    render_statue_ticks_floor_4_5_line(g, current, w, currentpoint, ticksText);
+                    if (config.ShowFireTickCounter())
+                    {
+                        render_statue_ticks_floor_4_5_line(g, current, w, currentpoint, ticksText);
+                    }
                 }
             }
         }
@@ -215,6 +263,8 @@ class HallowedHelperOverlay extends Overlay
             {
                 for(Color current : rotation)
                 {
+                    boolean displayTiles = displayFloor4or5StatueRotationTiles(current);
+                    current = setFloor4or5StatueRotationTileColor(current);
                     decrementCurrentpoint();
                     if(current == Rotation.blank)
                     {
@@ -222,10 +272,17 @@ class HallowedHelperOverlay extends Overlay
                     }
                     if(!plugin.floor4_SouthA_first_fire_detected)
                     {
-                        render_server_line_offsetx(g, Color.YELLOW, w, currentpoint);
+                        if (displayTiles)
+                        {
+                            render_server_line_offsetx(g, Color.YELLOW, w, currentpoint);
+                        }
                     }
-                    else {
-                        render_server_line_offsetx(g, current, w, currentpoint);
+                    else
+                    {
+                        if (displayTiles)
+                        {
+                            render_server_line_offsetx(g, current, w, currentpoint);
+                        }
                     }
                 }
             }
@@ -243,6 +300,8 @@ class HallowedHelperOverlay extends Overlay
             {
                 for(Color current : rotation)
                 {
+                    boolean displayTiles = displayFloor4or5StatueRotationTiles(current);
+                    current = setFloor4or5StatueRotationTileColor(current);
                     incrementCurrentpoint();
                     if(current == Rotation.blank)
                     {
@@ -250,10 +309,17 @@ class HallowedHelperOverlay extends Overlay
                     }
                     if(!plugin.floor4_SouthB_first_fire_detected)
                     {
-                        render_server_line_offsety(g, Color.YELLOW, w, currentpoint);
+                        if (displayTiles)
+                        {
+                            render_server_line_offsety(g, Color.YELLOW, w, currentpoint);
+                        }
                     }
-                    else {
-                        render_server_line_offsety(g, current, w, currentpoint);
+                    else
+                    {
+                        if (displayTiles)
+                        {
+                            render_server_line_offsety(g, current, w, currentpoint);
+                        }
                     }
                 }
             }
@@ -271,13 +337,22 @@ class HallowedHelperOverlay extends Overlay
             {
                 for(Color current : rotation)
                 {
+                    boolean displayTiles = displayFloor4or5StatueRotationTiles(current);
+                    current = setFloor4or5StatueRotationTileColor(current);
                     decrementCurrentpoint();
-                    if(!plugin.floor_5_first_fire_detected) {
-                        render_server_line_offsetx(g, Color.YELLOW, w, currentpoint);
+                    if(!plugin.floor_5_first_fire_detected)
+                    {
+                        if (displayTiles)
+                        {
+                            render_server_line_offsetx(g, Color.YELLOW, w, currentpoint);
+                        }
                     }
                     else
                     {
-                        render_server_line_offsetx(g, current, w, currentpoint);
+                        if (displayTiles)
+                        {
+                            render_server_line_offsetx(g, current, w, currentpoint);
+                        }
                     }
                 }
             }
@@ -296,13 +371,22 @@ class HallowedHelperOverlay extends Overlay
             {
                 for(Color current : rotation)
                 {
+                    boolean displayTiles = displayFloor4or5StatueRotationTiles(current);
+                    current = setFloor4or5StatueRotationTileColor(current);
                     decrementCurrentpoint();
                     if(!plugin.floor5_2A_first_fire_detected)
                     {
-                        render_server_line_offsetx(g, Color.YELLOW, w, currentpoint);
+                        if (displayTiles)
+                        {
+                            render_server_line_offsetx(g, Color.YELLOW, w, currentpoint);
+                        }
                     }
-                    else {
-                        render_server_line_offsetx(g, current, w, currentpoint);
+                    else
+                    {
+                        if (displayTiles)
+                        {
+                            render_server_line_offsetx(g, current, w, currentpoint);
+                        }
                     }
                 }
             }
@@ -314,13 +398,22 @@ class HallowedHelperOverlay extends Overlay
             {
                 for(Color current : rotation2)
                 {
+                    boolean displayTiles = displayFloor4or5StatueRotationTiles(current);
+                    current = setFloor4or5StatueRotationTileColor(current);
                     decrementCurrentpoint();
                     if(!plugin.floor5_2A_first_fire_detected)
                     {
-                        render_server_line_offsetx(g, Color.YELLOW, w, currentpoint);
+                        if (displayTiles)
+                        {
+                            render_server_line_offsetx(g, Color.YELLOW, w, currentpoint);
+                        }
                     }
-                    else {
-                        render_server_line_offsetx(g, current, w, currentpoint);
+                    else
+                    {
+                        if (displayTiles)
+                        {
+                            render_server_line_offsetx(g, current, w, currentpoint);
+                        }
                     }
                 }
             }
@@ -338,6 +431,8 @@ class HallowedHelperOverlay extends Overlay
             {
                 for(Color current : rotation)
                 {
+                    boolean displayTiles = displayFloor4or5StatueRotationTiles(current);
+                    current = setFloor4or5StatueRotationTileColor(current);
                     decrementCurrentpoint();
                     if(current == Rotation.blank)
                     {
@@ -345,10 +440,17 @@ class HallowedHelperOverlay extends Overlay
                     }
                     if(!plugin.floor_5_4_first_fire_detected)
                     {
-                        render_server_line_offsetx(g, Color.YELLOW, w, currentpoint);
+                        if (displayTiles)
+                        {
+                            render_server_line_offsetx(g, Color.YELLOW, w, currentpoint);
+                        }
                     }
-                    else {
-                        render_server_line_offsetx(g, current, w, currentpoint);
+                    else
+                    {
+                        if (displayTiles)
+                        {
+                            render_server_line_offsetx(g, current, w, currentpoint);
+                        }
                     }
                 }
             }
