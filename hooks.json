@@ -3,117 +3,117 @@
   [
     {
       "n": "invokeMenuAction",
-      "c": "cj",
-      "p": "lg",
-      "m": -37
+      "c": "pb",
+      "p": "ll",
+      "m": -2081131744
     },
     {
       "n": "setViewportWalking",
-      "c": "kq",
-      "p": "bu",
+      "c": "hf",
+      "p": "ba",
       "m": 1
     },
     {
       "n": "setCheckClick",
-      "c": "kq",
-      "p": "bi",
+      "c": "hf",
+      "p": "br",
       "m": 1
     },
     {
       "n": "setSelectedSpellWidget",
-      "c": "ck",
-      "p": "ol",
-      "m": 970534027
+      "c": "cv",
+      "p": "os",
+      "m": 1846373877
     },
     {
       "n": "setSelectedSpellChildIndex",
       "c": "client",
-      "p": "oh",
-      "m": -330305459
+      "p": "ou",
+      "m": -1655482617
     },
     {
       "n": "setSelectedSpellItemId",
       "c": "client",
       "p": "ok",
-      "m": 1460628217
+      "m": -1344704113
     },
     {
       "n": "getNpcOverheadIcon",
-      "c": "hb",
-      "p": "bq",
+      "c": "jm",
+      "p": "bw",
       "m": 1
     },
     {
       "n": "menuOptionsCount",
-      "c": "client",
-      "p": "nr",
-      "m": -1361024685
+      "c": "nu",
+      "p": "ay",
+      "m": 809284913
     },
     {
       "n": "menuIdentifiersArray",
-      "c": "client",
-      "p": "oq",
+      "c": "nu",
+      "p": "au",
       "m": 1
     },
     {
       "n": "menuItemIdsArray",
-      "c": "client",
-      "p": "ov",
+      "c": "nu",
+      "p": "ac",
       "m": 1
     },
     {
       "n": "menuOptionsArray",
-      "c": "client",
-      "p": "op",
+      "c": "nu",
+      "p": "ae",
       "m": 1
     },
     {
       "n": "menuParam0Array",
-      "c": "client",
-      "p": "nb",
+      "c": "nu",
+      "p": "am",
       "m": 1
     },
     {
       "n": "menuParam1Array",
-      "c": "client",
-      "p": "nk",
+      "c": "nu",
+      "p": "ax",
       "m": 1
     },
     {
       "n": "menuTargetsArray",
-      "c": "client",
-      "p": "ob",
+      "c": "nu",
+      "p": "ad",
       "m": 1
     },
     {
       "n": "menuTypesArray",
-      "c": "client",
-      "p": "on",
+      "c": "nu",
+      "p": "an",
       "m": 1
     },
     {
       "n": "setSelectedSceneTileX",
-      "c": "kq",
-      "p": "ps",
+      "c": "hf",
+      "p": "bi",
       "m": 1
     },
     {
       "n": "setSelectedSceneTileY",
-      "c": "kq",
-      "p": "pg",
+      "c": "hf",
+      "p": "be",
       "m": 1
     },
     {
       "n": "isMoving",
-      "c": "dw",
-      "p": "dl",
-      "m": -6991657
+      "c": "dt",
+      "p": "dd",
+      "m": 1409302933
     },
     {
       "n": "getActorAnimationId",
-      "c": "dw",
-      "p": "ca",
-      "m": -614178723
+      "c": "dt",
+      "p": "dv",
+      "m": 783237933
     }
   ]
 }
