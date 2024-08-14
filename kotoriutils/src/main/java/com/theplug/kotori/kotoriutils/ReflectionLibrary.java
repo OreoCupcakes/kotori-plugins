@@ -575,7 +575,7 @@ public class ReflectionLibrary
 	{
 		Field optionsCount = getField(menuOptionsCountClassName, menuOptionsCountFieldName);
 		String errorMsg = "Kotori Plugin Utils - Failed to get menu options count.";
-		return getFieldIntValue(optionsCount, client.getMenu().getClass(), menuOptionsCountMultiplier, errorMsg);
+		return getFieldIntValue(optionsCount, client.getMenu(), menuOptionsCountMultiplier, errorMsg);
 	}
 
 	public static int getTopMenuEntryIndex()
@@ -587,49 +587,49 @@ public class ReflectionLibrary
 	{
 		Field menuIdentifiers = getField(menuIdentifiersClassName, menuIdentifiersFieldName);
 		String errorMsg = "Kotori Plugin Utils - Failed to set menu identifier \"" + value + "\" in menu index \"" + index + "\".";
-		setFieldIntArrayValue(menuIdentifiers, client.getMenu().getClass(), index, value, errorMsg);
+		setFieldIntArrayValue(menuIdentifiers, client.getMenu(), index, value, errorMsg);
 	}
 	
 	public static void setMenuItemId(int index, int value)
 	{
 		Field menuItemIds = getField(menuItemIdsClassName, menuItemIdsFieldName);
 		String errorMsg = "Kotori Plugin Utils - Failed to set menu item id \"" + value + "\" in menu index \"" + index + "\".";
-		setFieldIntArrayValue(menuItemIds, client.getMenu().getClass(), index, value, errorMsg);
+		setFieldIntArrayValue(menuItemIds, client.getMenu(), index, value, errorMsg);
 	}
 	
 	private static void setMenuOption(int index, String value)
 	{
 		Field menuOptions = getField(menuOptionsClassName, menuOptionsFieldName);
 		String errorMsg = "Kotori Plugin Utils - Failed to set menu option \"" + value + "\" in menu index \"" + index + "\".";
-		setFieldObjectArrayValue(menuOptions, client.getMenu().getClass(), index, value, errorMsg);
+		setFieldObjectArrayValue(menuOptions, client.getMenu(), index, value, errorMsg);
 	}
 	
 	private static void setMenuParam0(int index, int value)
 	{
 		Field menuParam0s = getField(menuParam0ClassName, menuParam0FieldName);
 		String errorMsg = "Kotori Plugin Utils - Failed to set menu param0 \"" + value + "\" in menu index \"" + index + "\".";
-		setFieldIntArrayValue(menuParam0s, client.getMenu().getClass(), index, value, errorMsg);
+		setFieldIntArrayValue(menuParam0s, client.getMenu(), index, value, errorMsg);
 	}
 	
 	private static void setMenuParam1(int index, int value)
 	{
 		Field menuParam1s = getField(menuParam1ClassName, menuParam1FieldName);
 		String errorMsg = "Kotori Plugin Utils - Failed to set menu param1 \"" + value + "\" in menu index \"" + index + "\".";
-		setFieldIntArrayValue(menuParam1s, client.getMenu().getClass(), index, value, errorMsg);
+		setFieldIntArrayValue(menuParam1s, client.getMenu(), index, value, errorMsg);
 	}
 	
 	private static void setMenuTarget(int index, String value)
 	{
 		Field menuTargets = getField(menuTargetsClassName, menuTargetsFieldName);
 		String errorMsg = "Kotori Plugin Utils - Failed to set menu target \"" + value + "\" in menu index \"" + index + "\".";
-		setFieldObjectArrayValue(menuTargets, client.getMenu().getClass(), index, value, errorMsg);
+		setFieldObjectArrayValue(menuTargets, client.getMenu(), index, value, errorMsg);
 	}
 	
 	private static void setMenuOpcode(int index, int value)
 	{
 		Field menuOpcodes = getField(menuTypesClassName, menuTypesFieldName);
 		String errorMsg = "Kotori Plugin Utils - Failed to set menu option \"" + value + "\" in menu index \"" + index + "\".";
-		setFieldIntArrayValue(menuOpcodes, client.getMenu().getClass(), index, value, errorMsg);
+		setFieldIntArrayValue(menuOpcodes, client.getMenu(), index, value, errorMsg);
 	}
 	
 	public static void insertMenuEntry(int index, String option, String target, int opcode, int id, int param0, int param1, int itemId)
