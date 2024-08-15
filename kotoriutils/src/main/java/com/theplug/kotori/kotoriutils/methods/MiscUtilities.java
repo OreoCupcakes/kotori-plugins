@@ -68,7 +68,7 @@ public class MiscUtilities
 
 	public static MenuEntry findAnyMenuEntryWithAction(MenuAction... menuActions)
 	{
-		MenuEntry[] activeEntries = client.getMenuEntries();
+		MenuEntry[] activeEntries = client.getMenu().getMenuEntries();
 
 		//Go backwards here because the back of the array is the top menu entry
 		for (int i = activeEntries.length - 1; i >= 0; i--)

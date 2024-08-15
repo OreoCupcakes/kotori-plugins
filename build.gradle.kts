@@ -65,6 +65,7 @@ subprojects {
     apply<JavaPlugin>()
 
     val version = "latest.release"
+//    val version = "1.10.36"
 
     dependencies {
         annotationProcessor(Libraries.lombok)

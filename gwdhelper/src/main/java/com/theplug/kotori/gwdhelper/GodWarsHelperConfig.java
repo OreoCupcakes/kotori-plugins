@@ -23,6 +23,7 @@
  */
 package com.theplug.kotori.gwdhelper;
 
+import com.theplug.kotori.kotoriutils.rlapi.Spells;
 import com.theplug.kotori.kotoriutils.rlapi.WidgetInfoPlus;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -1870,16 +1871,15 @@ public interface GodWarsHelperConfig extends Config
 	@AllArgsConstructor
 	enum SpellChoice
 	{
-		BLOOD_BURST("Blood Burst", WidgetInfoPlus.SPELL_BLOOD_BURST),
-		ICE_BURST("Ice Burst", WidgetInfoPlus.SPELL_ICE_BURST),
-		BLOOD_BARRAGE("Blood Barrage", WidgetInfoPlus.SPELL_BLOOD_BARRAGE),
-		ICE_BARRAGE("Ice Barrage", WidgetInfoPlus.SPELL_ICE_BARRAGE),
-		SUPERIOR_DEMONBANE("Superior Demonbane", WidgetInfoPlus.SPELL_SUPERIOR_DEMONBANE),
-		DARK_DEMONBANE("Dark Demonbane", WidgetInfoPlus.SPELL_DARK_DEMONBANE),
-		MARK_OF_DARKNESS("Mark of Darkness", WidgetInfoPlus.SPELL_MARK_OF_DARKNESS),
+		BLOOD_BURST("Blood Burst", Spells.BLOOD_BURST),
+		ICE_BURST("Ice Burst", Spells.ICE_BURST),
+		BLOOD_BARRAGE("Blood Barrage", Spells.BLOOD_BARRAGE),
+		ICE_BARRAGE("Ice Barrage", Spells.ICE_BARRAGE),
+		SUPERIOR_DEMONBANE("Superior Demonbane", Spells.SUPERIOR_DEMONBANE),
+		DARK_DEMONBANE("Dark Demonbane", Spells.DARK_DEMONBANE),
 		OFF("Off", null);
 		
 		private final String spellString;
-		private final WidgetInfoPlus widgetInfo;
+		private final Spells spell;
 	}
 }

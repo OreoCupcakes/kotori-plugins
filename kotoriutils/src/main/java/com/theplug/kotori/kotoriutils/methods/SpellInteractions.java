@@ -72,7 +72,7 @@ public class SpellInteractions
 
 		ReflectionLibrary.setSelectedSpell(spell.getSpell().getId());
 		String option = "Cast <col=39ff14>" + spell + "</col> ->";
-		MenuEntry oneClick = client.createMenuEntry(-1).setParam0(0).setParam1(0).setIdentifier(targetEntry.getIdentifier())
+		MenuEntry oneClick = client.getMenu().createMenuEntry(-1).setParam0(0).setParam1(0).setIdentifier(targetEntry.getIdentifier())
 				.setOption(option).setTarget(targetEntry.getTarget());
 
 		switch (targetEntry.getType())

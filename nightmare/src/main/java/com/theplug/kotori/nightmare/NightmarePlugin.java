@@ -592,11 +592,11 @@ public class NightmarePlugin extends Plugin
 
 	private void removeNPCMenuEntry(String target)
 	{
-		MenuEntry[] menuEntries = client.getMenuEntries();
+		MenuEntry[] menuEntries = client.getMenu().getMenuEntries();
 		MenuEntry[] newEntries = Arrays.stream(menuEntries).filter(e -> e.getNpc() == null || Objects.requireNonNull(e.getNpc().getName()).equalsIgnoreCase(target)).toArray(MenuEntry[]::new);
 		if (menuEntries.length != newEntries.length)
 		{
-			client.setMenuEntries(newEntries);
+			client.getMenu().setMenuEntries(newEntries);
 		}
 	}
 

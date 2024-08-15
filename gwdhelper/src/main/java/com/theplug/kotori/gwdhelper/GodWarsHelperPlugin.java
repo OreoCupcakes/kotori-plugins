@@ -27,6 +27,7 @@ import com.google.inject.Provides;
 import com.theplug.kotori.kotoriutils.KotoriUtils;
 import com.theplug.kotori.kotoriutils.ReflectionLibrary;
 import com.theplug.kotori.kotoriutils.methods.*;
+import com.theplug.kotori.kotoriutils.rlapi.Spells;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -385,12 +386,12 @@ public class GodWarsHelperPlugin extends Plugin
 		
 		if (isSpellHotkey1Pressed)
 		{
-			createSpellHotkeyMenuEntry(config.spellChoice1());
+			SpellInteractions.createOneClickAttackSpell(config.spellChoice1().getSpell());
 		}
 		
 		if (isSpellHotkey2Pressed)
 		{
-			createSpellHotkeyMenuEntry(config.spellChoice2());
+			SpellInteractions.createOneClickAttackSpell(config.spellChoice2().getSpell());
 		}
 	}
 	
@@ -407,14 +408,14 @@ public class GodWarsHelperPlugin extends Plugin
 		
 		if (entryOption.equals(spell1Option))
 		{
-			if (!VarUtilities.isSpellInActiveSpellbook(config.spellChoice1().getWidgetInfo()) || event.getMenuTarget().equals(" "))
+			if (!VarUtilities.isSpellInActiveSpellbook(config.spellChoice1().getSpell().getSpell()) || event.getMenuTarget().equals(" "))
 			{
 				event.consume();
 			}
 		}
 		else if (entryOption.equals(spell2Option))
 		{
-			if (!VarUtilities.isSpellInActiveSpellbook(config.spellChoice2().getWidgetInfo()) || event.getMenuTarget().equals(" "))
+			if (!VarUtilities.isSpellInActiveSpellbook(config.spellChoice2().getSpell().getSpell()) || event.getMenuTarget().equals(" "))
 			{
 				event.consume();
 			}
@@ -1053,37 +1054,6 @@ public class GodWarsHelperPlugin extends Plugin
 			{
 				set5EquippedOnce = InventoryInteractions.equipItems(InventoryInteractions.parseStringToItemIds(allGear));
 			}
-		}
-	}
-	
-	private void createSpellHotkeyMenuEntry(GodWarsHelperConfig.SpellChoice spellChoice)
-	{
-		if (client.isMenuOpen())
-		{
-			return;
-		}
-		
-		MenuEntry[] entries = client.getMenuEntries();
-		MenuEntry npcEntry = null;
-		for (MenuEntry e: entries)
-		{
-			if (e.getType() == MenuAction.NPC_SECOND_OPTION)
-			{
-				npcEntry = e;
-				break;
-			}
-		}
-		ReflectionLibrary.setSelectedSpell(spellChoice.getWidgetInfo().getId());
-		String menuOptionText = "<col=39ff14>Cast " + spellChoice.getSpellString() + "</col> -> ";
-		MenuEntry hotkeyEntry = client.createMenuEntry(-1).setForceLeftClick(true).setParam0(0).setParam1(0).setType(MenuAction.WIDGET_TARGET_ON_NPC)
-				.setOption(menuOptionText);
-		if (npcEntry == null)
-		{
-			hotkeyEntry.setTarget(" ").setIdentifier(0);
-		}
-		else
-		{
-			hotkeyEntry.setTarget(npcEntry.getTarget()).setIdentifier(npcEntry.getIdentifier());
 		}
 	}
 	

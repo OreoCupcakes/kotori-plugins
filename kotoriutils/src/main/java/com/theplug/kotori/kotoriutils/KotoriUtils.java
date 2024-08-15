@@ -384,7 +384,7 @@ public class KotoriUtils extends Plugin {
         {
             return;
         }
-        client.createMenuEntry(index).setForceLeftClick(true);
+        client.getMenu().createMenuEntry(index).setForceLeftClick(true);
         ReflectionLibrary.insertMenuEntry(index, "Kotori Utils Test - Activate ", "Thick Skin Prayer", MenuAction.CC_OP.getId(), 1, -1,
                 PrayerExtended.getPrayerWidgetId(Prayer.THICK_SKIN), -1);
     }
@@ -396,7 +396,7 @@ public class KotoriUtils extends Plugin {
             return;
         }
         
-        MenuEntry[] entries = client.getMenuEntries();
+        MenuEntry[] entries = client.getMenu().getMenuEntries();
         MenuEntry npcEntry = null;
         for (MenuEntry e: entries)
         {
@@ -406,9 +406,9 @@ public class KotoriUtils extends Plugin {
                 break;
             }
         }
-        ReflectionLibrary.setSelectedSpell(WidgetInfoPlus.SPELL_FIRE_STRIKE.getId());
-        String menuOptionText = "<col=39ff14>Kotori Utils Test - Cast Fire Strike</col> -> ";
-        MenuEntry hotkeyEntry = client.createMenuEntry(-1).setForceLeftClick(true).setParam0(0).setParam1(0).setType(MenuAction.WIDGET_TARGET_ON_NPC)
+        ReflectionLibrary.setSelectedSpell(WidgetInfoPlus.SPELL_WIND_STRIKE.getId());
+        String menuOptionText = "<col=39ff14>Kotori Utils Test - Cast Wind Strike</col> -> ";
+        MenuEntry hotkeyEntry = client.getMenu().createMenuEntry(-1).setForceLeftClick(true).setParam0(0).setParam1(0).setType(MenuAction.WIDGET_TARGET_ON_NPC)
                 .setOption(menuOptionText);
         if (npcEntry == null)
         {
