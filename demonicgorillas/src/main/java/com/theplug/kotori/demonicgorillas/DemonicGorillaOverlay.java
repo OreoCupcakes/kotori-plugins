@@ -66,7 +66,7 @@ public class DemonicGorillaOverlay extends Overlay
 		this.plugin = plugin;
 		setPosition(OverlayPosition.DYNAMIC);
 		setPriority(Overlay.PRIORITY_HIGHEST);
-		setLayer(OverlayLayer.ABOVE_SCENE);
+		setLayer(OverlayLayer.UNDER_WIDGETS);
 	}
 
 	private BufferedImage getIcon(DemonicGorilla.AttackStyle attackStyle)
@@ -96,7 +96,7 @@ public class DemonicGorillaOverlay extends Overlay
 			LocalPoint lp = gorilla.getNpc().getLocalLocation();
 			if (lp != null)
 			{
-				Point point = Perspective.localToCanvas(client, lp, client.getPlane(),
+				Point point = Perspective.localToCanvas(client, lp, client.getTopLevelWorldView().getPlane(),
 					gorilla.getNpc().getLogicalHeight() + 16);
 				if (point != null)
 				{
