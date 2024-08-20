@@ -96,8 +96,8 @@ public class DemonicGorillaOverlay extends Overlay
 			LocalPoint lp = gorilla.getNpc().getLocalLocation();
 			if (lp != null)
 			{
-				Point point = Perspective.localToCanvas(client, lp, client.getTopLevelWorldView().getPlane(),
-					gorilla.getNpc().getLogicalHeight() + 16);
+				Point point = Perspective.localToCanvas(client, lp, client.getTopLevelWorldView().getPlane());
+				//		,gorilla.getNpc().getLogicalHeight() - 32);
 				if (point != null)
 				{
 					point = new Point(point.getX(), point.getY());
