@@ -565,6 +565,7 @@ public class NexPlugin extends Plugin
 	{
 		if (!inNexRegion || !inFight)
 		{
+
 			return;
 		}
 		Actor actor = event.getActor();
@@ -575,14 +576,14 @@ public class NexPlugin extends Plugin
 
 		if (actor == client.getLocalPlayer())
 		{
-			if (actor.getGraphic() == COUGH_GRAPHIC_ID)
+			if (actor.hasSpotAnim(COUGH_GRAPHIC_ID))
 			{
 				selfCoughingPlayer = new NexCoughingPlayer(actor.getName(), client.getGameCycle(), (Player) actor);
 			}
 			return;
 		}
 
-		if (actor.getGraphic() == COUGH_GRAPHIC_ID)
+		if (actor.hasSpotAnim(COUGH_GRAPHIC_ID))
 		{
 			coughingPlayers.add(new NexCoughingPlayer(actor.getName(), client.getGameCycle(), (Player) actor));
 			coughingPlayersChanged = true;
@@ -592,11 +593,11 @@ public class NexPlugin extends Plugin
 	@Subscribe
 	private void onChatMessage(ChatMessage event)
 	{
-		if (!inNexRegion || !inFight || event.getType() != ChatMessageType.GAMEMESSAGE)
+		if (!inNexRegion || !inFight || event.getType() != ChatMessageType.NPC_SAY)
 		{
 			return;
 		}
-		String message = event.getMessage().toLowerCase().replaceFirst("nex:", "").replaceAll("<[^>]+>", "").strip();
+		String message = event.getMessage().toLowerCase().replaceFirst("nex\\|", "").replaceAll("<[^>]+>", "").strip();
 
 		if (setPhase(message))
 		{
@@ -697,7 +698,7 @@ public class NexPlugin extends Plugin
 		if (lastActive == null)
 		{
 			var currentMinionId = NexPhase.getMinionId(getCurrentPhase());
-			var active = client.getTopLevelWorldView().npcs().stream().filter(npc -> npc.getId() == currentMinionId).findFirst().orElse(null);
+			var active = NPCInteractions.getNpcs().stream().filter(npc -> npc.getId() == currentMinionId).findFirst().orElse(null);
 			lastActive = active;
 			return active;
 		}
@@ -830,10 +831,7 @@ public class NexPlugin extends Plugin
 				return true;
 			}
 
-			if (config.hideHealthyPlayers() && teamSize >= config.hideAboveNumber() && healthyPlayers.contains(player.getName()))
-			{
-				return false;
-			}
+            return !config.hideHealthyPlayers() || teamSize < config.hideAboveNumber() || !healthyPlayers.contains(player.getName());
 		}
 
 		return true;

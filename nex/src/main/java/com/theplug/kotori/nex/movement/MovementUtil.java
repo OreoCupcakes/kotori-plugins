@@ -15,6 +15,11 @@ public class MovementUtil
 	public static boolean isWalkable(Client client, LocalPoint tile)
 	{
 		WorldView wv = client.getTopLevelWorldView();
+		if (wv == null)
+		{
+			return false;
+		}
+
 		if (wv.getCollisionMaps() != null)
 		{
 			int[][] flags = wv.getCollisionMaps()[wv.getPlane()].getFlags();
@@ -47,18 +52,28 @@ public class MovementUtil
 
 	public static List<LocalPoint> getWalkableLocalTiles(Client client, WorldPoint center, int radius)
 	{
+		WorldView wv = client.getTopLevelWorldView();
+		if (wv == null)
+		{
+			return Collections.singletonList(client.getLocalPlayer().getLocalLocation());
+		}
 		return MovementUtil.getRadiusTiles(center, radius)
 			.stream()
-			.map(tile -> LocalPoint.fromWorld(client.getTopLevelWorldView(), tile))
+			.map(tile -> LocalPoint.fromWorld(wv, tile))
 			.filter(tile -> MovementUtil.isWalkable(client, tile))
 			.collect(Collectors.toList());
 	}
 
 	public static List<WorldPoint> getWalkableWorldTiles(Client client, WorldPoint center, int radius)
 	{
+		WorldView wv = client.getTopLevelWorldView();
+		if (wv == null)
+		{
+			return Collections.singletonList(client.getLocalPlayer().getWorldLocation());
+		}
 		return MovementUtil.getRadiusTiles(center, radius)
 			.stream()
-			.filter(tile -> MovementUtil.isWalkable(client, LocalPoint.fromWorld(client.getTopLevelWorldView(), tile)))
+			.filter(tile -> MovementUtil.isWalkable(client, LocalPoint.fromWorld(wv, tile)))
 			.collect(Collectors.toList());
 	}
 }
