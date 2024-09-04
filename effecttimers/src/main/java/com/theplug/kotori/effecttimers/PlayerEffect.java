@@ -40,6 +40,7 @@ public enum PlayerEffect
 	BURST("Ice Burst", 363, 16, false, TimerType.FREEZE),
 	BLITZ("Ice Blitz", 367, 24, false, TimerType.FREEZE),
 	BARRAGE("Ice Barrage", 369, 32, false, TimerType.FREEZE),
+	SCORCHING_BOW("Scorching Bow", 2808, 20, false, TimerType.FREEZE),
 	TELEBLOCK("Teleblock", 345, 500, true, TimerType.TELEBLOCK),
 	VENG("Vengeance", 726, 50, false, TimerType.VENG),
 	VENG_LEAGUES_FOUR("Vengeance", 2605, 50, false, TimerType.VENG),
