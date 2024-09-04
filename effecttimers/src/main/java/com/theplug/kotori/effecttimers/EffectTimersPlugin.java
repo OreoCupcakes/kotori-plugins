@@ -201,7 +201,7 @@ public class EffectTimersPlugin extends Plugin
 				return;
 			}
 			
-			if (timerManager.hasTimerActive(actorWithGraphic, effect.getType()))
+			if (timerManager.hasTimerActive(actorWithGraphic, effect.getType()) && effect != PlayerEffect.SCORCHING_BOW)
 			{
 				return;
 			}

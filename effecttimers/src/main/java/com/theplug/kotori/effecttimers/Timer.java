@@ -272,6 +272,8 @@ public class Timer
 					}
 				}
 				return length;
+			case SCORCHING_BOW:
+				return 0;
 			default:
 				return length;
 		}
