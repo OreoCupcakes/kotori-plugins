@@ -23,7 +23,7 @@
       "n": "setSelectedSpellWidget",
       "c": "bp",
       "p": "og",
-      "m": 795297053
+      "m": -795297053
     },
     {
       "n": "setSelectedSpellChildIndex",
@@ -106,7 +106,7 @@
     {
       "n": "isMoving",
       "c": "dy",
-      "p": "dl",
+      "p": "cp",
       "m": 166438615
     },
     {
