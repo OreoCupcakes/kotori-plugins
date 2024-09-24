@@ -94,13 +94,13 @@
     {
       "n": "setSelectedSceneTileX",
       "c": "jh",
-      "p": "bz",
+      "p": "us",
       "m": 1
     },
     {
       "n": "setSelectedSceneTileY",
       "c": "jh",
-      "p": "bu",
+      "p": "rw",
       "m": 1
     },
     {
@@ -112,7 +112,7 @@
     {
       "n": "getActorAnimationId",
       "c": "dy",
-      "p": "by",
+      "p": "cd",
       "m": 1036457443
     }
   ]
