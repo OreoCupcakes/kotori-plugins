@@ -94,19 +94,19 @@
     {
       "n": "setSelectedSceneTileX",
       "c": "jh",
-      "p": "us",
+      "p": "bz",
       "m": 1
     },
     {
       "n": "setSelectedSceneTileY",
       "c": "jh",
-      "p": "rw",
+      "p": "bu",
       "m": 1
     },
     {
       "n": "isMoving",
       "c": "dy",
-      "p": "cp",
+      "p": "ds",
       "m": 166438615
     },
     {
