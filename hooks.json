@@ -74,6 +74,24 @@
       "m": 2098117423
     },
     {
+      "n": "menuParam0Array",
+      "c": "vl",
+      "p": "ag",
+      "m": 1
+    },
+    {
+      "n": "menuParam1Array",
+      "c": "vl",
+      "p": "am",
+      "m": 1
+    },
+    {
+      "n": "menuTypesArray",
+      "c": "vl",
+      "p": "ax",
+      "m": 1
+    },
+    {
       "n": "menuIdentifiersArray",
       "c": "vl",
       "p": "aq",
@@ -92,27 +110,9 @@
       "m": 1
     },
     {
-      "n": "menuParam0Array",
-      "c": "vl",
-      "p": "ag",
-      "m": 1
-    },
-    {
-      "n": "menuParam1Array",
-      "c": "vl",
-      "p": "am",
-      "m": 1
-    },
-    {
       "n": "menuTargetsArray",
       "c": "vl",
       "p": "ar",
-      "m": 1
-    },
-    {
-      "n": "menuTypesArray",
-      "c": "vl",
-      "p": "ax",
       "m": 1
     }
   ]
