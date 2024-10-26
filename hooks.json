@@ -8,12 +8,6 @@
       "m": 1002130222
     },
     {
-      "n": "setViewportWalking",
-      "c": "ji",
-      "p": "bi",
-      "m": 1
-    },
-    {
       "n": "setCheckClick",
       "c": "ji",
       "p": "bn",
@@ -29,6 +23,12 @@
       "n": "setSelectedSceneTileY",
       "c": "ji",
       "p": "bw",
+      "m": 1
+    },
+    {
+      "n": "setViewportWalking",
+      "c": "ji",
+      "p": "bi",
       "m": 1
     },
     {
@@ -52,7 +52,7 @@
     {
       "n": "getNpcOverheadIcon",
       "c": "hy",
-      "p": "ah",
+      "p": "bj",
       "m": 1
     },
     {
@@ -70,37 +70,37 @@
     {
       "n": "menuOptionsCount",
       "c": "ww",
-      "p": "bu",
+      "p": "aw",
       "m": -1577732637
     },
     {
       "n": "menuParam0Array",
       "c": "ww",
-      "p": "ay",
+      "p": "ak",
       "m": 1
     },
     {
       "n": "menuParam1Array",
       "c": "ww",
-      "p": "as",
+      "p": "aj",
       "m": 1
     },
     {
       "n": "menuTypesArray",
       "c": "ww",
-      "p": "aj",
+      "p": "ai",
       "m": 1
     },
     {
       "n": "menuIdentifiersArray",
       "c": "ww",
-      "p": "ai",
+      "p": "ay",
       "m": 1
     },
     {
       "n": "menuItemIdsArray",
       "c": "ww",
-      "p": "ae",
+      "p": "as",
       "m": 1
     },
     {
