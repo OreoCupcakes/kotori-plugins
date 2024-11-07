@@ -50,11 +50,11 @@ public class SpecBarPlugin extends Plugin
 	@Subscribe
 	private void onClientTick(ClientTick event)
 	{
-		Widget specBar = client.getWidget(specBarGroupId,36);
-		Widget specBarBorder = client.getWidget(specBarGroupId, 37);
-		Widget specBarText = client.getWidget(specBarGroupId,41);
-		Widget specBarChargeBar1 = client.getWidget(specBarGroupId,39);
-		Widget specBarChargeBar2 = client.getWidget(specBarGroupId,40);
+		Widget specBar = client.getWidget(specBarGroupId,37);
+		Widget specBarBorder = client.getWidget(specBarGroupId, 38);
+		Widget specBarText = client.getWidget(specBarGroupId,42);
+		Widget specBarChargeBar1 = client.getWidget(specBarGroupId,40);
+		Widget specBarChargeBar2 = client.getWidget(specBarGroupId,41);
 		if (specBar != null)
 		{
 			specBar.setHidden(false);
