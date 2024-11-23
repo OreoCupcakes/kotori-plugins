@@ -88,6 +88,11 @@ public class EffectTimersOverlay extends Overlay
 
 	private void renderActor(Graphics2D g, Actor actor)
 	{
+		if (actor == null)
+		{
+			return;
+		}
+
 		int offset = 0;
 		for (TimerType timerType : TimerType.values())
 		{

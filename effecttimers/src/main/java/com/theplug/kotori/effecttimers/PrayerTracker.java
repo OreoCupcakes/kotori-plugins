@@ -57,6 +57,11 @@ class PrayerTracker
 
 	private void processActor(Actor actor)
 	{
+		if (actor == null)
+		{
+			return;
+		}
+
 		if (!newTick.containsKey(actor))
 		{
 			newTick.put(actor, new HashMap<>());
