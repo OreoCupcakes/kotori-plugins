@@ -102,6 +102,11 @@ public class BombOverlay extends Overlay
 		Map<WorldPoint, Integer> aoeTiles = new HashMap<>();
 		plugin.getBombs().forEach(bomb ->
 		{
+			if (bomb == null)
+			{
+				return;
+			}
+
 			final LocalPoint localLoc = LocalPoint.fromWorld(wv, bomb.getWorldLocation());
 			final WorldPoint worldLoc = bomb.getWorldLocation();
 
