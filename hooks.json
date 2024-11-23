@@ -3,116 +3,116 @@
   [
     {
       "n": "invokeMenuAction",
-      "c": "kq",
-      "p": "lh",
-      "m": 1002130222
+      "c": "dq",
+      "p": "lj",
+      "m": -1438833992
     },
     {
       "n": "setCheckClick",
-      "c": "ji",
-      "p": "bn",
+      "c": "jp",
+      "p": "bq",
       "m": 1
     },
     {
       "n": "setSelectedSceneTileX",
-      "c": "ji",
-      "p": "ba",
+      "c": "jp",
+      "p": "bc",
       "m": 1
     },
     {
       "n": "setSelectedSceneTileY",
-      "c": "ji",
-      "p": "bw",
+      "c": "jp",
+      "p": "cc",
       "m": 1
     },
     {
       "n": "setViewportWalking",
-      "c": "ji",
-      "p": "bi",
+      "c": "jp",
+      "p": "ct",
       "m": 1
     },
     {
       "n": "setSelectedSpellWidget",
-      "c": "sq",
-      "p": "oc",
-      "m": -1652536849
+      "c": "ia",
+      "p": "os",
+      "m": 2095827681
     },
     {
       "n": "setSelectedSpellChildIndex",
       "c": "client",
-      "p": "oy",
-      "m": 891090469
+      "p": "oc",
+      "m": -1339855645
     },
     {
       "n": "setSelectedSpellItemId",
       "c": "client",
-      "p": "ot",
-      "m": -669592405
+      "p": "ok",
+      "m": 1931014943
     },
     {
       "n": "getNpcOverheadIcon",
-      "c": "hy",
-      "p": "bw",
+      "c": "hw",
+      "p": "bd",
       "m": 1
     },
     {
       "n": "isMoving",
-      "c": "dw",
-      "p": "de",
-      "m": -1746074449
+      "c": "di",
+      "p": "di",
+      "m": -1820678361
     },
     {
       "n": "getActorAnimationId",
-      "c": "dw",
-      "p": "cs",
-      "m": -1489920319
+      "c": "di",
+      "p": "cr",
+      "m": 1400873349
     },
     {
       "n": "menuOptionsCount",
-      "c": "ww",
+      "c": "wv",
       "p": "aw",
-      "m": -1577732637
+      "m": 1449400177
     },
     {
       "n": "menuParam0Array",
-      "c": "ww",
-      "p": "ay",
+      "c": "wv",
+      "p": "at",
       "m": 1
     },
     {
       "n": "menuParam1Array",
-      "c": "ww",
+      "c": "wv",
       "p": "ae",
       "m": 1
     },
     {
       "n": "menuTypesArray",
-      "c": "ww",
-      "p": "as",
+      "c": "wv",
+      "p": "ao",
       "m": 1
     },
     {
       "n": "menuIdentifiersArray",
-      "c": "ww",
-      "p": "ai",
+      "c": "wv",
+      "p": "ac",
       "m": 1
     },
     {
       "n": "menuItemIdsArray",
-      "c": "ww",
+      "c": "wv",
       "p": "aj",
       "m": 1
     },
     {
       "n": "menuOptionsArray",
-      "c": "ww",
-      "p": "am",
+      "c": "wv",
+      "p": "au",
       "m": 1
     },
     {
       "n": "menuTargetsArray",
-      "c": "ww",
-      "p": "at",
+      "c": "wv",
+      "p": "an",
       "m": 1
     }
   ]
