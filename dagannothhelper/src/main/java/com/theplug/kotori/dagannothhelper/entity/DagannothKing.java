@@ -101,8 +101,8 @@ public class DagannothKing
 		DAGANNOTH_REX(NpcID.DAGANNOTH_REX, DagannothHelperPlugin.DAG_REX_ATTACK, 4, AttackStyle.MELEE),
 		DAGANNOTH_SUPREME(NpcID.DAGANNOTH_SUPREME, DagannothHelperPlugin.DAG_SUPREME_ATTACK, 4, AttackStyle.RANGE),
 		ECHO_PRIME(NpcID.DAGANNOTH_PRIME, DagannothHelperPlugin.DAG_PRIME_ATTACK, 5, AttackStyle.MAGE),
-		ECHO_REX(NpcID.DAGANNOTH_PRIME, DagannothHelperPlugin.DAG_REX_ATTACK, 5, AttackStyle.MELEE),
-		ECHO_SUPREME(NpcID.DAGANNOTH_PRIME, DagannothHelperPlugin.DAG_SUPREME_ATTACK, 5, AttackStyle.RANGE);
+		ECHO_REX(NpcID.DAGANNOTH_REX, DagannothHelperPlugin.DAG_REX_ATTACK, 5, AttackStyle.MELEE),
+		ECHO_SUPREME(NpcID.DAGANNOTH_SUPREME, DagannothHelperPlugin.DAG_SUPREME_ATTACK, 5, AttackStyle.RANGE);
 
 		private final int npcId;
 		private final int animationId;
