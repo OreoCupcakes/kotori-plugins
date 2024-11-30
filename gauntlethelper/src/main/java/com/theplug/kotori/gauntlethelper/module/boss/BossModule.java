@@ -365,6 +365,9 @@ public final class BossModule implements Module
 
 		if (missile == null)
 		{
+			/*
+				This projectile check is for Echo Hunllef. Echo Hunllef shoots out two projectiles for its normal magic and ranged attack. We only want to capture one of them as they do damage on the same tick.
+			 */
 			if (projectile.getRemainingCycles() >= 15)
 			{
 				missile = projectile;
