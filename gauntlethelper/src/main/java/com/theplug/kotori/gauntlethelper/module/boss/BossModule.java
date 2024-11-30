@@ -212,7 +212,6 @@ public final class BossModule implements Module
 
 	//Leagues Echo Variables
 	private boolean inversePrayerAttack = false;
-	private int numberOfNormalProjectiles = 0;
 
 	@Override
 	public void start()
@@ -261,7 +260,6 @@ public final class BossModule implements Module
 		lastUniquePlayerAttackCount = -1;
 
 		inversePrayerAttack = false;
-		numberOfNormalProjectiles = 0;
 	}
 
 	@Subscribe
@@ -367,15 +365,18 @@ public final class BossModule implements Module
 
 		if (missile == null)
 		{
-			missile = projectile;
+			if (projectile.getRemainingCycles() >= 15)
+			{
+				missile = projectile;
+			}
+			else
+			{
+				return;
+			}
 
 			if (GraphicIDPlus.HUNLLEF_ECHO_INVERSION_ATTACK == id)
 			{
 				inversePrayerAttack = true;
-			}
-			else if (PROJECTILE_MAGIC_IDS.contains(id) || PROJECTILE_RANGE_IDS.contains(id))
-			{
-				numberOfNormalProjectiles++;
 			}
 		}
 		else
@@ -383,17 +384,7 @@ public final class BossModule implements Module
 			return;
 		}
 
-		if (PROJECTILE_MAGIC_IDS.contains(id) || PROJECTILE_RANGE_IDS.contains(id))
-		{
-			if (numberOfNormalProjectiles % 2 == 0)
-			{
-				hunllef.updateAttackCount();
-			}
-		}
-		else
-		{
-			hunllef.updateAttackCount();
-		}
+		hunllef.updateAttackCount();
 
 		if (PROJECTILE_PRAYER_IDS.contains(id) && config.hunllefPrayerAudio())
 		{
