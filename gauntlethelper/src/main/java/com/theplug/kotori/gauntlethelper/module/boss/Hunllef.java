@@ -10,6 +10,7 @@ import java.awt.*;
 class Hunllef
 {
     private static final int ATTACK_TICK_SPEED = 6;
+    private static final int ECHO_ATTACK_TICK_SPEED = 5;
 
     private static final int MAX_ATTACK_COUNT = 4;
     private static final int MAX_PLAYER_ATTACK_COUNT = 6;
@@ -27,9 +28,13 @@ class Hunllef
     @Getter
     private int ticksUntilNextAttack;
 
-    public Hunllef(final NPC npc)
+    @Getter
+    private final boolean echo;
+
+    public Hunllef(final NPC npc, boolean echo)
     {
         this.npc = npc;
+        this.echo = echo;
 
         this.attackCount = MAX_ATTACK_COUNT;
         this.playerAttackCount = MAX_PLAYER_ATTACK_COUNT;
@@ -56,7 +61,14 @@ class Hunllef
 
     public void updateAttackCount()
     {
-        ticksUntilNextAttack = ATTACK_TICK_SPEED;
+        if (this.echo)
+        {
+            ticksUntilNextAttack = ECHO_ATTACK_TICK_SPEED;
+        }
+        else
+        {
+            ticksUntilNextAttack = ATTACK_TICK_SPEED;
+        }
 
         if (--attackCount <= 0)
         {

@@ -106,7 +106,7 @@ public final class BossModule implements Module
 		PROJECTILE_IDS.add(GraphicIDPlus.HUNLLEF_ECHO_INVERSION_ATTACK);
 	}
 
-	private static final List<Integer> TORNADO_IDS = List.of(NullNpcID.NULL_9025, NullNpcID.NULL_9039);
+	private static final List<Integer> TORNADO_IDS = List.of(NullNpcID.NULL_9025, NullNpcID.NULL_9039, NullNpcID.NULL_14142);
 	private static final List<Integer> HUNLLEF_IDS = List.of(
 		NpcID.CRYSTALLINE_HUNLLEF,
 		NpcID.CRYSTALLINE_HUNLLEF_9022,
@@ -758,7 +758,7 @@ public final class BossModule implements Module
 		{
 			if (HUNLLEF_IDS.contains(npc.getId()))
 			{
-				hunllef = new Hunllef(npc);
+				hunllef = new Hunllef(npc, config.killingEchoHunllef());
 				hunllefOverhead = ReflectionLibrary.getNpcOverheadIcon(npc);
 				break;
 			}

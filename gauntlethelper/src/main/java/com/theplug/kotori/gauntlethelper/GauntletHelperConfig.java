@@ -120,6 +120,14 @@ public interface GauntletHelperConfig extends Config
 	)
 	String helperSection = "helper";
 
+	@ConfigSection(
+			name = "Leagues Echo Settings",
+			description = "Settings for the Leagues Raging Echos variant of Hunllef.",
+			position = 9,
+			closedByDefault = false
+	)
+	String leaguesSection = "leagues";
+
 
 	// Resource Tracking
 
@@ -1227,6 +1235,22 @@ public interface GauntletHelperConfig extends Config
 	{
 		return false;
 	}
+
+
+	//Leagues Section
+	@ConfigItem(
+			position = 0,
+			keyName = "killingEchoHunllef",
+			name = "Killing Echo Hunllef?",
+			description = "Toggle on if you are killing the Echo variant of Hunllef found in Leagues 5 - Raging Echos." +
+					"<br>This is a separate toggle because it has a different attack speed than the normal version, but uses the same IDs.",
+			section = leaguesSection
+	)
+	default boolean killingEchoHunllef()
+	{
+		return false;
+	}
+
 
 
 	// Constants
