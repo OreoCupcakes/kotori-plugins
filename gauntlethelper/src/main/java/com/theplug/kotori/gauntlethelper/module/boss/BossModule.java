@@ -525,12 +525,26 @@ public final class BossModule implements Module
 
 		if (!config.autoFlickPrayers())
 		{
-			PrayerInteractions.activatePrayer(protection);
-			PrayerInteractions.activatePrayer(offensive);
+			if (protection == null)
+			{
+				PrayerInteractions.deactivatePrayers(false);
+			}
+			else
+			{
+				PrayerInteractions.activatePrayer(protection);
+				PrayerInteractions.activatePrayer(offensive);
+			}
 		}
 		else
 		{
-			PrayerInteractions.oneTickFlickPrayers(protection, offensive);
+			if (protection == null)
+			{
+				PrayerInteractions.deactivatePrayers(false);
+			}
+			else
+			{
+				PrayerInteractions.oneTickFlickPrayers(protection, offensive);
+			}
 		}
 	}
 
