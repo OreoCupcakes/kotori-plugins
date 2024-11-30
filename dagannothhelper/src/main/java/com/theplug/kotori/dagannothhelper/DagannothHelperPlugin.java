@@ -404,7 +404,7 @@ public class DagannothHelperPlugin extends Plugin
 
 		if (kingSpawned)
 		{
-			dagannothKings.add(new DagannothKing(npc));
+			dagannothKings.add(new DagannothKing(npc, config.killingEchoDks()));
 			prayersDeactivated = false;
 		}
 	}

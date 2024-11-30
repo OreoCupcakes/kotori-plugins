@@ -63,13 +63,13 @@ public class DagannothKing
 	@Getter
 	private final Color color;
 
-	public DagannothKing(final NPC npc)
+	public DagannothKing(final NPC npc, boolean echo)
 	{
 		this.npc = npc;
 		this.npcId = npc.getId();
 		this.ticksUntilNextAnimation = 0;
 
-		final Boss boss = Boss.of(npcId);
+		final Boss boss = Boss.of(npcId, echo);
 		this.animationId = boss.animationId;
 		this.animationTickSpeed = boss.attackSpeed;
 		this.attackStyle = boss.attackStyle;
@@ -99,18 +99,28 @@ public class DagannothKing
 	{
 		DAGANNOTH_PRIME(NpcID.DAGANNOTH_PRIME, DagannothHelperPlugin.DAG_PRIME_ATTACK, 4, AttackStyle.MAGE),
 		DAGANNOTH_REX(NpcID.DAGANNOTH_REX, DagannothHelperPlugin.DAG_REX_ATTACK, 4, AttackStyle.MELEE),
-		DAGANNOTH_SUPREME(NpcID.DAGANNOTH_SUPREME, DagannothHelperPlugin.DAG_SUPREME_ATTACK, 4, AttackStyle.RANGE);
+		DAGANNOTH_SUPREME(NpcID.DAGANNOTH_SUPREME, DagannothHelperPlugin.DAG_SUPREME_ATTACK, 4, AttackStyle.RANGE),
+		ECHO_PRIME(NpcID.DAGANNOTH_PRIME, DagannothHelperPlugin.DAG_PRIME_ATTACK, 5, AttackStyle.MAGE),
+		ECHO_REX(NpcID.DAGANNOTH_PRIME, DagannothHelperPlugin.DAG_REX_ATTACK, 5, AttackStyle.MELEE),
+		ECHO_SUPREME(NpcID.DAGANNOTH_PRIME, DagannothHelperPlugin.DAG_SUPREME_ATTACK, 5, AttackStyle.RANGE);
 
 		private final int npcId;
 		private final int animationId;
 		private final int attackSpeed;
 		private final AttackStyle attackStyle;
 
-		public static Boss of(final int npcId)
+		public static Boss of(final int npcId, boolean echo)
 		{
 			for (final Boss boss : Boss.values())
 			{
-				if (boss.npcId == npcId)
+				if (echo)
+				{
+					if (boss.attackSpeed == 5 && boss.npcId == npcId)
+					{
+						return boss;
+					}
+				}
+				else if (boss.npcId == npcId)
 				{
 					return boss;
 				}

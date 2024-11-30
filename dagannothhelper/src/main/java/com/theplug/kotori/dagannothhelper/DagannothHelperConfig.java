@@ -45,20 +45,27 @@ public interface DagannothHelperConfig extends Config
 
 	@ConfigSection(
 			position = 1,
+			name = "Leagues Settings",
+			description = "Settings for Leagues 5 Echo Bosses."
+	)
+	String leaguesSettings = "Leagues Settings";
+
+	@ConfigSection(
+			position = 2,
 			name = "Prayer Helper",
 			description = "Settings to automatically switch prayers."
 	)
 	String prayerHelper = "Prayer Helper";
 
 	@ConfigSection(
-			position = 2,
+			position = 3,
 			name = "Gear Helper",
 			description = "Settings to automatically switch gear."
 	)
 	String gearHelper = "Gear Helper";
 
 	@ConfigSection(
-			position = 3,
+			position = 4,
 			name = "Spell Helper",
 			description = "Settings for spell hotkey helpers."
 	)
@@ -126,6 +133,25 @@ public interface DagannothHelperConfig extends Config
 	{
 		return false;
 	}
+
+
+
+
+
+
+	@ConfigItem(
+			position = 0,
+			keyName = "echoDksModifier",
+			name = "Killing Echo DKs?",
+			description = "Turn on if you are killing the Echo variants of DKs." +
+					"<br>This is because the Echo variants use the same IDs as normal DKs but the Echo variants are 5 tick instead of 4.",
+			section = leaguesSettings
+	)
+	default boolean killingEchoDks()
+	{
+		return false;
+	}
+
 
 
 
