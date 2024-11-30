@@ -23,7 +23,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "2.0.7"
+version = "2.0.8"
 
 project.extra["PluginName"] = "<html><font color=#6b8af6>[K]</font> Gauntlet Helper</html>" // This is the name that is used in the external plugin manager panel
 project.extra["PluginDescription"] = "All-in-one plugin for The Gauntlet." // This is the description that is used in the external plugin manager panel

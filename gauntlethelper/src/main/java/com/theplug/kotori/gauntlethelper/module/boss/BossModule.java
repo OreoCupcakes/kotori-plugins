@@ -212,6 +212,7 @@ public final class BossModule implements Module
 
 	//Leagues Echo Variables
 	private boolean inversePrayerAttack = false;
+	private int numberOfNormalProjectiles = 0;
 
 	@Override
 	public void start()
@@ -260,6 +261,7 @@ public final class BossModule implements Module
 		lastUniquePlayerAttackCount = -1;
 
 		inversePrayerAttack = false;
+		numberOfNormalProjectiles = 0;
 	}
 
 	@Subscribe
@@ -371,13 +373,27 @@ public final class BossModule implements Module
 			{
 				inversePrayerAttack = true;
 			}
+			else if (PROJECTILE_MAGIC_IDS.contains(id) || PROJECTILE_RANGE_IDS.contains(id))
+			{
+				numberOfNormalProjectiles++;
+			}
 		}
 		else
 		{
 			return;
 		}
 
-		hunllef.updateAttackCount();
+		if (PROJECTILE_MAGIC_IDS.contains(id) || PROJECTILE_RANGE_IDS.contains(id))
+		{
+			if (numberOfNormalProjectiles % 2 == 0)
+			{
+				hunllef.updateAttackCount();
+			}
+		}
+		else
+		{
+			hunllef.updateAttackCount();
+		}
 
 		if (PROJECTILE_PRAYER_IDS.contains(id) && config.hunllefPrayerAudio())
 		{
