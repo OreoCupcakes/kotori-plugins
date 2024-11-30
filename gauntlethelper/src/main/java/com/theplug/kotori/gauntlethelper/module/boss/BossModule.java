@@ -85,11 +85,11 @@ public final class BossModule implements Module
 	}
 
 	private static final List<Integer> PROJECTILE_MAGIC_IDS = List.of(
-			GraphicIDPlus.HUNLLEF_MAGE_ATTACK, GraphicIDPlus.HUNLLEF_CORRUPTED_MAGE_ATTACK
+			GraphicIDPlus.HUNLLEF_MAGE_ATTACK, GraphicIDPlus.HUNLLEF_CORRUPTED_MAGE_ATTACK, GraphicIDPlus.HUNLLEF_ECHO_MAGE_ATTACK
 	);
 
 	private static final List<Integer> PROJECTILE_RANGE_IDS = List.of(
-			GraphicIDPlus.HUNLLEF_RANGE_ATTACK, GraphicIDPlus.HUNLLEF_CORRUPTED_RANGE_ATTACK
+			GraphicIDPlus.HUNLLEF_RANGE_ATTACK, GraphicIDPlus.HUNLLEF_CORRUPTED_RANGE_ATTACK, GraphicIDPlus.HUNLLEF_ECHO_RANGE_ATTACK
 	);
 
 	private static final List<Integer> PROJECTILE_PRAYER_IDS = List.of(
@@ -103,6 +103,7 @@ public final class BossModule implements Module
 		PROJECTILE_IDS.addAll(PROJECTILE_MAGIC_IDS);
 		PROJECTILE_IDS.addAll(PROJECTILE_RANGE_IDS);
 		PROJECTILE_IDS.addAll(PROJECTILE_PRAYER_IDS);
+		PROJECTILE_IDS.add(GraphicIDPlus.HUNLLEF_ECHO_INVERSION_ATTACK);
 	}
 
 	private static final List<Integer> TORNADO_IDS = List.of(NullNpcID.NULL_9025, NullNpcID.NULL_9039);
@@ -123,7 +124,8 @@ public final class BossModule implements Module
 			ItemID.CORRUPTED_HALBERD_PERFECTED,
 			ItemID.CRYSTAL_STAFF_PERFECTED,
 			ItemID.CRYSTAL_BOW_PERFECTED,
-			ItemID.CRYSTAL_HALBERD_PERFECTED
+			ItemID.CRYSTAL_HALBERD_PERFECTED,
+			ItemID.CRYSTAL_DAGGER_PERFECTED
 	);
 
 	private static final List<Integer> ATTUNED_WEAPONS = List.of(
@@ -208,6 +210,9 @@ public final class BossModule implements Module
 	private int weaponThreeStyle = -1;
 	private int lastUniquePlayerAttackCount = -1;
 
+	//Leagues Echo Variables
+	private Projectile inversePrayerAttack = null;
+
 
 	@Override
 	public void start()
@@ -274,6 +279,11 @@ public final class BossModule implements Module
 		if (missile != null && missile.getRemainingCycles() <= 0)
 		{
 			missile = null;
+		}
+
+		if (inversePrayerAttack != null && inversePrayerAttack.getRemainingCycles() <= 0)
+		{
+			inversePrayerAttack = null;
 		}
 
 		handlePrayerInteractions();
@@ -366,6 +376,11 @@ public final class BossModule implements Module
 		if (PROJECTILE_PRAYER_IDS.contains(id) && config.hunllefPrayerAudio())
 		{
 			client.playSoundEffect(SoundEffectID.MAGIC_SPLASH_BOING);
+		}
+
+		if (GraphicIDPlus.HUNLLEF_ECHO_INVERSION_ATTACK == id)
+		{
+			inversePrayerAttack = projectile;
 		}
 	}
 
@@ -482,7 +497,10 @@ public final class BossModule implements Module
 		{
 			if (hunllef != null)
 			{
-				protection = hunllef.getAttackPhase().getPrayer();
+				if (inversePrayerAttack == null)
+				{
+					protection = hunllef.getAttackPhase().getPrayer();
+				}
 			}
 		}
 
@@ -623,6 +641,7 @@ public final class BossModule implements Module
 			case ItemID.CRYSTAL_HALBERD_ATTUNED:
 			case ItemID.CRYSTAL_HALBERD_BASIC:
 			case ItemID.CRYSTAL_SCEPTRE:
+			case ItemID.CRYSTAL_DAGGER_PERFECTED:
 				return 0;
 			case ItemID.CORRUPTED_BOW_PERFECTED:
 			case ItemID.CORRUPTED_BOW_ATTUNED:
@@ -650,16 +669,26 @@ public final class BossModule implements Module
 			return false;
 		}
 
-		int currentStyle = checkWeaponStyle(InventoryInteractions.getEquippedItemId(EquipmentInventorySlot.WEAPON));
+		int styleToAvoid = determineStyleToAvoid();
+		int weaponId = InventoryInteractions.getEquippedItemId(EquipmentInventorySlot.WEAPON);
+		int currentStyle = checkWeaponStyle(weaponId);
 
-		switch (currentStyle)
+		switch (styleToAvoid)
 		{
 			case -1:
+			case 3:
 				return true;
 			case 0:
 			case 1:
 			case 2:
-				return determineStyleToAvoid() == currentStyle;
+				if (weaponId == ItemID.CRYSTAL_DAGGER_PERFECTED)
+				{
+					return true;
+				}
+				else
+				{
+					return styleToAvoid == currentStyle;
+				}
 			default:
 				return false;
 		}
@@ -675,6 +704,8 @@ public final class BossModule implements Module
 				return 1;
 			case MAGIC:
 				return 2;
+			case RANGE_MAGE_MELEE:
+				return 3;
 			default:
 				return -1;
 		}
@@ -683,9 +714,13 @@ public final class BossModule implements Module
 	private void equipWeapon()
 	{
 		int styleToAvoid = determineStyleToAvoid();
-		if (styleToAvoid == -1)
+		switch (styleToAvoid)
 		{
-			return;
+			case -1:
+				return;
+			case 3:
+				weaponSwitched = InventoryInteractions.equipItems(ItemID.CRYSTAL_DAGGER_PERFECTED);
+				return;
 		}
 
 		if (weaponOne != -1 && weaponOneStyle != styleToAvoid && InventoryInteractions.inventoryContains(weaponOne))
