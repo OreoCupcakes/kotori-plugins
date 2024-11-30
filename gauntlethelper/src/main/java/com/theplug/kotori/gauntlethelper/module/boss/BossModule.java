@@ -211,8 +211,7 @@ public final class BossModule implements Module
 	private int lastUniquePlayerAttackCount = -1;
 
 	//Leagues Echo Variables
-	private Projectile inversePrayerAttack = null;
-
+	private boolean inversePrayerAttack = false;
 
 	@Override
 	public void start()
@@ -259,6 +258,8 @@ public final class BossModule implements Module
 		weaponThree = -1;
 		weaponThreeStyle = -1;
 		lastUniquePlayerAttackCount = -1;
+
+		inversePrayerAttack = false;
 	}
 
 	@Subscribe
@@ -278,12 +279,12 @@ public final class BossModule implements Module
 
 		if (missile != null && missile.getRemainingCycles() <= 0)
 		{
-			missile = null;
-		}
+			if (missile.getId() == GraphicIDPlus.HUNLLEF_ECHO_INVERSION_ATTACK)
+			{
+				inversePrayerAttack = false;
+			}
 
-		if (inversePrayerAttack != null && inversePrayerAttack.getRemainingCycles() <= 0)
-		{
-			inversePrayerAttack = null;
+			missile = null;
 		}
 
 		handlePrayerInteractions();
@@ -365,6 +366,11 @@ public final class BossModule implements Module
 		if (missile == null)
 		{
 			missile = projectile;
+
+			if (GraphicIDPlus.HUNLLEF_ECHO_INVERSION_ATTACK == id)
+			{
+				inversePrayerAttack = true;
+			}
 		}
 		else
 		{
@@ -376,14 +382,6 @@ public final class BossModule implements Module
 		if (PROJECTILE_PRAYER_IDS.contains(id) && config.hunllefPrayerAudio())
 		{
 			client.playSoundEffect(SoundEffectID.MAGIC_SPLASH_BOING);
-		}
-
-		if (GraphicIDPlus.HUNLLEF_ECHO_INVERSION_ATTACK == id)
-		{
-			if (inversePrayerAttack == null)
-			{
-				inversePrayerAttack = projectile;
-			}
 		}
 	}
 
@@ -500,7 +498,7 @@ public final class BossModule implements Module
 		{
 			if (hunllef != null)
 			{
-				if (inversePrayerAttack == null)
+				if (!inversePrayerAttack)
 				{
 					protection = hunllef.getAttackPhase().getPrayer();
 				}
