@@ -380,7 +380,10 @@ public final class BossModule implements Module
 
 		if (GraphicIDPlus.HUNLLEF_ECHO_INVERSION_ATTACK == id)
 		{
-			inversePrayerAttack = projectile;
+			if (inversePrayerAttack == null)
+			{
+				inversePrayerAttack = projectile;
+			}
 		}
 	}
 
