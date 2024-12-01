@@ -77,18 +77,25 @@ public class ReflectionLibrary
 	private static String actorAnimationIdFieldName;
 	@Setter
 	private static int actorAnimationIdMultiplier;
-	
-	@Setter
-	private static String npcOverheadIconClassName;
-	@Setter
-	private static String npcOverheadIconFieldName;
-	
+
 	@Setter
 	private static String actorPathLengthClassName;
 	@Setter
 	private static String actorPathLengthFieldName;
 	@Setter
 	private static int actorPathLengthMultiplier;
+	
+	@Setter
+	private static String npcOverheadIconClassName;
+	@Setter
+	private static String npcOverheadIconFieldName;
+
+	@Setter
+	private static String npcOverheadMethodClassName;
+	@Setter
+	private static String npcOverheadMethodName;
+	@Setter
+	private static int npcOverheadMethodJunkValue;
 	
 	//Menu Entry Hooks
 	@Setter
@@ -493,11 +500,84 @@ public class ReflectionLibrary
 	
 	public static HeadIcon getNpcOverheadIcon(NPC npc)
 	{
+		HeadIcon icon = getNpcOverheadIconOldMethod(npc);
+		if (icon != null)
+		{
+			return icon;
+		}
+		icon = getNpcOverheadIconNewMethod(npc);
+		return icon;
+	}
+
+	private static HeadIcon getNpcOverheadIconNewMethod(NPC npc)
+	{
 		if (npc == null)
 		{
 			return null;
 		}
-		
+
+		Class<?> npcClazz = getClass(npcOverheadMethodClassName);
+		Method method;
+		boolean isJunkValueAByte = npcOverheadMethodJunkValue < 128 && npcOverheadMethodJunkValue >= -128;
+
+		if (npcClazz == null)
+		{
+			return null;
+		}
+
+		try
+		{
+			if (isJunkValueAByte)
+			{
+				method = npcClazz.getDeclaredMethod(npcOverheadMethodName, byte.class);
+			}
+			else
+			{
+				method = npcClazz.getDeclaredMethod(npcOverheadMethodName, int.class);
+			}
+		}
+		catch (Exception e)
+		{
+			log.error("Kotori Plugin Utils - Unable to find the RuneLite getOverhead method in the NPC class.", e);
+			return null;
+		}
+
+		try
+		{
+			Object headIconShortArray = null;
+			method.setAccessible(true);
+			if (isJunkValueAByte)
+			{
+				headIconShortArray = method.invoke(npc, (byte) npcOverheadMethodJunkValue);
+			}
+			else
+			{
+				headIconShortArray = method.invoke(npc, npcOverheadMethodJunkValue);
+			}
+			method.setAccessible(false);
+			if (headIconShortArray == null)
+			{
+				System.out.println("Head Icon Short Array was null.");
+				return null;
+			}
+			short overheadIconShortValue = Array.getShort(headIconShortArray, 0);
+			return HeadIcon.values()[overheadIconShortValue];
+		}
+		catch (Exception e)
+		{
+			log.error("Kotori Plugin Utils - Unable to invoke the RuneLite getOverhead method.", e);
+		}
+
+		return null;
+	}
+
+	private static HeadIcon getNpcOverheadIconOldMethod(NPC npc)
+	{
+		if (npc == null)
+		{
+			return null;
+		}
+
 		NPCComposition npcComposition = npc.getComposition();
 		if (npcComposition == null)
 		{
@@ -524,29 +604,7 @@ public class ReflectionLibrary
 		}
 		catch (Exception e)
 		{
-			log.error("Kotori Plugin Utils - Unable to get NPC Composition's overhead icon via field.", e);
-		}
-
-		try
-		{
-			for (Method declaredMethod : npcComposition.getClass().getDeclaredMethods())
-			{
-				if (declaredMethod.getReturnType() == short[].class && declaredMethod.getParameterTypes().length == 1)
-				{
-					declaredMethod.setAccessible(true);
-					short[] headIconArray = (short[]) declaredMethod.invoke(npcComposition);
-					declaredMethod.setAccessible(false);
-					if (headIconArray == null || headIconArray.length == 0)
-					{
-						continue;
-					}
-					return HeadIcon.values()[headIconArray[0]];
-				}
-			}
-		}
-		catch (Exception e)
-		{
-			log.error("Kotori Plugin Utils - Unable to get NPC Composition's overhead icon.", e);
+			log.error("Kotori Plugin Utils - Unable to use old method of getting NPC Composition's overhead icon via field.", e);
 		}
 
 		return null;

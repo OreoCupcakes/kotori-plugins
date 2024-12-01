@@ -242,6 +242,11 @@ public class KotoriUtils extends Plugin {
                     ReflectionLibrary.setNpcOverheadIconClassName(hookInfo.getC());
                     ReflectionLibrary.setNpcOverheadIconFieldName(hookInfo.getP());
                     break;
+                case "getNpcOverheadMethod":
+                    ReflectionLibrary.setNpcOverheadMethodClassName(hookInfo.getC());
+                    ReflectionLibrary.setNpcOverheadMethodName(hookInfo.getP());
+                    ReflectionLibrary.setNpcOverheadMethodJunkValue(hookInfo.getM());
+                    break;
                 case "menuOptionsCount":
                     ReflectionLibrary.setMenuOptionsCountClassName(hookInfo.getC());
                     ReflectionLibrary.setMenuOptionsCountFieldName(hookInfo.getP());

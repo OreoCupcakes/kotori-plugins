@@ -56,6 +56,12 @@
       "m": 1
     },
     {
+      "n": "getNpcOverheadMethod",
+      "c": "ec",
+      "p": "ax",
+      "m": 1110875933
+    },
+    {
       "n": "isMoving",
       "c": "di",
       "p": "di",
