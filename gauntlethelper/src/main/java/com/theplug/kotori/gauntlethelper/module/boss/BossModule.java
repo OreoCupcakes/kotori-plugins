@@ -64,6 +64,9 @@ public final class BossModule implements Module
 	public static final int ONEHAND_SLASH_HALBERD_ANIMATION = 440;
 	public static final int ONEHAND_SLASH_SWORD_ANIMATION = 390;
 	public static final int ONEHAND_STAB_SWORD_ANIMATION = 386;
+	public static final int ONEHAND_STAB_DAGGER_ANIMATION = 376;
+	public static final int ONEHAND_SLASH_DAGGER_ANIMATION = 377;
+	public static final int CRYSTAL_DAGGER_SPECIAL_ANIMATION = 1062;
 	public static final int HIGH_LEVEL_MAGIC_ATTACK = 1167;
 	public static final int HUNLEFF_TORNADO = 8418;
 
@@ -72,7 +75,8 @@ public final class BossModule implements Module
 			ONEHAND_SLASH_AXE_ANIMATION, ONEHAND_CRUSH_PICKAXE_ANIMATION,
 			ONEHAND_CRUSH_AXE_ANIMATION, UNARMED_PUNCH_ANIMATION,
 			UNARMED_KICK_ANIMATION, ONEHAND_STAB_HALBERD_ANIMATION,
-			ONEHAND_SLASH_HALBERD_ANIMATION
+			ONEHAND_SLASH_HALBERD_ANIMATION, ONEHAND_SLASH_DAGGER_ANIMATION,
+			ONEHAND_STAB_DAGGER_ANIMATION, CRYSTAL_DAGGER_SPECIAL_ANIMATION
 	);
 
 	private static final Set<Integer> ATTACK_ANIM_IDS = new HashSet<>();
@@ -367,6 +371,7 @@ public final class BossModule implements Module
 		{
 			/*
 				This projectile check is for Echo Hunllef. Echo Hunllef shoots out two projectiles for its normal magic and ranged attack. We only want to capture one of them as they do damage on the same tick.
+				1 game cycle = 20ms, 1 game tick (0.6s) = 30 game cycles
 			 */
 			if (projectile.getRemainingCycles() >= 15)
 			{
@@ -413,11 +418,20 @@ public final class BossModule implements Module
 			if (validAttack)
 			{
 				wrongAttackStyle = false;
-				hunllef.updatePlayerAttackCount();
 
-				if (hunllef.getPlayerAttackCount() == 1)
+				if (hunllefOverhead == null)
 				{
+					hunllef.resetPlayerAttackCount();
 					switchWeapon = true;
+				}
+				else
+				{
+					hunllef.updatePlayerAttackCount();
+
+					if (hunllef.getPlayerAttackCount() == 1)
+					{
+						switchWeapon = true;
+					}
 				}
 			}
 			else
@@ -485,6 +499,12 @@ public final class BossModule implements Module
 				break;
 			case MAGIC:
 				if (animationId == HIGH_LEVEL_MAGIC_ATTACK)
+				{
+					return false;
+				}
+				break;
+			case RANGE_MAGE_MELEE:
+				if (MELEE_ANIM_IDS.contains(animationId) || animationId == BOW_ATTACK_ANIMATION || animationId == HIGH_LEVEL_MAGIC_ATTACK)
 				{
 					return false;
 				}
@@ -596,6 +616,14 @@ public final class BossModule implements Module
 					}
 					break;
 			}
+
+			/*
+				Force the weapon switch to the dagger as Hunllef can become immune in the middle of the player attack cycle
+			 */
+			if (hunllefOverhead == HeadIcon.RANGE_MAGE_MELEE)
+			{
+				equipWeapon();
+			}
 		}
 	}
 
@@ -612,6 +640,14 @@ public final class BossModule implements Module
 		{
 			if (!InventoryInteractions.inventoryContains(id) &&
 					!InventoryInteractions.yourEquipmentContains(id, EquipmentInventorySlot.WEAPON))
+			{
+				continue;
+			}
+
+			/*
+				Skip the crystal dagger found in Leagues 5 - Raging Echos as its just a spec weapon.
+			 */
+			if (ItemID.CRYSTAL_DAGGER_PERFECTED == id)
 			{
 				continue;
 			}
@@ -708,7 +744,7 @@ public final class BossModule implements Module
 			case 2:
 				if (weaponId == ItemID.CRYSTAL_DAGGER_PERFECTED)
 				{
-					return true;
+                    return !justEnteredArena;
 				}
 				else
 				{
@@ -721,6 +757,11 @@ public final class BossModule implements Module
 
 	private int determineStyleToAvoid()
 	{
+		if (hunllefOverhead == null)
+		{
+			return -1;
+		}
+
 		switch (hunllefOverhead)
 		{
 			case MELEE:
@@ -742,6 +783,10 @@ public final class BossModule implements Module
 		switch (styleToAvoid)
 		{
 			case -1:
+				/*
+					Default to the first weapon if no overhead prayer found
+				 */
+				weaponSwitched = InventoryInteractions.equipItems(weaponOne);
 				return;
 			case 3:
 				weaponSwitched = InventoryInteractions.equipItems(ItemID.CRYSTAL_DAGGER_PERFECTED);

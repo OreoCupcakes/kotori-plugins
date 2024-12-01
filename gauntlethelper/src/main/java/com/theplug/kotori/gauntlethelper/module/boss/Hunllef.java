@@ -55,8 +55,13 @@ class Hunllef
     {
         if (--playerAttackCount <= 0)
         {
-            playerAttackCount = MAX_PLAYER_ATTACK_COUNT;
+            resetPlayerAttackCount();
         }
+    }
+
+    public void resetPlayerAttackCount()
+    {
+        playerAttackCount = MAX_PLAYER_ATTACK_COUNT;
     }
 
     public void updateAttackCount()
