@@ -813,7 +813,7 @@ public class CerberusHelperPlugin extends Plugin
 
 		if (!inAreaPastFlames || cerberus == null)
 		{
-			inAreaPastFlames = Arena.getArena(client.getLocalPlayer().getWorldLocation()) != null;
+			inAreaPastFlames = Arena.getArena(WorldPoint.fromLocalInstance(client, client.getLocalPlayer().getLocalLocation())) != null;
 		}
 	}
 
