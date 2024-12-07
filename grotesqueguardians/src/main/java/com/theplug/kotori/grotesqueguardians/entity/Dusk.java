@@ -44,6 +44,7 @@ public class Dusk extends Gargoyle
 
 	private static final int PHASE_2_ANIMATION_MELEE_7786 = 7786;
 	private static final int PHASE_2_ANIMATION_MELEE_7788 = 7788;
+	public static final int PHASE_2_ECLIPSE_EXPLOSION = 7802;
 
 	private static final int PHASE_3_ANIMATION_MELEE_7785 = 7785;
 	private static final int PHASE_3_ANIMATION_MELEE_7787 = 7787;
@@ -113,10 +114,10 @@ public class Dusk extends Gargoyle
 
 	@Getter
 	@RequiredArgsConstructor
-	enum Phase
+	public enum Phase
 	{
 		PHASE_1(NpcID.DUSK_7851, Set.of(PHASE_1_ANIMATION_MELEE)),
-		PHASE_2(NpcID.DUSK_7882, Set.of(PHASE_2_ANIMATION_MELEE_7786, PHASE_2_ANIMATION_MELEE_7788)),
+		PHASE_2(NpcID.DUSK_7882, Set.of(PHASE_2_ANIMATION_MELEE_7786, PHASE_2_ANIMATION_MELEE_7788, PHASE_2_ECLIPSE_EXPLOSION)),
 		PHASE_3(NpcID.DUSK_7883, Set.of(PHASE_3_ANIMATION_MELEE_7785, PHASE_3_ANIMATION_MELEE_7787)),
 		PHASE_4(NpcID.DUSK_7888, Set.of(PHASE_4_ANIMATION_MELEE, PHASE_4_ANIMATION_RANGE));
 

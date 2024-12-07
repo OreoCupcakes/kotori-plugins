@@ -39,9 +39,12 @@ import net.runelite.client.config.ConfigSection;
 import net.runelite.client.config.Range;
 import net.runelite.client.config.Units;
 
-@ConfigGroup("grotesqueguardians")
+@ConfigGroup("grotesqueguardiansconfig")
 public interface GrotesqueGuardiansConfig extends Config
 {
+	String GROUP = "grotesqueguardiansconfig";
+
+
 	// Sections
 	@ConfigSection(
 		name = "Tick counters",
@@ -51,23 +54,20 @@ public interface GrotesqueGuardiansConfig extends Config
 	String tickCounterSection = "Tick counters";
 
 	@ConfigSection(
-		name = "Outlines",
-		description = "Outline settings.",
+		name = "Highlights",
+		description = "Highlight settings.",
 		position = 1
 	)
-	String outlineSection = "Outlines";
+	String highlightsSection = "Highlights";
 
-	@ConfigSection(
-		name = "Other",
-		description = "Other settings.",
-		position = 2
-	)
-	String otherSection = "Other";
+
+
+
 
 	// Tick counters
 
 	@ConfigItem(
-		name = "Prayer widget tick counter",
+		name = "Prayer Widget Tick Counter",
 		description = "Enable prayer widget tick counter overlay.",
 		position = 0,
 		keyName = "prayerTickCounter",
@@ -75,11 +75,11 @@ public interface GrotesqueGuardiansConfig extends Config
 	)
 	default boolean prayerTickCounter()
 	{
-		return false;
+		return true;
 	}
 
 	@ConfigItem(
-		name = "Prayer Guitar Hero mode",
+		name = "Prayer Guitar Hero Mode",
 		description = "Enable Guitar Hero mode for prayers.",
 		position = 1,
 		keyName = "guitarHeroMode",
@@ -91,15 +91,27 @@ public interface GrotesqueGuardiansConfig extends Config
 	}
 
 	@ConfigItem(
-		name = "Dusk tick counter",
+			name = "Dawn Tick Counter",
+			description = "Show tick counter on Dusk.",
+			position = 2,
+			keyName = "dawnTickCounter",
+			section = tickCounterSection
+	)
+	default boolean dawnTickCounter()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		name = "Dusk Tick Counter",
 		description = "Show tick counter on Dusk.",
-		position = 2,
+		position = 3,
 		keyName = "duskTickCounter",
 		section = tickCounterSection
 	)
 	default boolean duskTickCounter()
 	{
-		return false;
+		return true;
 	}
 
 	@Range(
@@ -107,197 +119,443 @@ public interface GrotesqueGuardiansConfig extends Config
 		max = 64
 	)
 	@ConfigItem(
-		name = "Font size",
-		description = "Adjust the font size of the Dusk tick counter.",
-		position = 3,
+		name = "Font Size",
+		description = "Adjust the font size of Dawn and Dusk's attack tick counter.",
+		position = 4,
 		keyName = "duskFontSize",
 		section = tickCounterSection
 	)
 	@Units(Units.PIXELS)
-	default int duskFontSize()
+	default int tickFontSize()
 	{
 		return 22;
 	}
 
 	@ConfigItem(
-		name = "Font style",
-		description = "Bold/Italics/Plain",
-		position = 4,
+		name = "Font Style",
+		description = "Adjust the style, Bold/Italics/Plain, of Dawn and Dusk's attack tick counter.",
+		position = 5,
 		keyName = "duskFontStyle",
 		section = tickCounterSection
 	)
-	default FontStyle duskFontStyle()
+	default FontStyle tickFontStyle()
 	{
 		return FontStyle.BOLD;
 	}
 
 	@Alpha
 	@ConfigItem(
-		name = "Font color",
-		description = "Color of the Dusk ticker counter font.",
-		position = 5,
+		name = "Font Color",
+		description = "Color of Dawn and Dusk's attack ticker counter font.",
+		position = 6,
 		keyName = "duskFontColor",
 		section = tickCounterSection
 	)
-	default Color duskFontColor()
-	{
-		return Color.YELLOW;
-	}
-
-	// Outlines
-
-	@ConfigItem(
-		name = "Outline gargoyle tiles",
-		description = "Outline gargoyle tiles.",
-		position = 0,
-		keyName = "outlineGargoyleTile",
-		section = outlineSection
-	)
-	default boolean outlineGargoyleTile()
-	{
-		return false;
-	}
-
-	@Range(
-		min = 1,
-		max = 4
-	)
-	@ConfigItem(
-		name = "Tile outline width",
-		description = "Change the width of the tile outline.",
-		position = 1,
-		keyName = "tileOutlineWidth",
-		section = outlineSection
-	)
-	@Units(Units.PIXELS)
-	default int tileOutlineWidth()
-	{
-		return 1;
-	}
-
-	@Alpha
-	@ConfigItem(
-		name = "Tile outline color",
-		description = "Change the color of the tile outline.",
-		position = 2,
-		keyName = "tileOutlineColor",
-		section = outlineSection
-	)
-	default Color tileOutlineColor()
+	default Color tickFontColor()
 	{
 		return Color.WHITE;
 	}
 
+	
+	
+	
+	
+	
+	// Outlines
+
 	@ConfigItem(
-		name = "Outline gargoyle invulnerability",
-		description = "Outline gargoyle npcs when invulnerable.",
-		position = 3,
-		keyName = "gargoyleInvulnOutline",
-		section = outlineSection
+		name = "Show NPC True Tile",
+		description = "Show Dusk and Dawn's true tiles by highlighting them.",
+		position = 0,
+		keyName = "highlightNpcTrueTile",
+		section = highlightsSection
 	)
-	default boolean gargoyleInvulnOutline()
+	default boolean highlightNpcTrueTile()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+			name = "Show NPC SW True Tile",
+			description = "Show Dusk and Dawn's south-west true tiles by highlighting them.",
+			position = 1,
+			keyName = "highlightSouthWestTrueTile",
+			section = highlightsSection
+	)
+	default boolean highlightNpcSouthWestTrueTile()
 	{
 		return false;
 	}
-
+	
 	@Range(
 		min = 1,
 		max = 4
 	)
 	@ConfigItem(
-		name = "Outline width",
-		description = "Change the width of the outline.",
-		position = 4,
-		keyName = "gargoyleInvulnOutlineWidth",
-		section = outlineSection
+		name = "NPC Border Width",
+		description = "Change the border width of Dusk and Dawn's tile highlight.",
+		position = 2,
+		keyName = "npcBorderWidth",
+		section = highlightsSection
 	)
 	@Units(Units.PIXELS)
-	default int gargoyleInvulnOutlineWidth()
+	default int npcBorderWidth()
 	{
 		return 2;
 	}
 
 	@Alpha
 	@ConfigItem(
-		name = "Outline color",
-		description = "Change the color of the outline.",
-		position = 5,
-		keyName = "gargoyleInvulnOutlineColor",
-		section = outlineSection
+			name = "NPC Border Color",
+			description = "Change the border color of Dusk and Dawn's tile highlight.",
+			position = 3,
+			keyName = "npcBorderColor",
+			section = highlightsSection
 	)
-	default Color gargoyleInvulnOutlineColor()
+	default Color npcBorderColor()
 	{
-		return Color.ORANGE;
+		return Color.WHITE;
 	}
 
+	@Alpha
 	@ConfigItem(
-		name = "Outline graphics objects",
-		description = "Outline the damage tiles during Phase 3.",
-		position = 6,
-		keyName = "outlineGraphicsObjects",
-		section = outlineSection
+		name = "NPC Fill Color",
+		description = "Change the fill color of Dusk and Dawn's tile highlight.",
+		position = 4,
+		keyName = "npcFillColor",
+		section = highlightsSection
 	)
-	default boolean outlineGraphicsObjects()
+	default Color npcFillColor()
 	{
-		return false;
+		return new Color(255, 255, 255, 25);
+	}
+
+
+	@ConfigItem(
+		name = "Highlight Invulnerability",
+		description = "Outline Dusk and Dawn when they are invulnerable to attacks.",
+		position = 5,
+		keyName = "invulnerabilityOutline",
+		section = highlightsSection
+	)
+	default boolean invulnerabilityOutline()
+	{
+		return true;
 	}
 
 	@Range(
 		min = 1,
-		max = 4
+		max = 10
 	)
 	@ConfigItem(
-		name = "Outline width",
-		description = "Change the width of the graphics objects outline.",
-		position = 7,
-		keyName = "graphicsObjectsOutlineWidth",
-		section = outlineSection
+		name = "Invul. Border Width",
+		description = "Change the border width of the highlight.",
+		position = 6,
+		keyName = "invulnerabilityBorderWidth",
+		section = highlightsSection
 	)
 	@Units(Units.PIXELS)
-	default int graphicsObjectsOutlineWidth()
+	default int invulnerabilityBorderWidth()
+	{
+		return 5;
+	}
+
+	@Alpha
+	@ConfigItem(
+		name = "Invul. Fill Color",
+		description = "Change the fill color of the highlight.",
+		position = 7,
+		keyName = "invulnerabilityFillColor",
+		section = highlightsSection
+	)
+	default Color invulnerabilityFillColor()
+	{
+		return new Color(255, 200, 0, 255);
+	}
+
+
+	@ConfigItem(
+			name = "Highlight Stone Orb",
+			description = "Highlight the stone orb AoE attack.",
+			position = 8,
+			keyName = "highlightStoneOrb",
+			section = highlightsSection
+	)
+	default boolean highlightStoneOrb()
+	{
+		return true;
+	}
+
+	@Range(
+			min = 1,
+			max = 4
+	)
+	@ConfigItem(
+			name = "Stone Orb Border Width",
+			description = "Change the border width of the stone orb outline.",
+			position = 9,
+			keyName = "stoneOrbBorderWidth",
+			section = highlightsSection
+	)
+	@Units(Units.PIXELS)
+	default int stoneOrbBorderWidth()
 	{
 		return 1;
 	}
 
 	@Alpha
 	@ConfigItem(
-		name = "Outline color",
-		description = "Change the color of the graphics objects outline.",
-		position = 8,
-		keyName = "graphicsObjectsOutlineColor",
-		section = outlineSection
+			name = "Stone Orb Fill Color",
+			description = "Change the fill color of the stone orb outline.",
+			position = 10,
+			keyName = "stoneOrbFillColor",
+			section = highlightsSection
 	)
-	default Color graphicsObjectsOutlineColor()
+	default Color stoneOrbFillColor()
 	{
-		return Color.WHITE;
+		return new Color(211, 211, 211, 25);
 	}
 
-	// Other Section
 
 	@ConfigItem(
-		name = "Flash on Danger",
-		description = "Flash the screen if danger tile spawns under you.",
-		position = 9,
-		keyName = "flashOnDanger",
-		section = otherSection
+			name = "Highlight Falling Rocks",
+			description = "Highlight the falling rocks AoE attack.",
+			position = 11,
+			keyName = "highlightFallingRocks",
+			section = highlightsSection
 	)
-	default boolean flashOnDanger()
+	default boolean highlightFallingRocks()
+	{
+		return true;
+	}
+
+	@Range(
+			min = 1,
+			max = 4
+	)
+	@ConfigItem(
+			name = "Rocks Border Width",
+			description = "Change the border width of the falling rocks outline.",
+			position = 12,
+			keyName = "fallingRocksWidth",
+			section = highlightsSection
+	)
+	@Units(Units.PIXELS)
+	default int fallingRocksWidth()
+	{
+		return 1;
+	}
+
+	@Alpha
+	@ConfigItem(
+			name = "Rocks Fill Color",
+			description = "Change the fill color of the falling rocks outline.",
+			position = 13,
+			keyName = "fallingRocksFillColor",
+			section = highlightsSection
+	)
+	default Color fallingRocksFillColor()
+	{
+		return new Color(255, 255, 0, 25);
+	}
+
+
+	@ConfigItem(
+			name = "Highlight Lightning",
+			description = "Highlight the lightning AoE attack.",
+			position = 14,
+			keyName = "highlightLightning",
+			section = highlightsSection
+	)
+	default boolean highlightLightning()
+	{
+		return true;
+	}
+
+	@Range(
+			min = 1,
+			max = 4
+	)
+	@ConfigItem(
+			name = "Lightning Border Width",
+			description = "Change the border width of the lightning outline.",
+			position = 15,
+			keyName = "lightningWidth",
+			section = highlightsSection
+	)
+	@Units(Units.PIXELS)
+	default int lightningWidth()
+	{
+		return 1;
+	}
+
+	@Alpha
+	@ConfigItem(
+			name = "Lightning Fill Color",
+			description = "Change the fill color of the lightning outline.",
+			position = 16,
+			keyName = "lightningFillColor",
+			section = highlightsSection
+	)
+	default Color lightningFillColor()
+	{
+		return new Color(0, 255, 255, 25);
+	}
+
+
+	@ConfigItem(
+			name = "Highlight Energy Sphere",
+			description = "Highlight the healing energy sphere orbs.",
+			position = 17,
+			keyName = "highlightEnergy",
+			section = highlightsSection
+	)
+	default boolean highlightEnergy()
+	{
+		return true;
+	}
+
+	@Range(
+			min = 1,
+			max = 4
+	)
+	@ConfigItem(
+			name = "Energy Border Width",
+			description = "Change the border width of the energy sphere outline.",
+			position = 18,
+			keyName = "energyWidth",
+			section = highlightsSection
+	)
+	@Units(Units.PIXELS)
+	default int energyWidth()
+	{
+		return 1;
+	}
+
+	@Alpha
+	@ConfigItem(
+			name = "Energy Fill Color",
+			description = "Change the fill color of the energy sphere outline.",
+			position = 19,
+			keyName = "energyFillColor",
+			section = highlightsSection
+	)
+	default Color energyFillColor()
+	{
+		return new Color(0, 255, 0, 25);
+	}
+
+
+	@ConfigItem(
+			name = "Highlight Flame Wall",
+			description = "Highlight Dusk's flame wall special attack.",
+			position = 20,
+			keyName = "highlightFlameWall",
+			section = highlightsSection
+	)
+	default boolean highlightFlameWall()
+	{
+		return true;
+	}
+
+	@Range(
+			min = 1,
+			max = 4
+	)
+	@ConfigItem(
+			name = "Flame Border Width",
+			description = "Change the border width of the flame wall outline.",
+			position = 21,
+			keyName = "flameWallBorderWidth",
+			section = highlightsSection
+	)
+	@Units(Units.PIXELS)
+	default int flameWallWidth()
+	{
+		return 1;
+	}
+
+	@Alpha
+	@ConfigItem(
+			name = "Flame Fill Color",
+			description = "Change the fill color of the flame wall outline.",
+			position = 22,
+			keyName = "flameWallFillColor",
+			section = highlightsSection
+	)
+	default Color flameWallFillColor()
+	{
+		return new Color(138, 43, 226, 25);
+	}
+
+	@ConfigItem(
+			name = "Highlight Dusk On Explosion",
+			description = "Change the NPC outline and tile color when Dusk is about to do its explosion attack.",
+			position = 23,
+			keyName = "highlightNpcOnExplosion",
+			section = highlightsSection
+	)
+	default boolean highlightDuskOnExplosion()
+	{
+		return true;
+	}
+
+	@Range(
+			min = 1,
+			max = 10
+	)
+	@ConfigItem(
+			name = "Explosion Border Width",
+			description = "Change Dusk's border width when highlighting the explosion attack.",
+			position = 24,
+			keyName = "explosionBorderWidth",
+			section = highlightsSection
+	)
+	@Units(Units.PIXELS)
+	default int explosionBorderWidth()
+	{
+		return 5;
+	}
+
+	@Alpha
+	@ConfigItem(
+			name = "Explosion Color",
+			description = "Change the color of the Dusk's highlights when it does the explosion attack.",
+			position = 25,
+			keyName = "highlightExplosionColor",
+			section = highlightsSection
+	)
+	default Color explosionColor()
+	{
+		return new Color(255, 0, 0, 255);
+	}
+
+	@ConfigItem(
+			name = "Flash On Explosion",
+			description = "Epilepsy warning! Flash the screen when Dusk is about to perform its eclipse explosion attack.",
+			position = 26,
+			keyName = "flashOnExplosion",
+			section = highlightsSection
+	)
+	default boolean flashOnExplosion()
 	{
 		return false;
 	}
 
 	@Alpha
 	@ConfigItem(
-		name = "Flash color",
-		description = "Change the color of the flash.",
-		position = 10,
-		keyName = "flashColor",
-		section = otherSection
+			name = "Flash Color",
+			description = "Change the color of the flash on explosion.",
+			position = 27,
+			keyName = "flashColor",
+			section = highlightsSection
 	)
 	default Color flashColor()
 	{
 		return new Color(255, 0, 0, 70);
 	}
+
+
 
 
 	// Constants

@@ -33,14 +33,89 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import net.runelite.api.NPC;
 import net.runelite.api.NpcID;
+import net.runelite.api.Prayer;
+import net.runelite.api.Projectile;
 
 public class Dawn extends Gargoyle
 {
+	private static final int PROJECTILE_STONE_ORB = 1445;
+	private static final int PROJECTILE_RANGED_ATTACK = 1444;
+
+	private static final int ANIMATION_STONE_ORB = 7771;
+	private static final int ANIMATION_RANGED_ATTACK = 7770;
+	private static final int ANIMATION_MELEE_ATTACK = 7769;
+
+	private static final int ATTACK_TICK_SPEED = 6;
+
+	@Getter
+	private Projectile lastAttackProjectile;
+
 	public Dawn(@NonNull final NPC npc)
 	{
 		super(npc);
+	}
+
+	public void setLastAttackProjectile(final Projectile projectile)
+	{
+		final Dawn.Phase phase = getPhase();
+
+		if (phase == null)
+		{
+			return;
+		}
+
+		final int projectileId = projectile.getId();
+
+		if (phase.getProjectileIdSet().contains(projectileId))
+		{
+			lastAttackProjectile = projectile;
+		}
+	}
+
+	public void removeExpiredProjectile()
+	{
+		if (lastAttackProjectile == null)
+		{
+			return;
+		}
+
+		if (lastAttackProjectile.getRemainingCycles() <= 0)
+		{
+			lastAttackProjectile = null;
+		}
+	}
+
+	@Override
+	public void updateTicksUntilNextAttack()
+	{
+		// Dawn npc does not always show animation ID when attacking
+		// Currently unused
+		if (ticksUntilNextAttack > 0)
+		{
+			ticksUntilNextAttack--;
+		}
+
+		if (ticksUntilNextAttack <= 0)
+		{
+			final Dawn.Phase phase = getPhase();
+
+			if (phase == null)
+			{
+				return;
+			}
+
+			final int animationId = npc.getAnimation();
+
+			if (!phase.getAttackAnimationIdSet().contains(animationId) && lastAttackProjectile == null)
+			{
+				return;
+			}
+
+			ticksUntilNextAttack = ATTACK_TICK_SPEED;
+		}
 	}
 
 	public Phase getPhase()
@@ -48,19 +123,12 @@ public class Dawn extends Gargoyle
 		return Phase.of(npc.getId());
 	}
 
-	@Override
-	protected void updateTicksUntilNextAttack()
-	{
-		// Dawn npc does not always show animation ID when attacking
-		// Currently unused
-	}
-
 	@Getter
 	@RequiredArgsConstructor
-	enum Phase
+	public enum Phase
 	{
-		PHASE_1(NpcID.DAWN_7852, Set.of(7770, 7771)),
-		PHASE_3(NpcID.DAWN_7884, Set.of(7770));
+		PHASE_1(NpcID.DAWN_7852, Set.of(ANIMATION_MELEE_ATTACK, ANIMATION_RANGED_ATTACK, ANIMATION_STONE_ORB), Set.of(PROJECTILE_RANGED_ATTACK, PROJECTILE_STONE_ORB)),
+		PHASE_3(NpcID.DAWN_7884, Set.of(ANIMATION_MELEE_ATTACK, ANIMATION_RANGED_ATTACK, ANIMATION_STONE_ORB), Set.of(PROJECTILE_RANGED_ATTACK, PROJECTILE_STONE_ORB));
 
 		private static final Map<Integer, Phase> MAP;
 
@@ -78,6 +146,8 @@ public class Dawn extends Gargoyle
 
 		private final int npcId;
 		private final Set<Integer> attackAnimationIdSet;
+		@Getter
+		private final Set<Integer> projectileIdSet;
 
 		static Phase of(final int npcId)
 		{

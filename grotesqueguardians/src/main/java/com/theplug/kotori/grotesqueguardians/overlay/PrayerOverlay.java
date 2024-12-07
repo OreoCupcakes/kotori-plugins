@@ -39,6 +39,7 @@ import java.awt.Shape;
 import java.awt.Stroke;
 import javax.inject.Inject;
 
+import com.theplug.kotori.grotesqueguardians.entity.Dawn;
 import com.theplug.kotori.kotoriutils.rlapi.PrayerExtended;
 import net.runelite.api.*;
 import com.theplug.kotori.kotoriutils.rlapi.InterfaceTab;
@@ -62,6 +63,7 @@ public class PrayerOverlay extends Overlay
 	private final GrotesqueGuardiansConfig config;
 
 	private Dusk dusk;
+	private Dawn dawn;
 
 	@Inject
 	private PrayerOverlay(final Client client, final GrotesqueGuardiansPlugin plugin, final GrotesqueGuardiansConfig config)
@@ -80,22 +82,28 @@ public class PrayerOverlay extends Overlay
 	public Dimension render(final Graphics2D graphics2D)
 	{
 		dusk = plugin.getDusk();
+		dawn = plugin.getDawn();
 
 		if (dusk != null)
 		{
-			renderAttackTicks(graphics2D);
+			renderDuskAttackTicks(graphics2D);
+		}
+
+		if (dawn != null)
+		{
+			renderDawnAttackTicks(graphics2D);
 		}
 
 		return null;
 	}
 
-	private void renderAttackTicks(final Graphics2D graphics2D)
+	private void renderDuskAttackTicks(final Graphics2D graphics2D)
 	{
-		final int ticksUntilNextAttack = dusk.getTicksUntilNextAttack();
+		final int duskTicksUntilNextAttack = dusk.getTicksUntilNextAttack();
 
 		final NPC npc = dusk.getNpc();
 
-		if (npc == null || npc.isDead() || ticksUntilNextAttack <= 0)
+		if (npc == null || npc.isDead() || duskTicksUntilNextAttack <= 0)
 		{
 			return;
 		}
@@ -106,12 +114,38 @@ public class PrayerOverlay extends Overlay
 		{
 			final Color color = getColorFromPrayer(prayer);
 
-			renderPrayerWidget(graphics2D, prayer, color, ticksUntilNextAttack);
+			renderPrayerWidget(graphics2D, prayer, color, duskTicksUntilNextAttack);
 		}
 
 		if (config.guitarHeroMode())
 		{
-			renderDescendingBoxes(graphics2D, prayer, ticksUntilNextAttack);
+			renderDescendingBoxes(graphics2D, prayer, duskTicksUntilNextAttack);
+		}
+	}
+
+	private void renderDawnAttackTicks(final Graphics2D graphics2D)
+	{
+		final int dawnTicksUntilNextAttack = dawn.getTicksUntilNextAttack();
+
+		final NPC npc = dawn.getNpc();
+
+		if (npc == null || npc.isDead() || dawnTicksUntilNextAttack <= 0)
+		{
+			return;
+		}
+
+		final Prayer prayer = dawn.getNpc().getWorldArea().isInMeleeDistance(client.getLocalPlayer().getWorldArea()) ? Prayer.PROTECT_FROM_MELEE : Prayer.PROTECT_FROM_MISSILES;
+
+		if (config.prayerTickCounter())
+		{
+			final Color color = getColorFromPrayer(prayer);
+
+			renderPrayerWidget(graphics2D, prayer, color, dawnTicksUntilNextAttack);
+		}
+
+		if (config.guitarHeroMode())
+		{
+			renderDescendingBoxes(graphics2D, prayer, dawnTicksUntilNextAttack);
 		}
 	}
 

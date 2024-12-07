@@ -35,18 +35,18 @@ import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.Shape;
 import java.awt.Stroke;
+import java.awt.geom.Area;
+import java.util.Set;
 import javax.inject.Inject;
-import net.runelite.api.Client;
-import net.runelite.api.GraphicsObject;
-import net.runelite.api.NPC;
-import net.runelite.api.NPCComposition;
-import net.runelite.api.Perspective;
-import net.runelite.api.Point;
+
+import net.runelite.api.*;
 import net.runelite.api.coords.LocalPoint;
 import com.theplug.kotori.grotesqueguardians.GrotesqueGuardiansConfig;
 import com.theplug.kotori.grotesqueguardians.GrotesqueGuardiansPlugin;
 import com.theplug.kotori.grotesqueguardians.entity.Dawn;
 import com.theplug.kotori.grotesqueguardians.entity.Dusk;
+import net.runelite.client.game.npcoverlay.HighlightedNpc;
+import net.runelite.client.game.npcoverlay.NpcOverlayService;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
@@ -57,7 +57,7 @@ public class SceneOverlay extends Overlay
 {
 	private static final Color TRANSPARENT = new Color(0, 0, 0, 0);
 
-	private static final int FLASH_DURATION = 20;
+	private static final int FLASH_DURATION = 30;
 
 	private final Client client;
 	private final GrotesqueGuardiansPlugin plugin;
@@ -84,8 +84,7 @@ public class SceneOverlay extends Overlay
 	{
 		final Dusk dusk = plugin.getDusk();
 
-		final boolean gargoyleInvulnOutline = config.gargoyleInvulnOutline();
-		final boolean outlineTile = config.outlineGargoyleTile();
+		final boolean gargoyleInvulnOutline = config.invulnerabilityOutline();
 
 		if (dusk != null)
 		{
@@ -94,14 +93,25 @@ public class SceneOverlay extends Overlay
 				renderDuskTickCounter(graphics2D, dusk);
 			}
 
-			if (outlineTile)
-			{
-				renderTileOutline(graphics2D, dusk.getNpc());
-			}
-
 			if (gargoyleInvulnOutline && dusk.getPhase() == null)
 			{
 				renderInvulnerabilityOutline(dusk.getNpc());
+			}
+
+			if (plugin.isFlashOnExplosion())
+			{
+				if (dusk.getNpc().getWorldArea().isInMeleeDistance(client.getLocalPlayer().getWorldLocation()))
+				{
+					if (config.highlightDuskOnExplosion())
+					{
+						renderExplosionOutline(dusk.getNpc());
+					}
+
+					if (config.flashOnExplosion())
+					{
+						renderFlashOnExplosion(graphics2D);
+					}
+				}
 			}
 		}
 
@@ -109,9 +119,9 @@ public class SceneOverlay extends Overlay
 
 		if (dawn != null)
 		{
-			if (outlineTile)
+			if (config.dawnTickCounter())
 			{
-				renderTileOutline(graphics2D, dawn.getNpc());
+				renderDawnTickCounter(graphics2D, dawn);
 			}
 
 			if (gargoyleInvulnOutline && dawn.getPhase() == null)
@@ -120,15 +130,11 @@ public class SceneOverlay extends Overlay
 			}
 		}
 
-		if (config.outlineGraphicsObjects())
-		{
-			renderGraphicsObjectsOutline(graphics2D);
-		}
-
-		if (config.flashOnDanger() && plugin.isFlashOnDanger())
-		{
-			renderFlashOnDanger(graphics2D);
-		}
+		renderStoneOrbOutline(graphics2D);
+		renderFallingRocksOutline(graphics2D);
+		renderLightningOutline(graphics2D);
+		renderEnergySphereOutline(graphics2D);
+		renderFlameWallOutline(graphics2D);
 
 		return null;
 	}
@@ -160,66 +166,175 @@ public class SceneOverlay extends Overlay
 
 		final Font originalFont = graphics2D.getFont();
 
-		graphics2D.setFont(new Font(Font.SANS_SERIF, config.duskFontStyle().getFont(), config.duskFontSize()));
+		graphics2D.setFont(new Font(Font.SANS_SERIF, config.tickFontStyle().getFont(), config.tickFontSize()));
 
-		OverlayUtil.renderTextLocation(graphics2D, npcPoint, text, ticksUntilNextAttack == 1 ? Color.WHITE : config.duskFontColor());
+		OverlayUtil.renderTextLocation(graphics2D, npcPoint, text, ticksUntilNextAttack == 1 ? Color.WHITE : config.tickFontColor());
 
 		graphics2D.setFont(originalFont);
 	}
 
-	private void renderTileOutline(final Graphics2D graphics2D, final NPC npc)
+	private void renderDawnTickCounter(final Graphics2D graphics2D, final Dawn dawn)
 	{
-		final NPCComposition npcDefinition = npc.getComposition();
+		final int ticksUntilNextAttack = dawn.getTicksUntilNextAttack();
 
-		if (npcDefinition == null)
+		if (ticksUntilNextAttack == 0)
 		{
 			return;
 		}
 
-		final Polygon polygon = Perspective.getCanvasTileAreaPoly(client, npc.getLocalLocation(),
-			npcDefinition.getSize());
+		final NPC npc = dawn.getNpc();
 
-		if (polygon == null)
+		if (npc.isDead())
 		{
 			return;
 		}
 
-		drawOutlineAndFill(graphics2D, config.tileOutlineColor(), config.tileOutlineWidth(), polygon);
+		final String text = String.valueOf(ticksUntilNextAttack);
+
+		final Point npcPoint = npc.getCanvasTextLocation(graphics2D, text, 0);
+
+		if (npcPoint == null)
+		{
+			return;
+		}
+
+		final Font originalFont = graphics2D.getFont();
+
+		graphics2D.setFont(new Font(Font.SANS_SERIF, config.tickFontStyle().getFont(), config.tickFontSize()));
+
+		OverlayUtil.renderTextLocation(graphics2D, npcPoint, text, ticksUntilNextAttack == 1 ? Color.WHITE : config.tickFontColor());
+
+		graphics2D.setFont(originalFont);
 	}
 
-	private void renderGraphicsObjectsOutline(final Graphics2D graphics2D)
+	private void renderGraphicObjectSet(Graphics2D graphics2D, Set<GraphicsObject> graphicsObjects, Color color, int borderWidth, int aoeSize)
 	{
-		for (final GraphicsObject graphicsObject : client.getTopLevelWorldView().getGraphicsObjects())
+		if (graphicsObjects.isEmpty())
 		{
-			if (!GrotesqueGuardiansPlugin.isValidGraphicsObject(graphicsObject))
+			return;
+		}
+
+		Area aoeArea = new Area();
+
+		for (final GraphicsObject graphic : graphicsObjects)
+		{
+			if (graphic == null)
 			{
 				continue;
 			}
 
-			final LocalPoint localPoint = graphicsObject.getLocation();
+			final LocalPoint localPoint = graphic.getLocation();
 
 			if (localPoint == null)
 			{
 				return;
 			}
 
-			final Polygon polygon = Perspective.getCanvasTilePoly(client, localPoint);
+			final Polygon polygon = Perspective.getCanvasTileAreaPoly(client, localPoint, aoeSize);
 
 			if (polygon == null)
 			{
 				return;
 			}
 
-			drawOutlineAndFill(graphics2D, config.graphicsObjectsOutlineColor(), config.graphicsObjectsOutlineWidth(), polygon);
+			aoeArea.add(new Area(polygon));
 		}
+
+		drawOutlineAndFill(graphics2D, new Color(color.getRed(), color.getGreen(), color.getBlue()), color, borderWidth, aoeArea);
+	}
+
+	private void renderGameObjectSet(Graphics2D graphics2D, Set<GameObject> gameObjects, Color color, int borderWidth, int aoeSize)
+	{
+		if (gameObjects.isEmpty())
+		{
+			return;
+		}
+
+		for (final GameObject object : gameObjects)
+		{
+			if (object == null)
+			{
+				continue;
+			}
+
+			final Polygon polygon = Perspective.getCanvasTileAreaPoly(client, object.getLocalLocation(), aoeSize);
+
+			if (polygon == null)
+			{
+				return;
+			}
+
+			drawOutlineAndFill(graphics2D, new Color(color.getRed(), color.getGreen(), color.getBlue()), color, borderWidth, polygon);
+		}
+	}
+
+	private void renderFallingRocksOutline(final Graphics2D graphics2D)
+	{
+		if (!config.highlightFallingRocks())
+		{
+			return;
+		}
+
+		renderGraphicObjectSet(graphics2D, plugin.getFallingRockObjects(), config.fallingRocksFillColor(), config.fallingRocksWidth(), 3);
+	}
+
+	private void renderLightningOutline(final Graphics2D graphics2D)
+	{
+		if (!config.highlightLightning())
+		{
+			return;
+		}
+
+		renderGraphicObjectSet(graphics2D, plugin.getLightningObjects(), config.lightningFillColor(), config.lightningWidth(), 3);
+	}
+
+	private void renderFlameWallOutline(final Graphics2D graphics2D)
+	{
+		if (!config.highlightFlameWall())
+		{
+			return;
+		}
+
+		renderGraphicObjectSet(graphics2D, plugin.getFlameWallObjects(), config.flameWallFillColor(), config.flameWallWidth(), 1);
+	}
+
+	private void renderStoneOrbOutline(final Graphics2D graphics2D)
+	{
+		if (!config.highlightStoneOrb())
+		{
+			return;
+		}
+
+		renderGraphicObjectSet(graphics2D, plugin.getStoneOrbOjects(), config.stoneOrbFillColor(), config.stoneOrbBorderWidth(), 3);
+	}
+
+	private void renderEnergySphereOutline(final Graphics2D graphics2D)
+	{
+		if (!config.highlightEnergy())
+		{
+			return;
+		}
+
+		renderGameObjectSet(graphics2D, plugin.getEnergySpheres(), config.energyFillColor(), config.energyWidth(), 1);
 	}
 
 	private void renderInvulnerabilityOutline(final NPC npc)
 	{
-		modelOutlineRenderer.drawOutline(npc, config.gargoyleInvulnOutlineWidth(), config.gargoyleInvulnOutlineColor(), 0);
+		modelOutlineRenderer.drawOutline(npc, config.invulnerabilityBorderWidth(), config.invulnerabilityFillColor(), 0);
 	}
 
-	private void renderFlashOnDanger(final Graphics2D graphics2D)
+	private void renderExplosionOutline(final NPC npc)
+	{
+		modelOutlineRenderer.drawOutline(npc, config.explosionBorderWidth(), config.explosionColor(), 0);
+
+		if (++flashTimeout >= FLASH_DURATION)
+		{
+			flashTimeout = 0;
+			plugin.setFlashOnExplosion(false);
+		}
+	}
+
+	private void renderFlashOnExplosion(final Graphics2D graphics2D)
 	{
 		final Color originalColor = graphics2D.getColor();
 
@@ -232,20 +347,20 @@ public class SceneOverlay extends Overlay
 		if (++flashTimeout >= FLASH_DURATION)
 		{
 			flashTimeout = 0;
-			plugin.setFlashOnDanger(false);
+			plugin.setFlashOnExplosion(false);
 		}
 	}
 
-	private static void drawOutlineAndFill(final Graphics2D graphics2D, final Color outlineColor, final float strokeWidth, final Shape shape)
+	private static void drawOutlineAndFill(final Graphics2D graphics2D, final Color borderColor, final Color fillColor, final float strokeWidth, final Shape shape)
 	{
 		final Color originalColor = graphics2D.getColor();
 		final Stroke originalStroke = graphics2D.getStroke();
 
 		graphics2D.setStroke(new BasicStroke(strokeWidth));
-		graphics2D.setColor(outlineColor);
+		graphics2D.setColor(borderColor);
 		graphics2D.draw(shape);
 
-		graphics2D.setColor(SceneOverlay.TRANSPARENT);
+		graphics2D.setColor(fillColor);
 		graphics2D.fill(shape);
 
 		graphics2D.setColor(originalColor);
