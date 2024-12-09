@@ -227,14 +227,14 @@ public class SceneOverlay extends Overlay
 
 			if (localPoint == null)
 			{
-				return;
+				continue;
 			}
 
 			final Polygon polygon = Perspective.getCanvasTileAreaPoly(client, localPoint, aoeSize);
 
 			if (polygon == null)
 			{
-				return;
+				continue;
 			}
 
 			aoeArea.add(new Area(polygon));
@@ -261,7 +261,7 @@ public class SceneOverlay extends Overlay
 
 			if (polygon == null)
 			{
-				return;
+				continue;
 			}
 
 			drawOutlineAndFill(graphics2D, new Color(color.getRed(), color.getGreen(), color.getBlue()), color, borderWidth, polygon);
