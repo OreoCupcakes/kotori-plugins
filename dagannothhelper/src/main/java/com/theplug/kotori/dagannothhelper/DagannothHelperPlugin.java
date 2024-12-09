@@ -65,6 +65,8 @@ public class DagannothHelperPlugin extends Plugin
 	public static final int DAG_SUPREME_ATTACK = 2855;
 	public static final int DAG_KING_DEATH = 2856;
 
+	public static final int ECHO_ACID_POOL_PROJECTILE = 3034;
+
 	private static final Set<Integer> WATERBITH_REGIONS = Set.of(11588, 11589);
 
 	@Inject
@@ -90,6 +92,9 @@ public class DagannothHelperPlugin extends Plugin
 
 	@Getter
 	private final Set<DagannothKing> dagannothKings = new HashSet<>();
+
+	@Getter
+	private final Set<Projectile> echoAcidProjectiles = new HashSet<>();
 
 	private boolean atDks;
 
@@ -291,6 +296,7 @@ public class DagannothHelperPlugin extends Plugin
 			lastAttackStyle = -1;
 			lastOffensivePrayers = null;
 			lastProtectionPrayer = null;
+			echoAcidProjectiles.clear();
 		}
 		else
 		{
@@ -305,6 +311,7 @@ public class DagannothHelperPlugin extends Plugin
 
 		prayPreservePrayer();
 		handleGearEquips();
+		echoAcidProjectiles.removeIf(p -> p.getRemainingCycles() <= 0);
 	}
 
 	@Subscribe
@@ -345,6 +352,27 @@ public class DagannothHelperPlugin extends Plugin
 				default:
 					break;
 			}
+		}
+	}
+
+	@Subscribe
+	private void onProjectileMoved(final ProjectileMoved event)
+	{
+		if (!atDks)
+		{
+			return;
+		}
+
+		Projectile projectile = event.getProjectile();
+
+		if (dagannothKings.isEmpty() || client.getGameCycle() > projectile.getStartCycle())
+		{
+			return;
+		}
+
+		if (projectile.getId() == ECHO_ACID_POOL_PROJECTILE)
+		{
+            echoAcidProjectiles.add(projectile);
 		}
 	}
 

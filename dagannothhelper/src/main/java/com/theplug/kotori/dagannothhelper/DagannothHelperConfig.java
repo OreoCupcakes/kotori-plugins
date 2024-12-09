@@ -31,6 +31,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.runelite.client.config.*;
 
+import java.awt.*;
+
 @ConfigGroup("dagannothhelper")
 public interface DagannothHelperConfig extends Config
 {
@@ -151,6 +153,45 @@ public interface DagannothHelperConfig extends Config
 	{
 		return false;
 	}
+
+	@ConfigItem(
+			position = 1,
+			keyName = "highlightAcidTargets",
+			name = "Highlight Acid Target Tiles?",
+			description = "Highlight the tiles being targeted by the acid pools when the Echo Dagannoth Kings switch prayers.",
+			section = leaguesSettings
+	)
+	default boolean highlightAcidTargets()
+	{
+		return true;
+	}
+
+	@Alpha
+	@ConfigItem(
+			name = "Border Color",
+			keyName = "miasmaBorderColor",
+			description = "The color of the border for highlighting miasma tiles.",
+			position = 2,
+			section = leaguesSettings
+	)
+	default Color acidBorderColor()
+	{
+		return Color.GREEN;
+	}
+
+	@Alpha
+	@ConfigItem(
+			name = "Fill Color",
+			keyName = "miasmaFillColor",
+			description = "The color used to fill in the highlighted miasma tiles.",
+			position = 3,
+			section = leaguesSettings
+	)
+	default Color acidFillColor()
+	{
+		return new Color(0, 255, 0, 50);
+	}
+
 
 
 

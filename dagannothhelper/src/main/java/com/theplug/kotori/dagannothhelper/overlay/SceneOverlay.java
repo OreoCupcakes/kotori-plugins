@@ -29,9 +29,11 @@ package com.theplug.kotori.dagannothhelper.overlay;
 import com.theplug.kotori.dagannothhelper.DagannothHelperConfig;
 import com.theplug.kotori.dagannothhelper.DagannothHelperPlugin;
 import com.theplug.kotori.dagannothhelper.entity.DagannothKing;
+import com.theplug.kotori.kotoriutils.KotoriUtils;
 import com.theplug.kotori.kotoriutils.overlay.OverlayUtility;
 import net.runelite.api.Point;
 import net.runelite.api.*;
+import net.runelite.api.coords.LocalPoint;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
@@ -77,6 +79,7 @@ public class SceneOverlay extends Overlay
 		}
 
 		renderNpcTickCount(graphics2D);
+		renderEchoAcidPools(graphics2D);
 
 		return null;
 	}
@@ -113,6 +116,33 @@ public class SceneOverlay extends Overlay
 
 			OverlayUtility.renderTextLocation(graphics2D, text, 20, Font.BOLD,
 				ticksUntilNextAnimation == 1 ? Color.WHITE : dagannothKing.getColor(), npcPoint, true, 0);
+		}
+	}
+
+	private void renderEchoAcidPools(final Graphics2D graphics2D)
+	{
+		Set<Projectile> acidPools = plugin.getEchoAcidProjectiles();
+
+		if (!config.highlightAcidTargets() || acidPools.isEmpty())
+		{
+			return;
+		}
+
+		for (Projectile acid : acidPools)
+		{
+			if (acid == null)
+			{
+				continue;
+			}
+
+			final Polygon polygon = Perspective.getCanvasTilePoly(client, acid.getTarget());
+
+			if (polygon == null)
+			{
+				continue;
+			}
+
+			OverlayUtility.drawOutlineAndFill(graphics2D, config.acidBorderColor(), config.acidFillColor(), 2, polygon);
 		}
 	}
 }
