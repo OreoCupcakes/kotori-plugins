@@ -123,7 +123,7 @@ public class SceneOverlay extends Overlay
 	{
 		Set<Projectile> acidPools = plugin.getEchoAcidProjectiles();
 
-		if (!config.highlightAcidTargets() || acidPools.isEmpty())
+		if (acidPools == null || !config.highlightAcidTargets() || acidPools.isEmpty())
 		{
 			return;
 		}
@@ -135,7 +135,14 @@ public class SceneOverlay extends Overlay
 				continue;
 			}
 
-			final Polygon polygon = Perspective.getCanvasTilePoly(client, acid.getTarget());
+			LocalPoint localPoint = acid.getTarget();
+
+			if (localPoint == null)
+			{
+				continue;
+			}
+
+			final Polygon polygon = Perspective.getCanvasTilePoly(client, localPoint);
 
 			if (polygon == null)
 			{
