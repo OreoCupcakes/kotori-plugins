@@ -105,6 +105,9 @@ public class FightCavePlugin extends Plugin
 	public static final int KET_ZEK_MAGE_ATTACK = 2647;
 	public static final int MEJ_KOT_MELEE_ATTACK = 2637;
 	public static final int MEJ_KOT_HEAL_ATTACK = 2639;
+	public static final int IDLE = -1;
+
+	private static int lastJadAnimation = -1;
 
 	static String formatMonsterQuantity(final WaveMonster monster, final int quantity)
 	{
@@ -135,6 +138,7 @@ public class FightCavePlugin extends Plugin
 		overlayManager.remove(waveOverlay);
 		overlayManager.remove(fightCaveOverlay);
 		currentWave = -1;
+		lastJadAnimation = -1;
 		mageTicks.clear();
 		rangedTicks.clear();
 		meleeTicks.clear();
@@ -268,29 +272,40 @@ public class FightCavePlugin extends Plugin
 			{
 				if (anims == ReflectionLibrary.getNpcAnimationId(npc.getNpc()))
 				{
-					if (npc.getTicksUntilAttack() < 1)
+					if (npc.getNpcName().equals("TzTok-Jad"))
+					{
+						if (anims == lastJadAnimation)
+						{
+							break;
+						}
+
+						lastJadAnimation = anims;
+
+						if (npc.getTicksUntilAttack() < 1 && anims != -1)
+						{
+							npc.setTicksUntilAttack(npc.getAttackSpeed());
+						}
+
+						switch (anims)
+						{
+							case TZTOK_JAD_RANGE_ATTACK:
+								npc.setAttackStyle(FightCaveContainer.AttackStyle.RANGE);
+								break;
+							case TZTOK_JAD_MAGIC_ATTACK:
+								npc.setAttackStyle(FightCaveContainer.AttackStyle.MAGE);
+								break;
+							case TZTOK_JAD_MELEE_ATTACK:
+								npc.setAttackStyle(FightCaveContainer.AttackStyle.MELEE);
+								//Melee attack is instant damage so instead we're counting down until the next attack animation or melee attack.
+								npc.setTicksUntilAttack(4);
+								break;
+						}
+					}
+					else if (npc.getTicksUntilAttack() < 1)
 					{
 						npc.setTicksUntilAttack(npc.getAttackSpeed());
 					}
-
-					switch (anims)
-					{
-						case TZTOK_JAD_RANGE_ATTACK:
-							npc.setAttackStyle(FightCaveContainer.AttackStyle.RANGE);
-							break;
-						case TZTOK_JAD_MAGIC_ATTACK:
-							npc.setAttackStyle(FightCaveContainer.AttackStyle.MAGE);
-							break;
-						case TZTOK_JAD_MELEE_ATTACK:
-							npc.setAttackStyle(FightCaveContainer.AttackStyle.MELEE);
-							break;
-					}
 				}
-			}
-
-			if (npc.getNpcName().equals("TzTok-Jad"))
-			{
-				continue;
 			}
 
 			switch (npc.getAttackStyle())

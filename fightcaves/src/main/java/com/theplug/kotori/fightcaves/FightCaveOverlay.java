@@ -90,7 +90,7 @@ public class FightCaveOverlay extends Overlay
 
 			if (npc.getNpcName().equals("TzTok-Jad"))
 			{
-				color = (ticksLeft <= 1 || ticksLeft == 8 ? attackStyle.getColor() : Color.WHITE);
+				color = (ticksLeft <= 1 || ticksLeft == 3 ? attackStyle.getColor() : Color.WHITE);
 
 				BufferedImage pray = getPrayerImage(npc.getAttackStyle());
 

@@ -38,15 +38,8 @@ import net.runelite.api.NPC;
 import net.runelite.api.NPCComposition;
 import net.runelite.api.NpcID;
 import net.runelite.api.Prayer;
-import static com.theplug.kotori.fightcaves.FightCavePlugin.KET_ZEK_MAGE_ATTACK;
-import static com.theplug.kotori.fightcaves.FightCavePlugin.KET_ZEK_MELEE_ATTACK;
-import static com.theplug.kotori.fightcaves.FightCavePlugin.MEJ_KOT_HEAL_ATTACK;
-import static com.theplug.kotori.fightcaves.FightCavePlugin.MEJ_KOT_MELEE_ATTACK;
-import static com.theplug.kotori.fightcaves.FightCavePlugin.TOK_XIL_MELEE_ATTACK;
-import static com.theplug.kotori.fightcaves.FightCavePlugin.TOK_XIL_RANGE_ATTACK;
-import static com.theplug.kotori.fightcaves.FightCavePlugin.TZTOK_JAD_MAGIC_ATTACK;
-import static com.theplug.kotori.fightcaves.FightCavePlugin.TZTOK_JAD_MELEE_ATTACK;
-import static com.theplug.kotori.fightcaves.FightCavePlugin.TZTOK_JAD_RANGE_ATTACK;
+
+import static com.theplug.kotori.fightcaves.FightCavePlugin.*;
 
 @Getter(AccessLevel.PACKAGE)
 class FightCaveContainer
@@ -102,8 +95,8 @@ class FightCaveContainer
 		KETZEK2(NpcID.KETZEK_3126, AttackStyle.MAGE, ImmutableSet.of(KET_ZEK_MAGE_ATTACK, KET_ZEK_MELEE_ATTACK), 0, 4),
 		YTMEJKOT1(NpcID.YTMEJKOT, AttackStyle.MELEE, ImmutableSet.of(MEJ_KOT_HEAL_ATTACK, MEJ_KOT_MELEE_ATTACK), 2, 4),
 		YTMEJKOT2(NpcID.YTMEJKOT_3124, AttackStyle.MELEE, ImmutableSet.of(MEJ_KOT_HEAL_ATTACK, MEJ_KOT_MELEE_ATTACK), 2, 4),
-		TZTOKJAD1(NpcID.TZTOKJAD, AttackStyle.UNKNOWN, ImmutableSet.of(TZTOK_JAD_MAGIC_ATTACK, TZTOK_JAD_RANGE_ATTACK, TZTOK_JAD_MELEE_ATTACK), 0, 4),
-		TZTOKJAD2(NpcID.TZTOKJAD_6506, AttackStyle.UNKNOWN, ImmutableSet.of(TZTOK_JAD_MAGIC_ATTACK, TZTOK_JAD_RANGE_ATTACK, TZTOK_JAD_MELEE_ATTACK), 0, 8);
+		TZTOKJAD1(NpcID.TZTOKJAD, AttackStyle.UNKNOWN, ImmutableSet.of(TZTOK_JAD_MAGIC_ATTACK, TZTOK_JAD_RANGE_ATTACK, TZTOK_JAD_MELEE_ATTACK, IDLE), 0, 3),
+		TZTOKJAD2(NpcID.TZTOKJAD_6506, AttackStyle.UNKNOWN, ImmutableSet.of(TZTOK_JAD_MAGIC_ATTACK, TZTOK_JAD_RANGE_ATTACK, TZTOK_JAD_MELEE_ATTACK, IDLE), 0, 3);
 
 		private static final ImmutableMap<Integer, BossMonsters> idMap;
 
