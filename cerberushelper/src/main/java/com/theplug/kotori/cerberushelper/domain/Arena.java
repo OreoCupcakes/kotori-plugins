@@ -55,13 +55,40 @@ public enum Arena
 		return null;
 	}
 
-	public WorldPoint getGhostTile(final int ghostIndex)
+	public WorldPoint getGhostTile(final int ghostIndex, boolean echoVariant)
 	{
-		if (ghostIndex > 2 || ghostIndex < 0)
+		if (ghostIndex < 0)
 		{
 			return null;
 		}
 
-		return new WorldPoint(x1 + 8 + ghostIndex, y1 + 13, 0);
+		if (!echoVariant)
+		{
+			if (ghostIndex > 2)
+			{
+				return null;
+			}
+
+			return new WorldPoint(x1 + 8 + ghostIndex, y1 + 13, 0);
+		}
+		else
+		{
+			if (ghostIndex < 3)
+			{
+				return new WorldPoint(x1 + 8 + (ghostIndex % 3), y1 + 11, 0);
+			}
+			else if (ghostIndex < 6)
+			{
+				return new WorldPoint(x1 + 8 + (ghostIndex % 3), y1 + 12, 0);
+			}
+			else if (ghostIndex < 9)
+			{
+				return new WorldPoint(x1 + 8 + (ghostIndex % 3), y1 + 13, 0);
+			}
+			else
+			{
+				return null;
+			}
+		}
 	}
 }

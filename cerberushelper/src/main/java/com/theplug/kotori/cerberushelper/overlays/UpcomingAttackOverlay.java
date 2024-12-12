@@ -37,9 +37,11 @@ import javax.inject.Singleton;
 import com.theplug.kotori.cerberushelper.CerberusHelperConfig;
 import com.theplug.kotori.cerberushelper.CerberusHelperPlugin;
 import com.theplug.kotori.cerberushelper.domain.Cerberus;
+import com.theplug.kotori.cerberushelper.domain.CerberusAttack;
 import com.theplug.kotori.cerberushelper.domain.Phase;
 import com.theplug.kotori.cerberushelper.util.ImageManager;
 import com.theplug.kotori.cerberushelper.util.InfoBoxComponent;
+import net.runelite.api.Prayer;
 import net.runelite.client.ui.FontManager;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
@@ -120,7 +122,26 @@ public final class UpcomingAttackOverlay extends Overlay
 			final int cerberusHp = cerberus.getHp();
 			final Phase phase = cerberus.getNextAttackPhase(attack, cerberusHp);
 
-			final BufferedImage image = ImageManager.getCerberusBufferedImage(phase, plugin.getDefaultPrayer());
+			Prayer prayer = plugin.getDefaultPrayer();
+
+			if (config.killingEchoCerberus())
+			{
+				int attacksInRotation = cerberus.getNonGhostAttacks() % 24;
+				if (attacksInRotation < 8)
+				{
+					prayer = Prayer.PROTECT_FROM_MAGIC;
+				}
+				else if (attacksInRotation < 16)
+				{
+					prayer = Prayer.PROTECT_FROM_MISSILES;
+				}
+				else
+				{
+					prayer = Prayer.PROTECT_FROM_MELEE;
+				}
+			}
+
+			final BufferedImage image = ImageManager.getCerberusBufferedImage(phase, prayer);
 
 			if (image == null)
 			{

@@ -49,21 +49,16 @@ import net.runelite.api.*;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
-import net.runelite.api.events.AnimationChanged;
-import net.runelite.api.events.GameStateChanged;
-import net.runelite.api.events.GameTick;
-import net.runelite.api.events.NpcDespawned;
-import net.runelite.api.events.NpcSpawned;
-import net.runelite.api.events.ProjectileMoved;
+import net.runelite.api.events.*;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
+import net.runelite.client.game.ItemEquipmentStats;
 import net.runelite.client.game.ItemManager;
+import net.runelite.client.game.ItemStats;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
-import net.runelite.http.api.item.ItemEquipmentStats;
-import net.runelite.http.api.item.ItemStats;
 
 @Slf4j
 @Singleton
@@ -99,6 +94,15 @@ public class CerberusHelperPlugin extends Plugin
 	private static final Set<Integer> REGION_IDS = Set.of(4883, 5140, 5395);
 
 	private static final Set<Integer> CERBERUS_IDS = Set.of(NpcID.CERBERUS, NpcID.CERBERUS_5863, NpcID.CERBERUS_5866);
+
+	private static final int ECHO_PROJECTILE_MAGIC = 3119;
+	private static final int ECHO_PROJECTILE_RANGED = 3122;
+	private static final int ECHO_PROJECTILE_LAVA = 3124;
+	private static final int ECHO_GRAPHIC_LAVA_SPAWNING = 3124;
+	private static final int ECHO_GRAPHIC_LAVA_POOL = 3123;
+
+	private static final int ANIMATION_GHOST_RANGE_ATTACK = 8530;
+	private static final int ANIMATION_GHOST_MAGIC_ATTACK = 8529;
 
 	@Inject
 	private Client client;
@@ -146,6 +150,9 @@ public class CerberusHelperPlugin extends Plugin
 	private final Map<LocalPoint, Projectile> lavaProjectiles = new HashMap<>();
 
 	@Getter
+	private final Set<GraphicsObject> echoLavaGraphics = new HashSet<>();
+
+	@Getter
 	private int gameTick;
 
 	private int tickTimestampIndex;
@@ -162,6 +169,8 @@ public class CerberusHelperPlugin extends Plugin
 	private WorldPoint lavaSafeTile = null;
 	private int ticksSinceLavaDodge = 0;
 	private int ghostAttacked = 0;
+
+	private boolean sortedGhosts = false;
 
 	@Provides
 	CerberusHelperConfig provideConfig(final ConfigManager configManager)
@@ -193,7 +202,7 @@ public class CerberusHelperPlugin extends Plugin
 			{
 				if (CERBERUS_IDS.contains(npc.getId()))
 				{
-					cerberus = new Cerberus(npc);
+					cerberus = new Cerberus(npc, config.killingEchoCerberus());
 					break;
 				}
 			}
@@ -221,6 +230,7 @@ public class CerberusHelperPlugin extends Plugin
 		tickTimestamps.clear();
 		cerberusProjectiles.clear();
 		lavaProjectiles.clear();
+		echoLavaGraphics.clear();
 
 		defaultPrayer = Prayer.PROTECT_FROM_MAGIC;
 
@@ -233,6 +243,7 @@ public class CerberusHelperPlugin extends Plugin
 		ranFromLavaOnce = false;
 		performAttackAfterPrayer = false;
 		performAttackOnCerb = false;
+		sortedGhosts = false;
 
 		ghostAttacked = 0;
 
@@ -278,60 +289,62 @@ public class CerberusHelperPlugin extends Plugin
 	@Subscribe
 	private void onGameTick(final GameTick event)
 	{
-		if (!inArena)
+		if (!inArena || cerberus == null)
 		{
 			return;
 		}
 
-		if (cerberus != null)
+		inAreaPastFlames();
+
+		if (tickTimestamps.size() <= tickTimestampIndex)
 		{
-			inAreaPastFlames();
+			tickTimestamps.add(System.currentTimeMillis());
+		}
+		else
+		{
+			tickTimestamps.set(tickTimestampIndex, System.currentTimeMillis());
+		}
 
-			if (tickTimestamps.size() <= tickTimestampIndex)
+		long min = 0;
+
+		for (int i = 0; i < tickTimestamps.size(); ++i)
+		{
+			if (min == 0)
 			{
-				tickTimestamps.add(System.currentTimeMillis());
-			} else
-			{
-				tickTimestamps.set(tickTimestampIndex, System.currentTimeMillis());
+				min = tickTimestamps.get(i) + 600 * ((tickTimestampIndex - i + 5) % 5);
 			}
-
-			long min = 0;
-
-			for (int i = 0; i < tickTimestamps.size(); ++i)
+			else
 			{
-				if (min == 0)
-				{
-					min = tickTimestamps.get(i) + 600 * ((tickTimestampIndex - i + 5) % 5);
-				} else
-				{
-					min = Math.min(min, tickTimestamps.get(i) + 600 * ((tickTimestampIndex - i + 5) % 5));
-				}
+				min = Math.min(min, tickTimestamps.get(i) + 600 * ((tickTimestampIndex - i + 5) % 5));
 			}
+		}
 
-			tickTimestampIndex = (tickTimestampIndex + 1) % 5;
+		tickTimestampIndex = (tickTimestampIndex + 1) % 5;
 
-			lastTick = min;
+		lastTick = min;
 
-			++gameTick;
+		++gameTick;
 
-			if (gameTick % 10 == 3)
+		if (gameTick % 10 == 3)
+		{
+			switch (config.overrideAutoAttackCalc())
 			{
-				switch (config.overrideAutoAttackCalc())
-				{
-					case MAGIC:
-					case MELEE:
-					case MISSILES:
-						defaultPrayer = config.overrideAutoAttackCalc().getPrayer();
-						break;
-					default:
-						setAutoAttackPrayer();
-						break;
-				}
+				case MAGIC:
+				case MELEE:
+				case MISSILES:
+					defaultPrayer = config.overrideAutoAttackCalc().getPrayer();
+					break;
+				default:
+					setAutoAttackPrayer();
+					break;
 			}
+		}
 
-			calculateUpcomingAttacks();
+		calculateUpcomingAttacks();
 
-			if (ghosts.size() > 1)
+		if (ghosts.size() > 1)
+		{
+			if (!sortedGhosts)
 			{
 				/*
 				 * First, sort by the southernmost ghost (e.g with lowest y).
@@ -342,16 +355,34 @@ public class CerberusHelperPlugin extends Plugin
 						.compare(a.getLocalLocation().getY(), b.getLocalLocation().getY())
 						.compare(a.getLocalLocation().getX(), b.getLocalLocation().getX())
 						.result());
+
+				if (gameTick - cerberus.getLastGhostYellTick() >= 15)
+				{
+					sortedGhosts = true;
+				}
 			}
+			else
+			{
+				int lastYell = cerberus.getLastGhostYellTick();
+				if (lastYell != 0 && gameTick - lastYell >= 35)
+				{
+					sortedGhosts = false;
+				}
+			}
+		}
+		else
+		{
+			sortedGhosts = false;
 		}
 
 		handlePrayerInteractions();
 		handleSpellInteractions();
-		dodgeLavaSpecial();
 
-		/*
-			Check if the stored projectiles have expired. If expired, then reset it to null.
-		 */
+		if (!config.killingEchoCerberus())
+		{
+			dodgeLavaSpecial();
+		}
+
 		clearProjectileArray();
 	}
 
@@ -359,6 +390,7 @@ public class CerberusHelperPlugin extends Plugin
 	{
 		cerberusProjectiles.removeIf(p -> p.getRemainingCycles() <= 0);
 		lavaProjectiles.values().removeIf(p -> p.getRemainingCycles() <= 0);
+		echoLavaGraphics.removeIf(GraphicsObject::finished);
 	}
 
 	@Subscribe
@@ -390,6 +422,7 @@ public class CerberusHelperPlugin extends Plugin
 		switch (projectile.getId())
 		{
 			case PROJECTILE_ID_MAGIC:
+			case ECHO_PROJECTILE_MAGIC:
 				log.debug("gameTick={}, attack={}, cerbHp={}, expectedAttack={}, cerbProjectile={}", gameTick, cerberus.getPhaseCount() + 1, hp, expectedAttack, "MAGIC");
 				if (expectedAttack != Phase.TRIPLE)
 				{
@@ -403,6 +436,7 @@ public class CerberusHelperPlugin extends Plugin
 				cerberus.doProjectileOrAnimation(gameTick, Cerberus.Attack.MAGIC);
 				break;
 			case PROJECTILE_ID_RANGE:
+			case ECHO_PROJECTILE_RANGED:
 				log.debug("gameTick={}, attack={}, cerbHp={}, expectedAttack={}, cerbProjectile={}", gameTick, cerberus.getPhaseCount() + 1, hp, expectedAttack, "RANGED");
 				if (expectedAttack != Phase.TRIPLE)
 				{
@@ -482,6 +516,14 @@ public class CerberusHelperPlugin extends Plugin
 				cerberus.doProjectileOrAnimation(gameTick, Cerberus.Attack.LAVA);
 				break;
 			case ANIMATION_ID_GHOSTS:
+				/*
+					This is for the Echo variant which does the ghost animation 2 or 3 times to summon 9 ghosts. It puts a cooldown on what we would consider a valid ghost animation.
+					We want to make sure at least 14 game ticks (how long it takes from start of first animation to first ghost attack) has passed before we mark down another ghost animation.
+				 */
+				if (gameTick < cerberus.getLastGhostYellTick() + 14)
+				{
+					break;
+				}
 				log.debug("gameTick={}, attack={}, cerbHp={}, expectedAttack={}, cerbAnimation={}", gameTick, cerberus.getPhaseCount() + 1, hp, expectedAttack, "GHOSTS");
 				cerberus.nextPhase(Phase.GHOSTS);
 				cerberus.setLastGhostYellTick(gameTick);
@@ -490,7 +532,7 @@ public class CerberusHelperPlugin extends Plugin
 				break;
 			case ANIMATION_ID_SIT_DOWN:
 			case ANIMATION_ID_STAND_UP:
-				cerberus = new Cerberus(cerberus.getNpc());
+				cerberus = new Cerberus(cerberus.getNpc(), config.killingEchoCerberus());
 				gameTick = 0;
 				lastTick = System.currentTimeMillis();
 				upcomingAttacks.clear();
@@ -507,6 +549,7 @@ public class CerberusHelperPlugin extends Plugin
 				ghosts.clear();
 				cerberusProjectiles.clear();
 				lavaProjectiles.clear();
+				echoLavaGraphics.clear();
 				ranFromLavaOnce = false;
 				performAttackAfterPrayer = false;
 				performAttackOnCerb = false;
@@ -518,6 +561,22 @@ public class CerberusHelperPlugin extends Plugin
 			default:
 				log.debug("gameTick={}, animationId={} (UNKNOWN)", gameTick, animationId);
 				break;
+		}
+	}
+
+	@Subscribe
+	private void onGraphicsObjectCreated(final GraphicsObjectCreated event)
+	{
+		if (!inArena)
+		{
+			return;
+		}
+
+		GraphicsObject graphicsObject = event.getGraphicsObject();
+
+		if (graphicsObject.getId() == ECHO_GRAPHIC_LAVA_SPAWNING)
+		{
+			echoLavaGraphics.add(graphicsObject);
 		}
 	}
 
@@ -534,7 +593,7 @@ public class CerberusHelperPlugin extends Plugin
 		{
 			log.debug("onNpcSpawned name={}, id={}", npc.getName(), npc.getId());
 
-			cerberus = new Cerberus(npc);
+			cerberus = new Cerberus(npc, config.killingEchoCerberus());
 
 			gameTick = 0;
 			tickTimestampIndex = 0;
@@ -574,6 +633,7 @@ public class CerberusHelperPlugin extends Plugin
 			ghosts.clear();
 			cerberusProjectiles.clear();
 			lavaProjectiles.clear();
+			echoLavaGraphics.clear();
 			ranFromLavaOnce = false;
 			performAttackAfterPrayer = false;
 			performAttackOnCerb = false;
@@ -622,47 +682,120 @@ public class CerberusHelperPlugin extends Plugin
 		if (lastPhase != null)
 		{
 			tickDelay = lastPhase.getTickDelay();
+			if (lastPhase == Phase.GHOSTS && config.killingEchoCerberus())
+			{
+				tickDelay+= 6;
+			}
 		}
 
 		for (int tick = gameTick + 1; tick <= gameTick + 10; ++tick)
 		{
-			if (ghosts.size() == 3)
+			if (!config.killingEchoCerberus())
 			{
-				final Ghost ghost;
+				if (ghosts.size() == 3)
+				{
+					final Ghost ghost;
 
-				if (cerberus.getLastGhostYellTick() == tick - 13)
-				{
-					ghost = Ghost.fromNPC(ghosts.get(ghosts.size() - 3));
-				}
-				else if (cerberus.getLastGhostYellTick() == tick - 15)
-				{
-					ghost = Ghost.fromNPC(ghosts.get(ghosts.size() - 2));
-				}
-				else if (cerberus.getLastGhostYellTick() == tick - 17)
-				{
-					ghost = Ghost.fromNPC(ghosts.get(ghosts.size() - 1));
-				}
-				else
-				{
-					ghost = null;
-				}
-
-				if (ghost != null)
-				{
-					switch (ghost.getType())
+					if (cerberus.getLastGhostYellTick() == tick - 13)
 					{
-						case ATTACK:
-							upcomingAttacks.add(new CerberusAttack(tick, Cerberus.Attack.GHOST_MELEE));
-							break;
-						case RANGED:
-							upcomingAttacks.add(new CerberusAttack(tick, Cerberus.Attack.GHOST_RANGED));
-							break;
-						case MAGIC:
-							upcomingAttacks.add(new CerberusAttack(tick, Cerberus.Attack.GHOST_MAGIC));
-							break;
+						ghost = Ghost.fromNPC(ghosts.get(ghosts.size() - 3));
+					}
+					else if (cerberus.getLastGhostYellTick() == tick - 15)
+					{
+						ghost = Ghost.fromNPC(ghosts.get(ghosts.size() - 2));
+					}
+					else if (cerberus.getLastGhostYellTick() == tick - 17)
+					{
+						ghost = Ghost.fromNPC(ghosts.get(ghosts.size() - 1));
+					}
+					else
+					{
+						ghost = null;
 					}
 
-					continue;
+					if (ghost != null)
+					{
+						switch (ghost.getType())
+						{
+							case ATTACK:
+								upcomingAttacks.add(new CerberusAttack(tick, Cerberus.Attack.GHOST_MELEE));
+								break;
+							case RANGED:
+								upcomingAttacks.add(new CerberusAttack(tick, Cerberus.Attack.GHOST_RANGED));
+								break;
+							case MAGIC:
+								upcomingAttacks.add(new CerberusAttack(tick, Cerberus.Attack.GHOST_MAGIC));
+								break;
+						}
+
+						continue;
+					}
+				}
+			}
+			else
+			{
+				if (ghosts.size() == 9)
+				{
+					final Ghost ghost;
+
+					if (cerberus.getLastGhostYellTick() == tick - 15) //good
+					{
+						ghost = Ghost.fromNPC(ghosts.get(ghosts.size() - 9));
+					}
+					else if (cerberus.getLastGhostYellTick() == tick - 17)//good
+					{
+						ghost = Ghost.fromNPC(ghosts.get(ghosts.size() - 8));
+					}
+					else if (cerberus.getLastGhostYellTick() == tick - 19)//good
+					{
+						ghost = Ghost.fromNPC(ghosts.get(ghosts.size() - 7));
+					}
+					else if (cerberus.getLastGhostYellTick() == tick - 23)//2nd set
+					{
+						ghost = Ghost.fromNPC(ghosts.get(ghosts.size() - 6));
+					}
+					else if (cerberus.getLastGhostYellTick() == tick - 25)//2nd set
+					{
+						ghost = Ghost.fromNPC(ghosts.get(ghosts.size() - 5));
+					}
+					else if (cerberus.getLastGhostYellTick() == tick - 27)//2nd set
+					{
+						ghost = Ghost.fromNPC(ghosts.get(ghosts.size() - 4));
+					}
+					else if (cerberus.getLastGhostYellTick() == tick - 31)//3rd set
+					{
+						ghost = Ghost.fromNPC(ghosts.get(ghosts.size() - 3));
+					}
+					else if (cerberus.getLastGhostYellTick() == tick - 33)//3rd set
+					{
+						ghost = Ghost.fromNPC(ghosts.get(ghosts.size() - 2));
+					}
+					else if (cerberus.getLastGhostYellTick() == tick - 35)//3rd set
+					{
+						ghost = Ghost.fromNPC(ghosts.get(ghosts.size() - 1));
+					}
+					else
+					{
+						ghost = null;
+					}
+
+					if (ghost != null)
+					{
+						switch (ghost.getType())
+						{
+							case ATTACK:
+								upcomingAttacks.add(new CerberusAttack(tick, Cerberus.Attack.GHOST_MELEE));
+								break;
+							case RANGED:
+								upcomingAttacks.add(new CerberusAttack(tick, Cerberus.Attack.GHOST_RANGED));
+								break;
+							case MAGIC:
+								upcomingAttacks.add(new CerberusAttack(tick, Cerberus.Attack.GHOST_MAGIC));
+								break;
+						}
+
+						continue;
+					}
 				}
 			}
 
@@ -702,17 +835,34 @@ public class CerberusHelperPlugin extends Plugin
 			{
 				if (lastCerberusAttackTick + tickDelay + 1 == tick)
 				{
-					if (defaultPrayer == Prayer.PROTECT_FROM_MAGIC)
+					if (!config.killingEchoCerberus())
 					{
-						upcomingAttacks.add(new CerberusAttack(tick, Cerberus.Attack.MAGIC));
+						if (defaultPrayer == Prayer.PROTECT_FROM_MAGIC)
+						{
+							upcomingAttacks.add(new CerberusAttack(tick, Cerberus.Attack.MAGIC));
+						} else if (defaultPrayer == Prayer.PROTECT_FROM_MISSILES)
+						{
+							upcomingAttacks.add(new CerberusAttack(tick, Cerberus.Attack.RANGED));
+						} else if (defaultPrayer == Prayer.PROTECT_FROM_MELEE)
+						{
+							upcomingAttacks.add(new CerberusAttack(tick, Cerberus.Attack.MELEE));
+						}
 					}
-					else if (defaultPrayer == Prayer.PROTECT_FROM_MISSILES)
+					else
 					{
-						upcomingAttacks.add(new CerberusAttack(tick, Cerberus.Attack.RANGED));
-					}
-					else if (defaultPrayer == Prayer.PROTECT_FROM_MELEE)
-					{
-						upcomingAttacks.add(new CerberusAttack(tick, Cerberus.Attack.MELEE));
+						int attacksInRotation = cerberus.getNonGhostAttacks() % 24;
+						if (attacksInRotation < 8)
+						{
+							upcomingAttacks.add(new CerberusAttack(tick, Cerberus.Attack.MAGIC));
+						}
+						else if (attacksInRotation < 16)
+						{
+							upcomingAttacks.add(new CerberusAttack(tick, Cerberus.Attack.RANGED));
+						}
+						else
+                        {
+                            upcomingAttacks.add(new CerberusAttack(tick, Cerberus.Attack.MELEE));
+                        }
 					}
 				}
 			}
@@ -736,7 +886,7 @@ public class CerberusHelperPlugin extends Plugin
 					continue;
 				}
 
-				final ItemStats itemStats = itemManager.getItemStats(item.getId(), false);
+				final ItemStats itemStats = itemManager.getItemStats(item.getId());
 
 				if (itemStats == null)
 				{
@@ -956,7 +1106,7 @@ public class CerberusHelperPlugin extends Plugin
 
 		final Prayer prayer = config.offensivePrayerChoice().getPrayer();
 
-		if (config.conservePrayerGhostSkip() && cerberus.getHp() > 400 && cerberus.getPhaseCount() < 15)
+		if (!config.killingEchoCerberus() && config.conservePrayerGhostSkip() && cerberus.getHp() > 400 && cerberus.getPhaseCount() < 15)
 		{
 			return;
 		}
@@ -1081,4 +1231,7 @@ public class CerberusHelperPlugin extends Plugin
 			SpellInteractions.castSpell(Spells.DEMONIC_OFFERING);
 		}
 	}
+
+
+
 }

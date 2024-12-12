@@ -103,6 +103,14 @@ public interface CerberusHelperConfig extends Config
 	)
 	String spellHelper = "Spell Helper";
 
+	@ConfigSection(
+			name = "Leagues Settings",
+			description = "Settings for the Echo variant of Cerberus, found in Leagues 5 - Raging Echos.",
+			position = 4
+	)
+	String leaguesSettings = "Leagues Settings";
+
+
 
 	// Overlay Settings
 	@ConfigItem(
@@ -465,4 +473,20 @@ public interface CerberusHelperConfig extends Config
 			section = spellHelper
 	)
 	default int demonicOfferingAmount() { return 3; }
+
+
+
+	//Leagues Settings
+	@ConfigItem(
+			keyName = "killingEchoCerberus",
+			name = "Killing Echo Cerberus?",
+			description = "Turn on if you are killing the Echo variant of Cerberus." +
+					"<br>The Echo variant has different mechanics, but use the same IDs are the normal varient so this has to be a manual toggle.",
+			position = 0,
+			section = leaguesSettings
+	)
+	default boolean killingEchoCerberus()
+	{
+		return false;
+	}
 }

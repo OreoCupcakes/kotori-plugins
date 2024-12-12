@@ -26,8 +26,10 @@
 package com.theplug.kotori.cerberushelper.overlays;
 
 import java.awt.*;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -59,6 +61,7 @@ public final class SceneOverlay extends Overlay
 	private static final int GHOST_TILE_FILL_ALPHA = 20;
 
 	private static final int GHOST_YELL_TICK_WINDOW = 17;
+	private static final int ECHO_GHOST_YELL_TICK_WINDOW = 35;
 
 	private final Client client;
 	private final CerberusHelperPlugin plugin;
@@ -89,18 +92,41 @@ public final class SceneOverlay extends Overlay
 		}
 
 		renderGhostTiles(graphics2D);
-		renderLavaProjectileAreaTiles(graphics2D);
+
+		if (config.killingEchoCerberus())
+		{
+			renderEchoLavaGraphics(graphics2D);
+		}
+		else
+		{
+			renderLavaProjectileAreaTiles(graphics2D);
+		}
 
 		return null;
 	}
 
 	private void renderGhostTiles(final Graphics2D graphics2D)
 	{
-		if (!config.drawGhostTiles()
-			|| cerberus.getLastGhostYellTick() == 0
-			|| (plugin.getGameTick() - cerberus.getLastGhostYellTick()) >= GHOST_YELL_TICK_WINDOW)
+		if (!config.drawGhostTiles() || cerberus.getLastGhostYellTick() == 0)
 		{
 			return;
+		}
+
+		if (!config.killingEchoCerberus())
+		{
+			if ((plugin.getGameTick() - cerberus.getLastGhostYellTick()) >= GHOST_YELL_TICK_WINDOW)
+			{
+				plugin.getGhosts().clear();
+				return;
+			}
+		}
+		else
+		{
+			if ((plugin.getGameTick() - cerberus.getLastGhostYellTick()) >= ECHO_GHOST_YELL_TICK_WINDOW)
+			{
+				plugin.getGhosts().clear();
+				return;
+			}
 		}
 
 		final Player player = client.getLocalPlayer();
@@ -112,18 +138,26 @@ public final class SceneOverlay extends Overlay
 
 		final WorldPoint playerTile = player.getWorldLocation();
 
-		final Arena arena = Arena.getArena(playerTile);
+		final Arena arena = Arena.getArena(WorldPoint.fromLocalInstance(client, player.getLocalLocation()));
 
 		if (arena == null)
 		{
 			return;
 		}
 
-		final int numberOfTiles = 3;
+		//Echo variant, then 9 ghosts vs 3 in normal
+		final int numberOfTiles = !config.killingEchoCerberus() ? 3 : 9;
 
 		for (int i = 0; i < numberOfTiles; ++i)
 		{
-			final WorldPoint ghostTile = arena.getGhostTile(i);
+			final WorldPoint ghostTileNonInstanced = arena.getGhostTile(i, config.killingEchoCerberus());
+			Collection<WorldPoint> possibleGhostTileInstances = WorldPoint.toLocalInstance(client.getTopLevelWorldView(), ghostTileNonInstanced);
+			WorldPoint ghostTile = null;
+			for (WorldPoint worldPoint : possibleGhostTileInstances)
+			{
+				ghostTile = worldPoint;
+				break;
+			}
 
 			if (ghostTile == null || ghostTile.distanceTo(playerTile) >= MAX_RENDER_DISTANCE)
 			{
@@ -181,7 +215,31 @@ public final class SceneOverlay extends Overlay
 		final long lastGhostsTime = Math.min(cerberus.getLastGhostYellTime(), time - (600L * (tick - lastGhostsTick)));
 		cerberus.setLastGhostYellTime(lastGhostsTime);
 
-		final double timeUntilGhostAttack = Math.max((double) ((lastGhostsTime + 600 * (13 + tileIndex * 2L)) - System.currentTimeMillis()) / 1000, 0);
+		long baseTimeUntilGhosts = 13 + tileIndex * 2L;
+
+		if (config.killingEchoCerberus())
+		{
+			switch (tileIndex)
+			{
+				case 1:
+				case 2:
+				case 3:
+					baseTimeUntilGhosts = 13 + tileIndex * 2L;
+					break;
+				case 4:
+				case 5:
+				case 6:
+					baseTimeUntilGhosts = 17 + tileIndex * 2L;
+					break;
+				case 7:
+				case 8:
+				case 9:
+					baseTimeUntilGhosts = 19 + tileIndex * 2L;
+					break;
+			}
+		}
+
+		final double timeUntilGhostAttack = Math.max((double) ((lastGhostsTime + 600 * baseTimeUntilGhosts) - System.currentTimeMillis()) / 1000, 0);
 
 		final Color textColor = timeUntilGhostAttack <= GHOST_TIME_WARNING ? Color.RED : Color.WHITE;
 
@@ -217,6 +275,38 @@ public final class SceneOverlay extends Overlay
 			final LocalPoint localPoint = entry.getKey();
 
 			final Polygon polygon = Perspective.getCanvasTileAreaPoly(client, localPoint, 3);
+
+			if (polygon == null)
+			{
+				continue;
+			}
+
+			Color c = config.lavaFillColor();
+
+			net.runelite.client.ui.overlay.OverlayUtil.renderPolygon(graphics2D, polygon, new Color(c.getRed(), c.getGreen(), c.getBlue()),
+					config.lavaFillColor(), new BasicStroke(2));
+		}
+	}
+
+	private void renderEchoLavaGraphics(final Graphics2D graphics2D)
+	{
+		final Set<GraphicsObject> lavaSpawns = plugin.getEchoLavaGraphics();
+
+		if (!config.drawLavaTiles() || lavaSpawns.isEmpty())
+		{
+			return;
+		}
+
+		for (GraphicsObject lava : lavaSpawns)
+		{
+			if (lava.finished())
+			{
+				continue;
+			}
+
+			final LocalPoint localPoint = lava.getLocation();
+
+			final Polygon polygon = Perspective.getCanvasTilePoly(client, localPoint);
 
 			if (polygon == null)
 			{

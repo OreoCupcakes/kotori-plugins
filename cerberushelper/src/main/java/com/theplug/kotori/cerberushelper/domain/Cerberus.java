@@ -40,6 +40,7 @@ import net.runelite.api.Prayer;
 public class Cerberus
 {
 	private static final int TOTAL_HP = 600;
+	private static final int ECHO_TOTAL_HP = 1620;
 	private static final int GHOST_HP = 400;
 	private static final int LAVA_HP = 200;
 
@@ -66,13 +67,18 @@ public class Cerberus
 
 	private int hp;
 
-	public Cerberus(@NonNull final NPC npc)
+	private final boolean echoVariant;
+
+	private int nonGhostAttacks;
+
+	public Cerberus(@NonNull final NPC npc, final boolean echoVariant)
 	{
 		this.npc = npc;
+		this.echoVariant = echoVariant;
 
 		attacksDone = new ArrayList<>();
 		lastAttackPhase = Phase.SPAWNING;
-		hp = TOTAL_HP;
+		hp = echoVariant ? ECHO_TOTAL_HP : TOTAL_HP;
 	}
 
 	public void nextPhase(final Phase lastAttackPhase)
@@ -85,6 +91,17 @@ public class Cerberus
 	{
 		lastAttackTick = gameTick;
 		lastAttack = attack;
+
+		//For keep track of the Echo variant's attacks, it switches style after 8 non ghost attacks.
+		switch (attack)
+		{
+			case MELEE:
+			case RANGED:
+			case MAGIC:
+			case LAVA:
+				nonGhostAttacks++;
+				break;
+		}
 	}
 
 	public int getHp()
@@ -114,19 +131,34 @@ public class Cerberus
 			return Phase.SPAWNING;
 		}
 
-		if ((nextAttack - 1) % 10 == 0)
+		if (!echoVariant)
 		{
-			return Phase.TRIPLE;
-		}
+			if ((nextAttack - 1) % 10 == 0)
+			{
+				return Phase.TRIPLE;
+			}
 
-		if (nextAttack % 7 == 0 && hp <= GHOST_HP)
-		{
-			return Phase.GHOSTS;
-		}
+			if (nextAttack % 7 == 0 && hp <= GHOST_HP)
+			{
+				return Phase.GHOSTS;
+			}
 
-		if (nextAttack % 5 == 0 && hp <= LAVA_HP)
+			if (nextAttack % 5 == 0 && hp <= LAVA_HP)
+			{
+				return Phase.LAVA;
+			}
+		}
+		else
 		{
-			return Phase.LAVA;
+			if (nextAttack % 9 == 0)
+			{
+				return Phase.GHOSTS;
+			}
+
+			if (nextAttack % 4 == 0)
+			{
+				return Phase.LAVA;
+			}
 		}
 
 		return Phase.AUTO;
