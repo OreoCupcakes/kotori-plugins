@@ -91,6 +91,8 @@ public class DemonicGorillaPlugin extends Plugin
 	private static final Set<Integer> REGION_IDS = Set.of(8280, 8536);
 	private boolean atGorillas;
 
+	private static final int DEMONIC_GORILLA_AOE_ATTACK = 7228;
+
 	@Override
 	protected void startUp()
 	{
@@ -362,7 +364,7 @@ public class DemonicGorillaPlugin extends Plugin
 				{
 					onGorillaAttack(gorilla, DemonicGorilla.AttackStyle.RANGED);
 				}
-				else if (animationId == AnimationID.DEMONIC_GORILLA_AOE_ATTACK && interacting != null &&
+				else if (animationId == DEMONIC_GORILLA_AOE_ATTACK && interacting != null &&
 					gorilla.getNextPosibleAttackStyles().stream().anyMatch(x -> x == DemonicGorilla.AttackStyle.MAGIC || x == DemonicGorilla.AttackStyle.RANGED))
 				{
 					// Note that AoE animation is the same as prayer switch animation
