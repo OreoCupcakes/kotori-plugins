@@ -192,15 +192,15 @@ class HallowedHelperOverlay extends Overlay
 
     private boolean displayFloor4or5StatueRotationTiles(Color currentColor)
     {
-        if (currentColor == Color.RED)
+        if (currentColor.getRGB() == config.UnsafeTileColor().getRGB())
         {
             return config.ShowUnsafeTiles();
         }
-        else if (currentColor == Color.GREEN || currentColor == Color.BLUE)
+        else if (currentColor.getRGB() == config.SafeTileColor().getRGB() || currentColor.getRGB() == Color.BLUE.getRGB())
         {
             return config.ShowSafeTiles();
         }
-        else if (currentColor == Color.YELLOW)
+        else if (currentColor.getRGB() == Color.YELLOW.getRGB())
         {
             return config.ShowRiskyTiles();
         }
