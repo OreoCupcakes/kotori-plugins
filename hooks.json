@@ -64,19 +64,19 @@
     {
       "n": "isMoving",
       "c": "di",
-      "p": "di",
+      "p": "dx",
       "m": -1820678361
     },
     {
       "n": "getActorAnimationId",
       "c": "di",
-      "p": "cr",
+      "p": "bj",
       "m": 1400873349
     },
     {
       "n": "menuOptionsCount",
       "c": "wv",
-      "p": "aw",
+      "p": "gp",
       "m": 1449400177
     },
     {
