@@ -130,6 +130,21 @@ public class SceneOverlay extends Overlay
 			}
 		}
 
+		final Dusk defNotDusk = plugin.getDefNotDusk();
+
+		if (defNotDusk != null)
+		{
+			if (config.duskTickCounter())
+			{
+				renderDuskTickCounter(graphics2D, defNotDusk);
+			}
+
+			if (gargoyleInvulnOutline && defNotDusk.getPhase() == null)
+			{
+				renderInvulnerabilityOutline(defNotDusk.getNpc());
+			}
+		}
+
 		renderStoneOrbOutline(graphics2D);
 		renderFallingRocksOutline(graphics2D);
 		renderLightningOutline(graphics2D);
@@ -275,7 +290,7 @@ public class SceneOverlay extends Overlay
 			return;
 		}
 
-		renderGraphicObjectSet(graphics2D, plugin.getFallingRockObjects(), config.fallingRocksFillColor(), config.fallingRocksWidth(), 3);
+		renderGraphicObjectSet(graphics2D, plugin.getFallingRockObjects(), config.fallingRocksFillColor(), config.fallingRocksWidth(), config.killingEchoVariant() ? 1 : 3);
 	}
 
 	private void renderLightningOutline(final Graphics2D graphics2D)
@@ -305,7 +320,7 @@ public class SceneOverlay extends Overlay
 			return;
 		}
 
-		renderGraphicObjectSet(graphics2D, plugin.getStoneOrbOjects(), config.stoneOrbFillColor(), config.stoneOrbBorderWidth(), 3);
+		renderGraphicObjectSet(graphics2D, plugin.getStoneOrbOjects(), config.stoneOrbFillColor(), config.stoneOrbBorderWidth(), config.killingEchoVariant() ? 1 : 3);
 	}
 
 	private void renderEnergySphereOutline(final Graphics2D graphics2D)

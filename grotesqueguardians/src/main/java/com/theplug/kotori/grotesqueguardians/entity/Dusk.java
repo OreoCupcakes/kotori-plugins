@@ -53,13 +53,17 @@ public class Dusk extends Gargoyle
 	private static final int PHASE_4_ANIMATION_RANGE = 7801;
 
 	private static final int ATTACK_TICK_SPEED = 6;
+	private static final int DEFINITELY_NOT_DUSK_ATTACK_TICK_SPEED = 12;
+
+	private final boolean defNotDuskVariant;
 
 	@Getter
 	private Prayer lastAttackPrayer;
 
-	public Dusk(@NonNull final NPC npc)
+	public Dusk(@NonNull final NPC npc, boolean defNotDusk)
 	{
 		super(npc);
+		this.defNotDuskVariant = defNotDusk;
 	}
 
 	public void updateLastAnimation(final int animationId)
@@ -98,7 +102,7 @@ public class Dusk extends Gargoyle
 				return;
 			}
 
-			ticksUntilNextAttack = ATTACK_TICK_SPEED;
+			ticksUntilNextAttack = this.defNotDuskVariant ? DEFINITELY_NOT_DUSK_ATTACK_TICK_SPEED : ATTACK_TICK_SPEED;
 		}
 	}
 

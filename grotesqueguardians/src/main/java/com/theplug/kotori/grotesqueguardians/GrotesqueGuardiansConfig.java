@@ -60,6 +60,12 @@ public interface GrotesqueGuardiansConfig extends Config
 	)
 	String highlightsSection = "Highlights";
 
+	@ConfigSection(
+			name = "Leagues",
+			description = "Leagues - Raging Echoes Settings",
+			position = 2
+	)
+	String leaguesSection = "Leagues";
 
 
 
@@ -553,6 +559,22 @@ public interface GrotesqueGuardiansConfig extends Config
 	default Color flashColor()
 	{
 		return new Color(255, 0, 0, 70);
+	}
+
+
+
+	//Leagues Section
+	@ConfigItem(
+			name = "Killing Echo Dusk?",
+			description = "Toggle on if you are killing the echo variant found in Leagues 5 - Raging Echoes." +
+					"<br>This configures the AoE attack overlay as they are 1 tile in the echoed version.",
+			position = 0,
+			keyName = "killingEchoVariant",
+			section = leaguesSection
+	)
+	default boolean killingEchoVariant()
+	{
+		return false;
 	}
 
 

@@ -72,6 +72,8 @@ public class GrotesqueGuardiansPlugin extends Plugin
 {
 	private static final String DUSK = "Dusk";
 	private static final String DAWN = "Dawn";
+	private static final String DUSK_ECHO = "Dusk (Echo)";
+	private static final String DEF_NOT_DUSK = "Definitely Not Dusk";
 
 	private static final Set<Integer> FALLING_ROCKS = Set.of(1449, 1889, 1890, 1938);
 	private static final Set<Integer> LIGHTNING = Set.of(1416, 1424);
@@ -119,6 +121,10 @@ public class GrotesqueGuardiansPlugin extends Plugin
 	@Getter
 	@Nullable
 	private Dawn dawn;
+
+	@Getter
+	@Nullable
+	private Dusk defNotDusk;
 
 	@Getter
 	private boolean onRoof;
@@ -169,6 +175,7 @@ public class GrotesqueGuardiansPlugin extends Plugin
 
 		dusk = null;
 		dawn = null;
+		defNotDusk = null;
 
 		overlayManager.remove(sceneOverlay);
 		overlayManager.remove(prayerOverlay);
@@ -241,6 +248,11 @@ public class GrotesqueGuardiansPlugin extends Plugin
 			dawn.updateTicksUntilNextAttack();
 		}
 
+		if (defNotDusk != null)
+		{
+			defNotDusk.updateTicksUntilNextAttack();
+		}
+
 		clearExpiredGraphicObjectSets();
 	}
 
@@ -284,7 +296,7 @@ public class GrotesqueGuardiansPlugin extends Plugin
 			dusk.updateLastAnimation(animation);
 		}
 
-		if (animation == Dusk.PHASE_2_ECLIPSE_EXPLOSION)
+		if (animation == Dusk.PHASE_2_ECLIPSE_EXPLOSION && !config.killingEchoVariant())
 		{
 			flashOnExplosion = true;
 		}
@@ -383,13 +395,17 @@ public class GrotesqueGuardiansPlugin extends Plugin
 			return;
 		}
 
-		if (name.equals(DUSK))
+		if (name.equals(DUSK) || name.equals(DUSK_ECHO))
 		{
-			dusk = new Dusk(npc);
+			dusk = new Dusk(npc, false);
 		}
 		else if (name.equals(DAWN))
 		{
-			dawn = new Dawn(npc);
+			dawn = new Dawn(npc, config.killingEchoVariant());
+		}
+		else if (name.equals(DEF_NOT_DUSK))
+		{
+			defNotDusk = new Dusk(npc, true);
 		}
 	}
 
@@ -402,13 +418,17 @@ public class GrotesqueGuardiansPlugin extends Plugin
 			return;
 		}
 
-		if (name.equals(DUSK))
+		if (name.equals(DUSK) || name.equals(DUSK_ECHO))
 		{
 			dusk = null;
 		}
 		else if (name.equals(DAWN))
 		{
 			dawn = null;
+		}
+		else if (name.equals(DEF_NOT_DUSK))
+		{
+			defNotDusk = null;
 		}
 	}
 

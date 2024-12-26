@@ -49,13 +49,17 @@ public class Dawn extends Gargoyle
 	private static final int ANIMATION_MELEE_ATTACK = 7769;
 
 	private static final int ATTACK_TICK_SPEED = 6;
+	private static final int ECHO_ATTACK_TICK_SPEED = 12;
+
+	private final boolean echoVariant;
 
 	@Getter
 	private Projectile lastAttackProjectile;
 
-	public Dawn(@NonNull final NPC npc)
+	public Dawn(@NonNull final NPC npc, boolean echoVariant)
 	{
 		super(npc);
+		this.echoVariant = echoVariant;
 	}
 
 	public void setLastAttackProjectile(final Projectile projectile)
@@ -114,7 +118,7 @@ public class Dawn extends Gargoyle
 				return;
 			}
 
-			ticksUntilNextAttack = ATTACK_TICK_SPEED;
+			ticksUntilNextAttack = this.echoVariant ? ECHO_ATTACK_TICK_SPEED : ATTACK_TICK_SPEED;
 		}
 	}
 
