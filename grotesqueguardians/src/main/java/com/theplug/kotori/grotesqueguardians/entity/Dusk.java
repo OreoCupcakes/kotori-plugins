@@ -34,6 +34,7 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import net.runelite.api.NPC;
 import net.runelite.api.NpcID;
 import net.runelite.api.Prayer;
@@ -52,10 +53,15 @@ public class Dusk extends Gargoyle
 	private static final int PHASE_4_ANIMATION_MELEE = 7800;
 	private static final int PHASE_4_ANIMATION_RANGE = 7801;
 
+	public static final int ECHO_PHASE_2_TRANSITION = 7799;
+
 	private static final int ATTACK_TICK_SPEED = 6;
 	private static final int DEFINITELY_NOT_DUSK_ATTACK_TICK_SPEED = 12;
 
 	private final boolean defNotDuskVariant;
+
+	@Setter
+	private boolean echoVariantTransitioned;
 
 	@Getter
 	private Prayer lastAttackPrayer;
@@ -102,7 +108,7 @@ public class Dusk extends Gargoyle
 				return;
 			}
 
-			ticksUntilNextAttack = this.defNotDuskVariant ? DEFINITELY_NOT_DUSK_ATTACK_TICK_SPEED : ATTACK_TICK_SPEED;
+			ticksUntilNextAttack = this.defNotDuskVariant ? (this.echoVariantTransitioned ? ATTACK_TICK_SPEED : DEFINITELY_NOT_DUSK_ATTACK_TICK_SPEED) : ATTACK_TICK_SPEED;
 		}
 	}
 

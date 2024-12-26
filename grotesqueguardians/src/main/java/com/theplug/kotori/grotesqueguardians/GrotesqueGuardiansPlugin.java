@@ -136,6 +136,8 @@ public class GrotesqueGuardiansPlugin extends Plugin
 	@Setter
 	private boolean flashOnExplosion;
 
+	private boolean echoPhaseTwo;
+
 	@Provides
 	GrotesqueGuardiansConfig provideConfig(final ConfigManager configManager)
 	{
@@ -172,6 +174,7 @@ public class GrotesqueGuardiansPlugin extends Plugin
 	{
 		onRoof = false;
 		flashOnExplosion = false;
+		echoPhaseTwo = false;
 
 		dusk = null;
 		dawn = null;
@@ -240,17 +243,20 @@ public class GrotesqueGuardiansPlugin extends Plugin
 		if (dusk != null)
 		{
 			dusk.updateTicksUntilNextAttack();
+			dusk.setEchoVariantTransitioned(echoPhaseTwo);
 		}
 
 		if (dawn != null)
 		{
 			dawn.removeExpiredProjectile();
 			dawn.updateTicksUntilNextAttack();
+			dawn.setEchoVariantTransitioned(echoPhaseTwo);
 		}
 
 		if (defNotDusk != null)
 		{
 			defNotDusk.updateTicksUntilNextAttack();
+			defNotDusk.setEchoVariantTransitioned(echoPhaseTwo);
 		}
 
 		clearExpiredGraphicObjectSets();
@@ -296,9 +302,20 @@ public class GrotesqueGuardiansPlugin extends Plugin
 			dusk.updateLastAnimation(animation);
 		}
 
-		if (animation == Dusk.PHASE_2_ECLIPSE_EXPLOSION && !config.killingEchoVariant())
+		switch (animation)
 		{
-			flashOnExplosion = true;
+			case Dusk.PHASE_2_ECLIPSE_EXPLOSION:
+				if (!config.killingEchoVariant())
+				{
+					flashOnExplosion = true;
+				}
+				break;
+			case Dusk.ECHO_PHASE_2_TRANSITION:
+				if (config.killingEchoVariant())
+				{
+					echoPhaseTwo = true;
+				}
+				break;
 		}
 	}
 
@@ -421,6 +438,7 @@ public class GrotesqueGuardiansPlugin extends Plugin
 		if (name.equals(DUSK) || name.equals(DUSK_ECHO))
 		{
 			dusk = null;
+			echoPhaseTwo = false;
 		}
 		else if (name.equals(DAWN))
 		{

@@ -53,6 +53,9 @@ public class Dawn extends Gargoyle
 
 	private final boolean echoVariant;
 
+	@Setter
+	private boolean echoVariantTransitioned;
+
 	@Getter
 	private Projectile lastAttackProjectile;
 
@@ -118,7 +121,7 @@ public class Dawn extends Gargoyle
 				return;
 			}
 
-			ticksUntilNextAttack = this.echoVariant ? ECHO_ATTACK_TICK_SPEED : ATTACK_TICK_SPEED;
+			ticksUntilNextAttack = this.echoVariant ? (this.echoVariantTransitioned ? ATTACK_TICK_SPEED : ECHO_ATTACK_TICK_SPEED) : ATTACK_TICK_SPEED;
 		}
 	}
 
