@@ -31,13 +31,7 @@ import java.awt.Color;
 import java.awt.Font;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import net.runelite.client.config.Alpha;
-import net.runelite.client.config.Config;
-import net.runelite.client.config.ConfigGroup;
-import net.runelite.client.config.ConfigItem;
-import net.runelite.client.config.ConfigSection;
-import net.runelite.client.config.Range;
-import net.runelite.client.config.Units;
+import net.runelite.client.config.*;
 
 @ConfigGroup("grotesqueguardiansconfig")
 public interface GrotesqueGuardiansConfig extends Config
@@ -47,25 +41,32 @@ public interface GrotesqueGuardiansConfig extends Config
 
 	// Sections
 	@ConfigSection(
-		name = "Tick counters",
-		description = "Tick counter settings.",
-		position = 0
+			name = "Leagues",
+			description = "Leagues - Raging Echoes Settings",
+			position = 0
+	)
+	String leaguesSection = "Leagues";
+
+	@ConfigSection(
+			name = "Helper Settings",
+			description = "Automatic helper features.",
+			position = 1
+	)
+	String helperSection = "Helper";
+
+	@ConfigSection(
+			name = "Tick counters",
+			description = "Tick counter settings.",
+			position = 2
 	)
 	String tickCounterSection = "Tick counters";
 
 	@ConfigSection(
-		name = "Highlights",
-		description = "Highlight settings.",
-		position = 1
+			name = "Highlights",
+			description = "Highlight settings.",
+			position = 3
 	)
 	String highlightsSection = "Highlights";
-
-	@ConfigSection(
-			name = "Leagues",
-			description = "Leagues - Raging Echoes Settings",
-			position = 2
-	)
-	String leaguesSection = "Leagues";
 
 
 
@@ -97,6 +98,19 @@ public interface GrotesqueGuardiansConfig extends Config
 	}
 
 	@ConfigItem(
+			name = "Show NPC Tick Counter",
+			description = "Show the tick counter overlay on Dusk and Dawn's model.",
+			position = 3,
+			keyName = "showNpcTickCounter",
+			section = tickCounterSection
+	)
+	default boolean showNpcTickCounter()
+	{
+		return true;
+	}
+
+	/*
+	@ConfigItem(
 			name = "Dawn Tick Counter",
 			description = "Show tick counter on Dusk.",
 			position = 2,
@@ -119,6 +133,8 @@ public interface GrotesqueGuardiansConfig extends Config
 	{
 		return true;
 	}
+
+	 */
 
 	@Range(
 		min = 12,
@@ -559,6 +575,108 @@ public interface GrotesqueGuardiansConfig extends Config
 	default Color flashColor()
 	{
 		return new Color(255, 0, 0, 70);
+	}
+
+
+	//Helper Section
+	@ConfigItem(
+			name = "Auto Protection Prayers",
+			description = "Automatically switch protection prayers for Dawn and Dusk's attacks.",
+			position = 0,
+			keyName = "autoProtectionPrayers",
+			section = helperSection
+	)
+	default boolean autoProtectionPrayers()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+			name = "Auto Offensive Prayers",
+			description = "Automatically switch offensive prayers depending on your weapon type.",
+			position = 1,
+			keyName = "autoOffensivePrayers",
+			section = helperSection
+	)
+	default boolean autoOffensivePrayers()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+			name = "Turn/Keep Preserve Prayer On",
+			description = "Turn/keep the Preserve prayer on as long as you are in the arena.",
+			position = 2,
+			keyName = "keepPreservePrayerOn",
+			section = helperSection
+	)
+	default boolean keepPreservePrayerOn()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+			name = "Dusk Gear Hotkey",
+			description = "Assign a hotkey. When pressed, the script will automatically equip all items listed in Dusk Gear Ids.",
+			position = 3,
+			keyName = "duskGearHotkey",
+			section = helperSection
+	)
+	default Keybind duskGearHotkey()
+	{
+		return Keybind.NOT_SET;
+	}
+
+	@ConfigItem(
+			name = "Dusk Gear Ids",
+			description = "Enter in the item ids to equip for killing Dusk." +
+					"<br>The below example will mean you equip an Abyssal whip and Dragon defender." +
+					"<br>Example: 4151, 12954",
+			position = 4,
+			keyName = "duskGearString",
+			section = helperSection
+	)
+	default String duskGearString()
+	{
+		return "4151, 12954";
+	}
+
+	@ConfigItem(
+			name = "Dawn Gear Hotkey",
+			description = "Assign a hotkey. When pressed, the script will automatically equip all items listed in Dawn Gear Ids.",
+			position = 5,
+			keyName = "dawnGearHotkey",
+			section = helperSection
+	)
+	default Keybind dawnGearHotkey()
+	{
+		return Keybind.NOT_SET;
+	}
+
+	@ConfigItem(
+			name = "Dawn Gear Ids",
+			description = "Enter in the item ids to equip for killing Dawn." +
+					"<br>The below example will mean you equip a Magic shortbow (i) and Rune arrows." +
+					"<br>Example: 12788, 892",
+			position = 6,
+			keyName = "dawnGearString",
+			section = helperSection
+	)
+	default String dawnGearString()
+	{
+		return "12788, 892";
+	}
+
+	@ConfigItem(
+			name = "Auto Equip Gear",
+			description = "Automatic equip your gear as you enter new phases of the boss.",
+			position = 7,
+			keyName = "autoEquipGear",
+			section = helperSection
+	)
+	default boolean autoEquipGear()
+	{
+		return false;
 	}
 
 

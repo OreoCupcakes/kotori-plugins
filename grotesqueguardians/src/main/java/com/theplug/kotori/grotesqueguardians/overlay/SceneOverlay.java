@@ -36,17 +36,15 @@ import java.awt.Polygon;
 import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.Area;
+import java.util.Map;
 import java.util.Set;
 import javax.inject.Inject;
 
+import com.theplug.kotori.grotesqueguardians.entity.Guardian;
 import net.runelite.api.*;
 import net.runelite.api.coords.LocalPoint;
 import com.theplug.kotori.grotesqueguardians.GrotesqueGuardiansConfig;
 import com.theplug.kotori.grotesqueguardians.GrotesqueGuardiansPlugin;
-import com.theplug.kotori.grotesqueguardians.entity.Dawn;
-import com.theplug.kotori.grotesqueguardians.entity.Dusk;
-import net.runelite.client.game.npcoverlay.HighlightedNpc;
-import net.runelite.client.game.npcoverlay.NpcOverlayService;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
@@ -82,66 +80,37 @@ public class SceneOverlay extends Overlay
 	@Override
 	public Dimension render(final Graphics2D graphics2D)
 	{
-		final Dusk dusk = plugin.getDusk();
+		final Map<Actor, Guardian> guardianMap = plugin.getGuardians();
 
-		final boolean gargoyleInvulnOutline = config.invulnerabilityOutline();
-
-		if (dusk != null)
+		if (!guardianMap.isEmpty())
 		{
-			if (config.duskTickCounter())
+			for (Guardian guardian : guardianMap.values())
 			{
-				renderDuskTickCounter(graphics2D, dusk);
-			}
-
-			if (gargoyleInvulnOutline && dusk.getPhase() == null)
-			{
-				renderInvulnerabilityOutline(dusk.getNpc());
-			}
-
-			if (plugin.isFlashOnExplosion())
-			{
-				if (dusk.getNpc().getWorldArea().isInMeleeDistance(client.getLocalPlayer().getWorldLocation()))
+				if (config.showNpcTickCounter())
 				{
-					if (config.highlightDuskOnExplosion())
-					{
-						renderExplosionOutline(dusk.getNpc());
-					}
+					renderGuardianTickCounter(graphics2D, guardian);
+				}
 
-					if (config.flashOnExplosion())
+				if (config.invulnerabilityOutline() && guardian.getVariant() == null)
+				{
+					renderInvulnerabilityOutline(guardian.getNpc());
+				}
+
+				if (plugin.isFlashOnExplosion())
+				{
+					if (guardian.getNpc().getWorldArea().isInMeleeDistance(client.getLocalPlayer().getWorldLocation()))
 					{
-						renderFlashOnExplosion(graphics2D);
+						if (config.highlightDuskOnExplosion())
+						{
+							renderExplosionOutline(guardian.getNpc());
+						}
+
+						if (config.flashOnExplosion())
+						{
+							renderFlashOnExplosion(graphics2D);
+						}
 					}
 				}
-			}
-		}
-
-		final Dawn dawn = plugin.getDawn();
-
-		if (dawn != null)
-		{
-			if (config.dawnTickCounter())
-			{
-				renderDawnTickCounter(graphics2D, dawn);
-			}
-
-			if (gargoyleInvulnOutline && dawn.getPhase() == null)
-			{
-				renderInvulnerabilityOutline(dawn.getNpc());
-			}
-		}
-
-		final Dusk defNotDusk = plugin.getDefNotDusk();
-
-		if (defNotDusk != null)
-		{
-			if (config.duskTickCounter())
-			{
-				renderDuskTickCounter(graphics2D, defNotDusk);
-			}
-
-			if (gargoyleInvulnOutline && defNotDusk.getPhase() == null)
-			{
-				renderInvulnerabilityOutline(defNotDusk.getNpc());
 			}
 		}
 
@@ -154,50 +123,16 @@ public class SceneOverlay extends Overlay
 		return null;
 	}
 
-	private void renderDuskTickCounter(final Graphics2D graphics2D, final Dusk dusk)
+	private void renderGuardianTickCounter(final Graphics2D graphics2D, final Guardian guardian)
 	{
-		final int ticksUntilNextAttack = dusk.getTicksUntilNextAttack();
+		final int ticksUntilNextAttack = guardian.getTicksUntilNextAttack();
 
 		if (ticksUntilNextAttack == 0)
 		{
 			return;
 		}
 
-		final NPC npc = dusk.getNpc();
-
-		if (npc.isDead())
-		{
-			return;
-		}
-
-		final String text = String.valueOf(ticksUntilNextAttack);
-
-		final Point npcPoint = npc.getCanvasTextLocation(graphics2D, text, 0);
-
-		if (npcPoint == null)
-		{
-			return;
-		}
-
-		final Font originalFont = graphics2D.getFont();
-
-		graphics2D.setFont(new Font(Font.SANS_SERIF, config.tickFontStyle().getFont(), config.tickFontSize()));
-
-		OverlayUtil.renderTextLocation(graphics2D, npcPoint, text, ticksUntilNextAttack == 1 ? Color.WHITE : config.tickFontColor());
-
-		graphics2D.setFont(originalFont);
-	}
-
-	private void renderDawnTickCounter(final Graphics2D graphics2D, final Dawn dawn)
-	{
-		final int ticksUntilNextAttack = dawn.getTicksUntilNextAttack();
-
-		if (ticksUntilNextAttack == 0)
-		{
-			return;
-		}
-
-		final NPC npc = dawn.getNpc();
+		final NPC npc = guardian.getNpc();
 
 		if (npc.isDead())
 		{

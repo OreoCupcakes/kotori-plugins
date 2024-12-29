@@ -37,16 +37,16 @@ import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.Stroke;
+import java.util.Map;
 import javax.inject.Inject;
 
-import com.theplug.kotori.grotesqueguardians.entity.Dawn;
+import com.theplug.kotori.grotesqueguardians.entity.Guardian;
 import com.theplug.kotori.kotoriutils.rlapi.PrayerExtended;
 import net.runelite.api.*;
 import com.theplug.kotori.kotoriutils.rlapi.InterfaceTab;
 import net.runelite.api.widgets.Widget;
 import com.theplug.kotori.grotesqueguardians.GrotesqueGuardiansConfig;
 import com.theplug.kotori.grotesqueguardians.GrotesqueGuardiansPlugin;
-import com.theplug.kotori.grotesqueguardians.entity.Dusk;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
@@ -61,9 +61,6 @@ public class PrayerOverlay extends Overlay
 	private final Client client;
 	private final GrotesqueGuardiansPlugin plugin;
 	private final GrotesqueGuardiansConfig config;
-
-	private Dusk dusk;
-	private Dawn dawn;
 
 	@Inject
 	private PrayerOverlay(final Client client, final GrotesqueGuardiansPlugin plugin, final GrotesqueGuardiansConfig config)
@@ -81,71 +78,51 @@ public class PrayerOverlay extends Overlay
 	@Override
 	public Dimension render(final Graphics2D graphics2D)
 	{
-		dusk = plugin.getDusk();
-		dawn = plugin.getDawn();
+		Map<Actor, Guardian> guardianMap = plugin.getGuardians();
 
-		if (dusk != null)
+		if (guardianMap.isEmpty())
 		{
-			renderDuskAttackTicks(graphics2D);
+			return null;
 		}
 
-		if (dawn != null)
+		for (Guardian guardian : guardianMap.values())
 		{
-			renderDawnAttackTicks(graphics2D);
+			renderGuardianAttackTicks(graphics2D, guardian);
 		}
 
 		return null;
 	}
 
-	private void renderDuskAttackTicks(final Graphics2D graphics2D)
+	private void renderGuardianAttackTicks(final Graphics2D graphics2D, Guardian guardian)
 	{
-		final int duskTicksUntilNextAttack = dusk.getTicksUntilNextAttack();
+		final int guardianTicksUntilNextAttack = guardian.getTicksUntilNextAttack();
 
-		final NPC npc = dusk.getNpc();
+		final NPC npc = guardian.getNpc();
 
-		if (npc == null || npc.isDead() || duskTicksUntilNextAttack <= 0)
+		if (npc == null || npc.isDead() || guardianTicksUntilNextAttack <= 0)
 		{
 			return;
 		}
 
-		final Prayer prayer = dusk.isLastPhase() ? dusk.getLastAttackPrayer() : Prayer.PROTECT_FROM_MELEE;
+		Guardian.AttackStyle attackStyle = guardian.getAttackStyle();
+
+		if (attackStyle == Guardian.AttackStyle.UNKNOWN)
+		{
+			return;
+		}
+
+		final Prayer prayer = attackStyle.getPrayer();
 
 		if (config.prayerTickCounter())
 		{
 			final Color color = getColorFromPrayer(prayer);
 
-			renderPrayerWidget(graphics2D, prayer, color, duskTicksUntilNextAttack);
+			renderPrayerWidget(graphics2D, prayer, color, guardianTicksUntilNextAttack);
 		}
 
 		if (config.guitarHeroMode())
 		{
-			renderDescendingBoxes(graphics2D, prayer, duskTicksUntilNextAttack);
-		}
-	}
-
-	private void renderDawnAttackTicks(final Graphics2D graphics2D)
-	{
-		final int dawnTicksUntilNextAttack = dawn.getTicksUntilNextAttack();
-
-		final NPC npc = dawn.getNpc();
-
-		if (npc == null || npc.isDead() || dawnTicksUntilNextAttack <= 0)
-		{
-			return;
-		}
-
-		final Prayer prayer = dawn.getNpc().getWorldArea().isInMeleeDistance(client.getLocalPlayer().getWorldArea()) ? Prayer.PROTECT_FROM_MELEE : Prayer.PROTECT_FROM_MISSILES;
-
-		if (config.prayerTickCounter())
-		{
-			final Color color = getColorFromPrayer(prayer);
-
-			renderPrayerWidget(graphics2D, prayer, color, dawnTicksUntilNextAttack);
-		}
-
-		if (config.guitarHeroMode())
-		{
-			renderDescendingBoxes(graphics2D, prayer, dawnTicksUntilNextAttack);
+			renderDescendingBoxes(graphics2D, prayer, guardianTicksUntilNextAttack);
 		}
 	}
 
@@ -187,11 +164,11 @@ public class PrayerOverlay extends Overlay
 		}
 
 		int baseX = (int) prayerWidget.getBounds().getX();
-		baseX += prayerWidget.getBounds().getWidth() / 2;
+		baseX += (int) (prayerWidget.getBounds().getWidth() / 2);
 		baseX -= BOX_WIDTH / 2;
 
 		int baseY = (int) prayerWidget.getBounds().getY() - tick * TICK_PIXEL_SIZE - BOX_HEIGHT;
-		baseY += TICK_PIXEL_SIZE - ((plugin.getLastTickTime() + 600 - System.currentTimeMillis()) / 600.0 * TICK_PIXEL_SIZE);
+		baseY += (int) (TICK_PIXEL_SIZE - ((plugin.getLastTickTime() + 600 - System.currentTimeMillis()) / 600.0 * TICK_PIXEL_SIZE));
 
 		final Rectangle boxRectangle = new Rectangle(BOX_WIDTH, BOX_HEIGHT);
 		boxRectangle.translate(baseX, baseY);

@@ -29,9 +29,10 @@
 package com.theplug.kotori.grotesqueguardians;
 
 import com.google.inject.Provides;
-import javax.annotation.Nullable;
+
 import javax.inject.Inject;
 
+import com.theplug.kotori.grotesqueguardians.entity.Guardian;
 import com.theplug.kotori.kotoriutils.KotoriUtils;
 import com.theplug.kotori.kotoriutils.methods.MiscUtilities;
 import com.theplug.kotori.kotoriutils.methods.NPCInteractions;
@@ -48,16 +49,11 @@ import net.runelite.client.game.npcoverlay.NpcOverlayService;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
-import com.theplug.kotori.grotesqueguardians.entity.Dawn;
-import com.theplug.kotori.grotesqueguardians.entity.Dusk;
 import com.theplug.kotori.grotesqueguardians.overlay.PrayerOverlay;
 import com.theplug.kotori.grotesqueguardians.overlay.SceneOverlay;
 import net.runelite.client.ui.overlay.OverlayManager;
 
-import java.awt.*;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 
 @Slf4j
@@ -70,10 +66,10 @@ import java.util.function.Function;
 )
 public class GrotesqueGuardiansPlugin extends Plugin
 {
-	private static final String DUSK = "Dusk";
-	private static final String DAWN = "Dawn";
-	private static final String DUSK_ECHO = "Dusk (Echo)";
-	private static final String DEF_NOT_DUSK = "Definitely Not Dusk";
+	public static final String DUSK = "Dusk";
+	public static final String DAWN = "Dawn";
+	public static final String DUSK_ECHO = "Dusk (Echo)";
+	public static final String DEF_NOT_DUSK = "Definitely Not Dusk";
 
 	private static final Set<Integer> FALLING_ROCKS = Set.of(1449, 1889, 1890, 1938);
 	private static final Set<Integer> LIGHTNING = Set.of(1416, 1424);
@@ -115,16 +111,7 @@ public class GrotesqueGuardiansPlugin extends Plugin
 	private NpcOverlayService npcOverlayService;
 
 	@Getter
-	@Nullable
-	private Dusk dusk;
-
-	@Getter
-	@Nullable
-	private Dawn dawn;
-
-	@Getter
-	@Nullable
-	private Dusk defNotDusk;
+	private final Map<Actor, Guardian> guardians = new HashMap<>();
 
 	@Getter
 	private boolean onRoof;
@@ -176,9 +163,7 @@ public class GrotesqueGuardiansPlugin extends Plugin
 		flashOnExplosion = false;
 		echoPhaseTwo = false;
 
-		dusk = null;
-		dawn = null;
-		defNotDusk = null;
+		guardians.clear();
 
 		overlayManager.remove(sceneOverlay);
 		overlayManager.remove(prayerOverlay);
@@ -238,28 +223,22 @@ public class GrotesqueGuardiansPlugin extends Plugin
 		{
 			return;
 		}
+
 		lastTickTime = System.currentTimeMillis();
 
-		if (dusk != null)
-		{
-			dusk.updateTicksUntilNextAttack();
-			dusk.setEchoVariantTransitioned(echoPhaseTwo);
-		}
-
-		if (dawn != null)
-		{
-			dawn.removeExpiredProjectile();
-			dawn.updateTicksUntilNextAttack();
-			dawn.setEchoVariantTransitioned(echoPhaseTwo);
-		}
-
-		if (defNotDusk != null)
-		{
-			defNotDusk.updateTicksUntilNextAttack();
-			defNotDusk.setEchoVariantTransitioned(echoPhaseTwo);
-		}
-
 		clearExpiredGraphicObjectSets();
+
+		if (guardians.isEmpty())
+		{
+			return;
+		}
+
+		for (Guardian garg : guardians.values())
+		{
+			garg.setEchoVariantPhased(echoPhaseTwo);
+			garg.removeExpiredProjectile();
+			garg.updateTicksUntilNextAttack();
+		}
 	}
 
 	@Subscribe
@@ -269,6 +248,7 @@ public class GrotesqueGuardiansPlugin extends Plugin
 		{
 			return;
 		}
+
 		addNpc(event.getNpc());
 	}
 
@@ -279,38 +259,37 @@ public class GrotesqueGuardiansPlugin extends Plugin
 		{
 			return;
 		}
+
 		removeNpc(event.getNpc());
 	}
 
 	@Subscribe
 	private void onAnimationChanged(final AnimationChanged event)
 	{
-		if (!onRoof)
+		if (!onRoof || guardians.isEmpty())
 		{
 			return;
 		}
+
 		final Actor actor = event.getActor();
 		final int animation = actor.getAnimation();
 
-		if (dusk == null || actor != dusk.getNpc())
+		Guardian garg = guardians.get(actor);
+
+		if (garg == null || !garg.getNpcName().contains(DUSK))
 		{
 			return;
-		}
-
-		if (dusk.isLastPhase())
-		{
-			dusk.updateLastAnimation(animation);
 		}
 
 		switch (animation)
 		{
-			case Dusk.PHASE_2_ECLIPSE_EXPLOSION:
+			case Guardian.DUSK_PHASE_2_ECLIPSE_EXPLOSION:
 				if (!config.killingEchoVariant())
 				{
 					flashOnExplosion = true;
 				}
 				break;
-			case Dusk.ECHO_PHASE_2_TRANSITION:
+			case Guardian.ECHO_DUSK_PHASE_2_TRANSITION:
 				if (config.killingEchoVariant())
 				{
 					echoPhaseTwo = true;
@@ -322,22 +301,21 @@ public class GrotesqueGuardiansPlugin extends Plugin
 	@Subscribe
 	private void onProjectileMoved(final ProjectileMoved event)
 	{
-		if (!onRoof)
+		if (!onRoof || guardians.isEmpty())
 		{
 			return;
 		}
+
 		final Projectile projectile = event.getProjectile();
 
-		if (dawn == null)
+		for (Guardian garg : guardians.values())
 		{
-			return;
-		}
-
-		if (dawn.getLastAttackProjectile() == null)
-		{
-			if (projectile.getRemainingCycles() >= 15)
+			if (garg.getLastAttackProjectile() == null)
 			{
-				dawn.setLastAttackProjectile(projectile);
+				if (projectile.getRemainingCycles() >= 15)
+				{
+					garg.updateLastAttackProjectile(projectile);
+				}
 			}
 		}
 	}
@@ -412,17 +390,14 @@ public class GrotesqueGuardiansPlugin extends Plugin
 			return;
 		}
 
-		if (name.equals(DUSK) || name.equals(DUSK_ECHO))
+		switch (name)
 		{
-			dusk = new Dusk(npc, false);
-		}
-		else if (name.equals(DAWN))
-		{
-			dawn = new Dawn(npc, config.killingEchoVariant());
-		}
-		else if (name.equals(DEF_NOT_DUSK))
-		{
-			defNotDusk = new Dusk(npc, true);
+			case DUSK:
+			case DUSK_ECHO:
+			case DAWN:
+			case DEF_NOT_DUSK:
+				guardians.put(npc, new Guardian(npc, config.killingEchoVariant()));
+				break;
 		}
 	}
 
@@ -435,18 +410,17 @@ public class GrotesqueGuardiansPlugin extends Plugin
 			return;
 		}
 
-		if (name.equals(DUSK) || name.equals(DUSK_ECHO))
+		switch (name)
 		{
-			dusk = null;
-			echoPhaseTwo = false;
-		}
-		else if (name.equals(DAWN))
-		{
-			dawn = null;
-		}
-		else if (name.equals(DEF_NOT_DUSK))
-		{
-			defNotDusk = null;
+			case DUSK:
+			case DUSK_ECHO:
+				echoPhaseTwo = false;
+				guardians.remove(npc);
+				break;
+			case DAWN:
+			case DEF_NOT_DUSK:
+				guardians.remove(npc);
+				break;
 		}
 	}
 
@@ -474,6 +448,14 @@ public class GrotesqueGuardiansPlugin extends Plugin
 	{
 		return REGION_ID == MiscUtilities.getPlayerRegionID();
 	}
+
+	private void handleProtectionPrayers()
+	{
+
+	}
+
+
+
 
 	private HighlightedNpc highlightNpc(final NPC npc)
 	{
