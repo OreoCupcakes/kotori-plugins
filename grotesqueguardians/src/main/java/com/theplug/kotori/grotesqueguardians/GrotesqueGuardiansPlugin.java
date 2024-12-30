@@ -34,8 +34,7 @@ import javax.inject.Inject;
 
 import com.theplug.kotori.grotesqueguardians.entity.Guardian;
 import com.theplug.kotori.kotoriutils.KotoriUtils;
-import com.theplug.kotori.kotoriutils.methods.MiscUtilities;
-import com.theplug.kotori.kotoriutils.methods.NPCInteractions;
+import com.theplug.kotori.kotoriutils.methods.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -46,12 +45,14 @@ import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.game.npcoverlay.HighlightedNpc;
 import net.runelite.client.game.npcoverlay.NpcOverlayService;
+import net.runelite.client.input.KeyManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
 import com.theplug.kotori.grotesqueguardians.overlay.PrayerOverlay;
 import com.theplug.kotori.grotesqueguardians.overlay.SceneOverlay;
 import net.runelite.client.ui.overlay.OverlayManager;
+import net.runelite.client.util.HotkeyListener;
 
 import java.util.*;
 import java.util.function.Function;
@@ -102,6 +103,9 @@ public class GrotesqueGuardiansPlugin extends Plugin
 	private OverlayManager overlayManager;
 
 	@Inject
+	private KeyManager keyManager;
+
+	@Inject
 	private SceneOverlay sceneOverlay;
 
 	@Inject
@@ -124,6 +128,34 @@ public class GrotesqueGuardiansPlugin extends Plugin
 	private boolean flashOnExplosion;
 
 	private boolean echoPhaseTwo;
+
+	private Prayer lastProtectionPrayer = null;
+	private final Set<Prayer> lastOffensivePrayers = new HashSet<>();
+	private boolean prayersDeactivated;
+	private int lastPlayerAttackStyle = -1;
+
+	private int[] itemsToEquip = null;
+	private boolean finishedEquippingItems;
+	private Guardian.Variant lastVariantEquipped = null;
+
+	private final HotkeyListener duskGearHotkey = new HotkeyListener(() -> config.duskGearHotkey())
+	{
+		@Override
+		public void hotkeyPressed()
+		{
+			itemsToEquip = InventoryInteractions.parseStringToItemIds(config.duskGearString());
+		}
+	};
+
+	private final HotkeyListener dawnGearHotkey = new HotkeyListener(() -> config.dawnGearHotkey())
+	{
+		@Override
+		public void hotkeyPressed()
+		{
+			itemsToEquip = InventoryInteractions.parseStringToItemIds(config.dawnGearString());
+		}
+	};
+
 
 	@Provides
 	GrotesqueGuardiansConfig provideConfig(final ConfigManager configManager)
@@ -154,6 +186,9 @@ public class GrotesqueGuardiansPlugin extends Plugin
 		overlayManager.add(sceneOverlay);
 		overlayManager.add(prayerOverlay);
 		npcOverlayService.registerHighlighter(npcHighlighter);
+
+		keyManager.registerKeyListener(duskGearHotkey);
+		keyManager.registerKeyListener(dawnGearHotkey);
 	}
 
 	@Override
@@ -165,9 +200,21 @@ public class GrotesqueGuardiansPlugin extends Plugin
 
 		guardians.clear();
 
+		lastProtectionPrayer = null;
+		lastOffensivePrayers.clear();
+		prayersDeactivated = false;
+		lastPlayerAttackStyle = -1;
+
+		itemsToEquip = null;
+		finishedEquippingItems = false;
+		lastVariantEquipped = null;
+
 		overlayManager.remove(sceneOverlay);
 		overlayManager.remove(prayerOverlay);
 		npcOverlayService.unregisterHighlighter(npcHighlighter);
+
+		keyManager.unregisterKeyListener(duskGearHotkey);
+		keyManager.unregisterKeyListener(dawnGearHotkey);
 	}
 
 	@Subscribe
@@ -230,6 +277,7 @@ public class GrotesqueGuardiansPlugin extends Plugin
 
 		if (guardians.isEmpty())
 		{
+			handleDeactivatePrayers();
 			return;
 		}
 
@@ -239,6 +287,12 @@ public class GrotesqueGuardiansPlugin extends Plugin
 			garg.removeExpiredProjectile();
 			garg.updateTicksUntilNextAttack();
 		}
+
+		handleProtectionPrayers();
+		handleOffensivePrayers();
+		prayPreservePrayer();
+
+		handleGearEquips();
 	}
 
 	@Subscribe
@@ -449,9 +503,192 @@ public class GrotesqueGuardiansPlugin extends Plugin
 		return REGION_ID == MiscUtilities.getPlayerRegionID();
 	}
 
+	private int getNumberImmuneGuardians()
+	{
+		int immuneGargs = 0;
+
+		for (Guardian garg : guardians.values())
+		{
+			if (garg.getVariant() == null)
+			{
+				immuneGargs++;
+			}
+		}
+
+		return immuneGargs;
+	}
+
+	private void prayPreservePrayer()
+	{
+		if (!config.keepPreservePrayerOn())
+		{
+			return;
+		}
+
+		PrayerInteractions.activatePrayer(Prayer.PRESERVE);
+	}
+
 	private void handleProtectionPrayers()
 	{
+		if (!config.autoProtectionPrayers() || guardians.isEmpty())
+		{
+			return;
+		}
 
+		Prayer prayerToUse = null;
+		int priority = 0;
+		Set<Guardian.AttackStyle> attacksAtZeroTicks = new HashSet<>();
+
+
+		for (Guardian garg : guardians.values())
+		{
+			int ticksUntilAttack = garg.getTicksUntilNextAttack();
+			Guardian.AttackStyle attackStyle = garg.getAttackStyle();
+
+			if (ticksUntilAttack == 1)
+			{
+				int attackPriority = attackStyle.getPriority();
+				if (attackPriority > priority)
+				{
+					prayerToUse = attackStyle.getPrayer();
+					priority = attackPriority;
+				}
+			}
+			else if (ticksUntilAttack <= 0)
+			{
+				attacksAtZeroTicks.add(attackStyle);
+			}
+		}
+
+		if (prayerToUse == null && !attacksAtZeroTicks.isEmpty() && getNumberImmuneGuardians() != guardians.size())
+		{
+			for (Guardian.AttackStyle attack : attacksAtZeroTicks)
+			{
+				int attackPriority = attack.getPriority();
+				if (attackPriority > priority)
+				{
+					prayerToUse = attack.getPrayer();
+					priority = attackPriority;
+				}
+			}
+		}
+
+		if (prayerToUse == null)
+		{
+			if (config.lazyFlickPrayers())
+			{
+				PrayerInteractions.deactivatePrayer(lastProtectionPrayer);
+			}
+			return;
+		}
+
+		PrayerInteractions.activatePrayer(prayerToUse);
+		lastProtectionPrayer = prayerToUse;
+		prayersDeactivated = false;
+	}
+
+	private void handleOffensivePrayers()
+	{
+		if (!config.autoOffensivePrayers() || guardians.isEmpty())
+		{
+			return;
+		}
+
+		if (getNumberImmuneGuardians() == guardians.size())
+		{
+			if (lastOffensivePrayers.isEmpty() || !config.lazyFlickPrayers())
+			{
+				return;
+			}
+
+			for (Prayer prayer : lastOffensivePrayers)
+			{
+				PrayerInteractions.deactivatePrayer(prayer);
+			}
+
+			lastPlayerAttackStyle = -1;
+			lastOffensivePrayers.clear();
+			return;
+		}
+
+		int curPlayerAttackStyle = VarUtilities.getPlayerAttackStyle();
+
+		if (lastPlayerAttackStyle == curPlayerAttackStyle)
+		{
+			return;
+		}
+
+		lastOffensivePrayers.addAll(VarUtilities.bestOffensivePrayers(true, false));
+
+		if (!lastOffensivePrayers.isEmpty())
+		{
+			for (Prayer prayer : lastOffensivePrayers)
+			{
+				PrayerInteractions.activatePrayer(prayer);
+			}
+			lastPlayerAttackStyle = curPlayerAttackStyle;
+			prayersDeactivated = false;
+		}
+	}
+
+	private void handleDeactivatePrayers()
+	{
+		if (prayersDeactivated || (!config.autoProtectionPrayers() && !config.autoOffensivePrayers()))
+		{
+			lastProtectionPrayer = null;
+			lastOffensivePrayers.clear();
+			lastPlayerAttackStyle = -1;
+			return;
+		}
+
+		prayersDeactivated = PrayerInteractions.deactivatePrayers(config.keepPreservePrayerOn(), config.actionsPerTick());
+	}
+
+	private void handleGearEquips()
+	{
+		//Logic for auto gear equip, based on Guardian variant phases
+		if (config.autoEquipGear())
+		{
+			checkVariant:
+			for (Guardian garg : guardians.values())
+			{
+				Guardian.Variant variant = garg.getVariant();
+
+				if (lastVariantEquipped == variant)
+				{
+					break;
+				}
+
+				switch (variant)
+				{
+					case DAWN_PHASE_1:
+					case DAWN_PHASE_3:
+					case DUSK_DESPAWN:
+						itemsToEquip = InventoryInteractions.parseStringToItemIds(config.dawnGearString());
+						lastVariantEquipped = variant;
+						break checkVariant;
+					case DUSK_PHASE_2:
+					case DUSK_PHASE_4:
+					case DAWN_DESPAWN:
+						itemsToEquip = InventoryInteractions.parseStringToItemIds(config.duskGearString());
+						lastVariantEquipped = variant;
+						break checkVariant;
+				}
+			}
+		}
+
+		if (itemsToEquip == null)
+		{
+			return;
+		}
+
+		finishedEquippingItems = InventoryInteractions.equipItems(itemsToEquip, config.actionsPerTick());
+
+		if (finishedEquippingItems)
+		{
+			finishedEquippingItems = false;
+			itemsToEquip = null;
+		}
 	}
 
 

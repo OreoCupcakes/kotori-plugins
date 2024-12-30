@@ -109,33 +109,6 @@ public interface GrotesqueGuardiansConfig extends Config
 		return true;
 	}
 
-	/*
-	@ConfigItem(
-			name = "Dawn Tick Counter",
-			description = "Show tick counter on Dusk.",
-			position = 2,
-			keyName = "dawnTickCounter",
-			section = tickCounterSection
-	)
-	default boolean dawnTickCounter()
-	{
-		return true;
-	}
-
-	@ConfigItem(
-		name = "Dusk Tick Counter",
-		description = "Show tick counter on Dusk.",
-		position = 3,
-		keyName = "duskTickCounter",
-		section = tickCounterSection
-	)
-	default boolean duskTickCounter()
-	{
-		return true;
-	}
-
-	 */
-
 	@Range(
 		min = 12,
 		max = 64
@@ -578,6 +551,9 @@ public interface GrotesqueGuardiansConfig extends Config
 	}
 
 
+
+
+
 	//Helper Section
 	@ConfigItem(
 			name = "Auto Protection Prayers",
@@ -616,9 +592,22 @@ public interface GrotesqueGuardiansConfig extends Config
 	}
 
 	@ConfigItem(
+			name = "Lazy Flick Prayers",
+			description = "Protection prayers will flick on for an upcoming attack and turn off when not needed." +
+					"<br>Offensive prayers will stay on except when all the Guardians are immune to attacks.",
+			position = 3,
+			keyName = "flickProtectionPrayers",
+			section = helperSection
+	)
+	default boolean lazyFlickPrayers()
+	{
+		return false;
+	}
+
+	@ConfigItem(
 			name = "Dusk Gear Hotkey",
 			description = "Assign a hotkey. When pressed, the script will automatically equip all items listed in Dusk Gear Ids.",
-			position = 3,
+			position = 4,
 			keyName = "duskGearHotkey",
 			section = helperSection
 	)
@@ -632,7 +621,7 @@ public interface GrotesqueGuardiansConfig extends Config
 			description = "Enter in the item ids to equip for killing Dusk." +
 					"<br>The below example will mean you equip an Abyssal whip and Dragon defender." +
 					"<br>Example: 4151, 12954",
-			position = 4,
+			position = 5,
 			keyName = "duskGearString",
 			section = helperSection
 	)
@@ -644,7 +633,7 @@ public interface GrotesqueGuardiansConfig extends Config
 	@ConfigItem(
 			name = "Dawn Gear Hotkey",
 			description = "Assign a hotkey. When pressed, the script will automatically equip all items listed in Dawn Gear Ids.",
-			position = 5,
+			position = 6,
 			keyName = "dawnGearHotkey",
 			section = helperSection
 	)
@@ -658,7 +647,7 @@ public interface GrotesqueGuardiansConfig extends Config
 			description = "Enter in the item ids to equip for killing Dawn." +
 					"<br>The below example will mean you equip a Magic shortbow (i) and Rune arrows." +
 					"<br>Example: 12788, 892",
-			position = 6,
+			position = 7,
 			keyName = "dawnGearString",
 			section = helperSection
 	)
@@ -670,13 +659,27 @@ public interface GrotesqueGuardiansConfig extends Config
 	@ConfigItem(
 			name = "Auto Equip Gear",
 			description = "Automatic equip your gear as you enter new phases of the boss.",
-			position = 7,
+			position = 8,
 			keyName = "autoEquipGear",
 			section = helperSection
 	)
 	default boolean autoEquipGear()
 	{
 		return false;
+	}
+
+	@Range(min = 1, max = 10)
+	@ConfigItem(
+			name = "Actions Per Tick",
+			description = "Number of actions to send per game tick." +
+					"<br>For example: Number of items to equip per game tick.",
+			position = 9,
+			keyName = "actionsPerTick",
+			section = helperSection
+	)
+	default int actionsPerTick()
+	{
+		return 4;
 	}
 
 
