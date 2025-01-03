@@ -40,7 +40,9 @@ public enum TimerType
 	SOTD(0, loadImage("sotd"), null, Color.YELLOW),
 	IMBUEDHEART(0, loadImage("imbheart"), null, Color.BLACK),
 	DFS(0, loadImage("dfs"), null, Color.WHITE),
-	ANCWYVERN(0, loadImage("ancwyvern"), null, Color.WHITE);
+	ANCWYVERN(0, loadImage("ancwyvern"), null, Color.WHITE),
+	POISON(0, loadImage("poison"), null, Color.GREEN),
+	VENOM(0, loadImage("venom"), null, Color.GREEN.darker().darker());
 
 	private final int immunityLength;
 	private final BufferedImage icon;

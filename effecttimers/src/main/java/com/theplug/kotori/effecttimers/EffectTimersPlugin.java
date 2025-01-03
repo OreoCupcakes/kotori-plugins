@@ -212,6 +212,23 @@ public class EffectTimersPlugin extends Plugin
 	}
 
 	@Subscribe
+	private void onHitsplatApplied(HitsplatApplied event)
+	{
+		Actor actor = event.getActor();
+		Hitsplat hit = event.getHitsplat();
+
+		switch (hit.getHitsplatType())
+		{
+			case HitsplatID.POISON:
+				timerManager.addTimerFor(actor, TimerType.POISON, new Timer(this, PlayerEffect.POISON));
+				break;
+			case HitsplatID.VENOM:
+				timerManager.addTimerFor(actor, TimerType.VENOM, new Timer(this, PlayerEffect.VENOM));
+				break;
+		}
+	}
+
+	@Subscribe
 	private void onChatMessage(ChatMessage event)
 	{
 		if (event.getType() != ChatMessageType.GAMEMESSAGE

@@ -51,7 +51,9 @@ public enum PlayerEffect
 	IMBUED_HEART("Imbued Heart", 1316, 700, false, TimerType.IMBUEDHEART),
 	SATURATED_HEART("Saturated Heart", 2287, 500, false, TimerType.IMBUEDHEART),
 	DFS("Dragon Fire Shield", 1165, 192, false, TimerType.DFS),
-	ANCIENT_WYVERN("Ancient Wyvern Shield", 1402, 192, false, TimerType.ANCWYVERN);
+	ANCIENT_WYVERN("Ancient Wyvern Shield", 1402, 192, false, TimerType.ANCWYVERN),
+	POISON("Poison", -1, 30, false, TimerType.POISON),
+	VENOM("Venom", -1, 30, false, TimerType.VENOM);
 
 	@Getter(AccessLevel.PACKAGE)
 	private final String name;

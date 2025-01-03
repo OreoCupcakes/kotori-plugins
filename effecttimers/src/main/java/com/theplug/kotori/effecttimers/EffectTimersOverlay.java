@@ -140,6 +140,13 @@ public class EffectTimersOverlay extends Overlay
 						continue;
 					}
 					break;
+				case POISON:
+				case VENOM:
+					if (!config.poisonVenomTimers())
+					{
+						continue;
+					}
+					break;
 			}
 			
 			if (!actor.isDead())

@@ -275,6 +275,19 @@ public interface EffectTimersConfig extends Config
 	}
 
 	@ConfigItem(
+			name = "Show Poison/Venom Timers",
+			keyName = "poisonVenomTimers",
+			description = "Should we render a timer counting down until the next poison or venom splat gets applied?",
+			position = 9,
+			section = otherSettings
+	)
+	default boolean poisonVenomTimers()
+	{
+		return true;
+	}
+
+
+	@ConfigItem(
 			name = "Enable Debug Logging",
 			keyName = "debugLogging",
 			description = "Enable debug messages to show up in the client.log",
