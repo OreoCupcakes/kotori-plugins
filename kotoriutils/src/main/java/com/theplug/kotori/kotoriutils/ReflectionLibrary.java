@@ -518,18 +518,24 @@ public class ReflectionLibrary
 
 		Class<?> npcClazz = getClass(npcOverheadMethodClassName);
 		Method method;
-		boolean isJunkValueAByte = npcOverheadMethodJunkValue < 128 && npcOverheadMethodJunkValue >= -128;
 
 		if (npcClazz == null)
 		{
 			return null;
 		}
+		
+		boolean isJunkValueAByte = npcOverheadMethodJunkValue < 128 && npcOverheadMethodJunkValue >= -128;
+		boolean isJunkValueShort = npcOverheadMethodJunkValue < 32767 && npcOverheadMethodJunkValue >= -32767;
 
 		try
 		{
 			if (isJunkValueAByte)
 			{
 				method = npcClazz.getDeclaredMethod(npcOverheadMethodName, byte.class);
+			}
+			else if (isJunkValueShort)
+			{
+				method = npcClazz.getDeclaredMethod(npcOverheadMethodName, short.class);
 			}
 			else
 			{
@@ -549,6 +555,10 @@ public class ReflectionLibrary
 			if (isJunkValueAByte)
 			{
 				headIconShortArray = method.invoke(npc, (byte) npcOverheadMethodJunkValue);
+			}
+			else if (isJunkValueShort)
+			{
+				headIconShortArray = method.invoke(npc, (short) npcOverheadMethodJunkValue);
 			}
 			else
 			{
