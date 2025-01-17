@@ -217,7 +217,12 @@ public class ReflectionLibrary
 		try
 		{
 			field.setAccessible(true);
-			field.setInt(objectWithField, valueToSet * multiplier);
+			int newValue = valueToSet * multiplier;
+			if (newValue < -1)
+			{
+				newValue = Math.abs(newValue);
+			}
+			field.setInt(objectWithField, newValue);
 			field.setAccessible(false);
 		}
 		catch (Exception e)
