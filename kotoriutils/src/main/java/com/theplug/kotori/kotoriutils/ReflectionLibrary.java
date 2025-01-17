@@ -207,7 +207,7 @@ public class ReflectionLibrary
 		}
 	}
 	
-	private static void setFieldIntValue(Field field, Object objectWithField, int valueToSet, int multiplier, String errorMsg)
+	private static void setFieldIntValue(Field field, Object objectWithField, int valueToSet, String errorMsg)
 	{
 		if (field == null || objectWithField == null)
 		{
@@ -217,12 +217,7 @@ public class ReflectionLibrary
 		try
 		{
 			field.setAccessible(true);
-			int newValue = valueToSet * multiplier;
-			if (newValue < -1)
-			{
-				newValue = Math.abs(newValue);
-			}
-			field.setInt(objectWithField, newValue);
+			field.setInt(objectWithField, valueToSet);
 			field.setAccessible(false);
 		}
 		catch (Exception e)
@@ -362,14 +357,14 @@ public class ReflectionLibrary
 	{
 		Field xField = getField(sceneSelectedXClassName, sceneSelectedXFieldName);
 		String errorMsg = "Kotori Plugin Utils - Failed to set scene selected X coordinate.";
-		setFieldIntValue(xField, client.getTopLevelWorldView().getScene(), x, 1, errorMsg);
+		setFieldIntValue(xField, client.getTopLevelWorldView().getScene(), x, errorMsg);
 	}
 	
 	private static void setYCoordinate(int y)
 	{
 		Field yField = getField(sceneSelectedYClassName, sceneSelectedYFieldName);
 		String errorMsg = "Kotori Plugin Utils - Failed to set scene selected Y coordinate.";
-		setFieldIntValue(yField, client.getTopLevelWorldView().getScene(), y, 1, errorMsg);
+		setFieldIntValue(yField, client.getTopLevelWorldView().getScene(), y, errorMsg);
 	}
 
 	private static void setCheckClick()
@@ -453,7 +448,7 @@ public class ReflectionLibrary
 		Class<?> clazz = getClass(selectedSpellWidgetClassName);
 		Field spellWidget = getField(clazz, selectedSpellWidgetFieldName);
 		String errorMsg = "Kotori Plugin Utils - Unable to set selected spell widget.";
-		setFieldIntValue(spellWidget, clazz, widgetPackedId, selectedSpellWidgetMultiplier, errorMsg);
+		setFieldIntValue(spellWidget, clazz, Math.abs(widgetPackedId * selectedSpellWidgetMultiplier), errorMsg);
 	}
 
 	/*
@@ -465,7 +460,7 @@ public class ReflectionLibrary
 	{
 		Field spellChild = getField(selectedSpellChildIndexClassName, selectedSpellChildIndexFieldName);
 		String errorMsg = "Kotori Plugin Utils - Unable to set selected spell child index.";
-		setFieldIntValue(spellChild, client, index, selectedSpellChildIndexMultiplier, errorMsg);
+		setFieldIntValue(spellChild, client, Math.abs(index * selectedSpellChildIndexMultiplier), errorMsg);
 	}
 
 	/*
@@ -477,7 +472,7 @@ public class ReflectionLibrary
 	{
 		Field spellItem = getField(selectedSpellItemIDClassName, selectedSpellItemIDFieldName);
 		String errorMsg = "Kotori Plugin Utils - Unable to set selected spell item id.";
-		setFieldIntValue(spellItem, client, itemId, selectedSpellItemIDMultiplier, errorMsg);
+		setFieldIntValue(spellItem, client, Math.abs(itemId * selectedSpellItemIDMultiplier), errorMsg);
 	}
 
 	//As explained above, you need to set spellChildIndex and spellItemId to -1 if you want to cast a spell.
