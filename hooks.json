@@ -35,19 +35,19 @@
       "n": "setSelectedSpellWidget",
       "c": "bz",
       "p": "oj",
-      "m": 1691180619
+      "m": -1691180619
     },
     {
       "n": "setSelectedSpellChildIndex",
       "c": "client",
       "p": "ol",
-      "m": 2089631275
+      "m": -2089631275
     },
     {
       "n": "setSelectedSpellItemId",
       "c": "client",
       "p": "ob",
-      "m": 855231659
+      "m": -855231659
     },
     {
       "n": "getNpcOverheadIcon",
