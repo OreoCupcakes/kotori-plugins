@@ -16,13 +16,13 @@
     {
       "n": "setSelectedSceneTileX",
       "c": "hj",
-      "p": "be",
+      "p": "bl",
       "m": 1
     },
     {
       "n": "setSelectedSceneTileY",
       "c": "hj",
-      "p": "bn",
+      "p": "cb",
       "m": 1
     },
     {
