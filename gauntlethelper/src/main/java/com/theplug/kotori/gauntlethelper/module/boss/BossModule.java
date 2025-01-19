@@ -122,45 +122,6 @@ public final class BossModule implements Module
 		NpcID.CORRUPTED_HUNLLEF_9038
 	);
 
-	private static final List<Integer> PERFECTED_WEAPONS = List.of(
-			ItemID.CORRUPTED_STAFF_PERFECTED,
-			ItemID.CORRUPTED_BOW_PERFECTED,
-			ItemID.CORRUPTED_HALBERD_PERFECTED,
-			ItemID.CRYSTAL_STAFF_PERFECTED,
-			ItemID.CRYSTAL_BOW_PERFECTED,
-			ItemID.CRYSTAL_HALBERD_PERFECTED,
-			ItemID.CRYSTAL_DAGGER_PERFECTED
-	);
-
-	private static final List<Integer> ATTUNED_WEAPONS = List.of(
-			ItemID.CORRUPTED_STAFF_ATTUNED,
-			ItemID.CORRUPTED_BOW_ATTUNED,
-			ItemID.CORRUPTED_HALBERD_ATTUNED,
-			ItemID.CRYSTAL_STAFF_ATTUNED,
-			ItemID.CRYSTAL_BOW_ATTUNED,
-			ItemID.CRYSTAL_HALBERD_ATTUNED
-	);
-
-	private static final List<Integer> BASIC_WEAPONS = List.of(
-			ItemID.CORRUPTED_STAFF_BASIC,
-			ItemID.CORRUPTED_BOW_BASIC,
-			ItemID.CORRUPTED_HALBERD_BASIC,
-			ItemID.CRYSTAL_STAFF_BASIC,
-			ItemID.CRYSTAL_BOW_BASIC,
-			ItemID.CRYSTAL_HALBERD_BASIC
-	);
-
-	private static final List<Integer> WEAPON_IDS = new ArrayList<>();
-
-	static
-	{
-		WEAPON_IDS.addAll(PERFECTED_WEAPONS);
-		WEAPON_IDS.addAll(ATTUNED_WEAPONS);
-		WEAPON_IDS.addAll(BASIC_WEAPONS);
-		WEAPON_IDS.add(ItemID.CORRUPTED_SCEPTRE);
-		WEAPON_IDS.add(ItemID.CRYSTAL_SCEPTRE);
-	}
-
 	private final Function<NPC, HighlightedNpc> npcHighlighter = this::highlightNpc;
 
 	@Getter(AccessLevel.PACKAGE)
@@ -205,13 +166,9 @@ public final class BossModule implements Module
 	private boolean checkedWeapons;
 	private boolean doFiveOneMethod;
 	private boolean justEnteredArena;
-	private boolean weaponSwitched;
-	private int weaponOne = -1;
-	private int weaponOneStyle = -1;
-	private int weaponTwo = -1;
-	private int weaponTwoStyle = -1;
-	private int weaponThree = -1;
-	private int weaponThreeStyle = -1;
+
+	private final HashMap<Integer, CrystalWeapons> weaponsToUse = new HashMap<>();
+
 	private int lastUniquePlayerAttackCount = -1;
 
 	//Leagues Echo Variables
@@ -254,13 +211,7 @@ public final class BossModule implements Module
 		justEnteredArena = false;
 		checkedWeapons = false;
 		doFiveOneMethod = false;
-		weaponSwitched = false;
-		weaponOne = -1;
-		weaponOneStyle = -1;
-		weaponTwo = -1;
-		weaponTwoStyle = -1;
-		weaponThree = -1;
-		weaponThreeStyle = -1;
+		weaponsToUse.clear();
 		lastUniquePlayerAttackCount = -1;
 
 		inversePrayerAttack = false;
@@ -292,11 +243,7 @@ public final class BossModule implements Module
 		}
 
 		handlePrayerInteractions();
-
-		if (!config.killingEchoHunllef())
-		{
-			handleWeaponSwitching();
-		}
+		handleWeaponSwitching();
 	}
 
 	@Subscribe
@@ -591,6 +538,11 @@ public final class BossModule implements Module
 
 		hunllefOverhead = ReflectionLibrary.getNpcOverheadIcon(hunllef.getNpc());
 
+		if (hunllefOverhead == HeadIcon.RANGE_MAGE_MELEE || hunllefOverhead == null)
+		{
+			hunllef.resetPlayerAttackCount();
+		}
+
 		int truePlayerAttackCount = hunllef.getPlayerAttackCount();
 
 		if (lastUniquePlayerAttackCount != truePlayerAttackCount)
@@ -632,91 +584,37 @@ public final class BossModule implements Module
 
 		int numOfPerfected = 0;
 
-		for (int id : WEAPON_IDS)
+		for (CrystalWeapons weapon : CrystalWeapons.values())
 		{
+			int id = weapon.getItemId();
+
 			if (!InventoryInteractions.inventoryContains(id) &&
 					!InventoryInteractions.yourEquipmentContains(id, EquipmentInventorySlot.WEAPON))
 			{
 				continue;
 			}
 
-			/*
-				Skip the crystal dagger found in Leagues 5 - Raging Echos as its just a spec weapon.
-			 */
-			if (ItemID.CRYSTAL_DAGGER_PERFECTED == id)
-			{
-				continue;
-			}
-
-			if (PERFECTED_WEAPONS.contains(id))
+			if (weapon.isPerfected())
 			{
 				numOfPerfected++;
 			}
 
-			int weaponType = checkWeaponStyle(id);
+			int weaponType = weapon.getWeaponType();
 
-			if (weaponOneStyle == weaponType || weaponTwoStyle == weaponType || weaponThree == weaponType)
-			{
-				continue;
-			}
+            CrystalWeapons storedWeapon = weaponsToUse.get(weaponType);
 
-			if (weaponOne == -1)
+			if (storedWeapon == null)
 			{
-				weaponOne = id;
-				weaponOneStyle = weaponType;
+				weaponsToUse.put(weaponType, weapon);
 			}
-			else if (weaponTwo == -1)
+			else if (storedWeapon.getPriority() < weapon.getPriority())
 			{
-				weaponTwo = id;
-				weaponTwoStyle = weaponType;
-			}
-			else if (weaponThree == -1)
-			{
-				weaponThree = id;
-				weaponThreeStyle = weaponType;
-			}
-
-			if (weaponOne != -1 && weaponTwo != -1 && weaponThree != -1)
-			{
-				break;
+				weaponsToUse.put(weaponType, weapon);
 			}
 		}
 
 		doFiveOneMethod = numOfPerfected < 2;
 		checkedWeapons = true;
-	}
-
-	private int checkWeaponStyle(int id)
-	{
-		switch (id)
-		{
-			case ItemID.CORRUPTED_HALBERD_PERFECTED:
-			case ItemID.CORRUPTED_HALBERD_ATTUNED:
-			case ItemID.CORRUPTED_HALBERD_BASIC:
-			case ItemID.CORRUPTED_SCEPTRE:
-			case ItemID.CRYSTAL_HALBERD_PERFECTED:
-			case ItemID.CRYSTAL_HALBERD_ATTUNED:
-			case ItemID.CRYSTAL_HALBERD_BASIC:
-			case ItemID.CRYSTAL_SCEPTRE:
-			case ItemID.CRYSTAL_DAGGER_PERFECTED:
-				return 0;
-			case ItemID.CORRUPTED_BOW_PERFECTED:
-			case ItemID.CORRUPTED_BOW_ATTUNED:
-			case ItemID.CORRUPTED_BOW_BASIC:
-			case ItemID.CRYSTAL_BOW_PERFECTED:
-			case ItemID.CRYSTAL_BOW_ATTUNED:
-			case ItemID.CRYSTAL_BOW_BASIC:
-				return 1;
-			case ItemID.CORRUPTED_STAFF_PERFECTED:
-			case ItemID.CORRUPTED_STAFF_ATTUNED:
-			case ItemID.CORRUPTED_STAFF_BASIC:
-			case ItemID.CRYSTAL_STAFF_PERFECTED:
-			case ItemID.CRYSTAL_STAFF_ATTUNED:
-			case ItemID.CRYSTAL_STAFF_BASIC:
-				return 2;
-			default:
-				return -1;
-		}
 	}
 
 	private boolean determineSwitchNecessary()
@@ -726,16 +624,19 @@ public final class BossModule implements Module
 			return false;
 		}
 
-		int currentStyle = checkWeaponStyle(InventoryInteractions.getEquippedItemId(EquipmentInventorySlot.WEAPON));
+		int overhead = determineStyleToAvoid();
+		int currentStyle = CrystalWeapons.getWeaponTypeById(InventoryInteractions.getEquippedItemId(EquipmentInventorySlot.WEAPON));
 
-		switch (currentStyle)
+		switch (overhead)
 		{
-			case -1:
-				return true;
 			case 0:
 			case 1:
 			case 2:
-				return determineStyleToAvoid() == currentStyle;
+				return overhead == currentStyle;
+			case 3:
+				return overhead != currentStyle;
+			case 4:
+				return true;
 			default:
 				return false;
 		}
@@ -743,6 +644,11 @@ public final class BossModule implements Module
 
 	private int determineStyleToAvoid()
 	{
+		if (hunllefOverhead == null)
+		{
+			return 4;
+		}
+
 		switch (hunllefOverhead)
 		{
 			case MELEE:
@@ -751,6 +657,8 @@ public final class BossModule implements Module
 				return 1;
 			case MAGIC:
 				return 2;
+			case RANGE_MAGE_MELEE:
+				return 3;
 			default:
 				return -1;
 		}
@@ -764,17 +672,53 @@ public final class BossModule implements Module
 			return;
 		}
 
-		if (weaponOne != -1 && weaponOneStyle != styleToAvoid && InventoryInteractions.inventoryContains(weaponOne))
+		CrystalWeapons pickedWeapon = null;
+
+		for (CrystalWeapons weapon : weaponsToUse.values())
 		{
-			weaponSwitched = InventoryInteractions.equipItems(weaponOne);
+			if (styleToAvoid == 3)
+			{
+				if (weapon.getWeaponType() == 3)
+				{
+					pickedWeapon = weapon;
+					break;
+				}
+			}
+			else if (styleToAvoid == 4)
+			{
+				if (pickedWeapon == null)
+				{
+					pickedWeapon = weapon;
+				}
+				else if (weapon.getPriority() < pickedWeapon.getPriority())
+				{
+					pickedWeapon = weapon;
+				}
+			}
+			else
+			{
+				if (styleToAvoid != weapon.getWeaponType())
+				{
+					if (pickedWeapon == null)
+					{
+						pickedWeapon = weapon;
+					}
+					else if (weapon.getPriority() > pickedWeapon.getPriority())
+					{
+						pickedWeapon = weapon;
+					}
+				}
+			}
 		}
-		else if (weaponTwo != -1 && weaponTwoStyle != styleToAvoid && InventoryInteractions.inventoryContains(weaponTwo))
+
+		if (pickedWeapon != null)
 		{
-			weaponSwitched = InventoryInteractions.equipItems(weaponTwo);
-		}
-		else if (weaponThree != -1 && weaponThreeStyle != styleToAvoid && InventoryInteractions.inventoryContains(weaponThree))
-		{
-			weaponSwitched = InventoryInteractions.equipItems(weaponThree);
+			if (styleToAvoid == 4 && pickedWeapon.getWeaponType() == CrystalWeapons.getWeaponTypeById(InventoryInteractions.getEquippedItemId(EquipmentInventorySlot.WEAPON)))
+			{
+				return;
+			}
+
+			InventoryInteractions.equipItems(pickedWeapon.getItemId());
 		}
 	}
 
