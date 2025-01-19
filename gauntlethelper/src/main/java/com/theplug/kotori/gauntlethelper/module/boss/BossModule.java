@@ -292,7 +292,11 @@ public final class BossModule implements Module
 		}
 
 		handlePrayerInteractions();
-		handleWeaponSwitching();
+
+		if (!config.killingEchoHunllef())
+		{
+			handleWeaponSwitching();
+		}
 	}
 
 	@Subscribe
@@ -419,7 +423,7 @@ public final class BossModule implements Module
 			{
 				wrongAttackStyle = false;
 
-				if (hunllefOverhead == null)
+				if (hunllefOverhead == null || hunllefOverhead == HeadIcon.RANGE_MAGE_MELEE)
 				{
 					hunllef.resetPlayerAttackCount();
 					switchWeapon = true;
@@ -616,14 +620,6 @@ public final class BossModule implements Module
 					}
 					break;
 			}
-
-			/*
-				Force the weapon switch to the dagger as Hunllef can become immune in the middle of the player attack cycle
-			 */
-			if (hunllefOverhead == HeadIcon.RANGE_MAGE_MELEE)
-			{
-				equipWeapon();
-			}
 		}
 	}
 
@@ -730,26 +726,16 @@ public final class BossModule implements Module
 			return false;
 		}
 
-		int styleToAvoid = determineStyleToAvoid();
-		int weaponId = InventoryInteractions.getEquippedItemId(EquipmentInventorySlot.WEAPON);
-		int currentStyle = checkWeaponStyle(weaponId);
+		int currentStyle = checkWeaponStyle(InventoryInteractions.getEquippedItemId(EquipmentInventorySlot.WEAPON));
 
-		switch (styleToAvoid)
+		switch (currentStyle)
 		{
 			case -1:
-			case 3:
 				return true;
 			case 0:
 			case 1:
 			case 2:
-				if (weaponId == ItemID.CRYSTAL_DAGGER_PERFECTED)
-				{
-                    return !justEnteredArena;
-				}
-				else
-				{
-					return styleToAvoid == currentStyle;
-				}
+				return determineStyleToAvoid() == currentStyle;
 			default:
 				return false;
 		}
@@ -757,11 +743,6 @@ public final class BossModule implements Module
 
 	private int determineStyleToAvoid()
 	{
-		if (hunllefOverhead == null)
-		{
-			return -1;
-		}
-
 		switch (hunllefOverhead)
 		{
 			case MELEE:
@@ -770,8 +751,6 @@ public final class BossModule implements Module
 				return 1;
 			case MAGIC:
 				return 2;
-			case RANGE_MAGE_MELEE:
-				return 3;
 			default:
 				return -1;
 		}
@@ -780,17 +759,9 @@ public final class BossModule implements Module
 	private void equipWeapon()
 	{
 		int styleToAvoid = determineStyleToAvoid();
-		switch (styleToAvoid)
+		if (styleToAvoid == -1)
 		{
-			case -1:
-				/*
-					Default to the first weapon if no overhead prayer found
-				 */
-				weaponSwitched = InventoryInteractions.equipItems(weaponOne);
-				return;
-			case 3:
-				weaponSwitched = InventoryInteractions.equipItems(ItemID.CRYSTAL_DAGGER_PERFECTED);
-				return;
+			return;
 		}
 
 		if (weaponOne != -1 && weaponOneStyle != styleToAvoid && InventoryInteractions.inventoryContains(weaponOne))
