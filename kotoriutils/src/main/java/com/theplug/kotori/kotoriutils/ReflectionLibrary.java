@@ -448,7 +448,8 @@ public class ReflectionLibrary
 		Class<?> clazz = getClass(selectedSpellWidgetClassName);
 		Field spellWidget = getField(clazz, selectedSpellWidgetFieldName);
 		String errorMsg = "Kotori Plugin Utils - Unable to set selected spell widget.";
-		setFieldIntValue(spellWidget, clazz, Math.abs(widgetPackedId * selectedSpellWidgetMultiplier), errorMsg);
+		int value = widgetPackedId * selectedSpellWidgetMultiplier;
+		setFieldIntValue(spellWidget, clazz, value < -1 ? Math.abs(value) : value, errorMsg);
 	}
 
 	/*
@@ -460,7 +461,8 @@ public class ReflectionLibrary
 	{
 		Field spellChild = getField(selectedSpellChildIndexClassName, selectedSpellChildIndexFieldName);
 		String errorMsg = "Kotori Plugin Utils - Unable to set selected spell child index.";
-		setFieldIntValue(spellChild, client, Math.abs(index * selectedSpellChildIndexMultiplier), errorMsg);
+		int value = index * selectedSpellChildIndexMultiplier;
+		setFieldIntValue(spellChild, client, value < -1 ? Math.abs(value) : value, errorMsg);
 	}
 
 	/*
@@ -472,7 +474,8 @@ public class ReflectionLibrary
 	{
 		Field spellItem = getField(selectedSpellItemIDClassName, selectedSpellItemIDFieldName);
 		String errorMsg = "Kotori Plugin Utils - Unable to set selected spell item id.";
-		setFieldIntValue(spellItem, client, Math.abs(itemId * selectedSpellItemIDMultiplier), errorMsg);
+		int value = itemId * selectedSpellItemIDMultiplier;
+		setFieldIntValue(spellItem, client, value < -1 ? Math.abs(value) : value, errorMsg);
 	}
 
 	//As explained above, you need to set spellChildIndex and spellItemId to -1 if you want to cast a spell.
