@@ -10,7 +10,7 @@
     {
       "n": "setCheckClick",
       "c": "hj",
-      "p": "bk",
+      "p": "cn",
       "m": 1
     },
     {
@@ -28,26 +28,26 @@
     {
       "n": "setViewportWalking",
       "c": "hj",
-      "p": "cn",
+      "p": "bk",
       "m": 1
     },
     {
       "n": "setSelectedSpellWidget",
       "c": "bz",
       "p": "oj",
-      "m": -1691180619
+      "m": 1691180619
     },
     {
       "n": "setSelectedSpellChildIndex",
       "c": "client",
       "p": "ol",
-      "m": -2089631275
+      "m": 2089631275
     },
     {
       "n": "setSelectedSpellItemId",
       "c": "client",
       "p": "ob",
-      "m": -855231659
+      "m": 855231659
     },
     {
       "n": "getNpcOverheadIcon",
@@ -64,19 +64,19 @@
     {
       "n": "isMoving",
       "c": "da",
-      "p": "da",
+      "p": "bx",
       "m": -3955027
     },
     {
       "n": "getActorAnimationId",
       "c": "da",
-      "p": "cm",
+      "p": "bd",
       "m": 692374621
     },
     {
       "n": "menuOptionsCount",
       "c": "wl",
-      "p": "ah",
+      "p": "vm",
       "m": -851609407
     },
     {
@@ -112,13 +112,13 @@
     {
       "n": "menuOptionsArray",
       "c": "wl",
-      "p": "at",
+      "p": "ac",
       "m": 1
     },
     {
       "n": "menuTargetsArray",
       "c": "wl",
-      "p": "ac",
+      "p": "at",
       "m": 1
     }
   ]
