@@ -43,6 +43,7 @@ import com.theplug.kotori.kotoriutils.rlapi.GraphicIDPlus;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.api.events.*;
 import net.runelite.client.eventbus.EventBus;
@@ -51,6 +52,7 @@ import net.runelite.client.game.npcoverlay.HighlightedNpc;
 import net.runelite.client.game.npcoverlay.NpcOverlayService;
 import net.runelite.client.ui.overlay.OverlayManager;
 
+@Slf4j
 @Singleton
 public final class BossModule implements Module
 {
@@ -538,7 +540,7 @@ public final class BossModule implements Module
 
 		hunllefOverhead = ReflectionLibrary.getNpcOverheadIcon(hunllef.getNpc());
 
-		if (hunllefOverhead == HeadIcon.RANGE_MAGE_MELEE || hunllefOverhead == null)
+		if (config.killingEchoHunllef() && (hunllefOverhead == HeadIcon.RANGE_MAGE_MELEE || hunllefOverhead == null))
 		{
 			hunllef.resetPlayerAttackCount();
 		}
@@ -554,6 +556,7 @@ public final class BossModule implements Module
 				case 1:
 					if (doFiveOneMethod)
 					{
+						log.info("Trying to do 5-1 method.");
 						equipWeapon();
 					}
 					break;
@@ -591,11 +594,13 @@ public final class BossModule implements Module
 			if (!InventoryInteractions.inventoryContains(id) &&
 					!InventoryInteractions.yourEquipmentContains(id, EquipmentInventorySlot.WEAPON))
 			{
+				log.info("Skipping weapon id: {}, weapon name: {}", id, weapon.name());
 				continue;
 			}
 
 			if (weapon.isPerfected())
 			{
+				log.info("Perfected weapon found - name {}, id {}", weapon.name(), id);
 				numOfPerfected++;
 			}
 
@@ -615,6 +620,14 @@ public final class BossModule implements Module
 
 		doFiveOneMethod = numOfPerfected < 2;
 		checkedWeapons = true;
+
+        log.info("doFiveOneMethod value: {}", doFiveOneMethod);
+		log.info("numOfPerfected value: {}", numOfPerfected);
+		log.info("Number of weapons in map: {}", weaponsToUse.size());
+		for (CrystalWeapons w : weaponsToUse.values())
+		{
+			log.info("Weapon in map: {}", w.toString());
+		}
 	}
 
 	private boolean determineSwitchNecessary()
