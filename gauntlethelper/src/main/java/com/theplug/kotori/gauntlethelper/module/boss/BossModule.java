@@ -556,7 +556,6 @@ public final class BossModule implements Module
 				case 1:
 					if (doFiveOneMethod)
 					{
-						log.info("Trying to do 5-1 method.");
 						equipWeapon();
 					}
 					break;
@@ -594,13 +593,11 @@ public final class BossModule implements Module
 			if (!InventoryInteractions.inventoryContains(id) &&
 					!InventoryInteractions.yourEquipmentContains(id, EquipmentInventorySlot.WEAPON))
 			{
-				log.info("Skipping weapon id: {}, weapon name: {}", id, weapon.name());
 				continue;
 			}
 
 			if (weapon.isPerfected())
 			{
-				log.info("Perfected weapon found - name {}, id {}", weapon.name(), id);
 				numOfPerfected++;
 			}
 
@@ -620,14 +617,6 @@ public final class BossModule implements Module
 
 		doFiveOneMethod = numOfPerfected < 2;
 		checkedWeapons = true;
-
-        log.info("doFiveOneMethod value: {}", doFiveOneMethod);
-		log.info("numOfPerfected value: {}", numOfPerfected);
-		log.info("Number of weapons in map: {}", weaponsToUse.size());
-		for (CrystalWeapons w : weaponsToUse.values())
-		{
-			log.info("Weapon in map: {}", w.toString());
-		}
 	}
 
 	private boolean determineSwitchNecessary()
@@ -689,6 +678,11 @@ public final class BossModule implements Module
 
 		for (CrystalWeapons weapon : weaponsToUse.values())
 		{
+			if (InventoryInteractions.yourEquipmentContains(weapon.getItemId(), EquipmentInventorySlot.WEAPON))
+			{
+				continue;
+			}
+
 			if (styleToAvoid == 3)
 			{
 				if (weapon.getWeaponType() == 3)
