@@ -58,6 +58,18 @@ public class PrayerInteractions
 					return false;
 				}
 				break;
+			case MYSTIC_VIGOUR:
+				if (!VarUtilities.isMysticVigourUnlocked())
+				{
+					return false;
+				}
+				break;
+			case DEADEYE:
+				if (!VarUtilities.isDeadeyeUnlocked())
+				{
+					return false;
+				}
+				break;
 		}
 
 		int param1 = prayerExtended.getWidgetInfoPlus().getId();

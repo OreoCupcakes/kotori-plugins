@@ -100,6 +100,14 @@ public class VarUtilities
 	{
 		return client.getVarbitValue(5453) == 1;
 	}
+	public static boolean isDeadeyeUnlocked()
+	{
+		return client.getVarbitValue(10699) == 1 && client.getVarbitValue(10671) == 0;
+	}
+	public static boolean isMysticVigourUnlocked()
+	{
+		return client.getVarbitValue(10698) == 1 && client.getVarbitValue(10670) == 0;
+	}
 	
 	/*
 		Returns the LocalPlayer's current attack style in the form of an int.
@@ -326,6 +334,10 @@ public class VarUtilities
 		{
 			return Prayer.RIGOUR;
 		}
+		else if (isDeadeyeUnlocked() && skillEqualGreater(Skill.PRAYER, 62))
+		{
+			return Prayer.EAGLE_EYE;
+		}
 		else if (skillEqualGreater(Skill.PRAYER, 44))
 		{
 			return Prayer.EAGLE_EYE;
@@ -349,6 +361,10 @@ public class VarUtilities
 		if (isAuguryUnlocked() && skillEqualGreater(Skill.PRAYER, 77) && skillEqualGreater(Skill.DEFENCE, 70))
 		{
 			return Prayer.AUGURY;
+		}
+		else if (isMysticVigourUnlocked() && skillEqualGreater(Skill.PRAYER, 63))
+		{
+			return Prayer.MYSTIC_MIGHT;
 		}
 		else if (skillEqualGreater(Skill.PRAYER, 45))
 		{

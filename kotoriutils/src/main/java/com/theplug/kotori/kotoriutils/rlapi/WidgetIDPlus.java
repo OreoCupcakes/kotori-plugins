@@ -191,6 +191,9 @@ public final class WidgetIDPlus
 		static final int PIETY = 35;
 		static final int AUGURY = 36;
 		static final int PRESERVE = 37;
+
+		static final int DEADEYE = 29;
+		static final int MYSTIC_VIGOUR = 32;
 	}
 
 	public static class QuickPrayer
@@ -226,6 +229,9 @@ public final class WidgetIDPlus
 		public static final int PIETY_CHILD_ID = 26;
 		public static final int AUGURY_CHILD_ID = 27;
 		public static final int PRESERVE_CHILD_ID = 28;
+
+		public static final int DEADEYE_CHILD_ID = 22;
+		public static final int MYSTIC_VIGOUR_CHILD_ID = 23;
 	}
 	
 	static class RuinousPrayers

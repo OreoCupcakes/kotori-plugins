@@ -132,6 +132,14 @@ public enum PrayerExtended
      */
     CHIVALRY(Varbits.PRAYER_CHIVALRY, 40.0, 60, WidgetInfoPlus.PRAYER_CHIVALRY),
     /**
+     * Deadeye (Level 62, Ranging/Damage/Defense)
+     */
+    DEADEYE(Varbits.PRAYER_EAGLE_EYE, 20.0, 62, WidgetInfoPlus.PRAYER_DEADEYE),
+    /**
+     * Mystic Vigour (Level 63, Magic/Magic Def./Defense)
+     */
+    MYSTIC_VIGOUR(Varbits.PRAYER_MYSTIC_MIGHT, 20.0, 63, WidgetInfoPlus.PRAYER_MYSTIC_VIGOUR),
+    /**
      * Piety (Level 70, Defence/Strength/Attack).
      */
     PIETY(Varbits.PRAYER_PIETY, 40.0, 70, WidgetInfoPlus.PRAYER_PIETY),
