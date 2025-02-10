@@ -84,6 +84,11 @@ public class VarUtilities
 		}
 		return activeSpellbook == spellbook;
 	}
+	public static boolean inLMS()
+	{
+		return client.getVarbitValue(5314) != 0;
+	}
+
 	public static boolean isPietyUnlocked()
 	{
 		return client.getVarbitValue(3909) == 8;
@@ -102,11 +107,11 @@ public class VarUtilities
 	}
 	public static boolean isDeadeyeUnlocked()
 	{
-		return client.getVarbitValue(10699) == 1 && client.getVarbitValue(10671) == 0;
+		return client.getVarbitValue(16097) == 1 && !inLMS();
 	}
 	public static boolean isMysticVigourUnlocked()
 	{
-		return client.getVarbitValue(10698) == 1 && client.getVarbitValue(10670) == 0;
+		return client.getVarbitValue(16098) == 1 && !inLMS();
 	}
 	
 	/*
