@@ -341,7 +341,7 @@ public class VarUtilities
 		}
 		else if (isDeadeyeUnlocked() && skillEqualGreater(Skill.PRAYER, 62))
 		{
-			return Prayer.EAGLE_EYE;
+			return Prayer.DEADEYE;
 		}
 		else if (skillEqualGreater(Skill.PRAYER, 44))
 		{
@@ -369,7 +369,7 @@ public class VarUtilities
 		}
 		else if (isMysticVigourUnlocked() && skillEqualGreater(Skill.PRAYER, 63))
 		{
-			return Prayer.MYSTIC_MIGHT;
+			return Prayer.MYSTIC_VIGOUR;
 		}
 		else if (skillEqualGreater(Skill.PRAYER, 45))
 		{
