@@ -32,6 +32,8 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import javax.inject.Inject;
+
+import com.theplug.kotori.kotoriutils.methods.NPCInteractions;
 import net.runelite.api.Actor;
 import net.runelite.api.Client;
 import net.runelite.api.Point;
@@ -72,12 +74,12 @@ public class EffectTimersOverlay extends Overlay
 
 		if (config.showNpcs())
 		{
-			client.getTopLevelWorldView().npcs().forEach((a) -> renderActor(g, a));
+			NPCInteractions.getNpcs().forEach((a) -> renderActor(g, a));
 		}
 
 		if (config.showPlayers())
 		{
-			client.getTopLevelWorldView().players().forEach((a) -> renderActor(g, a));
+			NPCInteractions.getPlayers().forEach((a) -> renderActor(g, a));
 		}
 
 		g.setFont(oldFont);
