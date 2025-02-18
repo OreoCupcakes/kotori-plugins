@@ -79,12 +79,12 @@ public class NPCInteractions
     public static NPC[] getCachedNPCs()
     {
         WorldView wv = client.getTopLevelWorldView();
-        return wv == null ? null : wv.npcs().getSparse();
+        return wv == null ? null : wv.npcs().stream().toArray(NPC[]::new);
     }
 
     public static Player[] getCachedPlayers()
     {
         WorldView wv = client.getTopLevelWorldView();
-        return wv == null ? null : wv.players().getSparse();
+        return wv == null ? null : wv.players().stream().toArray(Player[]::new));
     }
 }
