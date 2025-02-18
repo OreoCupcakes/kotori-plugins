@@ -384,7 +384,7 @@ public class ZulrahPlugin extends Plugin implements KeyListener
 		}
 		if (!holdingSnakelingHotkey && event.getTarget().contains("Snakeling") && event.getOption().equalsIgnoreCase("attack")) 
 		{
-			NPC npc = client.getTopLevelWorldView().npcs().byIndex()[event.getIdentifier()];
+			NPC npc = client.getTopLevelWorldView().npcs().byIndex(event.getIdentifier());
 			if (npc == null) 
 			{
 				return;
