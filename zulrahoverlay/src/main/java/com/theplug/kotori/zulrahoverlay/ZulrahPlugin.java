@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.inject.Provides;
 import com.theplug.kotori.kotoriutils.KotoriUtils;
 import com.theplug.kotori.kotoriutils.methods.MiscUtilities;
+import com.theplug.kotori.kotoriutils.methods.NPCInteractions;
 import com.theplug.kotori.zulrahoverlay.overlays.*;
 import com.theplug.kotori.zulrahoverlay.rotationutils.RotationType;
 import com.theplug.kotori.zulrahoverlay.rotationutils.ZulrahData;
@@ -259,7 +260,7 @@ public class ZulrahPlugin extends Plugin implements KeyListener
 		}
 		if (config.snakelingSetting() == ZulrahConfig.SnakelingSettings.ENTITY) 
 		{
-			snakelings.addAll(client.getTopLevelWorldView().npcs().stream().filter(npc -> npc != null && npc.getName() != null && npc.getName().equalsIgnoreCase("snakeling") && npc.getCombatLevel() == 90).collect(Collectors.toList()));
+			snakelings.addAll(NPCInteractions.getNpcs().stream().filter(npc -> npc != null && npc.getName() != null && npc.getName().equalsIgnoreCase("snakeling") && npc.getCombatLevel() == 90).collect(Collectors.toList()));
 			snakelings.forEach(npc -> ZulrahPlugin.setHidden(npc, true));
 		}
 	}
