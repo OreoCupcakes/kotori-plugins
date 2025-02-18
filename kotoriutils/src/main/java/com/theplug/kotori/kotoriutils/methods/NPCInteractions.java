@@ -85,6 +85,6 @@ public class NPCInteractions
     public static Player[] getCachedPlayers()
     {
         WorldView wv = client.getTopLevelWorldView();
-        return wv == null ? null : wv.players().stream().toArray(Player[]::new));
+        return wv == null ? null : wv.players().stream().toArray(Player[]::new);
     }
 }
