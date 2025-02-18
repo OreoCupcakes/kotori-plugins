@@ -29,6 +29,7 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
+import com.theplug.kotori.kotoriutils.methods.NPCInteractions;
 import net.runelite.api.*;
 
 @Slf4j
@@ -45,11 +46,11 @@ class PrayerTracker
 		lastTick.clear();
 		lastTick.putAll(newTick);
 		newTick.clear();
-		for (Player p : client.getTopLevelWorldView().players())
+		for (Player p : NPCInteractions.getPlayers())
 		{
 			processActor(p);
 		}
-		for (NPC npc : client.getTopLevelWorldView().npcs())
+		for (NPC npc : NPCInteractions.getNpcs())
 		{
 			processActor(npc);
 		}
