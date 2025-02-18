@@ -30,6 +30,7 @@ import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.OverlayUtil;
 import net.runelite.client.ui.overlay.outline.ModelOutlineRenderer;
+import com.theplug.kotori.kotoriutils.methods.NPCInteractions;
 
 @Singleton
 @Slf4j
@@ -336,7 +337,7 @@ class NightmareOverlay extends Overlay
 
 	private void renderHuskHighlights(Graphics2D graphics)
 	{
-		client.getTopLevelWorldView().npcs().forEach((npc) ->
+		NPCInteractions.getNpcs().forEach((npc) ->
 		{
 			int id = npc.getId();
 			Color color;
