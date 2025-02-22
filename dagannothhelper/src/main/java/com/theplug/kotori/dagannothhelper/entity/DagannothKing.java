@@ -37,12 +37,14 @@ import net.runelite.api.Actor;
 import net.runelite.api.NPC;
 import net.runelite.api.NpcID;
 import net.runelite.api.Prayer;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
+import java.util.Comparator;
 
 @Getter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class DagannothKing
+public class DagannothKing implements Comparable<DagannothKing>
 {
 	@EqualsAndHashCode.Include
 	private final NPC npc;
@@ -60,6 +62,8 @@ public class DagannothKing
 	@Getter
 	private final AttackStyle attackStyle;
 
+	private final int priority;
+
 	@Getter
 	private final Color color;
 
@@ -73,6 +77,7 @@ public class DagannothKing
 		this.animationId = boss.animationId;
 		this.animationTickSpeed = boss.attackSpeed;
 		this.attackStyle = boss.attackStyle;
+		this.priority = boss.attackStyle.getPriority();
 		this.color = attackStyle.color;
 	}
 
@@ -92,6 +97,12 @@ public class DagannothKing
 	public Actor getInteractingActor()
 	{
 		return npc.getInteracting();
+	}
+
+	@Override
+	public int compareTo(@NotNull DagannothKing o)
+	{
+		return Comparator.comparing(DagannothKing::getTicksUntilNextAnimation).thenComparing(DagannothKing::getPriority).compare(this, o);
 	}
 
 	@RequiredArgsConstructor
