@@ -1,6 +1,8 @@
 package com.theplug.kotori.hallowedhelper;
 
 import com.google.inject.Provides;
+import com.theplug.kotori.kotoriutils.KotoriUtils;
+import com.theplug.kotori.kotoriutils.methods.NPCInteractions;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +14,7 @@ import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.plugins.Plugin;
+import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.infobox.InfoBoxManager;
@@ -29,6 +32,7 @@ import java.util.stream.Collectors;
         description = "Hallowed Sepulchre helper with tons of overlays.",
         tags = {"grace", "marks", "overlay", "skilling", "traps", "sepulchre", "hallowed", "imno", "ported", "darkmeyer", "agility", "course", "minigame", "kotori"}
 )
+@PluginDependency(KotoriUtils.class)
 @Slf4j
 public class HallowedHelperPlugin extends Plugin {
 
@@ -53,8 +57,6 @@ public class HallowedHelperPlugin extends Plugin {
     public void getFloor()
     {
         //log.info("Getting floor...: " + client.getMapRegions()[0]);
-        System.out.println("Region ID from getfloor(): " + WorldPoint.fromLocalInstance(client, client.getLocalPlayer().getLocalLocation()).getRegionID());
-        System.out.println("Client.getMapRegions[0] = " + client.getMapRegions()[0]);
         switch (WorldPoint.fromLocalInstance(client, client.getLocalPlayer().getLocalLocation()).getRegionID())
         {
             case 8797:
@@ -103,8 +105,6 @@ public class HallowedHelperPlugin extends Plugin {
                 subfloor = 3;
             }
         }
-
-        System.out.println("Currentfloor: " + currentfloor);
     }
 
     public void get_third_floor_sub()
@@ -562,7 +562,7 @@ public class HallowedHelperPlugin extends Plugin {
             addgraphicsobject(graphicsObject);
         }
 
-        List<NPC> npcs = client.getTopLevelWorldView() == null ? Collections.emptyList() : client.getTopLevelWorldView().npcs().stream().collect(Collectors.toCollection(ArrayList::new));
+        List<NPC> npcs = NPCInteractions.getNpcs();
         for (final NPC npc : npcs)
         {
             addNpc(npc);
