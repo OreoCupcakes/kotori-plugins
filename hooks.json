@@ -64,13 +64,13 @@
     {
       "n": "isMoving",
       "c": "df",
-      "p": "dm",
+      "p": "cn",
       "m": -754790111
     },
     {
       "n": "getActorAnimationId",
       "c": "df",
-      "p": "cc",
+      "p": "bg",
       "m": 527657827
     },
     {
