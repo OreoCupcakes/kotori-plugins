@@ -64,13 +64,13 @@
     {
       "n": "isMoving",
       "c": "df",
-      "p": "cn",
+      "p": "dm",
       "m": -754790111
     },
     {
       "n": "getActorAnimationId",
       "c": "df",
-      "p": "bg",
+      "p": "cc",
       "m": 527657827
     },
     {
@@ -82,31 +82,31 @@
     {
       "n": "menuParam0Array",
       "c": "wn",
-      "p": "au",
+      "p": "ao",
       "m": 1
     },
     {
       "n": "menuParam1Array",
       "c": "wn",
-      "p": "ad",
+      "p": "af",
       "m": 1
     },
     {
       "n": "menuTypesArray",
       "c": "wn",
-      "p": "ah",
+      "p": "au",
       "m": 1
     },
     {
       "n": "menuIdentifiersArray",
       "c": "wn",
-      "p": "ac",
+      "p": "ah",
       "m": 1
     },
     {
       "n": "menuItemIdsArray",
       "c": "wn",
-      "p": "ao",
+      "p": "ad",
       "m": 1
     },
     {
