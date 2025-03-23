@@ -686,6 +686,52 @@ public class GodWarsHelperPlugin extends Plugin
 	
 	private void autoDeactivatePrayers()
 	{
+		switch (currentRegion)
+		{
+			case GENERAL_REGION:
+				if (config.generalGraardorOffensivePrayer() == GodWarsHelperConfig.OffensivePrayerChoice.OFF &&
+						config.sergeantGrimspikeOffensivePrayer() == GodWarsHelperConfig.OffensivePrayerChoice.OFF &&
+						config.sergeantSteelwillOffensivePrayer() == GodWarsHelperConfig.OffensivePrayerChoice.OFF &&
+						config.sergeantStrongstackOffensivePrayer() == GodWarsHelperConfig.OffensivePrayerChoice.OFF &&
+						config.autoBandosDefensePrayers() == GodWarsHelperConfig.PrayerSwitchChoice.OFF)
+				{
+					return;
+				}
+				break;
+			case ZAMMY_REGION:
+				if (config.krilTsutsarothOffensivePrayer() == GodWarsHelperConfig.OffensivePrayerChoice.OFF &&
+						config.balfrugKreeyathOffensivePrayer() == GodWarsHelperConfig.OffensivePrayerChoice.OFF &&
+						config.tstanonKarlakOffensivePrayer() == GodWarsHelperConfig.OffensivePrayerChoice.OFF &&
+						config.zaklnGritchOffensivePrayer() == GodWarsHelperConfig.OffensivePrayerChoice.OFF &&
+						config.autoZamorakDefensePrayers() == GodWarsHelperConfig.PrayerSwitchChoice.OFF)
+				{
+					return;
+				}
+				break;
+			case SARA_REGION:
+				if (config.commanderZilyanaOffensivePrayer() == GodWarsHelperConfig.OffensivePrayerChoice.OFF &&
+						config.starlightOffensivePrayer() == GodWarsHelperConfig.OffensivePrayerChoice.OFF &&
+						config.breeOffensivePrayer() == GodWarsHelperConfig.OffensivePrayerChoice.OFF &&
+						config.growlerOffensivePrayer() == GodWarsHelperConfig.OffensivePrayerChoice.OFF &&
+						config.autoSaradominDefensePrayers() == GodWarsHelperConfig.PrayerSwitchChoice.OFF)
+				{
+					return;
+				}
+				break;
+			case ARMA_REGION:
+				if (config.kreearraOffensivePrayer() == GodWarsHelperConfig.OffensivePrayerChoice.OFF &&
+						config.flightKilisaOffensivePrayer() == GodWarsHelperConfig.OffensivePrayerChoice.OFF &&
+						config.flockleaderGeerinOffensivePrayer() == GodWarsHelperConfig.OffensivePrayerChoice.OFF &&
+						config.wingmanSkreeOffensivePrayer() == GodWarsHelperConfig.OffensivePrayerChoice.OFF &&
+						config.autoArmadylDefensePrayers() == GodWarsHelperConfig.PrayerSwitchChoice.OFF)
+				{
+					return;
+				}
+				break;
+			default:
+				return;
+		}
+
 		if (!bossAlive && !rangedMinionAlive && !magicMinionAlive && !meleeMinionAlive && inBossRoom && !allPrayersDeactivated)
 		{
 			allPrayersDeactivated = PrayerInteractions.deactivatePrayers(config.keepPreservePrayerOn());

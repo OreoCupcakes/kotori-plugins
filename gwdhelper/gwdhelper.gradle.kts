@@ -23,7 +23,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "2.1.7"
+version = "2.1.8"
 
 project.extra["PluginName"] = "<html><font color=#6b8af6>[K]</font> God Wars Helper</html>" // This is the name that is used in the external plugin manager panel
 project.extra["PluginDescription"] = "Overlay and automatic helper plugin for the GWD bosses." // This is the description that is used in the external plugin manager panel
@@ -32,6 +32,7 @@ project.extra["PluginMainClassName"] = "GodWarsHelperPlugin" // This is the plug
 
 dependencies {
     compileOnly(project(":kotoriutils"))
+    testImplementation(project(mapOf("path" to ":kotoriutils")))
 }
 
 tasks {
