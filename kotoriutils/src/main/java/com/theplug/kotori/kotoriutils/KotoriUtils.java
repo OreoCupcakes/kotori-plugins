@@ -226,17 +226,17 @@ public class KotoriUtils extends Plugin {
                 case "setSelectedSpellWidget":
                     ReflectionLibrary.setSelectedSpellWidgetClassName(hookInfo.getC());
                     ReflectionLibrary.setSelectedSpellWidgetFieldName(hookInfo.getP());
-                    ReflectionLibrary.setSelectedSpellWidgetMultiplier(hookInfo.getM());
+                    ReflectionLibrary.setSelectedSpellWidgetMultiplier(getObfuscatedSetter(hookInfo.getM()));
                     break;
                 case "setSelectedSpellChildIndex":
                     ReflectionLibrary.setSelectedSpellChildIndexClassName(hookInfo.getC());
                     ReflectionLibrary.setSelectedSpellChildIndexFieldName(hookInfo.getP());
-                    ReflectionLibrary.setSelectedSpellChildIndexMultiplier(hookInfo.getM());
+                    ReflectionLibrary.setSelectedSpellChildIndexMultiplier(getObfuscatedSetter(hookInfo.getM()));
                     break;
                 case "setSelectedSpellItemId":
                     ReflectionLibrary.setSelectedSpellItemIDClassName(hookInfo.getC());
                     ReflectionLibrary.setSelectedSpellItemIDFieldName(hookInfo.getP());
-                    ReflectionLibrary.setSelectedSpellItemIDMultiplier(hookInfo.getM());
+                    ReflectionLibrary.setSelectedSpellItemIDMultiplier(getObfuscatedSetter(hookInfo.getM()));
                     break;
                 case "getNpcOverheadIcon":
                     ReflectionLibrary.setNpcOverheadIconClassName(hookInfo.getC());
@@ -310,7 +310,51 @@ public class KotoriUtils extends Plugin {
                             "Hooks successfully loaded into the client.", "Kotori Plugin Utils", JOptionPane.INFORMATION_MESSAGE));
         }
     }
-    
+
+    private long[] extendedGCD(long a, long m)
+    {
+        if (m == 0)
+        {
+            return new long[]{a, 1, 0};
+        }
+
+        long[] result = extendedGCD(m, a % m);
+
+        long gcd = result[0];
+        long x1 = result[1];
+        long y1 = result[2];
+
+        long x = y1;
+        long y = x1 - (a / m) * y1;
+
+        return new long[]{gcd, x, y};
+    }
+
+    private long modInverse(long a, long m)
+    {
+        // Normalize a to be within the range [0, m-1] if it's negative
+        a = (a % m + m) % m;
+
+        long[] result = extendedGCD(a, m);
+        long gcd = result[0];
+
+        // If gcd(a, m) != 1, there is no inverse
+        if (gcd != 1)
+        {
+            return -1;
+        }
+        else
+        {
+            // x is the modular multiplicative inverse, ensure it's positive
+            return (result[1] % m + m) % m;
+        }
+    }
+
+    private int getObfuscatedSetter(long a)
+    {
+        return (int) modInverse(a, 4294967296L);
+    }
+
     private void testWalkHooks()
     {
         WorldPoint currentPlayerLocation = WorldPoint.fromLocalInstance(client, client.getLocalPlayer().getLocalLocation());
