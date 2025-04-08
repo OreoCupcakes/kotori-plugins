@@ -35,19 +35,19 @@
       "n": "setSelectedSpellWidget",
       "c": "hq",
       "p": "sy",
-      "m": 1814784787
+      "m": 278861595
     },
     {
       "n": "setSelectedSpellChildIndex",
       "c": "client",
       "p": "sr",
-      "m": -103904781
+      "m": 284243771
     },
     {
       "n": "setSelectedSpellItemId",
       "c": "client",
       "p": "sg",
-      "m": -207591847
+      "m": -588217879
     },
     {
       "n": "getNpcOverheadIcon",
