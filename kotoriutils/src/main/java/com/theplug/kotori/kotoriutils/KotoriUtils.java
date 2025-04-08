@@ -341,6 +341,7 @@ public class KotoriUtils extends Plugin {
         // If gcd(a, m) != 1, there is no inverse
         if (gcd != 1)
         {
+            log.error("Unable to find the modular multiplicative inverse of {}.", a);
             return -1;
         }
         else
