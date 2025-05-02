@@ -70,7 +70,7 @@ open class BootstrapTask : DefaultTask() {
                             "version" to it.project.version,
                             "requires" to ProjectVersions.apiVersion,
                             "date" to formatDate(Date()),
-                            "url" to "https://raw.githubusercontent.com/OreoCupcakes/kotori-plugin-releases/master/release/${it.project.name}-${it.project.version}.jar",
+                            "url" to "https://raw.githubusercontent.com/OreoCupcakes/kotori-plugins-releases/master/release/${it.project.name}-${it.project.version}.jar",
                             "sha512sum" to hash(plugin.readBytes())
                     ))
 
