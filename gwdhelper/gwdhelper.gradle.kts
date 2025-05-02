@@ -23,7 +23,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "2.1.8"
+version = "2.1.9"
 
 project.extra["PluginName"] = "<html><font color=#6b8af6>[K]</font> God Wars Helper</html>" // This is the name that is used in the external plugin manager panel
 project.extra["PluginDescription"] = "Overlay and automatic helper plugin for the GWD bosses." // This is the description that is used in the external plugin manager panel
