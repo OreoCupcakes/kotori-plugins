@@ -172,8 +172,8 @@ public interface KotoriPluginLoaderConfig extends Config
 
     @ConfigItem(
             keyName = "grotesqueGuardiansChoice",
-            name = "Grotesque Guardians",
-            description = "Load the Grotesque Guardians plugin.",
+            name = "Grotesque Helper",
+            description = "Load the Grotesque Guardians Helper plugin.",
             section = pluginsToLoad
     )
     default boolean grotesqueGuardiansChoice() { return false; }

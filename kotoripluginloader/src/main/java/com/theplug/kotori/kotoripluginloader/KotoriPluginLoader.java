@@ -36,9 +36,9 @@ import java.util.List;
 @Slf4j
 public class KotoriPluginLoader extends Plugin
 {
-	final private String pluginsJsonURL = "https://github.com/OreoCupcakes/kotori-plugins-releases/blob/master/plugins.json?raw=true";
-	final private String infoJsonURL = "https://github.com/OreoCupcakes/kotori-plugins-releases/blob/master/info.json?raw=true";
-	final private String currentLoaderVersion = "3.0.0";
+	final private String pluginsJsonURL = "https://raw.githubusercontent.com/OreoCupcakes/kotori-plugins-releases/master/plugins.json";
+	final private String infoJsonURL = "https://raw.githubusercontent.com/OreoCupcakes/kotori-plugins-releases/master/info.json";
+	final private String currentLoaderVersion = "3.0.1";
 	
 	@Inject
 	private Client client;
@@ -436,7 +436,7 @@ public class KotoriPluginLoader extends Plugin
 		//Load Gauntlet Extended
 		addToPluginToLoadList(pluginClassPathsToLoad, config.gauntletHelperChoice(), infoJsonObject.isPreventGauntletHelper(), "Gauntlet Helper", 2);
 		//Load Grotesque Guardians
-		addToPluginToLoadList(pluginClassPathsToLoad, config.grotesqueGuardiansChoice(), infoJsonObject.isPreventGrotesqueGuardians(), "Grotesque Guardian", 1);
+		addToPluginToLoadList(pluginClassPathsToLoad, config.grotesqueGuardiansChoice(), infoJsonObject.isPreventGrotesqueGuardians(), "Grotesque Helper", 2);
 		//Load God Wars Helper
 		addToPluginToLoadList(pluginClassPathsToLoad, config.godWarsHelperChoice(), infoJsonObject.isPreventGwdHelper(), "God Wars Helper", 2);
 		//Load Hallowed Helper
