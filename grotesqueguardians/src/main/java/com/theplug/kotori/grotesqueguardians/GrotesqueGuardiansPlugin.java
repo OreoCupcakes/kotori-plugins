@@ -60,10 +60,10 @@ import java.util.function.Function;
 @Slf4j
 @PluginDependency(KotoriUtils.class)
 @PluginDescriptor(
-	name = "<html><font color=#6b8af6>[P]</font> Grotesque Guardian</html>",
+	name = "<html><font color=#6b8af6>[K]</font> Grotesque Helper</html>",
 	enabledByDefault = false,
 	description = "A plugin for Grotesque Guardians boss.",
-	tags = {"grotesque", "guardians", "gargoyles", "kotori"}
+	tags = {"grotesque", "guardians", "gargoyles", "kotori", "helper"}
 )
 public class GrotesqueGuardiansPlugin extends Plugin
 {
