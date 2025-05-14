@@ -64,19 +64,19 @@
     {
       "n": "isMoving",
       "c": "dy",
-      "p": "cx",
+      "p": "dq",
       "m": 1727033741
     },
     {
       "n": "getActorAnimationId",
       "c": "dy",
-      "p": "cw",
+      "p": "cy",
       "m": -2046318331
     },
     {
       "n": "menuOptionsCount",
       "c": "wm",
-      "p": "fo",
+      "p": "an",
       "m": -676541019
     },
     {
@@ -112,13 +112,13 @@
     {
       "n": "menuOptionsArray",
       "c": "wm",
-      "p": "aa",
+      "p": "ap",
       "m": 1
     },
     {
       "n": "menuTargetsArray",
       "c": "wm",
-      "p": "ap",
+      "p": "aa",
       "m": 1
     }
   ]
