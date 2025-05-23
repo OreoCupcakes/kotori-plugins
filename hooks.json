@@ -10,7 +10,7 @@
     {
       "n": "setCheckClick",
       "c": "ho",
-      "p": "cn",
+      "p": "bq",
       "m": 1
     },
     {
@@ -28,7 +28,7 @@
     {
       "n": "setViewportWalking",
       "c": "ho",
-      "p": "bq",
+      "p": "cn",
       "m": 1
     },
     {
@@ -52,7 +52,7 @@
     {
       "n": "getNpcOverheadIcon",
       "c": "jn",
-      "p": "by",
+      "p": "bp",
       "m": 1
     },
     {
@@ -64,61 +64,61 @@
     {
       "n": "isMoving",
       "c": "dy",
-      "p": "dq",
+      "p": "cz",
       "m": 1727033741
     },
     {
       "n": "getActorAnimationId",
       "c": "dy",
-      "p": "cy",
+      "p": "dr",
       "m": -2046318331
     },
     {
       "n": "menuOptionsCount",
       "c": "wm",
-      "p": "an",
+      "p": "dr",
       "m": -676541019
     },
     {
       "n": "menuParam0Array",
       "c": "wm",
-      "p": "ae",
+      "p": "av",
       "m": 1
     },
     {
       "n": "menuParam1Array",
       "c": "wm",
-      "p": "af",
+      "p": "as",
       "m": 1
     },
     {
       "n": "menuTypesArray",
       "c": "wm",
-      "p": "as",
+      "p": "am",
       "m": 1
     },
     {
       "n": "menuIdentifiersArray",
       "c": "wm",
-      "p": "aq",
+      "p": "af",
       "m": 1
     },
     {
       "n": "menuItemIdsArray",
       "c": "wm",
-      "p": "av",
+      "p": "aq",
       "m": 1
     },
     {
       "n": "menuOptionsArray",
       "c": "wm",
-      "p": "ap",
+      "p": "aa",
       "m": 1
     },
     {
       "n": "menuTargetsArray",
       "c": "wm",
-      "p": "aa",
+      "p": "ap",
       "m": 1
     }
   ]
