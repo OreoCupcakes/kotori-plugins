@@ -503,7 +503,22 @@ public class ReflectionLibrary
 	
 	public static HeadIcon getNpcOverheadIcon(NPC npc)
 	{
-		HeadIcon icon = getNpcOverheadIconOldMethod(npc);
+		HeadIcon icon = null;
+
+		try
+		{
+			short[] headIconArray = npc.getOverheadSpriteIds();
+			if (headIconArray != null)
+			{
+				return HeadIcon.values()[headIconArray[0]];
+			}
+		}
+		catch (Exception e)
+		{
+			log.error("Unable to use RL method npc.getOverheadSpriteIds.", e);
+		}
+
+		icon = getNpcOverheadIconOldMethod(npc);
 		if (icon != null)
 		{
 			return icon;
