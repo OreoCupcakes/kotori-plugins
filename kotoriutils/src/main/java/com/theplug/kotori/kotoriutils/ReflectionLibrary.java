@@ -293,6 +293,7 @@ public class ReflectionLibrary
 		Class<?> clazz = getClass(invokeMenuActionClassName);
 		Method method;
 		boolean isJunkValueAByte = invokeMenuActionJunkValue < 128 && invokeMenuActionJunkValue >= -128;
+		boolean isJunkValueShort = invokeMenuActionJunkValue < 32767 && invokeMenuActionJunkValue >= -32767;
 		
 		if (clazz == null)
 		{
@@ -305,6 +306,11 @@ public class ReflectionLibrary
 			{
 				method = clazz.getDeclaredMethod(invokeMenuActionMethodName, int.class, int.class, int.class, int.class, int.class, int.class, String.class, String.class,
 						int.class, int.class, byte.class);
+			}
+			else if (isJunkValueShort)
+			{
+				method = clazz.getDeclaredMethod(invokeMenuActionMethodName, int.class, int.class, int.class, int.class, int.class, int.class, String.class, String.class,
+						int.class, int.class, short.class);
 			}
 			else
 			{
@@ -327,6 +333,11 @@ public class ReflectionLibrary
 				{
 					//-1 is the id for the WorldView.
 					method.invoke(null, param0, param1, opcode, identifier, itemId, worldViewId, option, target, x, y, (byte) invokeMenuActionJunkValue);
+				}
+				else if (isJunkValueShort)
+				{
+					//-1 is the id for the WorldView.
+					method.invoke(null, param0, param1, opcode, identifier, itemId, worldViewId, option, target, x, y, (short) invokeMenuActionJunkValue);
 				}
 				else
 				{
@@ -585,7 +596,6 @@ public class ReflectionLibrary
 			method.setAccessible(false);
 			if (headIconShortArray == null)
 			{
-				System.out.println("Head Icon Short Array was null.");
 				return null;
 			}
 			short overheadIconShortValue = Array.getShort(headIconShortArray, 0);
