@@ -41,8 +41,7 @@ import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
 import net.runelite.api.NPC;
-import net.runelite.api.NpcID;
-import net.runelite.api.coords.WorldPoint;
+import net.runelite.api.gameval.NpcID;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;
@@ -211,14 +210,14 @@ public class FightCavePlugin extends Plugin
 
 		switch (npc.getId())
 		{
-			case NpcID.TOKXIL_3121:
-			case NpcID.TOKXIL_3122:
-			case NpcID.YTMEJKOT:
-			case NpcID.YTMEJKOT_3124:
-			case NpcID.KETZEK:
-			case NpcID.KETZEK_3126:
-			case NpcID.TZTOKJAD:
-			case NpcID.TZTOKJAD_6506:
+			case NpcID.TZHAAR_FIGHTCAVE_SWARM_3A:
+			case NpcID.TZHAAR_FIGHTCAVE_SWARM_3B:
+			case NpcID.TZHAAR_FIGHTCAVE_SWARM_4A:
+			case NpcID.TZHAAR_FIGHTCAVE_SWARM_4B:
+			case NpcID.TZHAAR_FIGHTCAVE_SWARM_5A:
+			case NpcID.TZHAAR_FIGHTCAVE_SWARM_5B:
+			case NpcID.TZHAAR_FIGHTCAVE_SWARM_BOSS:
+			case NpcID.CLANCUP_TZHAAR_FIGHTCAVE_SWARM_BOSS:
 				fightCaveContainer.add(new FightCaveContainer(npc));
 				break;
 		}
@@ -236,14 +235,14 @@ public class FightCavePlugin extends Plugin
 
 		switch (npc.getId())
 		{
-			case NpcID.TOKXIL_3121:
-			case NpcID.TOKXIL_3122:
-			case NpcID.YTMEJKOT:
-			case NpcID.YTMEJKOT_3124:
-			case NpcID.KETZEK:
-			case NpcID.KETZEK_3126:
-			case NpcID.TZTOKJAD:
-			case NpcID.TZTOKJAD_6506:
+			case NpcID.TZHAAR_FIGHTCAVE_SWARM_3A:
+			case NpcID.TZHAAR_FIGHTCAVE_SWARM_3B:
+			case NpcID.TZHAAR_FIGHTCAVE_SWARM_4A:
+			case NpcID.TZHAAR_FIGHTCAVE_SWARM_4B:
+			case NpcID.TZHAAR_FIGHTCAVE_SWARM_5A:
+			case NpcID.TZHAAR_FIGHTCAVE_SWARM_5B:
+			case NpcID.TZHAAR_FIGHTCAVE_SWARM_BOSS:
+			case NpcID.CLANCUP_TZHAAR_FIGHTCAVE_SWARM_BOSS:
 				fightCaveContainer.removeIf(c -> c.getNpc() == npc);
 				break;
 		}

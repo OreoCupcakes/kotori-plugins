@@ -33,7 +33,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.runelite.api.Client;
 import net.runelite.api.NPC;
-import net.runelite.api.NpcID;
+import net.runelite.api.gameval.NpcID;
 import net.runelite.api.Prayer;
 import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
@@ -382,16 +382,16 @@ class InfernoNPC
 	@Getter(AccessLevel.PACKAGE)
 	enum Type
 	{
-		NIBBLER(new int[]{NpcID.JALNIB}, Attack.MELEE, 4, 99, 100),
-		BAT(new int[]{NpcID.JALMEJRAH}, Attack.RANGED, 3, 4, 7),
-		BLOB(new int[]{NpcID.JALAK}, Attack.UNKNOWN, 6, 15, 4),
-		MELEE(new int[]{NpcID.JALIMKOT}, Attack.MELEE, 4, 1, 3),
-		RANGER(new int[]{NpcID.JALXIL, NpcID.JALXIL_7702}, Attack.RANGED, 4, 98, 2),
-		MAGE(new int[]{NpcID.JALZEK, NpcID.JALZEK_7703}, Attack.MAGIC, 4, 98, 1),
-		JAD(new int[]{NpcID.JALTOKJAD, NpcID.JALTOKJAD_7704, 10623}, Attack.UNKNOWN, 3, 99, 0),
-		HEALER_JAD(new int[]{NpcID.YTHURKOT, NpcID.YTHURKOT_7701, NpcID.YTHURKOT_7705}, Attack.MELEE, 4, 1, 6),
-		ZUK(new int[]{NpcID.TZKALZUK}, Attack.UNKNOWN, 10, 99, 99),
-		HEALER_ZUK(new int[]{NpcID.JALMEJJAK, 10624}, Attack.UNKNOWN, -1, 99, 100);
+		NIBBLER(new int[]{NpcID.INFERNO_NIBBLER}, Attack.MELEE, 4, 99, 100),
+		BAT(new int[]{NpcID.INFERNO_CREATURE_HARPIE}, Attack.RANGED, 3, 4, 7),
+		BLOB(new int[]{NpcID.INFERNO_CREATURE_SPLITTER}, Attack.UNKNOWN, 6, 15, 4),
+		MELEE(new int[]{NpcID.INFERNO_CREATURE_MELEE}, Attack.MELEE, 4, 1, 3),
+		RANGER(new int[]{NpcID.INFERNO_CREATURE_RANGER, NpcID.INFERNO_RANGER_FINALWAVE}, Attack.RANGED, 4, 98, 2),
+		MAGE(new int[]{NpcID.INFERNO_CREATURE_MAGER, NpcID.INFERNO_MAGER_FINALWAVE}, Attack.MAGIC, 4, 98, 1),
+		JAD(new int[]{NpcID.INFERNO_JAD, NpcID.INFERNO_JAD_FINALWAVE, NpcID.JAD_CHALLENGE_JAD}, Attack.UNKNOWN, 3, 99, 0),
+		HEALER_JAD(new int[]{NpcID.TZHAAR_FIGHTCAVE_SWARM_BOSS_CLERIC, NpcID.INFERNO_JAD_HEALER, NpcID.INFERNO_JAD_HEALER_FINALWAVE}, Attack.MELEE, 4, 1, 6),
+		ZUK(new int[]{NpcID.INFERNO_TZKALZUK_PLACEHOLDER}, Attack.UNKNOWN, 10, 99, 99),
+		HEALER_ZUK(new int[]{NpcID.INFERNO_ZUK_HEALER, NpcID.JAD_CHALLENGE_HEALER}, Attack.UNKNOWN, -1, 99, 100);
 
 		private final int[] npcIds;
 		private final Attack defaultAttack;

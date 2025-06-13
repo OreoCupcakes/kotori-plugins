@@ -31,7 +31,7 @@ import javax.inject.Inject;
 import lombok.Getter;
 import net.runelite.api.Client;
 import net.runelite.api.GroundObject;
-import net.runelite.api.ObjectID;
+import net.runelite.api.gameval.ObjectID;
 import net.runelite.api.events.GroundObjectSpawned;
 import net.runelite.api.events.VarbitChanged;
 import net.runelite.client.config.ConfigManager;
@@ -102,7 +102,7 @@ public class TempleTrekkingPlugin extends Plugin
 		}
 		
 		GroundObject obj = event.getGroundObject();
-		if (obj.getId() == ObjectID.BOG)
+		if (obj.getId() == ObjectID.TEMPLETREK_ROUTE_DIRECTION)
 		{
 			bogList.add(obj);
 		}

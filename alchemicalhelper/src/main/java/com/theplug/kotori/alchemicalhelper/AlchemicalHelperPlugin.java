@@ -39,6 +39,8 @@ import com.theplug.kotori.kotoriutils.ReflectionLibrary;
 import com.theplug.kotori.kotoriutils.methods.*;
 import lombok.Getter;
 import net.runelite.api.*;
+import net.runelite.api.gameval.NpcID;
+import net.runelite.api.gameval.ObjectID;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
@@ -273,7 +275,7 @@ public class AlchemicalHelperPlugin extends Plugin
 		}
 		GameObject gameobject = event.getGameObject();
 		int id = gameobject.getId();
-		if (id == ObjectID.CHEMICAL_VENT_RED || id == ObjectID.CHEMICAL_VENT_GREEN || id == ObjectID.CHEMICAL_VENT_BLUE)
+		if (id == ObjectID.KARUULM_HYDRA_ROOM_FLOOR_VENT_GEYSER_RED || id == ObjectID.KARUULM_HYDRA_ROOM_FLOOR_VENT_GEYSER_GREEN || id == ObjectID.KARUULM_HYDRA_ROOM_FLOOR_VENT_GEYSER_BLUE)
 		{
 			vents.add(gameobject);
 		}
@@ -492,7 +494,7 @@ public class AlchemicalHelperPlugin extends Plugin
 		}
 		final NPC npc = event.getNpc();
 
-		if (npc.getId() == NpcID.ALCHEMICAL_HYDRA)
+		if (npc.getId() == NpcID.HYDRABOSS)
 		{
 			hydra = new Hydra(npc);
 			if (client.getTopLevelWorldView().getScene().isInstance() && fountainTicks == -1) //handles the initial hydra spawn when your in the lobby but havent gone through the main doors

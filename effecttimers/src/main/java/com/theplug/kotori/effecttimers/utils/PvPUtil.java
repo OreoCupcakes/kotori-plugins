@@ -6,6 +6,8 @@ import java.util.Objects;
 import java.util.TreeMap;
 
 import net.runelite.api.*;
+import net.runelite.api.gameval.InventoryID;
+import net.runelite.api.gameval.VarbitID;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.util.QuantityFormatter;
@@ -123,7 +125,7 @@ public class PvPUtil
         {
             wildernessLevel += 15;
         }
-        if (client.getVarbitValue(Varbits.IN_WILDERNESS) == 1)
+        if (client.getVarbitValue(VarbitID.INSIDE_WILDERNESS) == 1)
         {
             wildernessLevel += getWildernessLevelFrom(client.getLocalPlayer().getWorldLocation());
         }
@@ -132,8 +134,8 @@ public class PvPUtil
 
     public static int calculateRisk(Client client, ItemManager itemManager)
     {
-        ItemContainer equipment = client.getItemContainer(InventoryID.EQUIPMENT);
-        ItemContainer inventory = client.getItemContainer(InventoryID.INVENTORY);
+        ItemContainer equipment = client.getItemContainer(InventoryID.WORN);
+        ItemContainer inventory = client.getItemContainer(InventoryID.INV);
         if (equipment == null)
         {
             return 0;
@@ -142,8 +144,8 @@ public class PvPUtil
         {
             return 0;
         }
-        Item[] items = ArrayUtils.addAll(Objects.requireNonNull(client.getItemContainer(InventoryID.EQUIPMENT)).getItems(),
-                Objects.requireNonNull(client.getItemContainer(InventoryID.INVENTORY)).getItems());
+        Item[] items = ArrayUtils.addAll(Objects.requireNonNull(client.getItemContainer(InventoryID.WORN)).getItems(),
+                Objects.requireNonNull(client.getItemContainer(InventoryID.INV)).getItems());
         TreeMap<Integer, Item> priceMap = new TreeMap<>(Comparator.comparingInt(Integer::intValue));
         int wealth = 0;
         for (Item i : items)

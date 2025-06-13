@@ -3,10 +3,7 @@ package com.theplug.kotori.nex;
 import java.util.Map;
 import java.util.Optional;
 import net.runelite.api.NPC;
-import static net.runelite.api.NpcID.CRUOR;
-import static net.runelite.api.NpcID.FUMUS;
-import static net.runelite.api.NpcID.GLACIES;
-import static net.runelite.api.NpcID.UMBRA;
+import net.runelite.api.gameval.NpcID;
 import net.runelite.api.Player;
 import net.runelite.api.Prayer;
 
@@ -68,13 +65,13 @@ public enum NexPhase
 		switch (phase)
 		{
 			case ICE:
-				return GLACIES;
+				return NpcID.NEX_ICEMAGE;
 			case BLOOD:
-				return CRUOR;
+				return NpcID.NEX_BLOODMAGE;
 			case SMOKE:
-				return FUMUS;
+				return NpcID.NEX_SMOKEMAGE;
 			case SHADOW:
-				return UMBRA;
+				return NpcID.NEX_SHADOWMAGE;
 			default:
 				return -1;
 		}

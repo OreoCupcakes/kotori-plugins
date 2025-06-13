@@ -34,7 +34,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import net.runelite.api.GameObject;
-import net.runelite.api.ObjectID;
+import net.runelite.api.gameval.ObjectID;
 import net.runelite.api.Point;
 import net.runelite.api.Skill;
 import net.runelite.client.game.SkillIconManager;
@@ -127,24 +127,24 @@ class ResourceGameObject
 	{
 		switch (objectId)
 		{
-			case ObjectID.CRYSTAL_DEPOSIT:
+			case ObjectID.GAUNTLET_ROCK:
 				return Resource.CRYSTAL_ORE;
-			case ObjectID.CORRUPT_DEPOSIT:
+			case ObjectID.GAUNTLET_ROCK_HM:
 				return Resource.CORRUPTED_ORE;
-			case ObjectID.PHREN_ROOTS:
+			case ObjectID.GAUNTLET_TREE:
 				return Resource.PHREN_BARK;
-			case ObjectID.CORRUPT_PHREN_ROOTS:
+			case ObjectID.GAUNTLET_TREE_HM:
 				return Resource.CORRUPTED_PHREN_BARK;
-			case ObjectID.LINUM_TIRINUM:
+			case ObjectID.GAUNTLET_FIBRE:
 				return Resource.LINUM_TIRINUM;
-			case ObjectID.CORRUPT_LINUM_TIRINUM:
+			case ObjectID.GAUNTLET_FIBRE_HM:
 				return Resource.CORRUPTED_LINUM_TIRINUM;
-			case ObjectID.GRYM_ROOT:
+			case ObjectID.GAUNTLET_HERB:
 				return Resource.GRYM_LEAF;
-			case ObjectID.CORRUPT_GRYM_ROOT:
+			case ObjectID.GAUNTLET_HERB_HM:
 				return Resource.CORRUPTED_GRYM_LEAF;
-			case ObjectID.CORRUPT_FISHING_SPOT:
-			case ObjectID.FISHING_SPOT_36068:
+			case ObjectID.GAUNTLET_POND:
+			case ObjectID.GAUNTLET_POND_HM:
 				return Resource.RAW_PADDLEFISH;
 			default:
 				throw new IllegalArgumentException("Unsupported game object id: " + objectId);

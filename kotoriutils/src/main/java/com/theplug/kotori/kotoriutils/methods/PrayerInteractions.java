@@ -2,10 +2,8 @@ package com.theplug.kotori.kotoriutils.methods;
 
 import com.theplug.kotori.kotoriutils.ReflectionLibrary;
 import com.theplug.kotori.kotoriutils.rlapi.PrayerExtended;
-import net.runelite.api.Client;
-import net.runelite.api.MenuAction;
-import net.runelite.api.Prayer;
-import net.runelite.api.Skill;
+import net.runelite.api.*;
+import net.runelite.api.gameval.VarbitID;
 import net.runelite.client.RuneLite;
 
 public class PrayerInteractions
@@ -204,5 +202,22 @@ public class PrayerInteractions
 	public static void oneTickFlickPrayers(Prayer... prayers)
 	{
 		oneTickFlickPrayers(true, prayers);
+	}
+
+	public static boolean isActive(Prayer prayer)
+	{
+		boolean basicPrayerActive = client.isPrayerActive(prayer);
+		boolean inLMS = client.getVarbitValue(VarbitID.BR_INGAME) != 0;
+		switch (prayer)
+		{
+			case DEADEYE:
+				boolean deadeye = client.getVarbitValue(VarbitID.PRAYER_DEADEYE_UNLOCKED) != 0;
+				return basicPrayerActive && (deadeye && !inLMS);
+			case MYSTIC_VIGOUR:
+				boolean mysticvigour = client.getVarbitValue(VarbitID.PRAYER_MYSTIC_VIGOUR_UNLOCKED) != 0;
+				return basicPrayerActive && (mysticvigour && !inLMS);
+			default:
+				return basicPrayerActive;
+		}
 	}
 }

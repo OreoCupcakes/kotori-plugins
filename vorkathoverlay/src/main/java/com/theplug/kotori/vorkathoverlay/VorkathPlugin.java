@@ -43,7 +43,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.GameObject;
 import net.runelite.api.NPC;
-import net.runelite.api.ObjectID;
+import net.runelite.api.gameval.ObjectID;
 import net.runelite.api.Projectile;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
@@ -54,7 +54,7 @@ import net.runelite.api.events.GameTick;
 import net.runelite.api.events.NpcDespawned;
 import net.runelite.api.events.NpcSpawned;
 import net.runelite.api.events.ProjectileMoved;
-import net.runelite.api.widgets.ComponentID;
+import net.runelite.api.gameval.InterfaceID;
 import net.runelite.api.widgets.Widget;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
@@ -271,7 +271,7 @@ public class VorkathPlugin extends Plugin
 
 		final GameObject obj = event.getGameObject();
 
-		if (obj.getId() == ObjectID.ACID_POOL || obj.getId() == ObjectID.ACID_POOL_32000)
+		if (obj.getId() == ObjectID.OLM_ACID_POOL || obj.getId() == ObjectID.VORKATH_ACID)
 		{
 			addAcidSpot(obj.getWorldLocation());
 		}
@@ -287,7 +287,7 @@ public class VorkathPlugin extends Plugin
 
 		final GameObject obj = event.getGameObject();
 
-		if (obj.getId() == ObjectID.ACID_POOL || obj.getId() == ObjectID.ACID_POOL_32000)
+		if (obj.getId() == ObjectID.OLM_ACID_POOL || obj.getId() == ObjectID.VORKATH_ACID)
 		{
 			acidSpots.remove(obj.getWorldLocation());
 		}
@@ -592,7 +592,7 @@ public class VorkathPlugin extends Plugin
 	{
 		// Update the WooxWalk tick indicator's dimensions
 		// based on the canvas dimensions
-		final Widget exp = client.getWidget(ComponentID.EXPERIENCE_TRACKER_WIDGET);
+		final Widget exp = client.getWidget(InterfaceID.XpDrops.CONTAINER);
 
 		if (exp == null)
 		{

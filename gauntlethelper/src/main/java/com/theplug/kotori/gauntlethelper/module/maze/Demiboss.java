@@ -33,7 +33,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import net.runelite.api.NPC;
-import net.runelite.api.NpcID;
+import net.runelite.api.gameval.NpcID;
 import net.runelite.api.Point;
 import net.runelite.api.Skill;
 import net.runelite.client.game.SkillIconManager;
@@ -73,14 +73,14 @@ class Demiboss
 	{
 		switch (npc.getId())
 		{
-			case NpcID.CRYSTALLINE_BEAR:
-			case NpcID.CORRUPTED_BEAR:
+			case NpcID.CRYSTAL_BEAR:
+			case NpcID.CRYSTAL_BEAR_HM:
 				return skillIconManager.getSkillImage(Skill.ATTACK, true);
-			case NpcID.CRYSTALLINE_DARK_BEAST:
-			case NpcID.CORRUPTED_DARK_BEAST:
+			case NpcID.CRYSTAL_DARK_BEAST:
+			case NpcID.CRYSTAL_DARK_BEAST_HM:
 				return skillIconManager.getSkillImage(Skill.RANGED, true);
-			case NpcID.CRYSTALLINE_DRAGON:
-			case NpcID.CORRUPTED_DRAGON:
+			case NpcID.CRYSTAL_DRAGON:
+			case NpcID.CRYSTAL_DRAGON_HM:
 				return skillIconManager.getSkillImage(Skill.MAGIC, true);
 			default:
 				throw new IllegalArgumentException("Unsupported npc id: " + npc.getId());

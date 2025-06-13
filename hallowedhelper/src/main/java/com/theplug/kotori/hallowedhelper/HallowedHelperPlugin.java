@@ -7,6 +7,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
+import net.runelite.api.gameval.ObjectID;
+import net.runelite.api.gameval.NpcID;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.*;
@@ -238,60 +240,64 @@ public class HallowedHelperPlugin extends Plugin {
     private static final int LIGHTNING_ID = 1796;
 
     private static final Set<Integer> SWORD_STATUES = Set.of(
-            38428,//Floor2
-            ObjectID.KNIGHT_STATUE_38429,
-            ObjectID.KNIGHT_STATUE_38430,
-            ObjectID.KNIGHT_STATUE_38431,
-            ObjectID.KNIGHT_STATUE_38432,
-            ObjectID.KNIGHT_STATUE_38435,//RUNE Floor4 maby 5
-            ObjectID.KNIGHT_STATUE_38437,
-            ObjectID.KNIGHT_STATUE_38438,
-            ObjectID.KNIGHT_STATUE_38439,
-            ObjectID.KNIGHT_STATUE_38436,//Floor2?
-            ObjectID.KNIGHT_STATUE_38440,
-            ObjectID.KNIGHT_STATUE_38441,//Floor 4 maby 5 too.
-            ObjectID.KNIGHT_STATUE_38442,//Floor 5 Section 2
-            ObjectID.KNIGHT_STATUE_38443//Floor 4 maby 5 too.
-            // hierboven breekt de sowrd ofzo
+            ObjectID.HALLOWED_SWORD_TRAP,//Floor2
+            ObjectID.HALLOWED_SWORD_TRAP_THROWN,//Floor2?
+            ObjectID.HALLOWED_SWORD_TRAP_OWL,
+            ObjectID.HALLOWED_SWORD_TRAP_OWL_THROWN,
+            ObjectID.HALLOWED_SWORD_TRAP_LION,
+            ObjectID.HALLOWED_SWORD_TRAP_LION_THROWN,
+            ObjectID.HALLOWED_SWORD_TRAP_UNICORN,
+            ObjectID.HALLOWED_SWORD_TRAP_UNICORN_THROWN,
+            ObjectID.HALLOWED_SWORD_TRAP_T2,
+            ObjectID.HALLOWED_SWORD_TRAP_T2_THROWN,
+            ObjectID.HALLOWED_SWORD_TRAP_T2_LION,
+            ObjectID.HALLOWED_SWORD_TRAP_T2_LION_THROWN,//Floor 4 maby 5 too.
+            ObjectID.HALLOWED_SWORD_TRAP_T3,
+            ObjectID.HALLOWED_SWORD_TRAP_T3_THROWN,//Floor 5 Section 2
+            ObjectID.HALLOWED_SWORD_TRAP_T3_LION,//RUNE Floor4 maby 5
+            ObjectID.HALLOWED_SWORD_TRAP_T3_LION_THROWN//Floor 4 maby 5 too.
     );
 
     private static final Set<Integer> CROSSBOWMAN_STATUE_IDS = Set.of(
-            ObjectID.CROSSBOWMAN_STATUE,
-            ObjectID.CROSSBOWMAN_STATUE_38445,
-            ObjectID.CROSSBOWMAN_STATUE_38446
+            ObjectID.HALLOWED_PROJECTILE_TRAP,
+            ObjectID.HALLOWED_PROJECTILE_TRAP_T2,
+            ObjectID.HALLOWED_PROJECTILE_TRAP_T3
     );
 
     private static final Set<Integer> WIZARD_STATUE_2TICK_IDS = Set.of(
-            ObjectID.WIZARD_STATUE_38421,
-            ObjectID.WIZARD_STATUE_38422,
-            ObjectID.WIZARD_STATUE_38423,
-            ObjectID.WIZARD_STATUE_38424,
-            ObjectID.WIZARD_STATUE_38425
+            ObjectID.HALLOWED_FIRE_TRAP_T3,
+            ObjectID.HALLOWED_FIRE_TRAP_T3_V2,
+            ObjectID.HALLOWED_FIRE_TRAP_T3_V3,
+            ObjectID.HALLOWED_FIRE_TRAP_T3_V4,
+            ObjectID.HALLOWED_FIRE_TRAP_T3_V5
     );
 
     private static final Set<Integer> WIZARD_STATUE_3TICK_IDS = Set.of(
-            ObjectID.WIZARD_STATUE,
-            ObjectID.WIZARD_STATUE_38410,
-            ObjectID.WIZARD_STATUE_38411,
-            ObjectID.WIZARD_STATUE_38412,
-            ObjectID.WIZARD_STATUE_38416,
-            ObjectID.WIZARD_STATUE_38417,
-            ObjectID.WIZARD_STATUE_38418,
-            ObjectID.WIZARD_STATUE_38419,
-            ObjectID.WIZARD_STATUE_38420
+            ObjectID.HALLOWED_FIRE_TRAP,
+            ObjectID.HALLOWED_FIRE_TRAP_V2,
+            ObjectID.HALLOWED_FIRE_TRAP_V3,
+            ObjectID.HALLOWED_FIRE_TRAP_V4,
+            ObjectID.HALLOWED_FIRE_TRAP_V5,
+            ObjectID.HALLOWED_FIRE_TRAP_V6,
+            ObjectID.HALLOWED_FIRE_TRAP_V7,
+            ObjectID.HALLOWED_FIRE_TRAP_T2,
+            ObjectID.HALLOWED_FIRE_TRAP_T2_V2,
+            ObjectID.HALLOWED_FIRE_TRAP_T2_V3,
+            ObjectID.HALLOWED_FIRE_TRAP_T2_V4,
+            ObjectID.HALLOWED_FIRE_TRAP_T2_V5
     );
 
     private static final Set<Integer> SWORD_IDS = Set.of(
-            NullNpcID.NULL_9669,
-            NullNpcID.NULL_9670,
-            NullNpcID.NULL_9671
+            NpcID.HALLOWED_SWORD_NPC,
+            NpcID.HALLOWED_SWORD_NPC_T2,
+            NpcID.HALLOWED_SWORD_NPC_T3
     );
 
 
     private static final Set<Integer> ARROW_IDS = Set.of(
-            NullNpcID.NULL_9672,
-            NullNpcID.NULL_9673,
-            NullNpcID.NULL_9674
+            NpcID.HALLOWED_PROJECTILE_NPC,
+            NpcID.HALLOWED_PROJECTILE_NPC_T2,
+            NpcID.HALLOWED_PROJECTILE_NPC_T3
     );
 
     private final int bridge_id = 39527;

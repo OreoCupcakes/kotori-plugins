@@ -12,6 +12,7 @@ import com.theplug.kotori.sirehelper.entity.Spawn;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
+import net.runelite.api.gameval.NpcID;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.*;
@@ -171,13 +172,13 @@ public class SireHelperPlugin extends Plugin
 			{
 				switch (npc.getId())
 				{
-					case NpcID.ABYSSAL_SIRE:
-					case NpcID.ABYSSAL_SIRE_5887:
-					case NpcID.ABYSSAL_SIRE_5888:
-					case NpcID.ABYSSAL_SIRE_5889:
-					case NpcID.ABYSSAL_SIRE_5890:
-					case NpcID.ABYSSAL_SIRE_5891:
-					case NpcID.ABYSSAL_SIRE_5908:
+					case NpcID.ABYSSALSIRE_SIRE_STASIS_SLEEPING:
+					case NpcID.ABYSSALSIRE_SIRE_STASIS_AWAKE:
+					case NpcID.ABYSSALSIRE_SIRE_STASIS_STUNNED:
+					case NpcID.ABYSSALSIRE_SIRE_PUPPET:
+					case NpcID.ABYSSALSIRE_SIRE_WANDERING:
+					case NpcID.ABYSSALSIRE_SIRE_PANICKING:
+					case NpcID.ABYSSALSIRE_SIRE_APOCALYPSE:
 						abyssalSire = new AbyssalSire(npc);
 						break;
 				}
@@ -324,24 +325,24 @@ public class SireHelperPlugin extends Plugin
 		NPC npc = event.getNpc();
 		switch (npc.getId())
 		{
-			case NpcID.SPAWN:
-			case NpcID.SPAWN_5917:
+			case NpcID.ABYSSALSIRE_SPAWN:
+			case NpcID.ABYSSALSIRE_SPAWN_DYING:
 				spawnSet.add(new Spawn(npc));
 				break;
-			case NpcID.RESPIRATORY_SYSTEM:
+			case NpcID.ABYSSALSIRE_LUNG:
 				respiratorsMap.putIfAbsent(npc.getWorldLocation(), new RespiratorySystem(npc));
 				break;
 			/*
 				Sire spawns twice in the fight, once for phase 1 and then for phase 2+.
 				If the Sire goes out of scene and comes back into scene, then the sire NPC will be different from the stored sire NPC
 			 */
-			case NpcID.ABYSSAL_SIRE:
-			case NpcID.ABYSSAL_SIRE_5887:
-			case NpcID.ABYSSAL_SIRE_5888:
-			case NpcID.ABYSSAL_SIRE_5889:
-			case NpcID.ABYSSAL_SIRE_5890:
-			case NpcID.ABYSSAL_SIRE_5891:
-			case NpcID.ABYSSAL_SIRE_5908:
+			case NpcID.ABYSSALSIRE_SIRE_STASIS_SLEEPING:
+			case NpcID.ABYSSALSIRE_SIRE_STASIS_AWAKE:
+			case NpcID.ABYSSALSIRE_SIRE_STASIS_STUNNED:
+			case NpcID.ABYSSALSIRE_SIRE_PUPPET:
+			case NpcID.ABYSSALSIRE_SIRE_WANDERING:
+			case NpcID.ABYSSALSIRE_SIRE_PANICKING:
+			case NpcID.ABYSSALSIRE_SIRE_APOCALYPSE:
 				if (abyssalSire == null)
 				{
 					abyssalSire = new AbyssalSire(npc);
@@ -365,11 +366,12 @@ public class SireHelperPlugin extends Plugin
 		NPC npc = event.getNpc();
 		switch (npc.getId())
 		{
-			case NpcID.SPAWN:
-			case NpcID.SPAWN_5917:
+			//5916 5917 5914
+			case NpcID.ABYSSALSIRE_SPAWN:
+			case NpcID.ABYSSALSIRE_SPAWN_DYING:
 				spawnSet.removeIf(spawn -> spawn.getNpc().equals(npc));
 				break;
-			case NpcID.RESPIRATORY_SYSTEM:
+			case NpcID.ABYSSALSIRE_LUNG:
 				WorldPoint ventPoint = npc.getWorldLocation();
 				RespiratorySystem system = respiratorsMap.get(ventPoint);
 				if (system != null)
@@ -384,14 +386,15 @@ public class SireHelperPlugin extends Plugin
 			/*
 				It despawns twice in a fight, once when it transitions to phase 2 and then when you kill it.
 				Ignore the despawn event for P1 as this event will trigger when the Sire is out of render distance when killing vents
-			case NpcID.ABYSSAL_SIRE:
-			case NpcID.ABYSSAL_SIRE_5887:
-			case NpcID.ABYSSAL_SIRE_5888:
+			case NpcID.ABYSSALSIRE_SIRE_STASIS_SLEEPING:
+			case NpcID.ABYSSALSIRE_SIRE_STASIS_AWAKE:
+			case NpcID.ABYSSALSIRE_SIRE_STASIS_STUNNED:
 			 */
-			case NpcID.ABYSSAL_SIRE_5889:
-			case NpcID.ABYSSAL_SIRE_5890:
-			case NpcID.ABYSSAL_SIRE_5891:
-			case NpcID.ABYSSAL_SIRE_5908:
+			//5889 5890 5891 5908
+			case NpcID.ABYSSALSIRE_SIRE_PUPPET:
+			case NpcID.ABYSSALSIRE_SIRE_WANDERING:
+			case NpcID.ABYSSALSIRE_SIRE_PANICKING:
+			case NpcID.ABYSSALSIRE_SIRE_APOCALYPSE:
 				abyssalSire = null;
 				isYourSireKill = false;
 				dodgedExplosion = false;
@@ -435,14 +438,14 @@ public class SireHelperPlugin extends Plugin
 
 			switch (npc.getId())
 			{
-				case NpcID.RESPIRATORY_SYSTEM:
-				case NpcID.ABYSSAL_SIRE:
-				case NpcID.ABYSSAL_SIRE_5887:
-				case NpcID.ABYSSAL_SIRE_5888:
-				case NpcID.ABYSSAL_SIRE_5889:
-				case NpcID.ABYSSAL_SIRE_5890:
-				case NpcID.ABYSSAL_SIRE_5891:
-				case NpcID.ABYSSAL_SIRE_5908:
+				case NpcID.ABYSSALSIRE_LUNG:
+				case NpcID.ABYSSALSIRE_SIRE_STASIS_SLEEPING:
+				case NpcID.ABYSSALSIRE_SIRE_STASIS_AWAKE:
+				case NpcID.ABYSSALSIRE_SIRE_STASIS_STUNNED:
+				case NpcID.ABYSSALSIRE_SIRE_PUPPET:
+				case NpcID.ABYSSALSIRE_SIRE_WANDERING:
+				case NpcID.ABYSSALSIRE_SIRE_PANICKING:
+				case NpcID.ABYSSALSIRE_SIRE_APOCALYPSE:
 					isYourSireKill = source != null && source.equals(client.getLocalPlayer());
 					break;
 			}
@@ -454,22 +457,22 @@ public class SireHelperPlugin extends Plugin
 
 			switch (npc.getId())
 			{
-				case NpcID.TENTACLE_5909:
-				case NpcID.TENTACLE_5910:
-				case NpcID.TENTACLE_5911:
-				case NpcID.TENTACLE_5912:
-				case NpcID.TENTACLE_5913:
-				case NpcID.SPAWN:
-				case NpcID.SPAWN_5917:
-				case NpcID.SCION:
-				case NpcID.SCION_6177:
-				case NpcID.ABYSSAL_SIRE:
-				case NpcID.ABYSSAL_SIRE_5887:
-				case NpcID.ABYSSAL_SIRE_5888:
-				case NpcID.ABYSSAL_SIRE_5889:
-				case NpcID.ABYSSAL_SIRE_5890:
-				case NpcID.ABYSSAL_SIRE_5891:
-				case NpcID.ABYSSAL_SIRE_5908:
+				case NpcID.ABYSSALSIRE_TENTACLE_SLEEPING_NORTH:
+				case NpcID.ABYSSALSIRE_TENTACLE_SLEEPING_SOUTH:
+				case NpcID.ABYSSALSIRE_TENTACLE_SLEEPING_UPRIGHT:
+				case NpcID.ABYSSALSIRE_TENTACLE_ACTIVE:
+				case NpcID.ABYSSALSIRE_TENTACLE_STUNNED:
+				case NpcID.ABYSSALSIRE_SPAWN:
+				case NpcID.ABYSSALSIRE_SPAWN_DYING:
+				case NpcID.ABYSSALSIRE_SCION:
+				case NpcID.ABYSSALSIRE_SCION_DYING:
+				case NpcID.ABYSSALSIRE_SIRE_STASIS_SLEEPING:
+				case NpcID.ABYSSALSIRE_SIRE_STASIS_AWAKE:
+				case NpcID.ABYSSALSIRE_SIRE_STASIS_STUNNED:
+				case NpcID.ABYSSALSIRE_SIRE_PUPPET:
+				case NpcID.ABYSSALSIRE_SIRE_WANDERING:
+				case NpcID.ABYSSALSIRE_SIRE_PANICKING:
+				case NpcID.ABYSSALSIRE_SIRE_APOCALYPSE:
 					isYourSireKill = target != null && target.equals(client.getLocalPlayer());
 					break;
 			}
@@ -761,15 +764,15 @@ public class SireHelperPlugin extends Plugin
 					}
 					switch (npc.getId())
 					{
-						case NpcID.ABYSSAL_SIRE_5889:
-						case NpcID.ABYSSAL_SIRE_5890:
-						case NpcID.ABYSSAL_SIRE_5891:
-						case NpcID.SCION:
-						case NpcID.SCION_6177:
+						case NpcID.ABYSSALSIRE_SIRE_PUPPET:
+						case NpcID.ABYSSALSIRE_SIRE_WANDERING:
+						case NpcID.ABYSSALSIRE_SIRE_PANICKING:
+						case NpcID.ABYSSALSIRE_SCION:
+						case NpcID.ABYSSALSIRE_SCION_DYING:
 							npcIndices.add(i);
 							break;
-						case NpcID.SPAWN:
-						case NpcID.SPAWN_5917:
+						case NpcID.ABYSSALSIRE_SPAWN:
+						case NpcID.ABYSSALSIRE_SPAWN_DYING:
 							swapMenuEntries = true;
 							break;
 					}
@@ -870,11 +873,11 @@ public class SireHelperPlugin extends Plugin
 
 		switch (id)
 		{
-			case NpcID.TENTACLE_5909:
-			case NpcID.TENTACLE_5910:
-			case NpcID.TENTACLE_5911:
-			case NpcID.TENTACLE_5912:
-			case NpcID.TENTACLE_5913:
+			case NpcID.ABYSSALSIRE_TENTACLE_SLEEPING_NORTH:
+			case NpcID.ABYSSALSIRE_TENTACLE_SLEEPING_SOUTH:
+			case NpcID.ABYSSALSIRE_TENTACLE_SLEEPING_UPRIGHT:
+			case NpcID.ABYSSALSIRE_TENTACLE_ACTIVE:
+			case NpcID.ABYSSALSIRE_TENTACLE_STUNNED:
 				return HighlightedNpc.builder()
 						.npc(npc)
 						.trueTile(true)
@@ -882,8 +885,8 @@ public class SireHelperPlugin extends Plugin
 						.fillColor(config.tentacleFillColor())
 						.render(n -> config.highlightTentacles() && !npc.isDead())
 						.build();
-			case NpcID.SPAWN:
-			case NpcID.SPAWN_5917:
+			case NpcID.ABYSSALSIRE_SPAWN:
+			case NpcID.ABYSSALSIRE_SPAWN_DYING:
 				return HighlightedNpc.builder()
 						.npc(npc)
 						.trueTile(true)
@@ -892,8 +895,8 @@ public class SireHelperPlugin extends Plugin
 						.fillColor(config.spawnFillColor())
 						.render(n -> config.highlightSpawns() && !npc.isDead())
 						.build();
-			case NpcID.SCION:
-			case NpcID.SCION_6177:
+			case NpcID.ABYSSALSIRE_SCION:
+			case NpcID.ABYSSALSIRE_SCION_DYING:
 				return HighlightedNpc.builder()
 						.npc(npc)
 						.trueTile(true)
@@ -902,13 +905,13 @@ public class SireHelperPlugin extends Plugin
 						.fillColor(config.scionFillColor())
 						.render(n -> config.highlightScions() && !npc.isDead())
 						.build();
-			case NpcID.ABYSSAL_SIRE:
-			case NpcID.ABYSSAL_SIRE_5887:
-			case NpcID.ABYSSAL_SIRE_5888:
-			case NpcID.ABYSSAL_SIRE_5889:
-			case NpcID.ABYSSAL_SIRE_5890:
-			case NpcID.ABYSSAL_SIRE_5891:
-			case NpcID.ABYSSAL_SIRE_5908:
+			case NpcID.ABYSSALSIRE_SIRE_STASIS_SLEEPING:
+			case NpcID.ABYSSALSIRE_SIRE_STASIS_AWAKE:
+			case NpcID.ABYSSALSIRE_SIRE_STASIS_STUNNED:
+			case NpcID.ABYSSALSIRE_SIRE_PUPPET:
+			case NpcID.ABYSSALSIRE_SIRE_WANDERING:
+			case NpcID.ABYSSALSIRE_SIRE_PANICKING:
+			case NpcID.ABYSSALSIRE_SIRE_APOCALYPSE:
 				return HighlightedNpc.builder()
 						.npc(npc)
 						.trueTile(true)

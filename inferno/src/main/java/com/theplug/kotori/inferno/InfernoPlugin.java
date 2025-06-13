@@ -41,9 +41,9 @@ import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
-import net.runelite.api.ItemID;
+import net.runelite.api.gameval.ItemID;
 import net.runelite.api.NPC;
-import net.runelite.api.NpcID;
+import net.runelite.api.gameval.NpcID;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.AnimationChanged;
 import net.runelite.api.events.ChatMessage;
@@ -327,7 +327,7 @@ public class InfernoPlugin extends Plugin
 
 		final int npcId = event.getNpc().getId();
 
-		if (npcId == NpcID.ANCESTRAL_GLYPH)
+		if (npcId == NpcID.INFERNO_MOVING_SAFESPOT)
 		{
 			zukShield = event.getNpc();
 			return;
@@ -370,7 +370,7 @@ public class InfernoPlugin extends Plugin
 						infoBoxManager.removeInfoBox(spawnTimerInfoBox);
 					}
 
-					spawnTimerInfoBox = new InfernoSpawnTimerInfobox(itemManager.getImage(ItemID.TZREKZUK), this);
+					spawnTimerInfoBox = new InfernoSpawnTimerInfobox(itemManager.getImage(ItemID.INFERNOPET_ZUK), this);
 					infoBoxManager.addInfoBox(spawnTimerInfoBox);
 				}
 				break;
@@ -404,10 +404,10 @@ public class InfernoPlugin extends Plugin
 
 		switch (npcId)
 		{
-			case NpcID.ANCESTRAL_GLYPH:
+			case NpcID.INFERNO_MOVING_SAFESPOT:
 				zukShield = null;
 				return;
-			case NpcID.TZKALZUK:
+			case NpcID.INFERNO_TZKALZUK_PLACEHOLDER:
 				zuk = null;
 
 				if (spawnTimerInfoBox != null)

@@ -45,14 +45,13 @@ import lombok.Getter;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import net.runelite.api.GameObject;
-import net.runelite.api.InventoryID;
+import net.runelite.api.gameval.InventoryID;
 import net.runelite.api.ItemContainer;
-import static net.runelite.api.ItemID.RAW_PADDLEFISH;
+import static net.runelite.api.gameval.ItemID.GAUNTLET_RAW_FOOD;
 import net.runelite.api.MenuEntry;
 import net.runelite.api.NPC;
-import net.runelite.api.NpcID;
-import net.runelite.api.ObjectID;
-import net.runelite.api.coords.WorldPoint;
+import net.runelite.api.gameval.NpcID;
+import net.runelite.api.gameval.ObjectID;
 import net.runelite.api.events.ActorDeath;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.GameObjectDespawned;
@@ -62,7 +61,7 @@ import net.runelite.api.events.NpcDespawned;
 import net.runelite.api.events.NpcSpawned;
 import net.runelite.api.events.PostMenuSort;
 import net.runelite.api.events.WidgetLoaded;
-import net.runelite.api.widgets.InterfaceID;
+import net.runelite.api.gameval.InterfaceID;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
@@ -76,32 +75,32 @@ import net.runelite.client.ui.overlay.OverlayManager;
 public final class MazeModule implements Module
 {
 	private static final List<Integer> NPC_IDS_DEMIBOSS = List.of(
-		NpcID.CRYSTALLINE_BEAR,
-		NpcID.CRYSTALLINE_DARK_BEAST,
-		NpcID.CRYSTALLINE_DRAGON,
-		NpcID.CORRUPTED_BEAR,
-		NpcID.CORRUPTED_DARK_BEAST,
-		NpcID.CORRUPTED_DRAGON
+		NpcID.CRYSTAL_BEAR,
+		NpcID.CRYSTAL_DARK_BEAST,
+		NpcID.CRYSTAL_DRAGON,
+		NpcID.CRYSTAL_BEAR_HM,
+		NpcID.CRYSTAL_DARK_BEAST_HM,
+		NpcID.CRYSTAL_DRAGON_HM
 	);
 	private static final List<Integer> GAME_OBJECT_IDS_RESOURCE = List.of(
-		ObjectID.CRYSTAL_DEPOSIT,
-		ObjectID.PHREN_ROOTS,
-		ObjectID.FISHING_SPOT_36068,
-		ObjectID.GRYM_ROOT,
-		ObjectID.LINUM_TIRINUM,
-		ObjectID.CORRUPT_DEPOSIT,
-		ObjectID.CORRUPT_PHREN_ROOTS,
-		ObjectID.CORRUPT_FISHING_SPOT,
-		ObjectID.CORRUPT_GRYM_ROOT,
-		ObjectID.CORRUPT_LINUM_TIRINUM
+		ObjectID.GAUNTLET_ROCK,
+		ObjectID.GAUNTLET_TREE,
+		ObjectID.GAUNTLET_POND,
+		ObjectID.GAUNTLET_HERB,
+		ObjectID.GAUNTLET_FIBRE,
+		ObjectID.GAUNTLET_ROCK_HM,
+		ObjectID.GAUNTLET_TREE_HM,
+		ObjectID.GAUNTLET_POND_HM,
+		ObjectID.GAUNTLET_HERB_HM,
+		ObjectID.GAUNTLET_FIBRE_HM
 	);
 	private static final List<Integer> GAME_OBJECT_IDS_UTILITY = List.of(
-		ObjectID.SINGING_BOWL_35966,
-		ObjectID.RANGE_35980,
-		ObjectID.WATER_PUMP_35981,
-		ObjectID.SINGING_BOWL_36063,
-		ObjectID.RANGE_36077,
-		ObjectID.WATER_PUMP_36078
+		ObjectID.GAUNTLET_SINGING_BOWL_HM,
+		ObjectID.GAUNTLET_RANGE_HM,
+		ObjectID.GAUNTLET_SINK_HM,
+		ObjectID.GAUNTLET_SINGING_BOWL,
+		ObjectID.GAUNTLET_RANGE,
+		ObjectID.GAUNTLET_SINK
 	);
 
 	@Getter(AccessLevel.PACKAGE)
@@ -212,13 +211,13 @@ public final class MazeModule implements Module
 		{
 			return;
 		}
-		final ItemContainer container = client.getItemContainer(InventoryID.INVENTORY);
+		final ItemContainer container = client.getItemContainer(InventoryID.INV);
 		if (container == null)
 		{
 			return;
 		}
 
-		final boolean hasRawFish = Arrays.stream(container.getItems()).anyMatch(x -> x.getId() == RAW_PADDLEFISH);
+		final boolean hasRawFish = Arrays.stream(container.getItems()).anyMatch(x -> x.getId() == GAUNTLET_RAW_FOOD);
 		if (!hasRawFish)
 		{
 			return;
@@ -235,7 +234,7 @@ public final class MazeModule implements Module
 	@Subscribe
 	void onWidgetLoaded(final WidgetLoaded event)
 	{
-		if (event.getGroupId() == InterfaceID.GAUNTLET_TIMER)
+		if (event.getGroupId() == InterfaceID.GAUNTLET_OVERLAY)
 		{
 			resourceManager.init(MiscUtilities.getPlayerRegionID());
 			timerOverlay.setGauntletStart();
@@ -328,12 +327,12 @@ public final class MazeModule implements Module
 
 		switch (id)
 		{
-			case NpcID.CRYSTALLINE_BAT:
-			case NpcID.CORRUPTED_BAT:
-			case NpcID.CRYSTALLINE_RAT:
-			case NpcID.CORRUPTED_RAT:
-			case NpcID.CRYSTALLINE_SPIDER:
-			case NpcID.CORRUPTED_SPIDER:
+			case NpcID.CRYSTAL_BAT:
+			case NpcID.CRYSTAL_BAT_HM:
+			case NpcID.CRYSTAL_RAT:
+			case NpcID.CRYSTAL_RAT_HM:
+			case NpcID.CRYSTAL_SPIDER:
+			case NpcID.CRYSTAL_SPIDER_HM:
 				return HighlightedNpc.builder()
 					.npc(npc)
 					.outline(true)
@@ -341,12 +340,12 @@ public final class MazeModule implements Module
 					.highlightColor(config.weakNpcOutlineColor())
 					.render(n -> config.weakNpcOutline() && !npc.isDead())
 					.build();
-			case NpcID.CRYSTALLINE_SCORPION:
-			case NpcID.CORRUPTED_SCORPION:
-			case NpcID.CRYSTALLINE_UNICORN:
-			case NpcID.CORRUPTED_UNICORN:
-			case NpcID.CRYSTALLINE_WOLF:
-			case NpcID.CORRUPTED_WOLF:
+			case NpcID.CRYSTAL_SCORPION:
+			case NpcID.CRYSTAL_SCORPION_HM:
+			case NpcID.CRYSTAL_UNICORN:
+			case NpcID.CRYSTAL_UNICORN_HM:
+			case NpcID.CRYSTAL_WOLF:
+			case NpcID.CRYSTAL_WOLF_HM:
 				return HighlightedNpc.builder()
 					.npc(npc)
 					.outline(true)
@@ -354,18 +353,18 @@ public final class MazeModule implements Module
 					.highlightColor(config.strongNpcOutlineColor())
 					.render(n -> config.strongNpcOutline() && !npc.isDead())
 					.build();
-			case NpcID.CRYSTALLINE_BEAR:
-			case NpcID.CORRUPTED_BEAR:
+			case NpcID.CRYSTAL_BEAR:
+			case NpcID.CRYSTAL_BEAR_HM:
 				borderWidth = config.demibossOutlineWidth();
 				highlightColor = config.bearOutlineColor();
 				break;
-			case NpcID.CRYSTALLINE_DARK_BEAST:
-			case NpcID.CORRUPTED_DARK_BEAST:
+			case NpcID.CRYSTAL_DARK_BEAST:
+			case NpcID.CRYSTAL_DARK_BEAST_HM:
 				borderWidth = config.demibossOutlineWidth();
 				highlightColor = config.darkBeastOutlineColor();
 				break;
-			case NpcID.CRYSTALLINE_DRAGON:
-			case NpcID.CORRUPTED_DRAGON:
+			case NpcID.CRYSTAL_DRAGON:
+			case NpcID.CRYSTAL_DRAGON_HM:
 				borderWidth = config.demibossOutlineWidth();
 				highlightColor = config.dragonOutlineColor();
 				break;

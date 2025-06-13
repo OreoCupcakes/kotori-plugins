@@ -4,7 +4,9 @@ import com.theplug.kotori.kotoriutils.ReflectionLibrary;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.api.kit.KitType;
-import net.runelite.api.widgets.ComponentID;
+import net.runelite.api.gameval.ItemID;
+import net.runelite.api.gameval.InventoryID;
+import net.runelite.api.gameval.InterfaceID;
 import net.runelite.api.widgets.Widget;
 import net.runelite.client.RuneLite;
 
@@ -15,9 +17,12 @@ import java.util.List;
 public class InventoryInteractions
 {
 	static Client client = RuneLite.getInjector().getInstance(Client.class);
-	private static final List<Integer> prayerPotions = List.of(ItemID.PRAYER_POTION1, ItemID.PRAYER_POTION2, ItemID.PRAYER_POTION3, ItemID.PRAYER_POTION4);
-	private static final List<Integer> superRestores = List.of(ItemID.SUPER_RESTORE1, ItemID.SUPER_RESTORE2, ItemID.SUPER_RESTORE3, ItemID.SUPER_RESTORE4);
-	private static final List<Integer> sanfewSerums = List.of(ItemID.SANFEW_SERUM1, ItemID.SANFEW_SERUM2, ItemID.SANFEW_SERUM3, ItemID.SANFEW_SERUM4);
+	//143 141 139 2434
+	//3030 3028 3026 3024
+	//10931 10929 10927 10925
+	private static final List<Integer> prayerPotions = List.of(ItemID._1DOSEPRAYERRESTORE, ItemID._2DOSEPRAYERRESTORE, ItemID._3DOSEPRAYERRESTORE, ItemID._4DOSEPRAYERRESTORE);
+	private static final List<Integer> superRestores = List.of(ItemID._1DOSE2RESTORE, ItemID._2DOSE2RESTORE, ItemID._3DOSE2RESTORE, ItemID._4DOSE2RESTORE);
+	private static final List<Integer> sanfewSerums = List.of(ItemID.SANFEW_SALVE_1_DOSE, ItemID.SANFEW_SALVE_2_DOSE, ItemID.SANFEW_SALVE_3_DOSE, ItemID.SANFEW_SALVE_4_DOSE);
 	private static final List<List<Integer>> allPrayerRestoringPotions = List.of(prayerPotions, superRestores, sanfewSerums);
 
 	public static int[] parseStringToItemIds(String listOfItemIds)
@@ -46,7 +51,7 @@ public class InventoryInteractions
 	
 	public static int getItemSlotNumber(int itemid)
 	{
-		ItemContainer inventory = client.getItemContainer(InventoryID.INVENTORY);
+		ItemContainer inventory = client.getItemContainer(InventoryID.INV);
 		if (inventory == null)
 		{
 			return -1;
@@ -71,7 +76,7 @@ public class InventoryInteractions
 		}
 
 		int numItemEquippedAtOnce = 0;
-		Widget inventoryWidget = client.getWidget(ComponentID.INVENTORY_CONTAINER);
+		Widget inventoryWidget = client.getWidget(InterfaceID.Inventory.ITEMS);
 		if (inventoryWidget == null)
 		{
 			return true;
@@ -122,7 +127,7 @@ public class InventoryInteractions
 			{
 				if (itemWidget.getItemId() == itemId)
 				{
-					ReflectionLibrary.invokeMenuAction(slot, ComponentID.INVENTORY_CONTAINER, MenuAction.CC_OP.getId(), index, itemId);
+					ReflectionLibrary.invokeMenuAction(slot, InterfaceID.Inventory.ITEMS, MenuAction.CC_OP.getId(), index, itemId);
 					numItemEquippedAtOnce++;
 					if (numItemEquippedAtOnce >= numEquips)
 					{
@@ -154,7 +159,7 @@ public class InventoryInteractions
 		{
 			return false;
 		}
-		ReflectionLibrary.invokeMenuAction(slot, ComponentID.INVENTORY_CONTAINER, MenuAction.CC_OP.getId(), 2, itemID);
+		ReflectionLibrary.invokeMenuAction(slot, InterfaceID.Inventory.ITEMS, MenuAction.CC_OP.getId(), 2, itemID);
 		return true;
 	}
 	
@@ -190,7 +195,7 @@ public class InventoryInteractions
 
 	public static boolean inventoryContains(int itemId)
 	{
-		ItemContainer inventory = client.getItemContainer(InventoryID.INVENTORY);
+		ItemContainer inventory = client.getItemContainer(InventoryID.INV);
 		if (inventory == null)
 		{
 			return false;
@@ -208,7 +213,7 @@ public class InventoryInteractions
 	
 	public static boolean yourEquipmentContains(int itemId, EquipmentInventorySlot slot)
 	{
-		ItemContainer equipmentContainer = client.getItemContainer(InventoryID.EQUIPMENT);
+		ItemContainer equipmentContainer = client.getItemContainer(InventoryID.WORN);
 		if (equipmentContainer == null)
 		{
 			return false;
@@ -311,7 +316,7 @@ public class InventoryInteractions
 
 	public static int getEquippedItemId(EquipmentInventorySlot slot)
 	{
-		ItemContainer equipment = client.getItemContainer(InventoryID.EQUIPMENT);
+		ItemContainer equipment = client.getItemContainer(InventoryID.WORN);
 		if (equipment == null)
 		{
 			return -1;

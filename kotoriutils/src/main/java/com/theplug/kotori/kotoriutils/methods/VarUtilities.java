@@ -3,6 +3,8 @@ package com.theplug.kotori.kotoriutils.methods;
 import com.theplug.kotori.kotoriutils.rlapi.WidgetIDPlus;
 import com.theplug.kotori.kotoriutils.rlapi.WidgetInfoPlus;
 import net.runelite.api.*;
+import net.runelite.api.gameval.VarbitID;
+import net.runelite.api.gameval.VarPlayerID;
 import net.runelite.client.RuneLite;
 
 import java.util.HashSet;
@@ -42,19 +44,19 @@ public class VarUtilities
 	}
 	public static boolean isSpellDeathChargeOffCooldown()
 	{
-		return client.getVarbitValue(Varbits.DEATH_CHARGE_COOLDOWN) == 0;
+		return client.getVarbitValue(VarbitID.ARCEUUS_DEATH_CHARGE_COOLDOWN) == 0;
 	}
 	public static boolean isSpellDeathChargeActive()
 	{
-		return client.getVarbitValue(Varbits.DEATH_CHARGE) == 1;
+		return client.getVarbitValue(VarbitID.ARCEUUS_DEATH_CHARGE_ACTIVE) == 1;
 	}
 	public static boolean isSpellResurrectThrallOffCooldown()
 	{
-		return client.getVarbitValue(Varbits.RESURRECT_THRALL_COOLDOWN) == 0;
+		return client.getVarbitValue(VarbitID.ARCEUUS_RESURRECTION_COOLDOWN) == 0;
 	}
 	public static boolean isSpellResurrectThrallActive()
 	{
-		return client.getVarbitValue(Varbits.RESURRECT_THRALL) == 1;
+		return client.getVarbitValue(VarbitID.ARCEUUS_RESURRECTION_ACTIVE) == 1;
 	}
 	public static boolean isSpellInActiveSpellbook(WidgetInfoPlus spell)
 	{
@@ -126,9 +128,9 @@ public class VarUtilities
 			Refer to https://github.com/runelite/runelite/blob/f5c04bf327ea7c72ac155d2e3342884670e23f69/runelite-client/src/main/java/net/runelite/client/plugins/attackstyles/WeaponType.java
 			for the list of weapon types and their respective attack styles
 		 */
-		final int weaponType = client.getVarbitValue(Varbits.EQUIPPED_WEAPON_TYPE);
-		final int attackStyle = client.getVarpValue(VarPlayer.ATTACK_STYLE);
-		final int castingMode = client.getVarbitValue(Varbits.DEFENSIVE_CASTING_MODE);
+		final int weaponType = client.getVarbitValue(VarbitID.COMBAT_WEAPON_CATEGORY);
+		final int attackStyle = client.getVarpValue(VarPlayerID.COM_MODE);
+		final int castingMode = client.getVarbitValue(VarbitID.AUTOCAST_DEFMODE);
 		
 		/*
 			CurrentStyle Legend
@@ -214,9 +216,9 @@ public class VarUtilities
 	// This is the new one used in RL now that weapon style is a global enum
 	public static int getPlayerWeaponType()
 	{
-		final int equippedWeaponType = client.getVarbitValue(Varbits.EQUIPPED_WEAPON_TYPE);
-		final int attackStyle = client.getVarpValue(VarPlayer.ATTACK_STYLE);
-		final int castingMode = client.getVarbitValue(Varbits.DEFENSIVE_CASTING_MODE);
+		final int equippedWeaponType = client.getVarbitValue(VarbitID.COMBAT_WEAPON_CATEGORY);
+		final int attackStyle = client.getVarpValue(VarPlayerID.COM_MODE);
+		final int castingMode = client.getVarbitValue(VarbitID.AUTOCAST_DEFMODE);
 
 		int weaponStyleEnum = client.getEnum(EnumID.WEAPON_STYLES).getIntValue(equippedWeaponType);
 		//	This is to capture if the equipped weapon type isn't in the weapon styles enum.

@@ -36,6 +36,7 @@ import com.theplug.kotori.kotoriutils.methods.*;
 import com.theplug.kotori.kotoriutils.rlapi.Spells;
 import lombok.Getter;
 import net.runelite.api.*;
+import net.runelite.api.gameval.NpcID;
 import net.runelite.api.events.*;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
@@ -340,13 +341,13 @@ public class DagannothHelperPlugin extends Plugin
 		{
 			switch (((NPC) actor).getId())
 			{
-				case NpcID.DAGANNOTH_REX:
+				case NpcID.DAGCAVE_MELEE_BOSS:
 					rexDeath = true;
 					break;
-				case NpcID.DAGANNOTH_SUPREME:
+				case NpcID.DAGCAVE_RANGED_BOSS:
 					supremeDeath = true;
 					break;
-				case NpcID.DAGANNOTH_PRIME:
+				case NpcID.DAGCAVE_MAGIC_BOSS:
 					primeDeath = true;
 					break;
 				default:
@@ -398,9 +399,9 @@ public class DagannothHelperPlugin extends Plugin
 
 		switch (npc.getId())
 		{
-			case NpcID.DAGANNOTH_REX:
-			case NpcID.DAGANNOTH_SUPREME:
-			case NpcID.DAGANNOTH_PRIME:
+			case NpcID.DAGCAVE_MELEE_BOSS:
+			case NpcID.DAGCAVE_RANGED_BOSS:
+			case NpcID.DAGCAVE_MAGIC_BOSS:
 				dagannothKings.removeIf(dk -> dk.getNpc() == npc);
 				break;
 			default:
@@ -414,15 +415,15 @@ public class DagannothHelperPlugin extends Plugin
 
 		switch (npc.getId())
 		{
-			case NpcID.DAGANNOTH_REX:
+			case NpcID.DAGCAVE_MELEE_BOSS:
 				kingSpawned = true;
 				rexDeath = false;
 				break;
-			case NpcID.DAGANNOTH_SUPREME:
+			case NpcID.DAGCAVE_RANGED_BOSS:
 				kingSpawned = true;
 				supremeDeath = false;
 				break;
-			case NpcID.DAGANNOTH_PRIME:
+			case NpcID.DAGCAVE_MAGIC_BOSS:
 				kingSpawned = true;
 				primeDeath = false;
 				break;

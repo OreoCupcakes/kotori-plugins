@@ -3,7 +3,7 @@ package com.theplug.kotori.sirehelper.entity;
 import com.theplug.kotori.kotoriutils.methods.NPCInteractions;
 import lombok.*;
 import net.runelite.api.NPC;
-import net.runelite.api.NpcID;
+import net.runelite.api.gameval.NpcID;
 
 @Getter
 public class AbyssalSire
@@ -60,13 +60,13 @@ public class AbyssalSire
 
         switch (npcId)
         {
-            case NpcID.ABYSSAL_SIRE:
-            case NpcID.ABYSSAL_SIRE_5887:
-            case NpcID.ABYSSAL_SIRE_5888:
+            case NpcID.ABYSSALSIRE_SIRE_STASIS_SLEEPING:
+            case NpcID.ABYSSALSIRE_SIRE_STASIS_AWAKE:
+            case NpcID.ABYSSALSIRE_SIRE_STASIS_STUNNED:
                 phase = 1;
                 break;
-            case NpcID.ABYSSAL_SIRE_5889:
-            case NpcID.ABYSSAL_SIRE_5890:
+            case NpcID.ABYSSALSIRE_SIRE_PUPPET:
+            case NpcID.ABYSSALSIRE_SIRE_WANDERING:
                 if (hp < PHASE_3_HP)
                 {
                     phase = 3;
@@ -76,7 +76,7 @@ public class AbyssalSire
                     phase = 2;
                 }
                 break;
-            case NpcID.ABYSSAL_SIRE_5891:
+            case NpcID.ABYSSALSIRE_SIRE_PANICKING:
                 if (npc.getAnimation() == EXPLOSION_ANIMATION_ID)
                 {
                     phase = 4;
@@ -90,7 +90,7 @@ public class AbyssalSire
                     phase = 3;
                 }
                 break;
-            case NpcID.ABYSSAL_SIRE_5908:
+            case NpcID.ABYSSALSIRE_SIRE_APOCALYPSE:
                 phase = 4;
                 break;
         }

@@ -39,6 +39,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
+import net.runelite.api.gameval.NpcID;
 import net.runelite.api.events.*;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
@@ -700,21 +701,21 @@ public class GrotesqueGuardiansPlugin extends Plugin
 
 		switch (id)
 		{
-			case NpcID.DUSK:
-			case NpcID.DUSK_7851:
-			case NpcID.DUSK_7854:
-			case NpcID.DUSK_7882:
-			case NpcID.DUSK_7883:
-			case NpcID.DUSK_7888:
-			case NpcID.DUSK_7855:
-			case NpcID.DUSK_7886:
-			case NpcID.DUSK_7889:
-			case NpcID.DUSK_7887:
-			case NpcID.DAWN:
-			case NpcID.DAWN_7852:
-			case NpcID.DAWN_7884:
-			case NpcID.DAWN_7853:
-			case NpcID.DAWN_7885:
+			case NpcID.GARGBOSS_DUSK_SPAWN:
+			case NpcID.GARGBOSS_DUSK_PHASE1_DEFENSIVE:
+			case NpcID.GARGBOSS_DUSK_PHASE1_TRANSITION:
+			case NpcID.GARGBOSS_DUSK_PHASE1_FLYTRANSITION:
+			case NpcID.GARGBOSS_DUSK_PHASE2_ATTACKING:
+			case NpcID.GARGBOSS_DUSK_PHASE3_DEFENSIVE:
+			case NpcID.GARGBOSS_DUSK_PHASE3_TRANSITION:
+			case NpcID.GARGBOSS_DUSK_PHASE4_SPAWN:
+			case NpcID.GARGBOSS_DUSK_PHASE4:
+			case NpcID.GARGBOSS_DUSK_DEATH:
+			case NpcID.GARGBOSS_DAWN_SPAWN:
+			case NpcID.GARGBOSS_DAWN_PHASE1:
+			case NpcID.GARGBOSS_DAWN_PHASE1_TRANSITION:
+			case NpcID.GARGBOSS_DAWN_PHASE3:
+			case NpcID.GARGBOSS_DAWN_DEATH:
 				return HighlightedNpc.builder()
 						.npc(npc)
 						.trueTile(true)

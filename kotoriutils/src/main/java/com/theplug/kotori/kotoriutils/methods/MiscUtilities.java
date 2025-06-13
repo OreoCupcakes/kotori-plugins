@@ -1,6 +1,7 @@
 package com.theplug.kotori.kotoriutils.methods;
 
 import net.runelite.api.*;
+import net.runelite.api.gameval.InventoryID;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.RuneLite;
 import net.runelite.client.chat.ChatMessageBuilder;
@@ -38,7 +39,7 @@ public class MiscUtilities
 	{
 		StringBuilder gearIds = new StringBuilder();
 		
-		ItemContainer equipment = client.getItemContainer(InventoryID.EQUIPMENT);
+		ItemContainer equipment = client.getItemContainer(InventoryID.WORN);
 		if (equipment == null)
 		{
 			return;

@@ -33,7 +33,6 @@ import com.theplug.kotori.gauntlethelper.module.overlay.TimerOverlay;
 
 import java.util.*;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -45,6 +44,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
+import net.runelite.api.gameval.NpcID;
 import net.runelite.api.events.*;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
@@ -112,16 +112,16 @@ public final class BossModule implements Module
 		PROJECTILE_IDS.add(GraphicIDPlus.HUNLLEF_ECHO_INVERSION_ATTACK);
 	}
 
-	private static final List<Integer> TORNADO_IDS = List.of(NullNpcID.NULL_9025, NullNpcID.NULL_9039, NullNpcID.NULL_14142);
+	private static final List<Integer> TORNADO_IDS = List.of(NpcID.CRYSTAL_HUNLLEF_CRYSTALS, NpcID.CRYSTAL_HUNLLEF_CRYSTALS_HM, NpcID.CRYSTAL_HUNLLEF_CRYSTALS_ECHO_CRYSTALS);
 	private static final List<Integer> HUNLLEF_IDS = List.of(
-		NpcID.CRYSTALLINE_HUNLLEF,
-		NpcID.CRYSTALLINE_HUNLLEF_9022,
-		NpcID.CRYSTALLINE_HUNLLEF_9023,
-		NpcID.CRYSTALLINE_HUNLLEF_9024,
-		NpcID.CORRUPTED_HUNLLEF,
-		NpcID.CORRUPTED_HUNLLEF_9036,
-		NpcID.CORRUPTED_HUNLLEF_9037,
-		NpcID.CORRUPTED_HUNLLEF_9038
+		NpcID.CRYSTAL_HUNLLEF_MELEE,
+		NpcID.CRYSTAL_HUNLLEF_RANGED,
+		NpcID.CRYSTAL_HUNLLEF_MAGIC,
+		NpcID.CRYSTAL_HUNLLEF_DEATH,
+		NpcID.CRYSTAL_HUNLLEF_MELEE_HM,
+		NpcID.CRYSTAL_HUNLLEF_RANGED_HM,
+		NpcID.CRYSTAL_HUNLLEF_MAGIC_HM,
+		NpcID.CRYSTAL_HUNLLEF_DEATH_HM
 	);
 
 	private final Function<NPC, HighlightedNpc> npcHighlighter = this::highlightNpc;
@@ -407,14 +407,14 @@ public final class BossModule implements Module
 
 		switch (id)
 		{
-			case NpcID.CRYSTALLINE_HUNLLEF:
-			case NpcID.CRYSTALLINE_HUNLLEF_9022:
-			case NpcID.CRYSTALLINE_HUNLLEF_9023:
-			case NpcID.CRYSTALLINE_HUNLLEF_9024:
-			case NpcID.CORRUPTED_HUNLLEF:
-			case NpcID.CORRUPTED_HUNLLEF_9036:
-			case NpcID.CORRUPTED_HUNLLEF_9037:
-			case NpcID.CORRUPTED_HUNLLEF_9038:
+			case NpcID.CRYSTAL_HUNLLEF_MELEE:
+			case NpcID.CRYSTAL_HUNLLEF_RANGED:
+			case NpcID.CRYSTAL_HUNLLEF_MAGIC:
+			case NpcID.CRYSTAL_HUNLLEF_DEATH:
+			case NpcID.CRYSTAL_HUNLLEF_MELEE_HM:
+			case NpcID.CRYSTAL_HUNLLEF_RANGED_HM:
+			case NpcID.CRYSTAL_HUNLLEF_MAGIC_HM:
+			case NpcID.CRYSTAL_HUNLLEF_DEATH_HM:
 				return HighlightedNpc.builder()
 					.npc(npc)
 					.tile(true)

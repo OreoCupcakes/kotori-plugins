@@ -36,7 +36,7 @@ import lombok.Setter;
 import net.runelite.api.Actor;
 import net.runelite.api.NPC;
 import net.runelite.api.NPCComposition;
-import net.runelite.api.NpcID;
+import net.runelite.api.gameval.NpcID;
 import net.runelite.api.Prayer;
 
 import static com.theplug.kotori.fightcaves.FightCavePlugin.*;
@@ -89,14 +89,14 @@ class FightCaveContainer
 	@RequiredArgsConstructor
 	enum BossMonsters
 	{
-		TOK_XIL1(NpcID.TOKXIL_3121, AttackStyle.RANGE, ImmutableSet.of(TOK_XIL_RANGE_ATTACK, TOK_XIL_MELEE_ATTACK), 1, 4),
-		TOK_XIL2(NpcID.TOKXIL_3122, AttackStyle.RANGE, ImmutableSet.of(TOK_XIL_RANGE_ATTACK, TOK_XIL_MELEE_ATTACK), 1, 4),
-		KETZEK1(NpcID.KETZEK, AttackStyle.MAGE, ImmutableSet.of(KET_ZEK_MAGE_ATTACK, KET_ZEK_MELEE_ATTACK), 0, 4),
-		KETZEK2(NpcID.KETZEK_3126, AttackStyle.MAGE, ImmutableSet.of(KET_ZEK_MAGE_ATTACK, KET_ZEK_MELEE_ATTACK), 0, 4),
-		YTMEJKOT1(NpcID.YTMEJKOT, AttackStyle.MELEE, ImmutableSet.of(MEJ_KOT_HEAL_ATTACK, MEJ_KOT_MELEE_ATTACK), 2, 4),
-		YTMEJKOT2(NpcID.YTMEJKOT_3124, AttackStyle.MELEE, ImmutableSet.of(MEJ_KOT_HEAL_ATTACK, MEJ_KOT_MELEE_ATTACK), 2, 4),
-		TZTOKJAD1(NpcID.TZTOKJAD, AttackStyle.UNKNOWN, ImmutableSet.of(TZTOK_JAD_MAGIC_ATTACK, TZTOK_JAD_RANGE_ATTACK, TZTOK_JAD_MELEE_ATTACK, IDLE), 0, 3),
-		TZTOKJAD2(NpcID.TZTOKJAD_6506, AttackStyle.UNKNOWN, ImmutableSet.of(TZTOK_JAD_MAGIC_ATTACK, TZTOK_JAD_RANGE_ATTACK, TZTOK_JAD_MELEE_ATTACK, IDLE), 0, 3);
+		TOK_XIL1(NpcID.TZHAAR_FIGHTCAVE_SWARM_3A, AttackStyle.RANGE, ImmutableSet.of(TOK_XIL_RANGE_ATTACK, TOK_XIL_MELEE_ATTACK), 1, 4),
+		TOK_XIL2(NpcID.TZHAAR_FIGHTCAVE_SWARM_3B, AttackStyle.RANGE, ImmutableSet.of(TOK_XIL_RANGE_ATTACK, TOK_XIL_MELEE_ATTACK), 1, 4),
+		KETZEK1(NpcID.TZHAAR_FIGHTCAVE_SWARM_5A, AttackStyle.MAGE, ImmutableSet.of(KET_ZEK_MAGE_ATTACK, KET_ZEK_MELEE_ATTACK), 0, 4),
+		KETZEK2(NpcID.TZHAAR_FIGHTCAVE_SWARM_5B, AttackStyle.MAGE, ImmutableSet.of(KET_ZEK_MAGE_ATTACK, KET_ZEK_MELEE_ATTACK), 0, 4),
+		YTMEJKOT1(NpcID.TZHAAR_FIGHTCAVE_SWARM_4A, AttackStyle.MELEE, ImmutableSet.of(MEJ_KOT_HEAL_ATTACK, MEJ_KOT_MELEE_ATTACK), 2, 4),
+		YTMEJKOT2(NpcID.TZHAAR_FIGHTCAVE_SWARM_4B, AttackStyle.MELEE, ImmutableSet.of(MEJ_KOT_HEAL_ATTACK, MEJ_KOT_MELEE_ATTACK), 2, 4),
+		TZTOKJAD1(NpcID.TZHAAR_FIGHTCAVE_SWARM_BOSS, AttackStyle.UNKNOWN, ImmutableSet.of(TZTOK_JAD_MAGIC_ATTACK, TZTOK_JAD_RANGE_ATTACK, TZTOK_JAD_MELEE_ATTACK, IDLE), 0, 3),
+		TZTOKJAD2(NpcID.CLANCUP_TZHAAR_FIGHTCAVE_SWARM_BOSS, AttackStyle.UNKNOWN, ImmutableSet.of(TZTOK_JAD_MAGIC_ATTACK, TZTOK_JAD_RANGE_ATTACK, TZTOK_JAD_MELEE_ATTACK, IDLE), 0, 3);
 
 		private static final ImmutableMap<Integer, BossMonsters> idMap;
 

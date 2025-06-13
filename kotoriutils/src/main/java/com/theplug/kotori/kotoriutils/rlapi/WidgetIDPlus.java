@@ -243,9 +243,9 @@ public final class WidgetIDPlus
 		static final int DECIMATE = 13;
 		static final int ANNIHILATE = 14;
 		static final int VAPORISE = 15;
-		static final int DEFLECT_MELEE = 16;
-		static final int DEFLECT_RANGED = 17;
-		static final int DEFLECT_MAGIC = 18;
+		static final int DAMPEN_MELEE = 16;
+		static final int DAMPEN_RANGED = 17;
+		static final int DAMPEN_MAGIC = 18;
 		static final int PURGE = 19;
 		static final int REJUVENATION = 20;
 		static final int RUINOUS_GRACE = 21;
@@ -256,7 +256,7 @@ public final class WidgetIDPlus
 		static final int CRUORS_VOW = 26;
 		static final int UMBRAS_VOW = 27;
 		static final int GLACIES_VOW = 28;
-		static final int GAMBIT = 29;
+		static final int INTENSIFY = 29;
 		static final int REBUKE = 30;
 		static final int VINDICATION = 31;
 	}
@@ -272,9 +272,9 @@ public final class WidgetIDPlus
 		public static final int DECIMATE_CHILD_ID = 4;
 		public static final int ANNIHILATE_CHILD_ID = 5;
 		public static final int VAPORISE_CHILD_ID = 6;
-		public static final int DEFLECT_MELEE_CHILD_ID = 7;
-		public static final int DEFLECT_RANGED_CHILD_ID = 8;
-		public static final int DEFLECT_MAGIC_CHILD_ID = 9;
+		public static final int DAMPEN_MELEE_CHILD_ID = 7;
+		public static final int DAMPEN_RANGED_CHILD_ID = 8;
+		public static final int DAMPEN_MAGIC_CHILD_ID = 9;
 		public static final int PURGE_CHILD_ID = 10;
 		public static final int REJUVENATION_CHILD_ID = 11;
 		public static final int RUINOUS_GRACE_CHILD_ID = 12;
@@ -285,7 +285,7 @@ public final class WidgetIDPlus
 		public static final int CRUORS_VOW_CHILD_ID = 17;
 		public static final int UMBRAS_CHILD_ID = 18;
 		public static final int GLACIES_VOW_CHILD_ID = 19;
-		public static final int GAMBIT_CHILD_ID = 20;
+		public static final int INTENSIFY_CHILD_ID = 20;
 		public static final int REBUKE_CHILD_ID = 21;
 		public static final int VINDICATION_CHILD_ID = 22;
 	}

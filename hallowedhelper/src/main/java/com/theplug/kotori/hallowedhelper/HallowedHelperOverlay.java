@@ -28,6 +28,7 @@ package com.theplug.kotori.hallowedhelper;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Point;
 import net.runelite.api.*;
+import net.runelite.api.gameval.ItemID;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.game.ItemManager;
@@ -44,7 +45,6 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.StreamSupport;
 
 @Slf4j
 @Singleton
@@ -528,7 +528,7 @@ class HallowedHelperOverlay extends Overlay
 
     public BufferedImage getRedCog()
     {
-        return itemManager.getImage(ItemID.RED_COG);
+        return itemManager.getImage(ItemID.REDCOG);
     }
 
     public final int bolt1 = 9671;

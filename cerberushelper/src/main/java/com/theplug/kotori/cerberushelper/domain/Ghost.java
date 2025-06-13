@@ -33,16 +33,16 @@ import javax.annotation.Nullable;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.runelite.api.NPC;
-import net.runelite.api.NpcID;
+import net.runelite.api.gameval.NpcID;
 import net.runelite.api.Skill;
 
 @Getter
 @RequiredArgsConstructor
 public enum Ghost
 {
-	RANGE(NpcID.SUMMONED_SOUL, Skill.RANGED, Color.GREEN),
-	MAGE(NpcID.SUMMONED_SOUL_5868, Skill.MAGIC, Color.BLUE),
-	MELEE(NpcID.SUMMONED_SOUL_5869, Skill.ATTACK, Color.RED);
+	RANGE(NpcID.CERBERUS_SPECTRE_RANGED, Skill.RANGED, Color.GREEN),
+	MAGE(NpcID.CERBERUS_SPECTRE_MAGIC, Skill.MAGIC, Color.BLUE),
+	MELEE(NpcID.CERBERUS_SPECTRE_MELEE, Skill.ATTACK, Color.RED);
 
 	private static final Map<Integer, Ghost> MAP;
 

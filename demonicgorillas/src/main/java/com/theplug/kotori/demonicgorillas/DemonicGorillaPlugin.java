@@ -39,6 +39,8 @@ import com.theplug.kotori.kotoriutils.KotoriUtils;
 import lombok.AccessLevel;
 import lombok.Getter;
 import net.runelite.api.*;
+import net.runelite.api.gameval.NpcID;
+import net.runelite.api.gameval.AnimationID;
 import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.GameStateChanged;
@@ -169,12 +171,12 @@ public class DemonicGorillaPlugin extends Plugin
 
 	private static boolean isNpcGorilla(int npcId)
 	{
-		return npcId == NpcID.DEMONIC_GORILLA ||
-			npcId == NpcID.DEMONIC_GORILLA_7145 ||
-			npcId == NpcID.DEMONIC_GORILLA_7146 ||
-			npcId == NpcID.DEMONIC_GORILLA_7147 ||
-			npcId == NpcID.DEMONIC_GORILLA_7148 ||
-			npcId == NpcID.DEMONIC_GORILLA_7149;
+		return npcId == NpcID.MM2_DEMON_GORILLA_1_MELEE ||
+			npcId == NpcID.MM2_DEMON_GORILLA_1_RANGED ||
+			npcId == NpcID.MM2_DEMON_GORILLA_1_MAGIC ||
+			npcId == NpcID.MM2_DEMON_GORILLA_2_MELEE ||
+			npcId == NpcID.MM2_DEMON_GORILLA_2_RANGED ||
+			npcId == NpcID.MM2_DEMON_GORILLA_2_MAGIC;
 	}
 
 	private void checkGorillaAttackStyleSwitch(DemonicGorilla gorilla, final DemonicGorilla.AttackStyle... protectedStyles)
@@ -352,15 +354,15 @@ public class DemonicGorillaPlugin extends Plugin
 			}
 			else if (animationId != gorilla.getLastTickAnimation())
 			{
-				if (animationId == AnimationID.DEMONIC_GORILLA_MELEE_ATTACK)
+				if (animationId == AnimationID.DEMONIC_GORILLA_PUNCH)
 				{
 					onGorillaAttack(gorilla, DemonicGorilla.AttackStyle.MELEE);
 				}
-				else if (animationId == AnimationID.DEMONIC_GORILLA_MAGIC_ATTACK)
+				else if (animationId == AnimationID.DEMONIC_GORILLA_MAGIC)
 				{
 					onGorillaAttack(gorilla, DemonicGorilla.AttackStyle.MAGIC);
 				}
-				else if (animationId == AnimationID.DEMONIC_GORILLA_RANGED_ATTACK)
+				else if (animationId == AnimationID.DEMONIC_GORILLA_RANGE)
 				{
 					onGorillaAttack(gorilla, DemonicGorilla.AttackStyle.RANGED);
 				}

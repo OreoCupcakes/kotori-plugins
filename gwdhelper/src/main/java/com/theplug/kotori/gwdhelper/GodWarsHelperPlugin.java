@@ -25,13 +25,12 @@ package com.theplug.kotori.gwdhelper;
 
 import com.google.inject.Provides;
 import com.theplug.kotori.kotoriutils.KotoriUtils;
-import com.theplug.kotori.kotoriutils.ReflectionLibrary;
 import com.theplug.kotori.kotoriutils.methods.*;
-import com.theplug.kotori.kotoriutils.rlapi.Spells;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
+import net.runelite.api.gameval.NpcID;
 import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.*;
@@ -127,7 +126,7 @@ public class GodWarsHelperPlugin extends Plugin
 	private GodWarsHelperConfig config;
 
 	@Getter(AccessLevel.PACKAGE)
-	private Set<NPCContainer> npcContainers = new HashSet<>();
+	private final Set<NPCContainer> npcContainers = new HashSet<>();
 	private boolean validRegion;
 	private int currentRegion;
 	private int lastRegion;
@@ -291,7 +290,7 @@ public class GodWarsHelperPlugin extends Plugin
 	@Subscribe
 	private void onAnimationChanged(AnimationChanged event)
 	{
-		//Used to check for NPC death animations because its faster than waiting for the NPC to despawn.
+		//Used to check for NPC death animations because it's faster than waiting for the NPC to despawn.
 		if (!validRegion)
 		{
 			return;
@@ -311,10 +310,10 @@ public class GodWarsHelperPlugin extends Plugin
 			
 			switch(npc.getId())
 			{
-				case NpcID.GENERAL_GRAARDOR:
-				case NpcID.KRIL_TSUTSAROTH:
-				case NpcID.COMMANDER_ZILYANA:
-				case NpcID.KREEARRA:
+				case NpcID.GODWARS_BANDOS_AVATAR:
+				case NpcID.GODWARS_ZAMORAK_AVATAR:
+				case NpcID.GODWARS_SARADOMIN_AVATAR:
+				case NpcID.GODWARS_ARMADYL_AVATAR:
 					if (npcAnimation == GENERAL_GRAARDOR_DEATH_ID || npcAnimation == KRIL_TSUTSAROTH_DEATH_ID || npcAnimation == COMMANDER_ZILYANA_DEATH_ID ||
 							npcAnimation == KREE_ARRA_DEATH_ID)
 					{
@@ -322,30 +321,30 @@ public class GodWarsHelperPlugin extends Plugin
 						set5EquippedOnce = false;
 					}
 					break;
-				case NpcID.SERGEANT_STRONGSTACK:
-				case NpcID.TSTANON_KARLAK:
-				case NpcID.STARLIGHT:
-				case NpcID.FLIGHT_KILISA:
+				case NpcID.GODWARS_SERGEANT_GOBLIN1:
+				case NpcID.GODWARS_ANCIENT_GREATER_DEMON:
+				case NpcID.GODWARS_SARADOMIN_UNICORN:
+				case NpcID.GODWARS_ARMADYL_BODYGUARD_KILISA:
 					if (npcAnimation == BANDOS_BODYGUARDS_DEATH_ID || npcAnimation == TSTANON_KARLAK_DEATH_ID || npcAnimation == STARLIGHT_DEATH_ID ||
 							npcAnimation == ARMADYL_BODYGUARDS_DEATH_ID)
 					{
 						meleeMinionAlive = false;
 					}
 					break;
-				case NpcID.SERGEANT_STEELWILL:
-				case NpcID.BALFRUG_KREEYATH:
-				case NpcID.GROWLER:
-				case NpcID.WINGMAN_SKREE:
+				case NpcID.GODWARS_SERGEANT_GOBLIN2:
+				case NpcID.GODWARS_ANCIENT_BLACK_DEMON:
+				case NpcID.GODWARS_SARADOMIN_LION:
+				case NpcID.GODWARS_ARMADYL_BODYGUARD_SKREE:
 					if (npcAnimation == BANDOS_BODYGUARDS_DEATH_ID || npcAnimation == ZAMORAK_BODYGUARDS_DEATH_ID || npcAnimation == GROWLER_DEATH_ID ||
 							npcAnimation == ARMADYL_BODYGUARDS_DEATH_ID)
 					{
 						magicMinionAlive = false;
 					}
 					break;
-				case NpcID.SERGEANT_GRIMSPIKE:
-				case NpcID.ZAKLN_GRITCH:
-				case NpcID.BREE:
-				case NpcID.FLOCKLEADER_GEERIN:
+				case NpcID.GODWARS_SERGEANT_GOBLIN3:
+				case NpcID.GODWARS_ANCIENT_LESSER_DEMON:
+				case NpcID.GODWARS_SARADOMIN_CENTAUR:
+				case NpcID.GODWARS_ARMADYL_BODYGUARD_GEERIN:
 					if (npcAnimation == BANDOS_BODYGUARDS_DEATH_ID || npcAnimation == ZAMORAK_BODYGUARDS_DEATH_ID || npcAnimation == BREE_DEATH_ID ||
 							npcAnimation == ARMADYL_BODYGUARDS_DEATH_ID)
 					{
@@ -613,10 +612,10 @@ public class GodWarsHelperPlugin extends Plugin
 
 		switch (npc.getId())
 		{
-			case NpcID.GENERAL_GRAARDOR:
-			case NpcID.KRIL_TSUTSAROTH:
-			case NpcID.COMMANDER_ZILYANA:
-			case NpcID.KREEARRA:
+			case NpcID.GODWARS_BANDOS_AVATAR:
+			case NpcID.GODWARS_ZAMORAK_AVATAR:
+			case NpcID.GODWARS_SARADOMIN_AVATAR:
+			case NpcID.GODWARS_ARMADYL_AVATAR:
 				bossAlive = true;
 				set1EquippedOnce = false;
 				set2EquippedOnce = false;
@@ -626,24 +625,24 @@ public class GodWarsHelperPlugin extends Plugin
 				allPrayersDeactivated = false;
 				npcContainers.add(new NPCContainer(npc));
 				break;
-			case NpcID.SERGEANT_STEELWILL:
-			case NpcID.BALFRUG_KREEYATH:
-			case NpcID.GROWLER:
-			case NpcID.WINGMAN_SKREE:
+			case NpcID.GODWARS_SERGEANT_GOBLIN2:
+			case NpcID.GODWARS_ANCIENT_BLACK_DEMON:
+			case NpcID.GODWARS_SARADOMIN_LION:
+			case NpcID.GODWARS_ARMADYL_BODYGUARD_SKREE:
 				magicMinionAlive = true;
 				npcContainers.add(new NPCContainer(npc));
 				break;
-			case NpcID.SERGEANT_STRONGSTACK:
-			case NpcID.TSTANON_KARLAK:
-			case NpcID.STARLIGHT:
-			case NpcID.FLIGHT_KILISA:
+			case NpcID.GODWARS_SERGEANT_GOBLIN1:
+			case NpcID.GODWARS_ANCIENT_GREATER_DEMON:
+			case NpcID.GODWARS_SARADOMIN_UNICORN:
+			case NpcID.GODWARS_ARMADYL_BODYGUARD_KILISA:
 				meleeMinionAlive = true;
 				npcContainers.add(new NPCContainer(npc));
 				break;
-			case NpcID.SERGEANT_GRIMSPIKE:
-			case NpcID.ZAKLN_GRITCH:
-			case NpcID.BREE:
-			case NpcID.FLOCKLEADER_GEERIN:
+			case NpcID.GODWARS_SERGEANT_GOBLIN3:
+			case NpcID.GODWARS_ANCIENT_LESSER_DEMON:
+			case NpcID.GODWARS_SARADOMIN_CENTAUR:
+			case NpcID.GODWARS_ARMADYL_BODYGUARD_GEERIN:
 				rangedMinionAlive = true;
 				npcContainers.add(new NPCContainer(npc));
 				break;
@@ -661,22 +660,22 @@ public class GodWarsHelperPlugin extends Plugin
 
 		switch (npc.getId())
 		{
-			case NpcID.GENERAL_GRAARDOR:
-			case NpcID.KRIL_TSUTSAROTH:
-			case NpcID.COMMANDER_ZILYANA:
-			case NpcID.KREEARRA:
-			case NpcID.SERGEANT_STRONGSTACK:
-			case NpcID.SERGEANT_STEELWILL:
-			case NpcID.SERGEANT_GRIMSPIKE:
-			case NpcID.TSTANON_KARLAK:
-			case NpcID.BALFRUG_KREEYATH:
-			case NpcID.ZAKLN_GRITCH:
-			case NpcID.STARLIGHT:
-			case NpcID.BREE:
-			case NpcID.GROWLER:
-			case NpcID.FLIGHT_KILISA:
-			case NpcID.FLOCKLEADER_GEERIN:
-			case NpcID.WINGMAN_SKREE:
+			case NpcID.GODWARS_BANDOS_AVATAR:
+			case NpcID.GODWARS_ZAMORAK_AVATAR:
+			case NpcID.GODWARS_SARADOMIN_AVATAR:
+			case NpcID.GODWARS_ARMADYL_AVATAR:
+			case NpcID.GODWARS_SERGEANT_GOBLIN1:
+			case NpcID.GODWARS_SERGEANT_GOBLIN2:
+			case NpcID.GODWARS_SERGEANT_GOBLIN3:
+			case NpcID.GODWARS_ANCIENT_GREATER_DEMON:
+			case NpcID.GODWARS_ANCIENT_BLACK_DEMON:
+			case NpcID.GODWARS_ANCIENT_LESSER_DEMON:
+			case NpcID.GODWARS_SARADOMIN_UNICORN:
+			case NpcID.GODWARS_SARADOMIN_CENTAUR:
+			case NpcID.GODWARS_SARADOMIN_LION:
+			case NpcID.GODWARS_ARMADYL_BODYGUARD_KILISA:
+			case NpcID.GODWARS_ARMADYL_BODYGUARD_GEERIN:
+			case NpcID.GODWARS_ARMADYL_BODYGUARD_SKREE:
 				npcContainers.removeIf(c -> c.getNpc() == npc);
 				break;
 			default:
@@ -821,7 +820,7 @@ public class GodWarsHelperPlugin extends Plugin
 	private void chooseDefensiveConfigStyle(GodWarsHelperConfig.PrayerSwitchChoice style, int bossPriority, int magePriority, int rangedPriority,
 											int meleePriority, boolean hotkey)
 	{
-		NPCContainer npcToPrayAgainst = null;
+		NPCContainer npcToPrayAgainst;
 		switch (style)
 		{
 			case ONLY_MINIONS:
@@ -958,28 +957,28 @@ public class GodWarsHelperPlugin extends Plugin
 			
 			switch (npcId)
 			{
-				case NpcID.SERGEANT_STEELWILL:
-				case NpcID.BALFRUG_KREEYATH:
-				case NpcID.GROWLER:
-				case NpcID.WINGMAN_SKREE:
+				case NpcID.GODWARS_SERGEANT_GOBLIN2:
+				case NpcID.GODWARS_ANCIENT_BLACK_DEMON:
+				case NpcID.GODWARS_SARADOMIN_LION:
+				case NpcID.GODWARS_ARMADYL_BODYGUARD_SKREE:
 					if (magicConfig != null && magicMinionAlive)
 					{
 						PrayerInteractions.activatePrayer(magicConfig);
 					}
 					break;
-				case NpcID.SERGEANT_GRIMSPIKE:
-				case NpcID.ZAKLN_GRITCH:
-				case NpcID.BREE:
-				case NpcID.FLOCKLEADER_GEERIN:
+				case NpcID.GODWARS_SERGEANT_GOBLIN3:
+				case NpcID.GODWARS_ANCIENT_LESSER_DEMON:
+				case NpcID.GODWARS_SARADOMIN_CENTAUR:
+				case NpcID.GODWARS_ARMADYL_BODYGUARD_GEERIN:
 					if (rangedConfig != null && rangedMinionAlive)
 					{
 						PrayerInteractions.activatePrayer(rangedConfig);
 					}
 					break;
-				case NpcID.SERGEANT_STRONGSTACK:
-				case NpcID.TSTANON_KARLAK:
-				case NpcID.STARLIGHT:
-				case NpcID.FLIGHT_KILISA:
+				case NpcID.GODWARS_SERGEANT_GOBLIN1:
+				case NpcID.GODWARS_ANCIENT_GREATER_DEMON:
+				case NpcID.GODWARS_SARADOMIN_UNICORN:
+				case NpcID.GODWARS_ARMADYL_BODYGUARD_KILISA:
 					if (meleeConfig != null && meleeMinionAlive)
 					{
 						PrayerInteractions.activatePrayer(meleeConfig);
@@ -998,7 +997,7 @@ public class GodWarsHelperPlugin extends Plugin
 			return;
 		}
 		
-		Prayer prayerToUse = null;
+		Prayer prayerToUse;
 		
 		switch (npc.getMonsterType())
 		{

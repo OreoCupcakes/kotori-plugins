@@ -30,7 +30,7 @@ import net.runelite.api.Perspective;
 import net.runelite.api.Point;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.geometry.Geometry;
-import net.runelite.api.widgets.ComponentID;
+import net.runelite.api.gameval.InterfaceID;
 import net.runelite.api.widgets.Widget;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
@@ -111,13 +111,13 @@ public class MultiIndicatorsMinimapOverlay extends Overlay
 		}
 
 		final Widget widget;
-		if (client.getWidget(ComponentID.FIXED_VIEWPORT_MINIMAP_DRAW_AREA) != null)
+		if (client.getWidget(InterfaceID.Toplevel.MINIMAP) != null)
 		{
-			widget = client.getWidget(ComponentID.FIXED_VIEWPORT_MINIMAP_DRAW_AREA);
+			widget = client.getWidget(InterfaceID.Toplevel.MINIMAP);
 		}
 		else
 		{
-			widget = client.getWidget(ComponentID.RESIZABLE_VIEWPORT_MINIMAP_DRAW_AREA);
+			widget = client.getWidget(InterfaceID.ToplevelOsrsStretch.MINIMAP);
 		}
 
 		if (widget == null)

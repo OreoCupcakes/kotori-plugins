@@ -35,7 +35,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.runelite.api.Actor;
 import net.runelite.api.NPC;
-import net.runelite.api.NpcID;
+import net.runelite.api.gameval.NpcID;
 import net.runelite.api.Prayer;
 import org.jetbrains.annotations.NotNull;
 
@@ -108,12 +108,12 @@ public class DagannothKing implements Comparable<DagannothKing>
 	@RequiredArgsConstructor
 	public enum Boss
 	{
-		DAGANNOTH_PRIME(NpcID.DAGANNOTH_PRIME, DagannothHelperPlugin.DAG_PRIME_ATTACK, 4, AttackStyle.MAGE),
-		DAGANNOTH_REX(NpcID.DAGANNOTH_REX, DagannothHelperPlugin.DAG_REX_ATTACK, 4, AttackStyle.MELEE),
-		DAGANNOTH_SUPREME(NpcID.DAGANNOTH_SUPREME, DagannothHelperPlugin.DAG_SUPREME_ATTACK, 4, AttackStyle.RANGE),
-		ECHO_PRIME(NpcID.DAGANNOTH_PRIME, DagannothHelperPlugin.DAG_PRIME_ATTACK, 5, AttackStyle.MAGE),
-		ECHO_REX(NpcID.DAGANNOTH_REX, DagannothHelperPlugin.DAG_REX_ATTACK, 5, AttackStyle.MELEE),
-		ECHO_SUPREME(NpcID.DAGANNOTH_SUPREME, DagannothHelperPlugin.DAG_SUPREME_ATTACK, 5, AttackStyle.RANGE);
+		DAGANNOTH_PRIME(NpcID.DAGCAVE_MAGIC_BOSS, DagannothHelperPlugin.DAG_PRIME_ATTACK, 4, AttackStyle.MAGE),
+		DAGANNOTH_REX(NpcID.DAGCAVE_MELEE_BOSS, DagannothHelperPlugin.DAG_REX_ATTACK, 4, AttackStyle.MELEE),
+		DAGANNOTH_SUPREME(NpcID.DAGCAVE_RANGED_BOSS, DagannothHelperPlugin.DAG_SUPREME_ATTACK, 4, AttackStyle.RANGE),
+		ECHO_PRIME(NpcID.DAGCAVE_MAGIC_BOSS, DagannothHelperPlugin.DAG_PRIME_ATTACK, 5, AttackStyle.MAGE),
+		ECHO_REX(NpcID.DAGCAVE_MELEE_BOSS, DagannothHelperPlugin.DAG_REX_ATTACK, 5, AttackStyle.MELEE),
+		ECHO_SUPREME(NpcID.DAGCAVE_RANGED_BOSS, DagannothHelperPlugin.DAG_SUPREME_ATTACK, 5, AttackStyle.RANGE);
 
 		private final int npcId;
 		private final int animationId;

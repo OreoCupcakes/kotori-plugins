@@ -33,6 +33,7 @@ import com.theplug.kotori.kotoriutils.methods.NPCInteractions;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
+import net.runelite.api.gameval.ItemID;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.*;
 import net.runelite.client.config.ConfigManager;
@@ -43,7 +44,6 @@ import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.util.HotkeyListener;
-import org.apache.commons.lang3.ArrayUtils;
 
 import javax.inject.Inject;
 import java.util.*;

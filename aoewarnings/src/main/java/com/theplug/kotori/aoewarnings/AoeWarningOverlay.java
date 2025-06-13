@@ -42,6 +42,7 @@ import net.runelite.api.Perspective;
 import net.runelite.api.Point;
 import com.theplug.kotori.kotoriutils.rlapi.GraphicIDPlus;
 import net.runelite.api.Varbits;
+import net.runelite.api.gameval.VarbitID;
 import net.runelite.api.coords.WorldPoint;
 import static com.theplug.kotori.aoewarnings.ColorUtil.setAlphaComponent;
 import net.runelite.client.ui.overlay.Overlay;
@@ -104,7 +105,7 @@ public class AoeWarningOverlay extends Overlay
 
 			if (proj.getProjectile().getId() == GraphicIDPlus.ICE_DEMON_ICE_BARRAGE_AOE || proj.getProjectile().getId() == GraphicIDPlus.TEKTON_METEOR_AOE)
 			{
-				if (client.getVarbitValue(Varbits.IN_RAID) == 0)
+				if (client.getVarbitValue(VarbitID.RAIDS_CLIENT_INDUNGEON) == 0)
 				{
 					return;
 				}

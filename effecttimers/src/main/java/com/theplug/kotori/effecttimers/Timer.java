@@ -32,6 +32,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Setter;
 import lombok.ToString;
 import net.runelite.api.*;
+import net.runelite.api.gameval.NpcID;
+import net.runelite.api.gameval.ItemID;
 
 @ToString
 @EqualsAndHashCode
@@ -191,8 +193,10 @@ public class Timer
 			case BURST:
 			case BLITZ:
 			case BARRAGE:
-				if (InventoryInteractions.yourEquipmentContains(ItemID.ANCIENT_SCEPTRE, ItemID.ICE_ANCIENT_SCEPTRE,
-						ItemID.ICE_ANCIENT_SCEPTRE_28262, ItemID.ICE_ANCIENT_SCEPTRE_L))
+				//27624, 25490, 28262, 28474
+				if (InventoryInteractions.yourEquipmentContains(ItemID.ANCIENT_SCEPTRE, ItemID.ANCIENT_SCEPTRE_ICE, ItemID.ANCIENT_SCEPTRE_ICE_TROUVER,
+						ItemID.ANCIENT_SCEPTRE_BLOOD, ItemID.ANCIENT_SCEPTRE_BLOOD_TROUVER, ItemID.ANCIENT_SCEPTRE_SMOKE, ItemID.ANCIENT_SCEPTRE_SMOKE_TROUVER,
+						ItemID.ANCIENT_SCEPTRE_SHADOW, ItemID.ANCIENT_SCEPTRE_SHADOW_TROUVER))
 				{
 					length += length * 10 / 100;
 				}
@@ -211,17 +215,18 @@ public class Timer
 			NPC npc = (NPC) actor;
 			switch (npc.getId())
 			{
-				case NpcID.PHANTOM_MUSPAH:
-				case NpcID.PHANTOM_MUSPAH_12078:
-				case NpcID.PHANTOM_MUSPAH_12079:
-				case NpcID.PHANTOM_MUSPAH_12080:
-				case NpcID.PHANTOM_MUSPAH_12082:
-				case NpcID.STRANGE_CREATURE:
-				case NpcID.STRANGE_CREATURE_12073:
-				case NpcID.STRANGE_CREATURE_12074:
-				case NpcID.STRANGE_CREATURE_12075:
-				case NpcID.STRANGE_CREATURE_12076:
-				case NpcID.STRANGE_CREATURE_12081:
+				//12077, 12078, 12079, 12080, 12082, 12063, 12073, 12074, 12075, 12076, 12081
+				case NpcID.MUSPAH:
+				case NpcID.MUSPAH_MELEE:
+				case NpcID.MUSPAH_SOULSPLIT:
+				case NpcID.MUSPAH_FINAL:
+				case NpcID.MUSPAH_TELEPORT:
+				case NpcID.SOTN_MUSPAH_CUTSCENE:
+				case NpcID.MUSPAH_QUEST:
+				case NpcID.MUSPAH_MELEE_QUEST:
+				case NpcID.MUSPAH_SOULSPLIT_QUEST:
+				case NpcID.MUSPAH_FINAL_QUEST:
+				case NpcID.MUSPAH_TELEPORT_QUEST:
 					length = length * 2 / 3;
 					break;
 			}
@@ -253,20 +258,20 @@ public class Timer
 					NPC npc = (NPC) actorWithGraphic;
 					switch (npc.getId())
 					{
-						case NpcID.PHANTOM_MUSPAH:
-						case NpcID.PHANTOM_MUSPAH_12078:
-						case NpcID.PHANTOM_MUSPAH_12079:
-						case NpcID.PHANTOM_MUSPAH_12080:
-						case NpcID.PHANTOM_MUSPAH_12082:
-						case NpcID.STRANGE_CREATURE:
-						case NpcID.STRANGE_CREATURE_12073:
-						case NpcID.STRANGE_CREATURE_12074:
-						case NpcID.STRANGE_CREATURE_12075:
-						case NpcID.STRANGE_CREATURE_12076:
-						case NpcID.STRANGE_CREATURE_12081:
-						case NpcID.ARTIO:
+						case NpcID.MUSPAH:
+						case NpcID.MUSPAH_MELEE:
+						case NpcID.MUSPAH_SOULSPLIT:
+						case NpcID.MUSPAH_FINAL:
+						case NpcID.MUSPAH_TELEPORT:
+						case NpcID.SOTN_MUSPAH_CUTSCENE:
+						case NpcID.MUSPAH_QUEST:
+						case NpcID.MUSPAH_MELEE_QUEST:
+						case NpcID.MUSPAH_SOULSPLIT_QUEST:
+						case NpcID.MUSPAH_FINAL_QUEST:
+						case NpcID.MUSPAH_TELEPORT_QUEST:
+						case NpcID.CALLISTO_SINGLES:
+						case NpcID.CLANCUP_CALLISTO:
 						case NpcID.CALLISTO:
-						case NpcID.CALLISTO_6609:
 							length = 0;
 							break;
 					}

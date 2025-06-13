@@ -5,6 +5,7 @@ package com.theplug.kotori.houseoverlay;
 import com.google.inject.Provides;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
+import net.runelite.api.gameval.InventoryID;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.*;
 import net.runelite.client.callback.ClientThread;
@@ -183,7 +184,7 @@ public class HouseOverlayPlugin extends Plugin
     @Subscribe
     private void onItemContainerChanged(ItemContainerChanged event)
     {
-        if (!inHouse || event.getItemContainer().getId() != InventoryID.EQUIPMENT.getId())
+        if (!inHouse || event.getItemContainer().getId() != InventoryID.WORN)
         {
             return;
         }
@@ -266,7 +267,7 @@ public class HouseOverlayPlugin extends Plugin
     
     private void checkWeaponSlot()
     {
-        ItemContainer itemContainer = client.getItemContainer(InventoryID.EQUIPMENT);
+        ItemContainer itemContainer = client.getItemContainer(InventoryID.WORN);
         Item weaponItem = itemContainer == null ? null : itemContainer.getItem(EquipmentInventorySlot.WEAPON.getSlotIdx());
         int currentWeapon = weaponItem == null ? -1 : weaponItem.getId();
         fairy_ring_has_staff = currentWeapon == 772 || currentWeapon == 9084;

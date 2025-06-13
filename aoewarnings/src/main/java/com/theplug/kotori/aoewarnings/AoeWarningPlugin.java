@@ -40,7 +40,7 @@ import net.runelite.api.Client;
 import net.runelite.api.GameObject;
 import net.runelite.api.GameState;
 import net.runelite.api.NullObjectID;
-import net.runelite.api.ObjectID;
+import net.runelite.api.gameval.ObjectID;
 import net.runelite.api.Projectile;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.GameObjectDespawned;
@@ -186,7 +186,7 @@ public class AoeWarningPlugin extends Plugin
 
 		switch (gameObject.getId())
 		{
-			case ObjectID.CRYSTAL_BOMB:
+			case ObjectID.OLM_CRYSTAL_BOMB:
 				bombs.add(new CrystalBomb(gameObject, client.getTickCount()));
 
 				if (config.aoeNotifyAll() || config.bombDisplayNotifyEnabled())
@@ -194,13 +194,14 @@ public class AoeWarningPlugin extends Plugin
 					notifier.notify("Bomb!");
 				}
 				break;
-			case ObjectID.ACID_POOL:
+			case ObjectID.OLM_ACID_POOL:
 				acidTrail.add(gameObject);
 				break;
-			case ObjectID.SMALL_CRYSTALS:
+			case ObjectID.OLM_CRYSTAL_ATTACK_SMALL:
 				crystalSpike.add(gameObject);
 				break;
-			case NullObjectID.NULL_26690:
+		//	case NullObjectID.NULL_26690:
+			case ObjectID.CLANWARS_SNOWFALLING:
 				if (config.isWintertodtEnabled())
 				{
 					wintertodtSnowFall.add(gameObject);
@@ -221,16 +222,17 @@ public class AoeWarningPlugin extends Plugin
 
 		switch (gameObject.getId())
 		{
-			case ObjectID.CRYSTAL_BOMB:
+			case ObjectID.OLM_CRYSTAL_BOMB:
 				bombs.removeIf(o -> o.getGameObject() == gameObject);
 				break;
-			case ObjectID.ACID_POOL:
+			case ObjectID.OLM_ACID_POOL:
 				acidTrail.remove(gameObject);
 				break;
-			case ObjectID.SMALL_CRYSTALS:
+			case ObjectID.OLM_CRYSTAL_ATTACK_SMALL:
 				crystalSpike.remove(gameObject);
 				break;
-			case NullObjectID.NULL_26690:
+		//	case NullObjectID.NULL_26690:
+			case ObjectID.CLANWARS_SNOWFALLING:
 				wintertodtSnowFall.remove(gameObject);
 				break;
 		}

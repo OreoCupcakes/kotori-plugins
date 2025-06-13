@@ -33,41 +33,52 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.AccessLevel;
 import lombok.Getter;
-import net.runelite.api.ItemID;
+import net.runelite.api.gameval.ItemID;
 
 public enum Resource
 {
-	TELEPORT_CRYSTAL("Teleport crystal", ItemID.TELEPORT_CRYSTAL, false),
-	CORRUPTED_TELEPORT_CRYSTAL("Corrupted teleport crystal", ItemID.CORRUPTED_TELEPORT_CRYSTAL, true),
+	//23904 23858
+	TELEPORT_CRYSTAL("Teleport crystal", ItemID.GAUNTLET_TELEPORT_CRYSTAL, false),
+	CORRUPTED_TELEPORT_CRYSTAL("Corrupted teleport crystal", ItemID.GAUNTLET_TELEPORT_CRYSTAL_HM, true),
 
-	WEAPON_FRAME("Weapon frame", ItemID.WEAPON_FRAME_23871, false),
-	CORRUPTED_WEAPON_FRAME("Weapon frame", ItemID.WEAPON_FRAME, true),
+	//23871 23834
+	WEAPON_FRAME("Weapon frame", ItemID.GAUNTLET_GENERIC_COMPONENT, false),
+	CORRUPTED_WEAPON_FRAME("Weapon frame", ItemID.GAUNTLET_GENERIC_COMPONENT_HM, true),
 
-	CRYSTALLINE_BOWSTRING("Crystalline bowstring", ItemID.CRYSTALLINE_BOWSTRING, false),
-	CORRUPTED_BOWSTRING("Corrupted bowstring", ItemID.CORRUPTED_BOWSTRING, true),
+	//23869 23832
+	CRYSTALLINE_BOWSTRING("Crystalline bowstring", ItemID.GAUNTLET_RANGED_COMPONENT, false),
+	CORRUPTED_BOWSTRING("Corrupted bowstring", ItemID.GAUNTLET_RANGED_COMPONENT_HM, true),
 
-	CRYSTAL_SPIKE("Crystal spike", ItemID.CRYSTAL_SPIKE, false),
-	CORRUPTED_SPIKE("Corrupted spike", ItemID.CORRUPTED_SPIKE, true),
+	//23868 23831
+	CRYSTAL_SPIKE("Crystal spike", ItemID.GAUNTLET_MELEE_COMPONENT, false),
+	CORRUPTED_SPIKE("Corrupted spike", ItemID.GAUNTLET_MELEE_COMPONENT_HM, true),
 
-	CRYSTAL_ORB("Crystal orb", ItemID.CRYSTAL_ORB, false),
-	CORRUPTED_ORB("Corrupted orb", ItemID.CORRUPTED_ORB, true),
+	//23870 23833
+	CRYSTAL_ORB("Crystal orb", ItemID.GAUNTLET_MAGIC_COMPONENT, false),
+	CORRUPTED_ORB("Corrupted orb", ItemID.GAUNTLET_MAGIC_COMPONENT_HM, true),
 
-	RAW_PADDLEFISH("Raw paddlefish", ItemID.RAW_PADDLEFISH, "You manage to catch a fish\\.", false),
+	//23872
+	RAW_PADDLEFISH("Raw paddlefish", ItemID.GAUNTLET_RAW_FOOD, "You manage to catch a fish\\.", false),
 
-	CRYSTAL_SHARDS("Crystal shards", ItemID.CRYSTAL_SHARDS, "You find (\\d+) crystal shards\\.", false),
-	CORRUPTED_SHARDS("Corrupted shards", ItemID.CORRUPTED_SHARDS, "You find (\\d+) corrupted shards\\.", true),
+	//23866 23824
+	CRYSTAL_SHARDS("Crystal shards", ItemID.GAUNTLET_CRYSTAL_SHARD, "You find (\\d+) crystal shards\\.", false),
+	CORRUPTED_SHARDS("Corrupted shards", ItemID.GAUNTLET_CRYSTAL_SHARD_HM, "You find (\\d+) corrupted shards\\.", true),
 
-	CRYSTAL_ORE("Crystal ore", ItemID.CRYSTAL_ORE, "You manage to mine some ore\\.", false),
-	CORRUPTED_ORE("Corrupted ore", ItemID.CORRUPTED_ORE, "You manage to mine some ore\\.", true),
+	//23877 23837
+	CRYSTAL_ORE("Crystal ore", ItemID.GAUNTLET_ORE, "You manage to mine some ore\\.", false),
+	CORRUPTED_ORE("Corrupted ore", ItemID.GAUNTLET_ORE_HM, "You manage to mine some ore\\.", true),
 
-	PHREN_BARK("Phren bark", ItemID.PHREN_BARK_23878, "You get some bark\\.", false),
-	CORRUPTED_PHREN_BARK("Phren bark", ItemID.PHREN_BARK, "You get some bark\\.", true),
+	//23878 23838
+	PHREN_BARK("Phren bark", ItemID.GAUNTLET_BARK, "You get some bark\\.", false),
+	CORRUPTED_PHREN_BARK("Phren bark", ItemID.GAUNTLET_BARK_HM, "You get some bark\\.", true),
 
-	LINUM_TIRINUM("Linum tirinum", ItemID.LINUM_TIRINUM_23876, "You pick some fibre from the plant\\.", false),
-	CORRUPTED_LINUM_TIRINUM("Linum tirinum", ItemID.LINUM_TIRINUM, "You pick some fibre from the plant\\.", true),
+	//23876 23836
+	LINUM_TIRINUM("Linum tirinum", ItemID.GAUNTLET_FIBRE, "You pick some fibre from the plant\\.", false),
+	CORRUPTED_LINUM_TIRINUM("Linum tirinum", ItemID.GAUNTLET_FIBRE_HM, "You pick some fibre from the plant\\.", true),
 
-	GRYM_LEAF("Grym leaf", ItemID.GRYM_LEAF_23875, "You pick a herb from the roots\\.", false),
-	CORRUPTED_GRYM_LEAF("Grym leaf", ItemID.GRYM_LEAF, "You pick a herb from the roots\\.", true);
+	//23875 23835
+	GRYM_LEAF("Grym leaf", ItemID.GAUNTLET_HERB, "You pick a herb from the roots\\.", false),
+	CORRUPTED_GRYM_LEAF("Grym leaf", ItemID.GAUNTLET_HERB_HM, "You pick a herb from the roots\\.", true);
 
 	private static final Resource[] VALUES = Resource.values();
 

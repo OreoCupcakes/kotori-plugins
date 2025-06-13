@@ -46,6 +46,8 @@ import com.theplug.kotori.kotoriutils.rlapi.Spells;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
+import net.runelite.api.gameval.NpcID;
+import net.runelite.api.gameval.InventoryID;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
@@ -93,7 +95,7 @@ public class CerberusHelperPlugin extends Plugin
 
 	private static final Set<Integer> REGION_IDS = Set.of(4883, 5140, 5395);
 
-	private static final Set<Integer> CERBERUS_IDS = Set.of(NpcID.CERBERUS, NpcID.CERBERUS_5863, NpcID.CERBERUS_5866);
+	private static final Set<Integer> CERBERUS_IDS = Set.of(NpcID.CERBERUS_ATTACKING, NpcID.CERBERUS_SITTING, NpcID.CERBERUS_RESETTING);
 
 	private static final int ECHO_PROJECTILE_MAGIC = 3119;
 	private static final int ECHO_PROJECTILE_RANGED = 3122;
@@ -873,7 +875,7 @@ public class CerberusHelperPlugin extends Plugin
 	{
 		int defenseStab = 0, defenseMagic = 0, defenseRange = 0;
 
-		final ItemContainer itemContainer = client.getItemContainer(InventoryID.EQUIPMENT);
+		final ItemContainer itemContainer = client.getItemContainer(InventoryID.WORN);
 
 		if (itemContainer != null)
 		{
@@ -1220,7 +1222,7 @@ public class CerberusHelperPlugin extends Plugin
 			return;
 		}
 
-		ItemContainer inventory = client.getItemContainer(InventoryID.INVENTORY);
+		ItemContainer inventory = client.getItemContainer(InventoryID.INV);
 		if (inventory == null)
 		{
 			return;
