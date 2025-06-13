@@ -8,6 +8,7 @@ import java.awt.Rectangle;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import com.theplug.kotori.kotoriutils.methods.PrayerInteractions;
 import com.theplug.kotori.kotoriutils.rlapi.PrayerExtended;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
@@ -59,7 +60,7 @@ class NightmarePrayerOverlay extends Overlay
 			return null;
 		}
 
-		Color color = client.isPrayerActive(attack.getPrayer()) ? Color.GREEN : Color.RED;
+		Color color = PrayerInteractions.isActive(attack.getPrayer()) ? Color.GREEN : Color.RED;
 		renderPrayerOverlay(graphics, client, attack.getPrayer(), color);
 
 		return null;

@@ -2,6 +2,7 @@ package com.theplug.kotori.gauntlethelper.module.boss;
 
 import com.theplug.kotori.gauntlethelper.GauntletHelperConfig;
 import com.theplug.kotori.gauntlethelper.GauntletHelperPlugin;
+import com.theplug.kotori.kotoriutils.methods.PrayerInteractions;
 import net.runelite.api.Client;
 import net.runelite.api.NPC;
 import net.runelite.api.Prayer;
@@ -92,7 +93,7 @@ class PrayerInfoBoxOverlay extends Overlay
 
         infoBoxComponent.setImage(getPrayerSprite(prayer));
 
-        infoBoxComponent.setBackgroundColor(client.isPrayerActive(prayer)
+        infoBoxComponent.setBackgroundColor(PrayerInteractions.isActive(prayer)
                 ? ComponentConstants.STANDARD_BACKGROUND_COLOR
                 : NOT_ACTIVATED_BACKGROUND_COLOR);
 

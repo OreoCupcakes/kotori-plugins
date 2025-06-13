@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
 
+import com.theplug.kotori.kotoriutils.methods.PrayerInteractions;
 import com.theplug.kotori.kotoriutils.rlapi.PrayerExtended;
 import com.theplug.kotori.kotoriutils.rlapi.WidgetInfoPlus;
 import net.runelite.api.Client;
@@ -521,15 +522,15 @@ public class InfernoOverlay extends Overlay
 		{
 			// Prayer indicator in prayer tab
 			InfernoNPC.Attack prayerForAttack = null;
-			if (client.isPrayerActive(Prayer.PROTECT_FROM_MAGIC))
+			if (PrayerInteractions.isActive(Prayer.PROTECT_FROM_MAGIC))
 			{
 				prayerForAttack = InfernoNPC.Attack.MAGIC;
 			}
-			else if (client.isPrayerActive(Prayer.PROTECT_FROM_MISSILES))
+			else if (PrayerInteractions.isActive(Prayer.PROTECT_FROM_MISSILES))
 			{
 				prayerForAttack = InfernoNPC.Attack.RANGED;
 			}
-			else if (client.isPrayerActive(Prayer.PROTECT_FROM_MELEE))
+			else if (PrayerInteractions.isActive(Prayer.PROTECT_FROM_MELEE))
 			{
 				prayerForAttack = InfernoNPC.Attack.MELEE;
 			}

@@ -29,7 +29,6 @@ package com.theplug.kotori.dagannothhelper.overlay;
 import com.theplug.kotori.dagannothhelper.DagannothHelperConfig;
 import com.theplug.kotori.dagannothhelper.DagannothHelperPlugin;
 import com.theplug.kotori.dagannothhelper.entity.DagannothKing;
-import com.theplug.kotori.kotoriutils.KotoriUtils;
 import com.theplug.kotori.kotoriutils.overlay.OverlayUtility;
 import net.runelite.api.Point;
 import net.runelite.api.*;

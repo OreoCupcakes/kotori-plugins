@@ -32,7 +32,6 @@ import javax.inject.Inject;
 import net.runelite.api.GroundObject;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayPosition;
-import net.runelite.client.ui.overlay.OverlayPriority;
 import net.runelite.client.ui.overlay.OverlayUtil;
 
 public class TempleTrekkingBogOverlay extends Overlay
@@ -48,7 +47,7 @@ public class TempleTrekkingBogOverlay extends Overlay
 		this.config = config;
 		this.plugin = plugin;
 		setPosition(OverlayPosition.DYNAMIC);
-		setPriority(OverlayPriority.LOW);
+		setPriority(Overlay.PRIORITY_LOW);
 	}
 
 	@Override

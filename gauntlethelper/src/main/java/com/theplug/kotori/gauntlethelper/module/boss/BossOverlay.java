@@ -35,6 +35,7 @@ import java.awt.*;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import com.theplug.kotori.kotoriutils.methods.PrayerInteractions;
 import com.theplug.kotori.kotoriutils.overlay.OverlayUtility;
 import net.runelite.api.*;
 import net.runelite.api.Point;
@@ -179,7 +180,7 @@ class BossOverlay extends Overlay
 
 		final Hunllef.AttackPhase phase = hunllef.getAttackPhase();
 
-		if (client.isPrayerActive(phase.getPrayer()))
+		if (PrayerInteractions.isActive(phase.getPrayer()))
 		{
 			return;
 		}

@@ -368,7 +368,7 @@ public class KotoriUtils extends Plugin {
     private void testInvokeHook()
     {
         Prayer prayer = Prayer.THICK_SKIN;
-        if (client.isPrayerActive(prayer))
+        if (PrayerInteractions.isActive(prayer))
         {
             PrayerInteractions.deactivatePrayer(prayer);
             MiscUtilities.sendGameMessage("Kotori Utils Test - Deactivating Thick Skin prayer");

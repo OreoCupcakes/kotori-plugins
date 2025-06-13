@@ -30,7 +30,6 @@ import java.awt.Graphics2D;
 import javax.inject.Inject;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayPosition;
-import net.runelite.client.ui.overlay.OverlayPriority;
 import net.runelite.client.ui.overlay.components.LineComponent;
 import net.runelite.client.ui.overlay.components.PanelComponent;
 
@@ -48,7 +47,7 @@ public class TempleTrekkingOverlay extends Overlay
 		this.config = config;
 		this.plugin = plugin;
 		setPosition(OverlayPosition.TOP_LEFT);
-		setPriority(OverlayPriority.LOW);
+		setPriority(Overlay.PRIORITY_LOW);
 	}
 
 	@Override

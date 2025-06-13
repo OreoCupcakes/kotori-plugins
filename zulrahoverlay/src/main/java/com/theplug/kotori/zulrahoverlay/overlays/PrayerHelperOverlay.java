@@ -1,5 +1,6 @@
 package com.theplug.kotori.zulrahoverlay.overlays;
 
+import com.theplug.kotori.kotoriutils.methods.PrayerInteractions;
 import com.theplug.kotori.zulrahoverlay.ZulrahConfig;
 import com.theplug.kotori.zulrahoverlay.ZulrahPlugin;
 import com.theplug.kotori.zulrahoverlay.rotationutils.ZulrahData;
@@ -53,7 +54,7 @@ public class PrayerHelperOverlay extends OverlayPanel
 		}
 		InfoBoxComponent prayComponent = new InfoBoxComponent();
 		prayComponent.setImage(spriteManager.getSprite(prayerToSpriteId(prayer), 0));
-		prayComponent.setBackgroundColor(!client.isPrayerActive(prayer) ? RED : GREEN);
+		prayComponent.setBackgroundColor(!PrayerInteractions.isActive(prayer) ? RED : GREEN);
 		prayComponent.setPreferredSize(new Dimension(40, 40));
 		panelComponent.getChildren().add(prayComponent);
 		panelComponent.setPreferredSize(new Dimension(40, 0));

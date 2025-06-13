@@ -39,7 +39,6 @@ import lombok.Getter;
 import net.runelite.api.Client;
 import net.runelite.api.GameObject;
 import net.runelite.api.GameState;
-import net.runelite.api.NullObjectID;
 import net.runelite.api.gameval.ObjectID;
 import net.runelite.api.Projectile;
 import net.runelite.api.coords.WorldPoint;
@@ -55,7 +54,6 @@ import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
-import org.apache.commons.lang3.ArrayUtils;
 import static com.theplug.kotori.aoewarnings.AoeWarningConfig.*;
 
 @PluginDependency(KotoriUtils.class)

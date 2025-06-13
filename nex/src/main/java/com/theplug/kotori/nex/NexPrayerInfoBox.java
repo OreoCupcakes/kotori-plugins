@@ -6,6 +6,8 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import com.theplug.kotori.kotoriutils.methods.PrayerInteractions;
 import net.runelite.api.Client;
 import net.runelite.api.Prayer;
 import net.runelite.api.SpriteID;
@@ -13,7 +15,6 @@ import net.runelite.client.game.SpriteManager;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
-import net.runelite.client.ui.overlay.OverlayPriority;
 import net.runelite.client.ui.overlay.components.ComponentConstants;
 import net.runelite.client.ui.overlay.components.ImageComponent;
 import net.runelite.client.ui.overlay.components.PanelComponent;
@@ -64,7 +65,7 @@ public class NexPrayerInfoBox extends Overlay
 
 		BufferedImage prayerImage;
 		prayerImage = getPrayerImage(prayer);
-		imagePanelComponent.setBackgroundColor(client.isPrayerActive(prayer) ? ComponentConstants.STANDARD_BACKGROUND_COLOR : NOT_ACTIVATED_BACKGROUND_COLOR);
+		imagePanelComponent.setBackgroundColor(PrayerInteractions.isActive(prayer) ? ComponentConstants.STANDARD_BACKGROUND_COLOR : NOT_ACTIVATED_BACKGROUND_COLOR);
 
 		imagePanelComponent.getChildren().add(new ImageComponent(prayerImage));
 		return imagePanelComponent.render(graphics);

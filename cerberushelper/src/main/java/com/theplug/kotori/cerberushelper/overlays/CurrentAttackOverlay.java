@@ -41,6 +41,7 @@ import com.theplug.kotori.cerberushelper.CerberusHelperConfig;
 import com.theplug.kotori.cerberushelper.CerberusHelperPlugin;
 import com.theplug.kotori.cerberushelper.util.ImageManager;
 import com.theplug.kotori.cerberushelper.util.InfoBoxComponent;
+import com.theplug.kotori.kotoriutils.methods.PrayerInteractions;
 import net.runelite.api.Client;
 import net.runelite.api.Prayer;
 import net.runelite.client.ui.FontManager;
@@ -101,7 +102,7 @@ public final class CurrentAttackOverlay extends Overlay
 
 		infoBoxComponent.setImage(image);
 
-		final Color backgroundColor = client.isPrayerActive(prayer) ? COLOR_PRAYER_ENABLED : COLOR_PRAYER_DISABLED;
+		final Color backgroundColor = PrayerInteractions.isActive(prayer) ? COLOR_PRAYER_ENABLED : COLOR_PRAYER_DISABLED;
 
 		infoBoxComponent.setBackgroundColor(backgroundColor);
 		infoBoxComponent.setFont(FontManager.getRunescapeSmallFont());

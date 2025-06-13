@@ -1,5 +1,6 @@
 package com.theplug.kotori.zulrahoverlay.overlays;
 
+import com.theplug.kotori.kotoriutils.methods.PrayerInteractions;
 import com.theplug.kotori.zulrahoverlay.ZulrahConfig;
 import com.theplug.kotori.zulrahoverlay.ZulrahPlugin;
 import com.theplug.kotori.zulrahoverlay.util.OverlayUtils;
@@ -42,7 +43,7 @@ public class PrayerMarkerOverlay extends Overlay
 					if (client.getVarcIntValue(VarClientInt.INVENTORY_TAB) == 5)
 					{
 						Widget widget = client.getWidget(541, prayerToChildId(prayer));
-						Color color = !client.isPrayerActive(prayer) ? Color.RED : Color.GREEN;
+						Color color = !PrayerInteractions.isActive(prayer) ? Color.RED : Color.GREEN;
 						OverlayUtils.renderWidgetPolygon(graphics, widget, color, true, false);
 					}
 				}));

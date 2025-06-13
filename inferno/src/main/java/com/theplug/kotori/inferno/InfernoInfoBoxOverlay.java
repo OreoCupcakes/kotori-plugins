@@ -30,13 +30,14 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import com.theplug.kotori.kotoriutils.methods.PrayerInteractions;
 import net.runelite.api.Client;
 import net.runelite.api.SpriteID;
 import net.runelite.client.game.SpriteManager;
 import com.theplug.kotori.inferno.displaymodes.InfernoPrayerDisplayMode;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayPosition;
-import net.runelite.client.ui.overlay.OverlayPriority;
 import net.runelite.client.ui.overlay.components.ComponentConstants;
 import net.runelite.client.ui.overlay.components.ImageComponent;
 import net.runelite.client.ui.overlay.components.PanelComponent;
@@ -81,7 +82,7 @@ public class InfernoInfoBoxOverlay extends Overlay
 			final BufferedImage prayerImage = getPrayerImage(plugin.getClosestAttack());
 
 			imagePanelComponent.getChildren().add(new ImageComponent(prayerImage));
-			imagePanelComponent.setBackgroundColor(client.isPrayerActive(plugin.getClosestAttack().getPrayer())
+			imagePanelComponent.setBackgroundColor(PrayerInteractions.isActive(plugin.getClosestAttack().getPrayer())
 				? ComponentConstants.STANDARD_BACKGROUND_COLOR
 				: NOT_ACTIVATED_BACKGROUND_COLOR);
 		}

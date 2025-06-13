@@ -30,11 +30,11 @@ package com.theplug.kotori.dagannothhelper.overlay;
 import com.theplug.kotori.dagannothhelper.DagannothHelperConfig;
 import com.theplug.kotori.dagannothhelper.DagannothHelperPlugin;
 import com.theplug.kotori.dagannothhelper.entity.DagannothKing;
+import com.theplug.kotori.kotoriutils.methods.PrayerInteractions;
 import net.runelite.api.Client;
 import net.runelite.api.Prayer;
 import net.runelite.api.SpriteID;
 import net.runelite.client.game.SpriteManager;
-import net.runelite.client.plugins.prayer.PrayerPlugin;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
@@ -110,7 +110,7 @@ public class InfoboxOverlay extends Overlay
 
 	private void updatePrayerComponent(final Prayer prayer)
 	{
-		PRAYER_COMPONENT.setBackgroundColor(client.isPrayerActive(prayer)
+		PRAYER_COMPONENT.setBackgroundColor(PrayerInteractions.isActive(prayer)
 			? ComponentConstants.STANDARD_BACKGROUND_COLOR
 			: NOT_ACTIVATED_BACKGROUND_COLOR);
 

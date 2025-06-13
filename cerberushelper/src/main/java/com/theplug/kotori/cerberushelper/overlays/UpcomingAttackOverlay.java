@@ -37,7 +37,6 @@ import javax.inject.Singleton;
 import com.theplug.kotori.cerberushelper.CerberusHelperConfig;
 import com.theplug.kotori.cerberushelper.CerberusHelperPlugin;
 import com.theplug.kotori.cerberushelper.domain.Cerberus;
-import com.theplug.kotori.cerberushelper.domain.CerberusAttack;
 import com.theplug.kotori.cerberushelper.domain.Phase;
 import com.theplug.kotori.cerberushelper.util.ImageManager;
 import com.theplug.kotori.cerberushelper.util.InfoBoxComponent;

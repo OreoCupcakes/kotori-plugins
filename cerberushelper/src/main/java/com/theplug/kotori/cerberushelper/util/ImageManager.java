@@ -58,12 +58,11 @@ public final class ImageManager
 //	private static BufferedImage getCerberusPrayerBufferedImage(final Prayer prayer, final CerberusConfig.InfoBoxComponentSize size)
 	private static BufferedImage getCerberusPrayerBufferedImage(final Prayer prayer)
 	{
-		final String path;
-		final int imgIdx;
+		String path = "";
+		int imgIdx = 0;
 
 		switch (prayer)
 		{
-			default:
 			case PROTECT_FROM_MAGIC:
 				path = "cerberus_magic.png";
 				imgIdx = 0;
@@ -85,12 +84,11 @@ public final class ImageManager
 //	private static BufferedImage getCerberusPhaseBufferedImage(final Phase phase, final CerberusConfig.InfoBoxComponentSize size)
 	private static BufferedImage getCerberusPhaseBufferedImage(final Phase phase)
 	{
-		final String path;
-		final int imgIdx;
+		String path = "";
+		int imgIdx = 0;
 
 		switch (phase)
 		{
-			default:
 			case TRIPLE:
 				path = "cerberus_triple.png";
 				imgIdx = 3;

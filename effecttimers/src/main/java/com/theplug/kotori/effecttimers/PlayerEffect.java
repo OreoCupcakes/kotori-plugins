@@ -27,8 +27,6 @@ package com.theplug.kotori.effecttimers;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import net.runelite.api.ActorSpotAnim;
-import net.runelite.api.IterableHashTable;
 
 @AllArgsConstructor
 public enum PlayerEffect

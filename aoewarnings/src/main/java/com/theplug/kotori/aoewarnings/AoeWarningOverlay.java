@@ -41,7 +41,6 @@ import net.runelite.api.Client;
 import net.runelite.api.Perspective;
 import net.runelite.api.Point;
 import com.theplug.kotori.kotoriutils.rlapi.GraphicIDPlus;
-import net.runelite.api.Varbits;
 import net.runelite.api.gameval.VarbitID;
 import net.runelite.api.coords.WorldPoint;
 import static com.theplug.kotori.aoewarnings.ColorUtil.setAlphaComponent;

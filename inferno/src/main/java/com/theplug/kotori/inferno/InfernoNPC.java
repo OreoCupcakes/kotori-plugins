@@ -28,6 +28,7 @@ import java.awt.Color;
 import java.util.*;
 
 import com.theplug.kotori.kotoriutils.ReflectionLibrary;
+import com.theplug.kotori.kotoriutils.methods.PrayerInteractions;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -302,11 +303,11 @@ class InfernoNPC
 			&& client.getLocalPlayer().getWorldLocation().distanceTo(this.getNpc().getWorldArea()) <= Type.BLOB.getRange())
 		{
 			Attack nextBlobAttack = Attack.UNKNOWN;
-			if (client.isPrayerActive(Prayer.PROTECT_FROM_MISSILES))
+			if (PrayerInteractions.isActive(Prayer.PROTECT_FROM_MISSILES))
 			{
 				nextBlobAttack = Attack.MAGIC;
 			}
-			else if (client.isPrayerActive(Prayer.PROTECT_FROM_MAGIC))
+			else if (PrayerInteractions.isActive(Prayer.PROTECT_FROM_MAGIC))
 			{
 				nextBlobAttack = Attack.RANGED;
 			}

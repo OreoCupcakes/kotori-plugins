@@ -36,6 +36,7 @@ import javax.inject.Singleton;
 import com.theplug.kotori.alchemicalhelper.AlchemicalHelperConfig;
 import com.theplug.kotori.alchemicalhelper.AlchemicalHelperPlugin;
 import com.theplug.kotori.alchemicalhelper.entity.Hydra;
+import com.theplug.kotori.kotoriutils.methods.PrayerInteractions;
 import com.theplug.kotori.kotoriutils.overlay.ImageUtility;
 import com.theplug.kotori.kotoriutils.overlay.OverlayUtility;
 import net.runelite.api.*;
@@ -206,11 +207,11 @@ public class AttackOverlay extends Overlay
 
 		if (nextSwitch == 1)
 		{
-			prayerComponent.setBackgroundColor(client.isPrayerActive(nextPrayer) ? config.warningColor() : config.dangerColor());
+			prayerComponent.setBackgroundColor(PrayerInteractions.isActive(nextPrayer) ? config.warningColor() : config.dangerColor());
 		}
 		else
 		{
-			prayerComponent.setBackgroundColor(client.isPrayerActive(nextPrayer) ? config.safeColor() : config.dangerColor());
+			prayerComponent.setBackgroundColor(PrayerInteractions.isActive(nextPrayer) ? config.safeColor() : config.dangerColor());
 		}
 
 		prayerComponent.setImage(hydra.getNextAttack().getImage(spriteManager));

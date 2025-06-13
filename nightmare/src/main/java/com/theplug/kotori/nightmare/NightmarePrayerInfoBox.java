@@ -6,6 +6,8 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import com.theplug.kotori.kotoriutils.methods.PrayerInteractions;
 import net.runelite.api.Client;
 import net.runelite.client.game.SpriteManager;
 import net.runelite.client.ui.overlay.Overlay;
@@ -61,7 +63,7 @@ public class NightmarePrayerInfoBox extends Overlay
 
 		BufferedImage prayerImage;
 		prayerImage = getPrayerImage(attack);
-		imagePanelComponent.setBackgroundColor(client.isPrayerActive(attack.getPrayer()) ? ComponentConstants.STANDARD_BACKGROUND_COLOR : NOT_ACTIVATED_BACKGROUND_COLOR);
+		imagePanelComponent.setBackgroundColor(PrayerInteractions.isActive(attack.getPrayer()) ? ComponentConstants.STANDARD_BACKGROUND_COLOR : NOT_ACTIVATED_BACKGROUND_COLOR);
 
 		imagePanelComponent.getChildren().add(new ImageComponent(prayerImage));
 		return imagePanelComponent.render(graphics);

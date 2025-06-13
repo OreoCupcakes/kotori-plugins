@@ -6,6 +6,8 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import com.theplug.kotori.kotoriutils.methods.PrayerInteractions;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.Prayer;
@@ -13,7 +15,6 @@ import net.runelite.api.widgets.Widget;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
-import net.runelite.client.ui.overlay.OverlayPriority;
 import net.runelite.client.ui.overlay.OverlayUtil;
 import com.theplug.kotori.kotoriutils.rlapi.PrayerExtended;
 
@@ -72,11 +73,11 @@ class NexPrayerOverlay extends Overlay
 
 		if (!prayerWidgetHidden || config.alwaysShowPrayerHelper())
 		{
-			if (client.isPrayerActive(prayer) && !config.indicatePrayerIsCorrect())
+			if (PrayerInteractions.isActive(prayer) && !config.indicatePrayerIsCorrect())
 			{
 				return null;
 			}
-			Color color = client.isPrayerActive(prayer) ? Color.GREEN : Color.RED;
+			Color color = PrayerInteractions.isActive(prayer) ? Color.GREEN : Color.RED;
 			renderPrayerOverlay(graphics, client, prayer, color);
 		}
 
