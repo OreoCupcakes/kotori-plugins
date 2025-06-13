@@ -134,7 +134,7 @@ public class SceneOverlay extends Overlay
 				continue;
 			}
 
-			LocalPoint localPoint = acid.getTarget();
+			LocalPoint localPoint = acid.getTargetPoint();
 
 			if (localPoint == null)
 			{

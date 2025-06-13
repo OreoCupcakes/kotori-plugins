@@ -302,12 +302,18 @@ public class NightmarePlugin extends Plugin
 		switch (projectile.getId())
 		{
 			case 1770:
-				targetPlayer = (Player) projectile.getInteracting();
-				parasiteTargets.putIfAbsent(targetPlayer.getId(), targetPlayer);
+				targetPlayer = (Player) projectile.getTargetActor();
+				if (targetPlayer != null)
+				{
+					parasiteTargets.putIfAbsent(targetPlayer.getId(), targetPlayer);
+				}
 				break;
 			case 1781:
-				targetPlayer = (Player) projectile.getInteracting();
-				huskTarget.putIfAbsent(targetPlayer.getCanvasTilePoly(), targetPlayer);
+				targetPlayer = (Player) projectile.getTargetActor();
+				if (targetPlayer != null)
+				{
+					huskTarget.putIfAbsent(targetPlayer.getCanvasTilePoly(), targetPlayer);
+				}
 				break;
 		}
 	}

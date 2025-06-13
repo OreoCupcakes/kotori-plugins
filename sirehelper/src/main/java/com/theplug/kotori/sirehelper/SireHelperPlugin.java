@@ -744,7 +744,7 @@ public class SireHelperPlugin extends Plugin
 
 	private void prioritizeSpawnsOverSire()
 	{
-		MenuEntry[] menuEntries = client.getMenuEntries();
+		MenuEntry[] menuEntries = client.getMenu().getMenuEntries();
 		Set<Integer> npcIndices = new HashSet<>();
 		boolean swapMenuEntries = false;
 
@@ -786,7 +786,7 @@ public class SireHelperPlugin extends Plugin
 			{
 				menuEntries[index].setDeprioritized(true);
 			}
-			client.setMenuEntries(menuEntries);
+			client.getMenu().setMenuEntries(menuEntries);
 		}
 	}
 

@@ -389,7 +389,8 @@ public class ZulrahPlugin extends Plugin implements KeyListener
 			{
 				return;
 			}
-			client.setMenuEntries(Arrays.copyOf(client.getMenuEntries(), client.getMenuEntries().length - 1));
+			Menu menu = client.getMenu();
+			menu.setMenuEntries(Arrays.copyOf(menu.getMenuEntries(), menu.getMenuEntries().length - 1));
 		}
 	}
 

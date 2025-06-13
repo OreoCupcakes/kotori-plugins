@@ -224,11 +224,11 @@ public final class MazeModule implements Module
 		}
 
 		// Remove Quick-pass and Pass
-		final MenuEntry[] filteredEntires = Arrays.stream(client.getMenuEntries())
+		final MenuEntry[] filteredEntires = Arrays.stream(client.getMenu().getMenuEntries())
 			.filter(x -> !x.getOption().equals("Quick-pass") && !x.getOption().equals("Pass"))
 			.toArray(MenuEntry[]::new);
 
-		client.setMenuEntries(filteredEntires);
+		client.getMenu().setMenuEntries(filteredEntires);
 	}
 
 	@Subscribe

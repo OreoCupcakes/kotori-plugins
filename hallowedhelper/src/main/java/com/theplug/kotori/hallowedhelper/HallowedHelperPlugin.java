@@ -480,7 +480,12 @@ public class HallowedHelperPlugin extends Plugin {
             {
                 event.getActor().setAnimation(653);
                 //Might be the wrong one idk.
-                client.getLocalPlayer().setSpotAnimFrame(137);
+                Iterator<ActorSpotAnim> spotAnims = client.getLocalPlayer().getSpotAnims().iterator();
+                if (spotAnims.hasNext())
+                {
+                    spotAnims.next().setFrame(137);
+                }
+                //client.getLocalPlayer().setSpotAnimFrame(137);
             }
             //439 = RONDJE DRAAIE
         }
