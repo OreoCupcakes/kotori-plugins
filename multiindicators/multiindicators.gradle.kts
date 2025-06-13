@@ -23,7 +23,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "1.1.8"
+version = "1.1.9"
 
 project.extra["PluginName"] = "<html><font color=#6b8af6>[P]</font> Multi Indicators</html>" // This is the name that is used in the external plugin manager panel
 project.extra["PluginDescription"] = "Shows borders of multicombat and PvP safezones." // This is the description that is used in the external plugin manager panel
