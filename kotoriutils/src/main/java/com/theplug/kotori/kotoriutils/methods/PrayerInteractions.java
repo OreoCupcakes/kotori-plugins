@@ -19,7 +19,7 @@ public class PrayerInteractions
 
 		PrayerExtended prayerExtended = PrayerExtended.valueOf(prayer.name());
 		//do nothing if prayer is already active or prayer points is at 0
-		if (client.isPrayerActive(prayer) || client.getBoostedSkillLevel(Skill.PRAYER) <= 0 || client.getRealSkillLevel(Skill.PRAYER) < prayerExtended.getLevel())
+		if (isActive(prayer) || client.getBoostedSkillLevel(Skill.PRAYER) <= 0 || client.getRealSkillLevel(Skill.PRAYER) < prayerExtended.getLevel())
 		{
 			return false;
 		}
@@ -85,7 +85,7 @@ public class PrayerInteractions
 
 		PrayerExtended prayerExtended = PrayerExtended.valueOf(prayer.name());
 		//do nothing if prayer is not active or prayer points is at 0
-		if (!client.isPrayerActive(prayer) || client.getBoostedSkillLevel(Skill.PRAYER) <= 0 || client.getRealSkillLevel(Skill.PRAYER) < prayerExtended.getLevel())
+		if (!isActive(prayer) || client.getBoostedSkillLevel(Skill.PRAYER) <= 0 || client.getRealSkillLevel(Skill.PRAYER) < prayerExtended.getLevel())
 		{
 			return false;
 		}
@@ -113,6 +113,18 @@ public class PrayerInteractions
 				break;
 			case AUGURY:
 				if (!VarUtilities.isAuguryUnlocked())
+				{
+					return false;
+				}
+				break;
+			case DEADEYE:
+				if (!VarUtilities.isDeadeyeUnlocked())
+				{
+					return false;
+				}
+				break;
+			case MYSTIC_VIGOUR:
+				if (!VarUtilities.isMysticVigourUnlocked())
 				{
 					return false;
 				}
@@ -173,7 +185,7 @@ public class PrayerInteractions
 				continue;
 			}
 
-			if (client.isPrayerActive(prayer))
+			if (isActive(prayer))
 			{
 				active++;
 			}
