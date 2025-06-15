@@ -70,6 +70,7 @@ public class HouseOverlayPlugin extends Plugin
         // "A" Combinations
         cached_fairy_ring_names.put("AIQ", "Mudskipper Point");
         cached_fairy_ring_names.put("AIR", "South-east of Ardougne");
+        cached_fairy_ring_names.put("AJP", "Varlamore: Avium Savannah");
         cached_fairy_ring_names.put("AJQ", "Cave south of Dorgesh-Kaan");
         cached_fairy_ring_names.put("AJR", "Slayer cave south-east of Rellekka");
         cached_fairy_ring_names.put("AJS", "Penguins near Miscellania");
@@ -93,8 +94,8 @@ public class HouseOverlayPlugin extends Plugin
         cached_fairy_ring_names.put("BKR", "Mort Myre Swamp, south of Canifis");
         cached_fairy_ring_names.put("BKS", "Zanaris");
         cached_fairy_ring_names.put("BLP", "TzHaar area");
-        cached_fairy_ring_names.put("BLR", "Legends' Guild");
         cached_fairy_ring_names.put("BLQ", "Yu'biusk");
+        cached_fairy_ring_names.put("BLR", "Legends' Guild");
         cached_fairy_ring_names.put("BLS", "South of Mount Quidamortem");
         // "C" Combinations
         cached_fairy_ring_names.put("CIP", "Miscellania");
@@ -103,6 +104,7 @@ public class HouseOverlayPlugin extends Plugin
         cached_fairy_ring_names.put("CIS", "Arceuus Library");
         cached_fairy_ring_names.put("CJR", "Sinclair Mansion");
         cached_fairy_ring_names.put("CKP", "Cosmic entity's plane");
+        cached_fairy_ring_names.put("CKQ", "Varlamore: Aldarin");
         cached_fairy_ring_names.put("CKR", "South of Tai Bwo Wannai Village");
         cached_fairy_ring_names.put("CKS", "Canifis");
         cached_fairy_ring_names.put("CLP", "South of Draynor Village");
