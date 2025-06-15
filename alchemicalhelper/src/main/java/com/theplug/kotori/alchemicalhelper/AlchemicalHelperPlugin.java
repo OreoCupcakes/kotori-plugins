@@ -154,6 +154,8 @@ public class AlchemicalHelperPlugin extends Plugin
 
 	@Getter
 	private final Set<GameObject> vents = new HashSet<>();
+
+	private final Set<Projectile> hydraProjectiles = new HashSet<>();
 	
 	private boolean offensivePrayerActivated;
 	private boolean preservePrayerActivated;
@@ -210,6 +212,7 @@ public class AlchemicalHelperPlugin extends Plugin
 		poisonObjects.clear();
 		lightningObjects.clear();
 		flameObjects.clear();
+		hydraProjectiles.clear();
 		lastAttackTick = -1;
 		fountainTicks = -1;
 		vents.clear();
@@ -308,18 +311,7 @@ public class AlchemicalHelperPlugin extends Plugin
 		
 		attackOverlay.decrementStunTicks();
 		updateVentTicks();
-		if (!poisonObjects.isEmpty())
-		{
-			poisonObjects.removeIf(GraphicsObject::finished);
-		}
-		if (!flameObjects.isEmpty())
-		{
-			flameObjects.removeIf(GraphicsObject::finished);
-		}
-		if (!lightningObjects.isEmpty())
-		{
-			lightningObjects.removeIf(GraphicsObject::finished);
-		}
+		clearStoredArrays();
 
 		handlePhaseSpecials();
 		handlePrayerInteractions();
@@ -384,6 +376,7 @@ public class AlchemicalHelperPlugin extends Plugin
 					poisonObjects.clear();
 					lightningObjects.clear();
 					dangerousTiles.clear();
+					clearStoredArrays();
 					currentAnimation = -1;
 					lastUniqueAnimation = -1;
 					lightningSkipState = 0;
@@ -485,6 +478,14 @@ public class AlchemicalHelperPlugin extends Plugin
 		return dynamicObject.getAnimation() == null ? -1 : dynamicObject.getAnimation().getId();
 	}
 
+	private void clearStoredArrays()
+	{
+		hydraProjectiles.removeIf(p -> p.getRemainingCycles() <= 0);
+		poisonObjects.removeIf(GraphicsObject::finished);
+		flameObjects.removeIf(GraphicsObject::finished);
+		lightningObjects.removeIf(GraphicsObject::finished);
+	}
+
 	@Subscribe
 	private void onNpcSpawned(final NpcSpawned event)
 	{
@@ -512,11 +513,21 @@ public class AlchemicalHelperPlugin extends Plugin
 		{
 			return;
 		}
+
 		final Projectile projectile = event.getProjectile();
 
-		if (hydra == null || client.getGameCycle() >= projectile.getStartCycle())
+		if (hydra == null)
 		{
 			return;
+		}
+
+		if (hydraProjectiles.contains(projectile))
+		{
+			return;
+		}
+		else
+		{
+			hydraProjectiles.add(projectile);
 		}
 
 		final int projectileId = projectile.getId();
