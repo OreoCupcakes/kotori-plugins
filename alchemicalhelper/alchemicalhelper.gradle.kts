@@ -23,7 +23,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "2.0.12"
+version = "2.0.13"
 
 project.extra["PluginName"] = "<html><font color=#6b8af6>[K]</font> Alchemical Helper</html>" // This is the name that is used in the external plugin manager panel
 project.extra["PluginDescription"] = "A plugin for the Alchemical Hydra boss. Overlays and automation for prayer and dodging special attacks." // This is the description that is used in the external plugin manager panel
