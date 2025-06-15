@@ -505,6 +505,22 @@ public class AlchemicalHelperPlugin extends Plugin
 			allPrayersDeactived = false;
 		}
 	}
+
+	@Subscribe
+	private void onNpcDespawned(final NpcDespawned event)
+	{
+		if (!atHydra)
+		{
+			return;
+		}
+
+		final NPC npc = event.getNpc();
+
+		if (npc.getId() == NpcID.HYDRABOSS)
+		{
+			hydra = null;
+		}
+	}
 	
 	@Subscribe
 	private void onProjectileMoved(final ProjectileMoved event)

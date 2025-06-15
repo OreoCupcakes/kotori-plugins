@@ -27,6 +27,7 @@ package com.theplug.kotori.alchemicalhelper.overlay;
 
 import java.awt.*;
 import java.awt.geom.Area;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -192,7 +193,7 @@ public class SceneOverlay extends Overlay
 
 		if (fountainWorldPoint != null)
 		{
-			final Collection<WorldPoint> fountainWorldPoints = WorldPoint.toLocalInstance(wv.getScene(), fountainWorldPoint);
+			final Collection<WorldPoint> fountainWorldPoints = WorldPoint.toLocalInstance(wv, fountainWorldPoint);
 
 			if (fountainWorldPoints.size() == 1)
 			{
@@ -286,7 +287,8 @@ public class SceneOverlay extends Overlay
 		}
 
 		final WorldView wv = client.getTopLevelWorldView();
-		final Collection<WorldPoint> fountainWorldPoints = WorldPoint.toLocalInstance(wv.getScene(), HydraPhase.POISON.getFountainWorldPoint());
+		final Collection<WorldPoint> fountainWorldPoints = new ArrayList<>();
+		fountainWorldPoints.addAll(WorldPoint.toLocalInstance(wv.getScene(), HydraPhase.POISON.getFountainWorldPoint()));
 		fountainWorldPoints.addAll(WorldPoint.toLocalInstance(wv.getScene(), HydraPhase.LIGHTNING.getFountainWorldPoint()));
 		fountainWorldPoints.addAll(WorldPoint.toLocalInstance(wv.getScene(), HydraPhase.FLAME.getFountainWorldPoint()));
 
