@@ -366,7 +366,7 @@ public class DagannothHelperPlugin extends Plugin
 
 		Projectile projectile = event.getProjectile();
 
-		if (dagannothKings.isEmpty() || client.getGameCycle() > projectile.getStartCycle())
+		if (dagannothKings.isEmpty())
 		{
 			return;
 		}
