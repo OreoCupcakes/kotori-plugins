@@ -91,16 +91,16 @@ public class AoeWarningPlugin extends Plugin
 	private Client client;
 
 	@Getter(AccessLevel.PACKAGE)
-	private List<WorldPoint> lightningTrail = new ArrayList<>();
+	private final Set<WorldPoint> lightningTrail = new HashSet<>();
 
 	@Getter(AccessLevel.PACKAGE)
-	private List<GameObject> acidTrail = new ArrayList<>();
+	private final Set<GameObject> acidTrail = new HashSet<>();
 
 	@Getter(AccessLevel.PACKAGE)
-	private List<GameObject> crystalSpike = new ArrayList<>();
+	private final Set<GameObject> crystalSpike = new HashSet<>();
 
 	@Getter(AccessLevel.PACKAGE)
-	private List<GameObject> wintertodtSnowFall = new ArrayList<>();
+	private final Set<GameObject> wintertodtSnowFall = new HashSet<>();
 
 	private static final int VERZIK_REGION = 12611;
 	private static final int GROTESQUE_GUARDIANS_REGION = 6727;
