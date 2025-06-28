@@ -274,7 +274,7 @@ public final class SceneOverlay extends Overlay
 
 			final LocalPoint localPoint = entry.getKey();
 
-			final Polygon polygon = Perspective.getCanvasTileAreaPoly(client, localPoint, 3);
+			final Polygon polygon = Perspective.getCanvasTileAreaPoly(client, localPoint, 1);
 
 			if (polygon == null)
 			{
