@@ -474,6 +474,19 @@ public interface CerberusHelperConfig extends Config
 	)
 	default int demonicOfferingAmount() { return 3; }
 
+	@ConfigItem(
+			keyName = "castWardOfArceuus",
+			name = "Autocast Ward of Arceuus",
+			description = "Autocast Ward of Arceuus when the ghost spawn." +
+					"<br>This reduces the amount of prayer points lost from the attacks by 33%.",
+			position = 6,
+			section = spellHelper
+	)
+	default boolean autoCastWardOfArceuus()
+	{
+		return false;
+	}
+
 
 
 	//Leagues Settings

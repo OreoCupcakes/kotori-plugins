@@ -1028,8 +1028,15 @@ public class CerberusHelperPlugin extends Plugin
 				for (Map.Entry<LocalPoint, Projectile> lava : lavaProjectiles.entrySet())
 				{
 					WorldPoint lavaLocalWorld = WorldPoint.fromLocal(client, lava.getKey());
+					dangerousTiles.add(lavaLocalWorld);
+					/*
+						https://oldschool.runescape.wiki/w/Update:Summer_Sweep_Up:_Combat
+						Summer Sweep Up has nerfed the AoE size from 3 down to 1
+
 					WorldArea lavaSplash = new WorldArea(lavaLocalWorld.getX() - 1, lavaLocalWorld.getY() - 1, 3, 3, lavaLocalWorld.getPlane());
 					dangerousTiles.addAll(lavaSplash.toWorldPointList());
+
+					 */
 				}
 				dangerousTiles.addAll(cerberus.getNpc().getWorldArea().toWorldPointList());
 
@@ -1187,6 +1194,7 @@ public class CerberusHelperPlugin extends Plugin
 			return;
 		}
 
+		autoWardOfArceuus();
 		autoDeathCharge();
 		autoThralls();
 		autoDemonicOffering();
@@ -1234,6 +1242,16 @@ public class CerberusHelperPlugin extends Plugin
 		}
 	}
 
+	private void autoWardOfArceuus()
+	{
+		if (!config.autoCastWardOfArceuus() || cerberus == null || isCerberusNotAttackingYou())
+		{
+			return;
+		}
 
-
+		if (sortedGhosts && ghosts.size() == 3 && !cerberus.isEchoVariant())
+		{
+			SpellInteractions.castSpellWardOfArceuus();
+		}
+	}
 }
