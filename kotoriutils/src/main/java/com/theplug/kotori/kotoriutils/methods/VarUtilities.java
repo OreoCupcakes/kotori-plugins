@@ -58,6 +58,14 @@ public class VarUtilities
 	{
 		return client.getVarbitValue(VarbitID.ARCEUUS_RESURRECTION_ACTIVE) == 1;
 	}
+	public static boolean isSpellWardOfArceuusOffCooldown()
+	{
+		return client.getVarbitValue(VarbitID.ARCEUUS_WARD_COOLDOWN) == 0;
+	}
+	public static boolean isSpellWardOfArceuusActive()
+	{
+		return client.getVarbitValue(VarbitID.BUFF_WARD_OF_ARCEUUS_DISABLED) == 0;
+	}
 	public static boolean isSpellInActiveSpellbook(WidgetInfoPlus spell)
 	{
 		if (spell.getGroupId() != WidgetIDPlus.SPELLBOOK_GROUP_ID)

@@ -43,6 +43,14 @@ public class SpellInteractions
 		}
 	}
 
+	public static void castSpellWardOfArceuus()
+	{
+		if (!VarUtilities.isSpellWardOfArceuusActive() && VarUtilities.isSpellWardOfArceuusOffCooldown())
+		{
+			castSpell(Spells.WARD_OF_ARCEUUS);
+		}
+	}
+
 	public static void createOneClickAttackSpell(Spells spell)
 	{
 		if (VarUtilities.getActiveSpellbook() != spell.getSpellbook() || client.isMenuOpen())
