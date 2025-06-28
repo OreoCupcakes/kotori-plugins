@@ -639,6 +639,7 @@ public class CerberusHelperPlugin extends Plugin
 			ranFromLavaOnce = false;
 			performAttackAfterPrayer = false;
 			performAttackOnCerb = false;
+			sortedGhosts = false;
 			lavaSafeTile = null;
 			ticksSinceLavaDodge = 0;
 			ghostAttacked = 0;
