@@ -615,7 +615,7 @@ public final class BossModule implements Module
 			}
 		}
 
-		doFiveOneMethod = numOfPerfected < 2;
+		doFiveOneMethod = numOfPerfected < 2 && weaponsToUse.size() > 2;
 		checkedWeapons = true;
 	}
 
