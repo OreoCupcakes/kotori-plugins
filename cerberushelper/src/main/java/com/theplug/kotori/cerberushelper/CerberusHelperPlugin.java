@@ -395,7 +395,7 @@ public class CerberusHelperPlugin extends Plugin
 		echoLavaGraphics.removeIf(GraphicsObject::finished);
 	}
 
-	@Subscribe
+	@Subscribe(priority = Float.MAX_VALUE)
 	private void onProjectileMoved(final ProjectileMoved event)
 	{
 		if (!inArena || cerberus == null)
@@ -566,7 +566,7 @@ public class CerberusHelperPlugin extends Plugin
 		}
 	}
 
-	@Subscribe
+	@Subscribe(priority = Float.MAX_VALUE)
 	private void onGraphicsObjectCreated(final GraphicsObjectCreated event)
 	{
 		if (!inArena)
