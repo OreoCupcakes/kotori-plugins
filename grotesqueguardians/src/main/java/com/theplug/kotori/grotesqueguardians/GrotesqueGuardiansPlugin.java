@@ -318,7 +318,7 @@ public class GrotesqueGuardiansPlugin extends Plugin
 		removeNpc(event.getNpc());
 	}
 
-	@Subscribe
+	@Subscribe(priority = Float.MAX_VALUE)
 	private void onAnimationChanged(final AnimationChanged event)
 	{
 		if (!onRoof || guardians.isEmpty())
@@ -353,7 +353,7 @@ public class GrotesqueGuardiansPlugin extends Plugin
 		}
 	}
 
-	@Subscribe
+	@Subscribe(priority = Float.MAX_VALUE)
 	private void onProjectileMoved(final ProjectileMoved event)
 	{
 		if (!onRoof || guardians.isEmpty())
@@ -375,7 +375,7 @@ public class GrotesqueGuardiansPlugin extends Plugin
 		}
 	}
 
-	@Subscribe
+	@Subscribe(priority = Float.MAX_VALUE)
 	private void onGraphicsObjectCreated(final GraphicsObjectCreated event)
 	{
 		if (!onRoof)
@@ -404,7 +404,7 @@ public class GrotesqueGuardiansPlugin extends Plugin
 		}
 	}
 
-	@Subscribe
+	@Subscribe(priority = Float.MAX_VALUE)
 	private void onGameObjectSpawned(final GameObjectSpawned event)
 	{
 		if (!onRoof)
