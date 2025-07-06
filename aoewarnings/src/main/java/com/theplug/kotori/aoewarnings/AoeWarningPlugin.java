@@ -127,7 +127,7 @@ public class AoeWarningPlugin extends Plugin
 		reset();
 	}
 
-	@Subscribe
+	@Subscribe(priority = Float.MAX_VALUE)
 	private void onProjectileMoved(ProjectileMoved event)
 	{
 		//Original ProjectileSpawned Code
@@ -177,7 +177,7 @@ public class AoeWarningPlugin extends Plugin
 		});
 	}
 
-	@Subscribe
+	@Subscribe(priority = Float.MAX_VALUE)
 	private void onGameObjectSpawned(GameObjectSpawned event)
 	{
 		final GameObject gameObject = event.getGameObject();
@@ -213,7 +213,7 @@ public class AoeWarningPlugin extends Plugin
 		}
 	}
 
-	@Subscribe
+	@Subscribe(priority = Float.MAX_VALUE)
 	private void onGameObjectDespawned(GameObjectDespawned event)
 	{
 		final GameObject gameObject = event.getGameObject();
