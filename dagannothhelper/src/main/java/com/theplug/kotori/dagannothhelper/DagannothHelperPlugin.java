@@ -326,7 +326,7 @@ public class DagannothHelperPlugin extends Plugin
 		SpellInteractions.createOneClickAttackSpell(spellToLeftClick);
 	}
 
-	@Subscribe
+	@Subscribe(priority = Float.MAX_VALUE)
 	private void onAnimationChanged(final AnimationChanged event)
 	{
 		if (!atDks)
@@ -356,7 +356,7 @@ public class DagannothHelperPlugin extends Plugin
 		}
 	}
 
-	@Subscribe
+	@Subscribe(priority = Float.MAX_VALUE)
 	private void onProjectileMoved(final ProjectileMoved event)
 	{
 		if (!atDks)
