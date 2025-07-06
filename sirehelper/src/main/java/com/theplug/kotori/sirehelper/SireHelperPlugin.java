@@ -285,7 +285,7 @@ public class SireHelperPlugin extends Plugin
 		}
 	}
 
-	@Subscribe
+	@Subscribe(priority = Float.MAX_VALUE)
 	private void onGraphicsObjectCreated(GraphicsObjectCreated graphicsObjectCreated)
 	{
 		if (!atSire)
