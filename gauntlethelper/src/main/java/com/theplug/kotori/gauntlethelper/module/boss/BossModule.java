@@ -304,7 +304,7 @@ public final class BossModule implements Module
 		}
 	}
 
-	@Subscribe
+	@Subscribe(priority = Float.MAX_VALUE)
 	void onProjectileMoved(final ProjectileMoved event)
 	{
 		if (hunllef == null)
@@ -353,7 +353,7 @@ public final class BossModule implements Module
 		}
 	}
 
-	@Subscribe
+	@Subscribe(priority = Float.MAX_VALUE)
 	void onAnimationChanged(final AnimationChanged event)
 	{
 		final Actor actor = event.getActor();
