@@ -522,7 +522,7 @@ public class AlchemicalHelperPlugin extends Plugin
 		}
 	}
 	
-	@Subscribe
+	@Subscribe(priority = Float.MAX_VALUE)
 	private void onProjectileMoved(final ProjectileMoved event)
 	{
 		if (!atHydra)
@@ -566,7 +566,7 @@ public class AlchemicalHelperPlugin extends Plugin
 		}
 	}
 
-	@Subscribe
+	@Subscribe(priority = Float.MAX_VALUE)
 	private void onGraphicsObjectCreated(final GraphicsObjectCreated event)
 	{
 		if (!atHydra)
