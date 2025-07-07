@@ -202,7 +202,55 @@ public interface InfernoConfig extends Config
 	}
 
 	@ConfigItem(
-		position = 4,
+			position = 5,
+			keyName = "correctPrayerColor",
+			name = "Correct Prayer Color",
+			description = "Designates which color to highlight if the prayer is correctly activated already",
+			section = PrayerSection
+	)
+	default Color correctPrayerColor()
+	{
+		return Color.GREEN;
+	}
+
+	@ConfigItem(
+			position = 6,
+			keyName = "mustPrayNextTickColor",
+			name = "Must Pray Next Tick Color",
+			description = "Designates which color to highlight if the prayer must be activated in the current game tick",
+			section = PrayerSection
+	)
+	default Color mustPrayNextTickColor()
+	{
+		return Color.RED;
+	}
+
+	@ConfigItem(
+			position = 7,
+			keyName = "upcomingPrayerNotPrayedColor",
+			name = "Upcoming Prayer Color",
+			description = "Designates which color to highlight if the prayer is upcoming but not imminent",
+			section = PrayerSection
+	)
+	default Color upcomingPrayerNotPrayedColor()
+	{
+		return Color.ORANGE;
+	}
+
+	@ConfigItem(
+			position = 8,
+			keyName = "nonPriorityPrayerColor",
+			name = "Non Priority Prayer Color",
+			description = "If \"Indicate Non-Priority Boxes\" is enabled, this color determines which color to indicate for prayers that are not the priority to pray against.",
+			section = PrayerSection
+	)
+	default Color nonPriorityPrayerColor()
+	{
+		return Color.YELLOW;
+	}
+
+	@ConfigItem(
+		position = 0,
 		keyName = "safespotDisplayMode",
 		name = "Tile Safespots",
 		description = "Indicate safespots on the ground: safespot (white), pray melee (red), pray range (green), pray magic (blue) and combinations of those",
@@ -214,7 +262,7 @@ public interface InfernoConfig extends Config
 	}
 
 	@ConfigItem(
-		position = 5,
+		position = 1,
 		keyName = "safespotsCheckSize",
 		name = "Tile Safespots Check Size",
 		description = "The size of the area around the player that should be checked for safespots (SIZE x SIZE area)",
@@ -226,7 +274,7 @@ public interface InfernoConfig extends Config
 	}
 
 	@ConfigItem(
-		position = 6,
+		position = 2,
 		keyName = "indicateNonSafespotted",
 		name = "Non-safespotted NPC's Overlay",
 		description = "Red overlay for NPC's that can attack you",
@@ -238,7 +286,7 @@ public interface InfernoConfig extends Config
 	}
 
 	@ConfigItem(
-		position = 7,
+		position = 3,
 		keyName = "indicateTemporarySafespotted",
 		name = "Temporary safespotted NPC's Overlay",
 		description = "Orange overlay for NPC's that have to move to attack you",
@@ -250,7 +298,7 @@ public interface InfernoConfig extends Config
 	}
 
 	@ConfigItem(
-		position = 8,
+		position = 4,
 		keyName = "indicateSafespotted",
 		name = "Safespotted NPC's Overlay",
 		description = "Green overlay for NPC's that are safespotted (can't attack you)",
