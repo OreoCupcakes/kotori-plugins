@@ -10,7 +10,7 @@
     {
       "n": "setCheckClick",
       "c": "jg",
-      "p": "bg",
+      "p": "cc",
       "m": 1
     },
     {
@@ -28,7 +28,7 @@
     {
       "n": "setViewportWalking",
       "c": "jg",
-      "p": "cc",
+      "p": "bg",
       "m": 1
     },
     {
@@ -64,13 +64,13 @@
     {
       "n": "isMoving",
       "c": "cn",
-      "p": "bn",
+      "p": "dj",
       "m": -164506973
     },
     {
       "n": "getActorAnimationId",
       "c": "cn",
-      "p": "bq",
+      "p": "db",
       "m": -211433003
     },
     {
@@ -88,7 +88,7 @@
     {
       "n": "menuParam1Array",
       "c": "xy",
-      "p": "aa",
+      "p": "al",
       "m": 1
     },
     {
@@ -100,7 +100,7 @@
     {
       "n": "menuIdentifiersArray",
       "c": "xy",
-      "p": "al",
+      "p": "ai",
       "m": 1
     },
     {
@@ -112,13 +112,13 @@
     {
       "n": "menuOptionsArray",
       "c": "xy",
-      "p": "ag",
+      "p": "ah",
       "m": 1
     },
     {
       "n": "menuTargetsArray",
       "c": "xy",
-      "p": "ah",
+      "p": "ag",
       "m": 1
     }
   ]
