@@ -127,6 +127,8 @@ public class SceneOverlay extends Overlay
 			return;
 		}
 
+		WorldView wv = client.getTopLevelWorldView();
+
 		for (Projectile acid : acidPools)
 		{
 			if (acid == null)
@@ -134,7 +136,7 @@ public class SceneOverlay extends Overlay
 				continue;
 			}
 
-			LocalPoint localPoint = acid.getTargetPoint();
+			LocalPoint localPoint = LocalPoint.fromWorld(wv, acid.getTargetPoint());
 
 			if (localPoint == null)
 			{
