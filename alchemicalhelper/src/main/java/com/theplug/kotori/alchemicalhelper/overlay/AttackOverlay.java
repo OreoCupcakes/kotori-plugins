@@ -40,6 +40,7 @@ import com.theplug.kotori.kotoriutils.methods.PrayerInteractions;
 import com.theplug.kotori.kotoriutils.overlay.ImageUtility;
 import com.theplug.kotori.kotoriutils.overlay.OverlayUtility;
 import net.runelite.api.*;
+import net.runelite.api.gameval.SpriteID;
 import net.runelite.client.game.SpriteManager;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
@@ -166,7 +167,7 @@ public class AttackOverlay extends Overlay
 			return;
 		}
 
-		stunComponent.setImage(ImageUtility.combineSprites(client, AlchemicalHelperPlugin.BIG_ASS_GREY_ENTANGLE, SpriteID.TRADE_EXCLAMATION_MARK_ITEM_REMOVAL_WARNING));
+		stunComponent.setImage(ImageUtility.combineSprites(client, AlchemicalHelperPlugin.BIG_ASS_GREY_ENTANGLE, SpriteID.EXCLAMATION_MARK));
 		stunComponent.setText(INFO_BOX_TEXT_PADDING + stunTicks);
 
 		panelComponent.getChildren().add(stunComponent);

@@ -33,7 +33,7 @@ import com.theplug.kotori.dagannothhelper.entity.DagannothKing;
 import com.theplug.kotori.kotoriutils.methods.PrayerInteractions;
 import net.runelite.api.Client;
 import net.runelite.api.Prayer;
-import net.runelite.api.SpriteID;
+import net.runelite.api.gameval.SpriteID;
 import net.runelite.client.game.SpriteManager;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
@@ -124,21 +124,21 @@ public class InfoboxOverlay extends Overlay
 			case PROTECT_FROM_MAGIC:
 				if (SPRITES[0] == null)
 				{
-					SPRITES[0] = scaleSprite(spriteManager.getSprite(SpriteID.PRAYER_PROTECT_FROM_MAGIC, 0));
+					SPRITES[0] = scaleSprite(spriteManager.getSprite(SpriteID.Prayeron.PROTECT_FROM_MAGIC, 0));
 				}
 
 				return SPRITES[0];
 			case PROTECT_FROM_MISSILES:
 				if (SPRITES[1] == null)
 				{
-					SPRITES[1] = scaleSprite(spriteManager.getSprite(SpriteID.PRAYER_PROTECT_FROM_MISSILES, 0));
+					SPRITES[1] = scaleSprite(spriteManager.getSprite(SpriteID.Prayeron.PROTECT_FROM_MISSILES, 0));
 				}
 
 				return SPRITES[1];
 			case PROTECT_FROM_MELEE:
 				if (SPRITES[2] == null)
 				{
-					SPRITES[2] = scaleSprite(spriteManager.getSprite(SpriteID.PRAYER_PROTECT_FROM_MELEE, 0));
+					SPRITES[2] = scaleSprite(spriteManager.getSprite(SpriteID.Prayeron.PROTECT_FROM_MELEE, 0));
 				}
 
 				return SPRITES[2];
