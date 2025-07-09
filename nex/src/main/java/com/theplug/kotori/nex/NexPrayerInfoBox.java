@@ -10,7 +10,7 @@ import javax.inject.Singleton;
 import com.theplug.kotori.kotoriutils.methods.PrayerInteractions;
 import net.runelite.api.Client;
 import net.runelite.api.Prayer;
-import net.runelite.api.SpriteID;
+import net.runelite.api.gameval.SpriteID;
 import net.runelite.client.game.SpriteManager;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
@@ -79,16 +79,16 @@ public class NexPrayerInfoBox extends Overlay
 		switch (attack)
 		{
 			case PROTECT_FROM_MAGIC:
-				spriteId = SpriteID.PRAYER_PROTECT_FROM_MAGIC;
+				spriteId = SpriteID.Prayeron.PROTECT_FROM_MAGIC;
 				break;
 			case PROTECT_FROM_MISSILES:
-				spriteId = SpriteID.PRAYER_PROTECT_FROM_MISSILES;
+				spriteId = SpriteID.Prayeron.PROTECT_FROM_MISSILES;
 				break;
 			case PROTECT_FROM_MELEE:
-				spriteId = SpriteID.PRAYER_PROTECT_FROM_MELEE;
+				spriteId = SpriteID.Prayeron.PROTECT_FROM_MELEE;
 				break;
 			default:
-				spriteId = SpriteID.GE_CANCEL_OFFER_BUTTON;
+				spriteId = SpriteID.GeCancel.BUTTON;
 		}
 
 		return spriteManager.getSprite(spriteId, 0);
