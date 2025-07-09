@@ -37,7 +37,7 @@ import com.theplug.kotori.kotoriutils.overlay.OverlayUtility;
 import net.runelite.api.Client;
 import net.runelite.api.Point;
 import net.runelite.api.Prayer;
-import net.runelite.api.SpriteID;
+import net.runelite.api.gameval.SpriteID;
 import net.runelite.client.game.SpriteManager;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
@@ -157,11 +157,11 @@ public class FightCaveOverlay extends Overlay
 		switch (attackStyle)
 		{
 			case MAGE:
-				return spriteManager.getSprite(SpriteID.PRAYER_PROTECT_FROM_MAGIC, 0);
+				return spriteManager.getSprite(SpriteID.Prayeron.PROTECT_FROM_MAGIC, 0);
 			case MELEE:
-				return spriteManager.getSprite(SpriteID.PRAYER_PROTECT_FROM_MELEE, 0);
+				return spriteManager.getSprite(SpriteID.Prayeron.PROTECT_FROM_MELEE, 0);
 			case RANGE:
-				return spriteManager.getSprite(SpriteID.PRAYER_PROTECT_FROM_MISSILES, 0);
+				return spriteManager.getSprite(SpriteID.Prayeron.PROTECT_FROM_MISSILES, 0);
 		}
 		return null;
 	}
