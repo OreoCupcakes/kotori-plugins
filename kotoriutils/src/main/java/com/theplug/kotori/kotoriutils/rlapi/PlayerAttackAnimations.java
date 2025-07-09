@@ -29,7 +29,7 @@ package com.theplug.kotori.kotoriutils.rlapi;
 import com.google.common.collect.ImmutableMap;
 import lombok.Getter;
 import net.runelite.api.HeadIcon;
-import net.runelite.api.SpriteID;
+import net.runelite.api.gameval.SpriteID;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -213,11 +213,11 @@ public enum PlayerAttackAnimations
 
     public enum AttackStyle
     {
-        STAB(HeadIcon.MELEE, SpriteID.COMBAT_STYLE_SWORD_STAB),
-        SLASH(HeadIcon.MELEE, SpriteID.COMBAT_STYLE_SWORD_SLASH),
-        CRUSH(HeadIcon.MELEE, SpriteID.COMBAT_STYLE_HAMMER_POUND),
-        RANGED(HeadIcon.RANGED, SpriteID.SKILL_RANGED),
-        MAGIC(HeadIcon.MAGIC, SpriteID.SKILL_MAGIC);
+        STAB(HeadIcon.MELEE, SpriteID.Combaticons.SWORD_STAB),
+        SLASH(HeadIcon.MELEE, SpriteID.Combaticons.SWORD_SLASH),
+        CRUSH(HeadIcon.MELEE, SpriteID.Combaticons2.HAMMER_POUND),
+        RANGED(HeadIcon.RANGED, SpriteID.Staticons.RANGED),
+        MAGIC(HeadIcon.MAGIC, SpriteID.Staticons.MAGIC);
 
         static final AttackStyle[] MELEE_STYLES = {STAB, SLASH, CRUSH};
 
