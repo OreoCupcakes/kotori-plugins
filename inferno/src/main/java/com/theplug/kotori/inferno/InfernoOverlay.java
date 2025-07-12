@@ -468,52 +468,65 @@ public class InfernoOverlay extends Overlay
 
 	private void renderDescendingBoxes(Graphics2D graphics)
 	{
-		for (Integer tick : plugin.getUpcomingAttacks().keySet())
+		for (Integer ticksUntilAttack : plugin.getUpcomingAttacks().keySet())
 		{
-			final Map<InfernoNPC.Attack, Integer> attackPriority = plugin.getUpcomingAttacks().get(tick);
-			int bestPriority = 999;
-			InfernoNPC.Attack bestAttack = null;
-
-			for (Map.Entry<InfernoNPC.Attack, Integer> attackEntry : attackPriority.entrySet())
-			{
-				if (attackEntry.getValue() < bestPriority)
-				{
-					bestAttack = attackEntry.getKey();
-					bestPriority = attackEntry.getValue();
-				}
-			}
+			final Map<InfernoNPC.Attack, Integer> attackPriority = plugin.getUpcomingAttacks().get(ticksUntilAttack);
+			final InfernoNPC.Attack priorityAttack = attackPriority.entrySet().stream()
+					.min(Map.Entry.comparingByValue())
+					.map(Map.Entry::getKey)
+					.orElse(null);
 
 			for (InfernoNPC.Attack currentAttack : attackPriority.keySet())
 			{
-				//TODO: Config values for these colors
-				final Color color = (tick == 1 && currentAttack == bestAttack) ? Color.RED : Color.ORANGE;
-				final Widget prayerWidget = client.getWidget(PrayerExtended.getPrayerWidgetId(currentAttack.getPrayer()));
-				
-				if (prayerWidget == null)
-				{
-					continue;
-				}
-
-				int baseX = (int) prayerWidget.getBounds().getX();
-				baseX += (int) (prayerWidget.getBounds().getWidth() / 2);
-				baseX -= BOX_WIDTH / 2;
-
-				int baseY = (int) prayerWidget.getBounds().getY() - tick * TICK_PIXEL_SIZE - BOX_HEIGHT;
-				baseY += (int) (TICK_PIXEL_SIZE - ((plugin.getLastTick() + 600 - System.currentTimeMillis()) / 600.0 * TICK_PIXEL_SIZE));
-
-				final Rectangle boxRectangle = new Rectangle(BOX_WIDTH, BOX_HEIGHT);
-				boxRectangle.translate(baseX, baseY);
-
-				if (currentAttack == bestAttack)
-				{
-					renderFilledPolygon(graphics, boxRectangle, color);
-				}
-				else if (config.indicateNonPriorityDescendingBoxes())
-				{
-					renderOutlinePolygon(graphics, boxRectangle, color);
-				}
+				renderDescendingBox(graphics, currentAttack, priorityAttack, ticksUntilAttack);
 			}
 		}
+	}
+
+	private void renderDescendingBox(Graphics2D graphics, InfernoNPC.Attack currentAttack, InfernoNPC.Attack priorityAttack, int ticksUntilAttack)
+	{
+		final Color color = getCurrentAttackDescendingBarColor(currentAttack, priorityAttack, ticksUntilAttack);
+		final Widget prayerWidget = client.getWidget(PrayerExtended.getPrayerWidgetId(currentAttack.getPrayer()));
+
+		if (prayerWidget == null) return;
+
+		int baseX = (int) prayerWidget.getBounds().getX();
+		baseX += (int) (prayerWidget.getBounds().getWidth() / 2);
+		baseX -= BOX_WIDTH / 2;
+
+		int baseY = (int) prayerWidget.getBounds().getY() - ticksUntilAttack * TICK_PIXEL_SIZE - BOX_HEIGHT;
+		baseY += (int) (TICK_PIXEL_SIZE - ((plugin.getLastTick() + 600 - System.currentTimeMillis()) / 600.0 * TICK_PIXEL_SIZE));
+
+		final Rectangle boxRectangle = new Rectangle(BOX_WIDTH, BOX_HEIGHT);
+		boxRectangle.translate(baseX, baseY);
+
+		if (currentAttack == priorityAttack)
+		{
+			renderFilledPolygon(graphics, boxRectangle, color);
+		}
+		else if (config.indicateNonPriorityDescendingBoxes())
+		{
+			renderOutlinePolygon(graphics, boxRectangle, color);
+		}
+	}
+
+	private Color getCurrentAttackDescendingBarColor(InfernoNPC.Attack currentAttack, InfernoNPC.Attack priorityAttack, int ticksUntilAttack) {
+		if(currentAttack != priorityAttack)
+		{
+			return config.nonPriorityPrayerColor();
+		}
+
+		if(PrayerInteractions.isActive(priorityAttack.getPrayer()))
+		{
+			return config.correctPrayerColor();
+		}
+
+		if(ticksUntilAttack == 1)
+		{
+			return config.mustPrayNextTickColor();
+		}
+
+		return config.upcomingPrayerNotPrayedColor();
 	}
 
 	private void renderPrayerIconOverlay(Graphics2D graphics)
@@ -546,15 +559,14 @@ public class InfernoOverlay extends Overlay
 					(int) prayerWidget.getBounds().getHeight());
 				prayerRectangle.translate((int) prayerWidget.getBounds().getX(), (int) prayerWidget.getBounds().getY());
 
-				//TODO: Config values for these colors
 				Color prayerColor;
 				if (plugin.getClosestAttack() == prayerForAttack)
 				{
-					prayerColor = Color.GREEN;
+					prayerColor = config.correctPrayerColor();
 				}
 				else
 				{
-					prayerColor = Color.RED;
+					prayerColor = config.mustPrayNextTickColor();
 				}
 
 				renderOutlinePolygon(graphics, prayerRectangle, prayerColor);
