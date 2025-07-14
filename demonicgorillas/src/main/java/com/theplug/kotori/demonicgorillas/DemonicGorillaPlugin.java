@@ -571,7 +571,7 @@ public class DemonicGorillaPlugin extends Plugin
 		}
 		gorillaProjectiles.add(projectile);
 
-		final WorldPoint loc = WorldPoint.fromLocal(client.getTopLevelWorldView(), projectile.getSourcePoint().getX(), projectile.getSourcePoint().getY(), client.getTopLevelWorldView().getPlane());
+		final WorldPoint loc = projectile.getSourcePoint();
 
 		if (projectileId == GraphicIDPlus.DEMONIC_GORILLA_BOULDER)
 		{
