@@ -3,6 +3,7 @@ package com.theplug.kotori.kotoriutils.methods;
 import com.theplug.kotori.kotoriutils.ReflectionLibrary;
 import com.theplug.kotori.kotoriutils.rlapi.Spells;
 import net.runelite.api.*;
+import net.runelite.api.gameval.InventoryID;
 import net.runelite.client.RuneLite;
 
 public class SpellInteractions
@@ -45,10 +46,36 @@ public class SpellInteractions
 
 	public static void castSpellWardOfArceuus()
 	{
-		if (!VarUtilities.isSpellWardOfArceuusActive() && VarUtilities.isSpellWardOfArceuusOffCooldown())
+		if (VarUtilities.isSpellWardOfArceuusDisabled() && VarUtilities.isSpellWardOfArceuusOffCooldown())
 		{
 			castSpell(Spells.WARD_OF_ARCEUUS);
 		}
+	}
+
+	public static void castDemonicOffering(int num)
+	{
+		if (InventoryInteractions.inventoryCountOf(InventoryInteractions.DEMONIC_ASHES) >= num)
+		{
+			SpellInteractions.castSpell(Spells.DEMONIC_OFFERING);
+		}
+	}
+
+	public static void castDemonicOffering()
+	{
+		castDemonicOffering(3);
+	}
+
+	public static void castSinisterOffering(int num)
+	{
+		if (InventoryInteractions.inventoryCountOf(InventoryInteractions.SINISTER_BONES) >= num)
+		{
+			SpellInteractions.castSpell(Spells.SINISTER_OFFERING);
+		}
+	}
+
+	public static void castSinisterOffering()
+	{
+		castSinisterOffering(3);
 	}
 
 	public static void createOneClickAttackSpell(Spells spell)

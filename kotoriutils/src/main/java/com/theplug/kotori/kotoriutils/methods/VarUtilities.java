@@ -62,9 +62,9 @@ public class VarUtilities
 	{
 		return client.getVarbitValue(VarbitID.ARCEUUS_WARD_COOLDOWN) == 0;
 	}
-	public static boolean isSpellWardOfArceuusActive()
+	public static boolean isSpellWardOfArceuusDisabled()
 	{
-		return client.getVarbitValue(VarbitID.BUFF_WARD_OF_ARCEUUS_DISABLED) == 0;
+		return client.getVarbitValue(VarbitID.BUFF_WARD_OF_ARCEUUS_DISABLED) == 1;
 	}
 	public static boolean isSpellInActiveSpellbook(WidgetInfoPlus spell)
 	{

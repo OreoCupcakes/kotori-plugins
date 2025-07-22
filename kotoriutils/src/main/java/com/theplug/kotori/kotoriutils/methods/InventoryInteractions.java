@@ -12,18 +12,22 @@ import net.runelite.client.RuneLite;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 public class InventoryInteractions
 {
 	static Client client = RuneLite.getInjector().getInstance(Client.class);
-	//143 141 139 2434
-	//3030 3028 3026 3024
-	//10931 10929 10927 10925
-	private static final List<Integer> prayerPotions = List.of(ItemID._1DOSEPRAYERRESTORE, ItemID._2DOSEPRAYERRESTORE, ItemID._3DOSEPRAYERRESTORE, ItemID._4DOSEPRAYERRESTORE);
-	private static final List<Integer> superRestores = List.of(ItemID._1DOSE2RESTORE, ItemID._2DOSE2RESTORE, ItemID._3DOSE2RESTORE, ItemID._4DOSE2RESTORE);
-	private static final List<Integer> sanfewSerums = List.of(ItemID.SANFEW_SALVE_1_DOSE, ItemID.SANFEW_SALVE_2_DOSE, ItemID.SANFEW_SALVE_3_DOSE, ItemID.SANFEW_SALVE_4_DOSE);
-	private static final List<List<Integer>> allPrayerRestoringPotions = List.of(prayerPotions, superRestores, sanfewSerums);
+
+	public static final List<Integer> PRAYER_POTIONS = List.of(ItemID._1DOSEPRAYERRESTORE, ItemID._2DOSEPRAYERRESTORE, ItemID._3DOSEPRAYERRESTORE, ItemID._4DOSEPRAYERRESTORE);
+	public static final List<Integer> SUPER_RESTORES = List.of(ItemID._1DOSE2RESTORE, ItemID._2DOSE2RESTORE, ItemID._3DOSE2RESTORE, ItemID._4DOSE2RESTORE);
+	public static final List<Integer> SANFEW_SERUMS = List.of(ItemID.SANFEW_SALVE_1_DOSE, ItemID.SANFEW_SALVE_2_DOSE, ItemID.SANFEW_SALVE_3_DOSE, ItemID.SANFEW_SALVE_4_DOSE);
+	public static final List<List<Integer>> ALL_PRAYER_RESTORING_POTIONS = List.of(PRAYER_POTIONS, SUPER_RESTORES, SANFEW_SERUMS);
+
+	public static final Set<Integer> DEMONIC_ASHES = Set.of(ItemID.FIENDISH_ASHES, ItemID.VILE_ASHES, ItemID.MALICIOUS_ASHES, ItemID.ABYSSAL_ASHES, ItemID.INFERNAL_ASHES);
+	public static final Set<Integer> SINISTER_BONES = Set.of(ItemID.BONES, ItemID.MM_NORMAL_MONKEY_BONES, ItemID.BAT_BONES, ItemID.BIG_BONES, ItemID.TBWT_JOGRE_BONES, ItemID.BABYWYRM_BONES, ItemID.ZOGRE_BONES,
+			ItemID.TBWT_BEAST_BONES, ItemID.BABYDRAGON_BONES, ItemID.WYRM_BONES, ItemID.DRAGON_BONES, ItemID.WYVERN_BONES, ItemID.DRAKE_BONES, ItemID.ZOGRE_ANCESTRAL_BONES_FAYG, ItemID.LAVA_DRAGON_BONES,
+			ItemID.ZOGRE_ANCESTRAL_BONES_RAURG, ItemID.HYDRA_BONES, ItemID.DAGANNOTH_KING_BONES, ItemID.ZOGRE_ANCESTRAL_BONES_OURG, ItemID.DRAGON_BONES_SUPERIOR);
 
 	public static int[] parseStringToItemIds(String listOfItemIds)
 	{
@@ -166,7 +170,7 @@ public class InventoryInteractions
 	public static void drinkPrayerRestoreDose(boolean drinkPrayers, boolean drinkSupers, boolean drinkSanfews)
 	{
 		int listIndex = 0;
-		for (List<Integer> setOfPots : allPrayerRestoringPotions)
+		for (List<Integer> setOfPots : ALL_PRAYER_RESTORING_POTIONS)
 		{
 			for (int itemId : setOfPots)
 			{
@@ -202,6 +206,32 @@ public class InventoryInteractions
 		}
 
 		return inventory.contains(itemId);
+	}
+
+	public static int inventoryCountOf(int itemId)
+	{
+		return inventoryCountOf(Set.of(itemId));
+	}
+
+	public static int inventoryCountOf(Set<Integer> itemIds)
+	{
+		ItemContainer inventory = client.getItemContainer(InventoryID.INV);
+		if (inventory == null)
+		{
+			return 0;
+		}
+
+		int count = 0;
+
+		for (Item item : inventory.getItems())
+		{
+			if (itemIds.contains(item.getId()))
+			{
+				count++;
+			}
+		}
+
+		return count;
 	}
 	
 	// Equipment Methods
