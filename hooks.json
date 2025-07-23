@@ -52,7 +52,7 @@
     {
       "n": "getNpcOverheadIcon",
       "c": "hd",
-      "p": "bh",
+      "p": "ba",
       "m": 1
     },
     {
@@ -82,31 +82,31 @@
     {
       "n": "menuParam0Array",
       "c": "xy",
-      "p": "ac",
+      "p": "an",
       "m": 1
     },
     {
       "n": "menuParam1Array",
       "c": "xy",
-      "p": "al",
+      "p": "ai",
       "m": 1
     },
     {
       "n": "menuTypesArray",
       "c": "xy",
-      "p": "am",
+      "p": "al",
       "m": 1
     },
     {
       "n": "menuIdentifiersArray",
       "c": "xy",
-      "p": "ai",
+      "p": "ac",
       "m": 1
     },
     {
       "n": "menuItemIdsArray",
       "c": "xy",
-      "p": "an",
+      "p": "aa",
       "m": 1
     },
     {
