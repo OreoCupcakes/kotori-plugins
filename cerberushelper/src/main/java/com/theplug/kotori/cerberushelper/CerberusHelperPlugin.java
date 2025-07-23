@@ -1231,16 +1231,7 @@ public class CerberusHelperPlugin extends Plugin
 			return;
 		}
 
-		ItemContainer inventory = client.getItemContainer(InventoryID.INV);
-		if (inventory == null)
-		{
-			return;
-		}
-
-		if (inventory.contains(25778) && inventory.count(25778) >= config.demonicOfferingAmount())
-		{
-			SpellInteractions.castSpell(Spells.DEMONIC_OFFERING);
-		}
+		SpellInteractions.castDemonicOffering(config.demonicOfferingAmount());
 	}
 
 	private void autoWardOfArceuus()
@@ -1250,7 +1241,7 @@ public class CerberusHelperPlugin extends Plugin
 			return;
 		}
 
-		if (sortedGhosts && ghosts.size() == 3 && !cerberus.isEchoVariant())
+		if (sortedGhosts)
 		{
 			SpellInteractions.castSpellWardOfArceuus();
 		}
