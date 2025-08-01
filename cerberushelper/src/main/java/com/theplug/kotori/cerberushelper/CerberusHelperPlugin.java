@@ -358,7 +358,11 @@ public class CerberusHelperPlugin extends Plugin
 						.compare(a.getLocalLocation().getX(), b.getLocalLocation().getX())
 						.result());
 
-				if (gameTick - cerberus.getLastGhostYellTick() >= 15)
+				if (cerberus.isEchoVariant() && gameTick - cerberus.getLastGhostYellTick() >= 15)
+				{
+					sortedGhosts = true;
+				}
+				else if (!cerberus.isEchoVariant() && gameTick - cerberus.getLastGhostYellTick() >= 13)
 				{
 					sortedGhosts = true;
 				}
