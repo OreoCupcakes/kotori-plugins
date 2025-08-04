@@ -50,9 +50,21 @@
       "m": -589928191
     },
     {
-      "n": "getNpcOverheadIcon",
+      "n": "getOldNpcOverheadArray",
       "c": "hg",
       "p": "bb",
+      "m": 1
+    },
+    {
+      "n": "getNewNpcOverheadObject",
+      "c": "da",
+      "p": "ap",
+      "m": 1
+    },
+    {
+      "n": "getNewNpcOverheadArray",
+      "c": "wb",
+      "p": "ab",
       "m": 1
     },
     {

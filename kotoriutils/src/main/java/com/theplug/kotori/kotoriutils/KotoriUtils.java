@@ -238,9 +238,17 @@ public class KotoriUtils extends Plugin {
                     ReflectionLibrary.setSelectedSpellItemIDFieldName(hookInfo.getP());
                     ReflectionLibrary.setSelectedSpellItemIDMultiplier(getObfuscatedSetter(hookInfo.getM()));
                     break;
-                case "getNpcOverheadIcon":
-                    ReflectionLibrary.setNpcOverheadIconClassName(hookInfo.getC());
-                    ReflectionLibrary.setNpcOverheadIconFieldName(hookInfo.getP());
+                case "getOldNpcOverheadArray":
+                    ReflectionLibrary.setOldNpcOverheadArrayClassName(hookInfo.getC());
+                    ReflectionLibrary.setOldNpcOverheadArrayFieldName(hookInfo.getP());
+                    break;
+                case "getNewNpcOverheadObject":
+                    ReflectionLibrary.setNewNpcOverheadObjectClassName(hookInfo.getC());
+                    ReflectionLibrary.setNewNpcOverheadObjectFieldName(hookInfo.getP());
+                    break;
+                case "getNewNpcOverheadArray":
+                    ReflectionLibrary.setNewNpcOverheadArrayClassName(hookInfo.getC());
+                    ReflectionLibrary.setNewNpcOverheadArrayFieldName(hookInfo.getP());
                     break;
                 case "getNpcOverheadMethod":
                     ReflectionLibrary.setNpcOverheadMethodClassName(hookInfo.getC());

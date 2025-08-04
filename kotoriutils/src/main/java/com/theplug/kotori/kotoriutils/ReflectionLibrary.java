@@ -89,11 +89,21 @@ public class ReflectionLibrary
 	private static String actorPathLengthFieldName;
 	@Setter
 	private static int actorPathLengthMultiplier;
-	
+
 	@Setter
-	private static String npcOverheadIconClassName;
+	private static String oldNpcOverheadArrayClassName;
 	@Setter
-	private static String npcOverheadIconFieldName;
+	private static String oldNpcOverheadArrayFieldName;
+
+	@Setter
+	private static String newNpcOverheadObjectClassName;
+	@Setter
+	private static String newNpcOverheadObjectFieldName;
+
+	@Setter
+	private static String newNpcOverheadArrayClassName;
+	@Setter
+	private static String newNpcOverheadArrayFieldName;
 
 	@Setter
 	private static String npcOverheadMethodClassName;
@@ -539,7 +549,6 @@ public class ReflectionLibrary
 		Field animation = getField(actorAnimationIdClassName, actorAnimationIdFieldName);
 		String errorMsg = "Kotori Plugin Utils - Failed to get NPC animation id.";
 		return getFieldIntValue(animation, animationObject, actorAnimationIdMultiplier, errorMsg);
-	//	return npc.getAnimation();
 	}
 	
 	public static HeadIcon getNpcOverheadIcon(NPC npc)
@@ -559,16 +568,70 @@ public class ReflectionLibrary
 			log.error("Unable to use RL method npc.getOverheadSpriteIds.", e);
 		}
 
-		icon = getNpcOverheadIconOldMethod(npc);
+		icon = getOldNpcOverheadArray(npc);
 		if (icon != null)
 		{
 			return icon;
 		}
-		icon = getNpcOverheadIconNewMethod(npc);
+		icon = getNewNpcOverheadArray(npc);
+		if (icon != null)
+		{
+			return icon;
+		}
+		icon = getNpcOverheadMethod(npc);
 		return icon;
 	}
 
-	private static HeadIcon getNpcOverheadIconNewMethod(NPC npc)
+	private static HeadIcon getOldNpcOverheadArray(NPC npc)
+	{
+		if (npc == null)
+		{
+			return null;
+		}
+
+		NPCComposition npcComposition = npc.getComposition();
+
+		try
+		{
+			Field overheads = getField(oldNpcOverheadArrayClassName, oldNpcOverheadArrayFieldName);
+			String objectErrorMsg = "Kotori Plugin Utils - Failed to get the old NPC overheads array object.";
+			Object headIconShortArray = getFieldObjectValue(overheads, npcComposition, objectErrorMsg);
+			short overheadIconShortValue = Array.getShort(headIconShortArray, 0);
+			return HeadIcon.values()[overheadIconShortValue];
+		}
+		catch (Exception e)
+		{
+			log.error("Kotori Plugin Utils - Unable to use old method of getting NPC Composition's overhead icon via field.", e);
+			return null;
+		}
+	}
+
+	private static HeadIcon getNewNpcOverheadArray(NPC npc)
+	{
+		if (npc == null)
+		{
+			return null;
+		}
+
+		try
+		{
+			Field overheadClass = getField(newNpcOverheadObjectClassName, newNpcOverheadObjectFieldName);
+			String objectErrorMsg = "Kotori Plugin Utils - Failed to get the new NPC overheads class object.";
+			Object overheadObject = getFieldObjectValue(overheadClass, npc, objectErrorMsg);
+			Field overheadArray = getField(newNpcOverheadArrayClassName, newNpcOverheadArrayFieldName);
+			String arrayErrorMsg = "Kotori Plugin Utils - Failed to get NPC overheads array.";
+			Object overheadArrayObject = getFieldObjectValue(overheadArray, overheadObject, arrayErrorMsg);
+			short overheadShortValue = Array.getShort(overheadArrayObject, 0);
+			return HeadIcon.values()[overheadShortValue];
+		}
+		catch (Exception e)
+		{
+			log.error("Kotori Plugin Utils - Failed to get overhead via NewNpcOverheadArray method.", e);
+			return null;
+		}
+	}
+
+	private static HeadIcon getNpcOverheadMethod(NPC npc)
 	{
 		if (npc == null)
 		{
@@ -582,7 +645,7 @@ public class ReflectionLibrary
 		{
 			return null;
 		}
-		
+
 		boolean isJunkValueAByte = npcOverheadMethodJunkValue < 128 && npcOverheadMethodJunkValue >= -128;
 		boolean isJunkValueShort = npcOverheadMethodJunkValue < 32767 && npcOverheadMethodJunkValue >= -32767;
 
@@ -634,45 +697,6 @@ public class ReflectionLibrary
 		catch (Exception e)
 		{
 			log.error("Kotori Plugin Utils - Unable to invoke the RuneLite getOverhead method.", e);
-		}
-
-		return null;
-	}
-
-	private static HeadIcon getNpcOverheadIconOldMethod(NPC npc)
-	{
-		if (npc == null)
-		{
-			return null;
-		}
-
-		NPCComposition npcComposition = npc.getComposition();
-		if (npcComposition == null)
-		{
-			return null;
-		}
-
-		Field overheads = getField(npcOverheadIconClassName, npcOverheadIconFieldName);
-		if (overheads == null)
-		{
-			return null;
-		}
-
-		try
-		{
-			overheads.setAccessible(true);
-			Object headIconShortArray = overheads.get(npcComposition);
-			if (headIconShortArray == null)
-			{
-				return null;
-			}
-			short overheadIconShortValue = Array.getShort(headIconShortArray, 0);
-			overheads.setAccessible(false);
-			return HeadIcon.values()[overheadIconShortValue];
-		}
-		catch (Exception e)
-		{
-			log.error("Kotori Plugin Utils - Unable to use old method of getting NPC Composition's overhead icon via field.", e);
 		}
 
 		return null;
