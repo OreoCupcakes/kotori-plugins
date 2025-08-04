@@ -596,6 +596,10 @@ public class ReflectionLibrary
 			Field overheads = getField(oldNpcOverheadArrayClassName, oldNpcOverheadArrayFieldName);
 			String objectErrorMsg = "Kotori Plugin Utils - Failed to get the old NPC overheads array object.";
 			Object headIconShortArray = getFieldObjectValue(overheads, npcComposition, objectErrorMsg);
+			if (headIconShortArray == null)
+			{
+				return null;
+			}
 			short overheadIconShortValue = Array.getShort(headIconShortArray, 0);
 			return HeadIcon.values()[overheadIconShortValue];
 		}
@@ -621,6 +625,10 @@ public class ReflectionLibrary
 			Field overheadArray = getField(newNpcOverheadArrayClassName, newNpcOverheadArrayFieldName);
 			String arrayErrorMsg = "Kotori Plugin Utils - Failed to get NPC overheads array.";
 			Object overheadArrayObject = getFieldObjectValue(overheadArray, overheadObject, arrayErrorMsg);
+			if (overheadArrayObject == null)
+			{
+				return null;
+			}
 			short overheadShortValue = Array.getShort(overheadArrayObject, 0);
 			return HeadIcon.values()[overheadShortValue];
 		}
