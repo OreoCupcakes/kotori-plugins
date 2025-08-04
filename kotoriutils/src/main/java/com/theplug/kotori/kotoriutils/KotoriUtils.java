@@ -298,6 +298,10 @@ public class KotoriUtils extends Plugin {
                     ReflectionLibrary.setActorAnimationIdFieldName(hookInfo.getP());
                     ReflectionLibrary.setActorAnimationIdMultiplier(hookInfo.getM());
                     break;
+                case "getActorAnimationObject":
+                    ReflectionLibrary.setActorAnimationObjectClassName(hookInfo.getC());
+                    ReflectionLibrary.setActorAnimationObjectFieldName(hookInfo.getP());
+                    break;
             }
         }
 

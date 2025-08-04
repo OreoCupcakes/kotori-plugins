@@ -1,7 +1,7 @@
 {
-  "gameRevision": "231",
-  "runeliteVersion": "1.11.12.2",
-  "kotoriLoaderVersion": "3.0.0",
+  "gameRevision": "232",
+  "runeliteVersion": "1.11.13",
+  "kotoriLoaderVersion": "3.0.1",
   "preventMasterLoad": "false",
   "preventAlchemicalHelper": "false",
   "preventCerberusHelper": "false",

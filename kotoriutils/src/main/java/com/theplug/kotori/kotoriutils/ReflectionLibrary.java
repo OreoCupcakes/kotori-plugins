@@ -69,8 +69,13 @@ public class ReflectionLibrary
 	private static String selectedSpellItemIDFieldName;
 	@Setter
 	private static int selectedSpellItemIDMultiplier;
-	
+
 	//Actor Hooks
+	@Setter
+	private static String actorAnimationObjectClassName;
+	@Setter
+	private static String actorAnimationObjectFieldName;
+
 	@Setter
 	private static String actorAnimationIdClassName;
 	@Setter
@@ -184,6 +189,27 @@ public class ReflectionLibrary
 	{
 		Class<?> clazz = getClass(className);
 		return getField(clazz, fieldName);
+	}
+
+	private static Object getFieldObjectValue(Field field, Object objectWithField, String errorMsg)
+	{
+		if (field == null || objectWithField == null)
+		{
+			return null;
+		}
+
+		try
+		{
+			field.setAccessible(true);
+			Object obj = field.get(objectWithField);
+			field.setAccessible(false);
+			return obj;
+		}
+		catch (Exception e)
+		{
+			log.error(errorMsg, e);
+			return null;
+		}
 	}
 	
 	private static int getFieldIntValue(Field field, Object objectWithField, int multiplier, String errorMsg)
@@ -507,9 +533,13 @@ public class ReflectionLibrary
 	//Actor Hook Methods
 	public static int getNpcAnimationId(Actor npc)
 	{
+		Field animationClass = getField(actorAnimationObjectClassName, actorAnimationObjectFieldName);
+		String objectErrorMsg = "Kotori Plugin Utils - Failed to get the new Actor animation class object.";
+		Object animationObject = getFieldObjectValue(animationClass, npc, objectErrorMsg);
 		Field animation = getField(actorAnimationIdClassName, actorAnimationIdFieldName);
 		String errorMsg = "Kotori Plugin Utils - Failed to get NPC animation id.";
-		return getFieldIntValue(animation, npc, actorAnimationIdMultiplier, errorMsg);
+		return getFieldIntValue(animation, animationObject, actorAnimationIdMultiplier, errorMsg);
+	//	return npc.getAnimation();
 	}
 	
 	public static HeadIcon getNpcOverheadIcon(NPC npc)
