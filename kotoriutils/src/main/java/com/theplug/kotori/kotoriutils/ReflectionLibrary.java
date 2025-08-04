@@ -543,12 +543,21 @@ public class ReflectionLibrary
 	//Actor Hook Methods
 	public static int getNpcAnimationId(Actor npc)
 	{
-		Field animationClass = getField(actorAnimationObjectClassName, actorAnimationObjectFieldName);
-		String objectErrorMsg = "Kotori Plugin Utils - Failed to get the new Actor animation class object.";
-		Object animationObject = getFieldObjectValue(animationClass, npc, objectErrorMsg);
-		Field animation = getField(actorAnimationIdClassName, actorAnimationIdFieldName);
-		String errorMsg = "Kotori Plugin Utils - Failed to get NPC animation id.";
-		return getFieldIntValue(animation, animationObject, actorAnimationIdMultiplier, errorMsg);
+		if (actorAnimationObjectClassName.isBlank())
+		{
+			Field animation = getField(actorAnimationIdClassName, actorAnimationIdFieldName);
+			String errorMsg = "Kotori Plugin Utils - Failed to get NPC animation id.";
+			return getFieldIntValue(animation, npc, actorAnimationIdMultiplier, errorMsg);
+		}
+		else
+		{
+			Field animationClass = getField(actorAnimationObjectClassName, actorAnimationObjectFieldName);
+			String objectErrorMsg = "Kotori Plugin Utils - Failed to get the new Actor animation class object.";
+			Object animationObject = getFieldObjectValue(animationClass, npc, objectErrorMsg);
+			Field animation = getField(actorAnimationIdClassName, actorAnimationIdFieldName);
+			String errorMsg = "Kotori Plugin Utils - Failed to get NPC animation id.";
+			return getFieldIntValue(animation, animationObject, actorAnimationIdMultiplier, errorMsg);
+		}
 	}
 	
 	public static HeadIcon getNpcOverheadIcon(NPC npc)
