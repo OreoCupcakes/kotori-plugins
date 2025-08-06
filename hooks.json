@@ -16,13 +16,13 @@
     {
       "n": "setSelectedSceneTileX",
       "c": "iy",
-      "p": "bh",
+      "p": "ba",
       "m": 1
     },
     {
       "n": "setSelectedSceneTileY",
       "c": "iy",
-      "p": "qu",
+      "p": "bh",
       "m": 1
     },
     {
@@ -76,7 +76,7 @@
     {
       "n": "isMoving",
       "c": "ca",
-      "p": "df",
+      "p": "cu",
       "m": 606175875
     },
     {
@@ -88,13 +88,13 @@
     {
       "n": "getActorAnimationId",
       "c": "rk",
-      "p": "ab",
+      "p": "av",
       "m": 1901052507
     },
     {
       "n": "menuOptionsCount",
       "c": "xz",
-      "p": "xu",
+      "p": "ab",
       "m": -1208434705
     },
     {
@@ -130,13 +130,13 @@
     {
       "n": "menuOptionsArray",
       "c": "xz",
-      "p": "am",
+      "p": "aj",
       "m": 1
     },
     {
       "n": "menuTargetsArray",
       "c": "xz",
-      "p": "aj",
+      "p": "am",
       "m": 1
     }
   ]
