@@ -76,19 +76,19 @@
     {
       "n": "isMoving",
       "c": "ca",
-      "p": "cu",
+      "p": "df",
       "m": 606175875
     },
     {
       "n": "getActorAnimationObject",
       "c": "ca",
-      "p": "co",
+      "p": "ca",
       "m": 1
     },
     {
       "n": "getActorAnimationId",
       "c": "rk",
-      "p": "av",
+      "p": "ab",
       "m": 1901052507
     },
     {
@@ -130,13 +130,13 @@
     {
       "n": "menuOptionsArray",
       "c": "xz",
-      "p": "aj",
+      "p": "am",
       "m": 1
     },
     {
       "n": "menuTargetsArray",
       "c": "xz",
-      "p": "am",
+      "p": "aj",
       "m": 1
     }
   ]
