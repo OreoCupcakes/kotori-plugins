@@ -346,6 +346,9 @@ public class CerberusHelperPlugin extends Plugin
 
 		if (ghosts.size() > 1)
 		{
+			int startTick = cerberus.isEchoVariant() ? 15 : 13;
+			int endTick = cerberus.isEchoVariant() ? 35 : 17;
+
 			if (!sortedGhosts)
 			{
 				/*
@@ -358,11 +361,7 @@ public class CerberusHelperPlugin extends Plugin
 						.compare(a.getLocalLocation().getX(), b.getLocalLocation().getX())
 						.result());
 
-				if (cerberus.isEchoVariant() && gameTick - cerberus.getLastGhostYellTick() >= 15)
-				{
-					sortedGhosts = true;
-				}
-				else if (!cerberus.isEchoVariant() && gameTick - cerberus.getLastGhostYellTick() >= 13)
+				if (gameTick - cerberus.getLastGhostYellTick() >= startTick)
 				{
 					sortedGhosts = true;
 				}
@@ -370,7 +369,7 @@ public class CerberusHelperPlugin extends Plugin
 			else
 			{
 				int lastYell = cerberus.getLastGhostYellTick();
-				if (lastYell != 0 && gameTick - lastYell >= 35)
+				if (lastYell != 0 && gameTick - lastYell >= endTick)
 				{
 					sortedGhosts = false;
 				}
@@ -1240,12 +1239,12 @@ public class CerberusHelperPlugin extends Plugin
 
 	private void autoWardOfArceuus()
 	{
-		if (!config.autoCastWardOfArceuus() || cerberus == null || isCerberusNotAttackingYou())
+		if (!config.autoCastWardOfArceuus() || cerberus == null || isCerberusNotAttackingYou() || upcomingAttacks.isEmpty())
 		{
 			return;
 		}
 
-		if (sortedGhosts)
+		if (upcomingAttacks.get(0).getAttack().name().toLowerCase().contains("ghost"))
 		{
 			SpellInteractions.castSpellWardOfArceuus();
 		}

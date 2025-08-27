@@ -82,7 +82,7 @@
     {
       "n": "getActorAnimationObject",
       "c": "ca",
-      "p": "co",
+      "p": "ca",
       "m": 1
     },
     {
@@ -130,13 +130,13 @@
     {
       "n": "menuOptionsArray",
       "c": "xz",
-      "p": "aj",
+      "p": "am",
       "m": 1
     },
     {
       "n": "menuTargetsArray",
       "c": "xz",
-      "p": "am",
+      "p": "aj",
       "m": 1
     }
   ]
