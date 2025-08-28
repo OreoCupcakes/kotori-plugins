@@ -46,7 +46,7 @@ public class SpellInteractions
 
 	public static void castSpellWardOfArceuus()
 	{
-		if (VarUtilities.isSpellWardOfArceuusDisabled() && VarUtilities.isSpellWardOfArceuusOffCooldown())
+		if (VarUtilities.isSpellWardOfArceuusOffCooldown())
 		{
 			castSpell(Spells.WARD_OF_ARCEUUS);
 		}
