@@ -40,14 +40,14 @@
     {
       "n": "setSelectedSpellChildIndex",
       "c": "client",
-      "p": "sv",
-      "m": 290948069
+      "p": "st",
+      "m": 1167624643
     },
     {
       "n": "setSelectedSpellItemId",
       "c": "client",
-      "p": "st",
-      "m": 1167624643
+      "p": "sv",
+      "m": 290948069
     },
     {
       "n": "getOldNpcOverheadArray",
