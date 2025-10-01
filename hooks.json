@@ -10,7 +10,7 @@
     {
       "n": "setCheckClick",
       "c": "it",
-      "p": "bk",
+      "p": "co",
       "m": 1
     },
     {
@@ -28,7 +28,7 @@
     {
       "n": "setViewportWalking",
       "c": "it",
-      "p": "co",
+      "p": "bk",
       "m": 1
     },
     {
