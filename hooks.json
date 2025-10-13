@@ -16,13 +16,13 @@
     {
       "n": "setSelectedSceneTileX",
       "c": "ih",
-      "p": "wx",
+      "p": "wq",
       "m": 1
     },
     {
       "n": "setSelectedSceneTileY",
       "c": "ih",
-      "p": "bm",
+      "p": "pk",
       "m": 1
     },
     {
@@ -100,31 +100,31 @@
     {
       "n": "menuParam0Array",
       "c": "xx",
-      "p": "aq",
+      "p": "ag",
       "m": 1
     },
     {
       "n": "menuParam1Array",
       "c": "xx",
-      "p": "af",
+      "p": "aj",
       "m": 1
     },
     {
       "n": "menuTypesArray",
       "c": "xx",
-      "p": "ae",
+      "p": "ah",
       "m": 1
     },
     {
       "n": "menuIdentifiersArray",
       "c": "xx",
-      "p": "ah",
+      "p": "af",
       "m": 1
     },
     {
       "n": "menuItemIdsArray",
       "c": "xx",
-      "p": "ag",
+      "p": "ae",
       "m": 1
     },
     {
