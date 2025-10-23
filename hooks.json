@@ -16,13 +16,13 @@
     {
       "n": "setSelectedSceneTileX",
       "c": "ih",
-      "p": "wq",
+      "p": "bs",
       "m": 1
     },
     {
       "n": "setSelectedSceneTileY",
       "c": "ih",
-      "p": "pk",
+      "p": "yj",
       "m": 1
     },
     {
@@ -88,13 +88,13 @@
     {
       "n": "getActorAnimationId",
       "c": "rl",
-      "p": "at",
+      "p": "ae",
       "m": 677279171
     },
     {
       "n": "menuOptionsCount",
       "c": "xx",
-      "p": "at",
+      "p": "vv",
       "m": -1139806751
     },
     {
