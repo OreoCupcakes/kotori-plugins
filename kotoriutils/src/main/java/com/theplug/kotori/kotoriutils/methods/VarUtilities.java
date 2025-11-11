@@ -228,6 +228,29 @@ public class VarUtilities
 		//	This is to capture if the equipped weapon type isn't in the weapon styles enum.
 		if (weaponStyleEnum == -1)
 		{
+			//Blue moon spear
+			if (equippedWeaponType == 22)
+			{
+				if (castingMode == 1)
+				{
+					return 2;
+				}
+				else if (attackStyle == 4)
+				{
+					return 2;
+				}
+				else
+				{
+					return  0;
+				}
+			}
+
+			//Partisan
+			if (equippedWeaponType == 30)
+			{
+				return 0;
+			}
+
 			return -1;
 		}
 		int[] weaponStyleStructs = client.getEnum(weaponStyleEnum).getIntVals();
