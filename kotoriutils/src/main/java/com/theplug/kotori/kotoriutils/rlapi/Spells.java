@@ -46,6 +46,7 @@ public enum Spells
     SNARE("Snare", WidgetInfoPlus.SPELL_SNARE, 50, 0, 1, 0),
     ENTANGLE("Entangle", WidgetInfoPlus.SPELL_ENTANGLE, 79, 0, 1, 0),
     TELE_BLOCK("Tele Block", WidgetInfoPlus.SPELL_TELE_BLOCK, 95, 0, 3, 0),
+    MONSTER_INSPECT("Monster Inspect", WidgetInfoPlus.SPELL_MONSTER_INSPECT, 42, 0, 1, 0),
 
     //Normal Spellbook Support Spell
     CHARGE("Charge", WidgetInfoPlus.SPELL_CHARGE, 80, 0, 0, 1),
@@ -72,6 +73,8 @@ public enum Spells
     TELEOTHER_FALADOR("Teleother Falador", WidgetInfoPlus.SPELL_TELEOTHER_FALADOR, 82, 0, 3, 0),
     TELEPORT_TO_TARGET("Teleport to Target", WidgetInfoPlus.SPELL_BOUNTY_TARGET_TELEPORT, 85, 0, 0, 1),
     TELEOTHER_CAMELOT("Teleother Camelot", WidgetInfoPlus.SPELL_TELEOTHER_CAMELOT, 90, 0, 3, 0),
+    TELEPORT_BOAT_TO_ME("Teleport boat to me", WidgetInfoPlus.SPELL_TELEPORT_BOAT_TO_ME, 56, 0, 0, 1),
+    TELEPORT_ME_TO_BOAT("Teleport me to boat", WidgetInfoPlus.SPELL_TELEPORT_ME_TO_BOAT, 67, 0, 0, 1),
 
     //Normal Spellbook Alchemy Spells
     BONES_TO_BANANAS("Bones to Bananas", WidgetInfoPlus.SPELL_BONES_TO_BANANAS, 15, 0, 0, 1),
