@@ -25,6 +25,8 @@
 package com.theplug.kotori.specbar;
 
 import javax.inject.Inject;
+
+import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.events.ClientTick;
 import net.runelite.api.widgets.Widget;
@@ -32,6 +34,7 @@ import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 
+@Slf4j
 @PluginDescriptor(
 	name = "<html><font color=#6b8af6>[P]</font> Spec Bar</html>",
 	enabledByDefault = false,
@@ -50,11 +53,12 @@ public class SpecBarPlugin extends Plugin
 	@Subscribe
 	private void onClientTick(ClientTick event)
 	{
-		Widget specBar = client.getWidget(specBarGroupId,37);
-		Widget specBarBorder = client.getWidget(specBarGroupId, 38);
-		Widget specBarText = client.getWidget(specBarGroupId,42);
-		Widget specBarChargeBar1 = client.getWidget(specBarGroupId,40);
-		Widget specBarChargeBar2 = client.getWidget(specBarGroupId,41);
+		Widget specBar = client.getWidget(specBarGroupId,38);
+		Widget specBarBorder = client.getWidget(specBarGroupId, 39);
+		Widget specBarEmpty = client.getWidget(specBarGroupId, 40);
+		Widget specBarCurrentEnergy = client.getWidget(specBarGroupId,41);
+		Widget specBarCurrentEnergyChild = client.getWidget(specBarGroupId,42);
+		Widget specBarText = client.getWidget(specBarGroupId,43);
 		if (specBar != null)
 		{
 			specBar.setHidden(false);
@@ -62,17 +66,21 @@ public class SpecBarPlugin extends Plugin
 			{
 				specBarBorder.setHidden(false);
 			}
+			if (specBarEmpty != null)
+			{
+				specBarEmpty.revalidate();
+			}
 			if (specBarText != null)
 			{
 				specBarText.setHidden(false);
 				int currentSpecValue = client.getVarpValue(300) / 10;
 				specBarText.setText("Special Attack: " + currentSpecValue + "%");
-				if (specBarChargeBar1 != null && specBarChargeBar2 != null)
+				if (specBarCurrentEnergy != null && specBarCurrentEnergyChild != null)
 				{
 					int currentChargeBarWidth = specBarWidth * currentSpecValue / 100;
-					specBarChargeBar1.setSize(currentChargeBarWidth,12);
-					specBarChargeBar1.revalidate();
-					specBarChargeBar2.revalidate();
+					specBarCurrentEnergy.setSize(currentChargeBarWidth,12);
+					specBarCurrentEnergy.revalidate();
+					specBarCurrentEnergyChild.revalidate();
 				}
 			}
 		}
