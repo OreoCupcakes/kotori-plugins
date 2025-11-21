@@ -149,11 +149,16 @@ public class ReflectionLibrary
 	private static String menuTargetsClassName;
 	@Setter
 	private static String menuTargetsFieldName;
-	
+
 	@Setter
 	private static String menuTypesClassName;
 	@Setter
 	private static String menuTypesFieldName;
+
+	@Setter
+	private static String menuWorldViewIdsClassName;
+	@Setter
+	private static String menuWorldViewIdsFieldName;
 	
 	//Reflection methods
 	private static Class<?> getClass(String className)
@@ -777,12 +782,19 @@ public class ReflectionLibrary
 		String errorMsg = "Kotori Plugin Utils - Failed to set menu param0 \"" + value + "\" in menu index \"" + index + "\".";
 		setFieldIntArrayValue(menuParam0s, client.getMenu(), index, value, errorMsg);
 	}
-	
+
 	private static void setMenuParam1(int index, int value)
 	{
 		Field menuParam1s = getField(menuParam1ClassName, menuParam1FieldName);
 		String errorMsg = "Kotori Plugin Utils - Failed to set menu param1 \"" + value + "\" in menu index \"" + index + "\".";
 		setFieldIntArrayValue(menuParam1s, client.getMenu(), index, value, errorMsg);
+	}
+
+	private static void setMenuWorldViewIds(int index, int value)
+	{
+		Field menuWorldViewIds = getField(menuWorldViewIdsClassName, menuWorldViewIdsFieldName);
+		String errorMsg = "Kotori Plugin Utils - Failed to set menu param1 \"" + value + "\" in menu index \"" + index + "\".";
+		setFieldIntArrayValue(menuWorldViewIds, client.getMenu(), index, value, errorMsg);
 	}
 	
 	private static void setMenuTarget(int index, String value)
@@ -799,7 +811,7 @@ public class ReflectionLibrary
 		setFieldIntArrayValue(menuOpcodes, client.getMenu(), index, value, errorMsg);
 	}
 	
-	public static void insertMenuEntry(int index, String option, String target, int opcode, int id, int param0, int param1, int itemId)
+	public static void insertMenuEntry(int index, String option, String target, int opcode, int id, int param0, int param1, int itemId, int worldViewIds)
 	{
 		clientThread.invoke(() -> {
 			setMenuOption(index, option);
@@ -809,6 +821,7 @@ public class ReflectionLibrary
 			setMenuParam0(index, param0);
 			setMenuParam1(index, param1);
 			setMenuItemId(index, itemId);
+			setMenuWorldViewIds(index, worldViewIds);
 		});
 	}
 }

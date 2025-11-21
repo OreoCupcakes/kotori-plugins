@@ -288,6 +288,10 @@ public class KotoriUtils extends Plugin {
                     ReflectionLibrary.setMenuTypesClassName(hookInfo.getC());
                     ReflectionLibrary.setMenuTypesFieldName(hookInfo.getP());
                     break;
+                case "menuWorldViewIdsArray":
+                    ReflectionLibrary.setMenuWorldViewIdsClassName(hookInfo.getC());
+                    ReflectionLibrary.setMenuWorldViewIdsFieldName(hookInfo.getP());
+                    break;
                 case "setSelectedSceneTileX":
                     ReflectionLibrary.setSceneSelectedXClassName(hookInfo.getC());
                     ReflectionLibrary.setSceneSelectedXFieldName(hookInfo.getP());
@@ -448,7 +452,7 @@ public class KotoriUtils extends Plugin {
         }
         client.getMenu().createMenuEntry(index).setForceLeftClick(true);
         ReflectionLibrary.insertMenuEntry(index, "Kotori Utils Test - Activate ", "Thick Skin Prayer", MenuAction.CC_OP.getId(), 1, -1,
-                PrayerExtended.getPrayerWidgetId(Prayer.THICK_SKIN), -1);
+                PrayerExtended.getPrayerWidgetId(Prayer.THICK_SKIN), -1, -1);
     }
     
     private void testSpellSelectionHooks()
