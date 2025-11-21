@@ -16,13 +16,13 @@
     {
       "n": "setSelectedSceneTileX",
       "c": "jh",
-      "p": "bw",
+      "p": "bp",
       "m": 1
     },
     {
       "n": "setSelectedSceneTileY",
       "c": "jh",
-      "p": "bf",
+      "p": "bt",
       "m": 1
     },
     {
@@ -52,7 +52,7 @@
     {
       "n": "getOldNpcOverheadArray",
       "c": "hu",
-      "p": "cr",
+      "p": "dn",
       "m": 1
     },
     {
@@ -125,6 +125,12 @@
       "n": "menuItemIdsArray",
       "c": "xk",
       "p": "ak",
+      "m": 1
+    },
+    {
+      "n": "menuWorldViewIdsArray",
+      "c": "xk",
+      "p": "aw",
       "m": 1
     },
     {
