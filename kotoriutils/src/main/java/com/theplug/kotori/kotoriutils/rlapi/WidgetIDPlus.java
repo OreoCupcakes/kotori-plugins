@@ -494,8 +494,8 @@ public final class WidgetIDPlus
 		static final int TELEOTHER_CAMELOT = 75;
 		static final int EARTH_SURGE = 76;
 		static final int FIRE_SURGE = 78;
-		static final int TELEPORT_BOAT_TO_ME = 79;
-		static final int TELEPORT_ME_TO_BOAT = 80;
+		static final int SUMMON_BOAT = 79;
+		static final int TELEPORT_TO_BOAT = 80;
 		static final int MONSTER_INSPECT = 195;
 
 		// NORMAL SPELLS JEWELRY ENCHANTMENTS SUB MENU
