@@ -76,7 +76,7 @@
     {
       "n": "isMoving",
       "c": "cr",
-      "p": "da",
+      "p": "dw",
       "m": -1921456255
     },
     {
@@ -94,7 +94,7 @@
     {
       "n": "menuOptionsCount",
       "c": "xk",
-      "p": "at",
+      "p": "xf",
       "m": 1759446067
     },
     {
@@ -136,13 +136,13 @@
     {
       "n": "menuOptionsArray",
       "c": "xk",
-      "p": "ay",
+      "p": "ap",
       "m": 1
     },
     {
       "n": "menuTargetsArray",
       "c": "xk",
-      "p": "ap",
+      "p": "ay",
       "m": 1
     }
   ]
