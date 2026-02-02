@@ -3,146 +3,146 @@
   [
     {
       "n": "invokeMenuAction",
-      "c": "do",
-      "p": "lx",
-      "m": -32
+      "c": "cp",
+      "p": "kf",
+      "m": -188898719
     },
     {
       "n": "setCheckClick",
-      "c": "jh",
-      "p": "cw",
+      "c": "ih",
+      "p": "ce",
       "m": 1
     },
     {
       "n": "setSelectedSceneTileX",
-      "c": "jh",
-      "p": "bw",
+      "c": "ih",
+      "p": "bp",
       "m": 1
     },
     {
       "n": "setSelectedSceneTileY",
-      "c": "jh",
-      "p": "bf",
+      "c": "ih",
+      "p": "bi",
       "m": 1
     },
     {
       "n": "setViewportWalking",
-      "c": "jh",
-      "p": "bn",
+      "c": "ih",
+      "p": "bx",
       "m": 1
     },
     {
       "n": "setSelectedSpellWidget",
-      "c": "oy",
-      "p": "rw",
-      "m": -1070656277
+      "c": "mu",
+      "p": "rk",
+      "m": 502374837
     },
     {
       "n": "setSelectedSpellChildIndex",
       "c": "client",
-      "p": "rr",
-      "m": -436571069
+      "p": "rj",
+      "m": 562250837
     },
     {
       "n": "setSelectedSpellItemId",
       "c": "client",
-      "p": "rz",
-      "m": -2111303253
+      "p": "sy",
+      "m": 265175279
     },
     {
       "n": "getOldNpcOverheadArray",
-      "c": "hu",
-      "p": "dn",
+      "c": "ho",
+      "p": "ev",
       "m": 1
     },
     {
       "n": "getNewNpcOverheadObject",
-      "c": "dv",
-      "p": "ap",
+      "c": "dp",
+      "p": "al",
       "m": 1
     },
     {
       "n": "getNewNpcOverheadArray",
-      "c": "xe",
-      "p": "at",
+      "c": "xw",
+      "p": "ax",
       "m": 1
     },
     {
       "n": "getNpcOverheadMethod",
-      "c": "dv",
-      "p": "ar",
-      "m": 1761659387
+      "c": "dp",
+      "p": "at",
+      "m": -727813633
     },
     {
       "n": "isMoving",
-      "c": "cr",
-      "p": "da",
-      "m": -1921456255
+      "c": "cx",
+      "p": "ds",
+      "m": -859513317
     },
     {
       "n": "getActorAnimationObject",
-      "c": "cr",
-      "p": "cr",
+      "c": "cx",
+      "p": "cd",
       "m": 1
     },
     {
       "n": "getActorAnimationId",
-      "c": "sj",
-      "p": "at",
-      "m": 1870316967
+      "c": "sh",
+      "p": "ax",
+      "m": -701803531
     },
     {
       "n": "menuOptionsCount",
-      "c": "xk",
-      "p": "at",
+      "c": "xs",
+      "p": "eb",
       "m": 1759446067
     },
     {
       "n": "menuParam0Array",
-      "c": "xk",
-      "p": "ag",
+      "c": "xs",
+      "p": "ah",
       "m": 1
     },
     {
       "n": "menuParam1Array",
-      "c": "xk",
-      "p": "an",
+      "c": "xs",
+      "p": "af",
       "m": 1
     },
     {
       "n": "menuTypesArray",
-      "c": "xk",
-      "p": "ae",
+      "c": "xs",
+      "p": "ao",
       "m": 1
     },
     {
       "n": "menuIdentifiersArray",
-      "c": "xk",
-      "p": "aj",
+      "c": "xs",
+      "p": "ad",
       "m": 1
     },
     {
       "n": "menuItemIdsArray",
-      "c": "xk",
-      "p": "ak",
-      "m": 1
-    },
-    {
-      "n": "menuWorldViewIdsArray",
-      "c": "xk",
-      "p": "aw",
-      "m": 1
-    },
-    {
-      "n": "menuOptionsArray",
-      "c": "xk",
+      "c": "xs",
       "p": "ay",
       "m": 1
     },
     {
+      "n": "menuWorldViewIdsArray",
+      "c": "xs",
+      "p": "al",
+      "m": 1
+    },
+    {
+      "n": "menuOptionsArray",
+      "c": "xs",
+      "p": "as",
+      "m": 1
+    },
+    {
       "n": "menuTargetsArray",
-      "c": "xk",
-      "p": "ap",
+      "c": "xs",
+      "p": "aw",
       "m": 1
     }
   ]
