@@ -10,7 +10,7 @@
     {
       "n": "setCheckClick",
       "c": "ih",
-      "p": "ce",
+      "p": "bx",
       "m": 1
     },
     {
@@ -28,7 +28,7 @@
     {
       "n": "setViewportWalking",
       "c": "ih",
-      "p": "bx",
+      "p": "ce",
       "m": 1
     },
     {
@@ -94,7 +94,7 @@
     {
       "n": "menuOptionsCount",
       "c": "xs",
-      "p": "eb",
+      "p": "ax",
       "m": 1759446067
     },
     {
