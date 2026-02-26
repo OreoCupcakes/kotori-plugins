@@ -136,13 +136,13 @@
     {
       "n": "menuOptionsArray",
       "c": "xs",
-      "p": "as",
+      "p": "aw",
       "m": 1
     },
     {
       "n": "menuTargetsArray",
       "c": "xs",
-      "p": "aw",
+      "p": "as",
       "m": 1
     }
   ]
