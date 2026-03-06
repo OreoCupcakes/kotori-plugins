@@ -32,7 +32,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Assembling plugins
-        run: ./gradlew assemble --console=plain
+        run: ./gradlew clean assemble --console=plain
 
       - name: Building plugins
         run: ./gradlew build
@@ -78,7 +78,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Assembling plugins
-        run: ./gradlew assemble --console=plain
+        run: ./gradlew clean assemble --console=plain
 
       - name: Building plugins
         run: ./gradlew build
