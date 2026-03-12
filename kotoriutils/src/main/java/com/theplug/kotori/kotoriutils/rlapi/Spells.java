@@ -75,6 +75,7 @@ public enum Spells
     TELEOTHER_CAMELOT("Teleother Camelot", WidgetInfoPlus.SPELL_TELEOTHER_CAMELOT, 90, 0, 3, 0),
     SUMMON_BOAT("Summon Boat", WidgetInfoPlus.SPELL_SUMMON_BOAT, 56, 0, 0, 1),
     TELEPORT_TO_BOAT("Teleport to Boat", WidgetInfoPlus.SPELL_TELEPORT_TO_BOAT, 67, 0, 0, 1),
+    MINIGAME_TELEPORT_MENU("Minigame Teleport", WidgetInfoPlus.SPELL_MINIGAME_TELEPORT, 1, 0, 0, 1),
 
     //Normal Spellbook Alchemy Spells
     BONES_TO_BANANAS("Bones to Bananas", WidgetInfoPlus.SPELL_BONES_TO_BANANAS, 15, 0, 0, 1),
