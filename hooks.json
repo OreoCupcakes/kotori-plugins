@@ -10,7 +10,7 @@
     {
       "n": "setCheckClick",
       "c": "ih",
-      "p": "ce",
+      "p": "bx",
       "m": 1
     },
     {
@@ -28,7 +28,7 @@
     {
       "n": "setViewportWalking",
       "c": "ih",
-      "p": "bx",
+      "p": "ce",
       "m": 1
     },
     {
@@ -82,7 +82,7 @@
     {
       "n": "getActorAnimationObject",
       "c": "cx",
-      "p": "cr",
+      "p": "cd",
       "m": 1
     },
     {
@@ -136,13 +136,13 @@
     {
       "n": "menuOptionsArray",
       "c": "xs",
-      "p": "as",
+      "p": "aw",
       "m": 1
     },
     {
       "n": "menuTargetsArray",
       "c": "xs",
-      "p": "aw",
+      "p": "as",
       "m": 1
     }
   ]
