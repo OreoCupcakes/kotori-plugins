@@ -70,7 +70,8 @@ public class HouseOverlayPlugin extends Plugin
         // "A" Combinations
         cached_fairy_ring_names.put("AIQ", "Mudskipper Point");
         cached_fairy_ring_names.put("AIR", "South-east of Ardougne");
-        cached_fairy_ring_names.put("AJP", "Varlamore: Avium Savannah");
+        cached_fairy_ring_names.put("AIS", "Auburn Valley");
+        cached_fairy_ring_names.put("AJP", "Avium Savannah");
         cached_fairy_ring_names.put("AJQ", "Cave south of Dorgesh-Kaan");
         cached_fairy_ring_names.put("AJR", "Slayer cave south-east of Rellekka");
         cached_fairy_ring_names.put("AJS", "Penguins near Miscellania");
@@ -102,12 +103,13 @@ public class HouseOverlayPlugin extends Plugin
         cached_fairy_ring_names.put("CIQ", "North-west of Yanille");
         cached_fairy_ring_names.put("CIR", "South of Mount Karuulm");
         cached_fairy_ring_names.put("CIS", "Arceuus Library");
+        cached_fairy_ring_names.put("CJQ", "The Great Conch");
         cached_fairy_ring_names.put("CJR", "Sinclair Mansion");
         cached_fairy_ring_names.put("CKP", "Cosmic entity's plane");
-        cached_fairy_ring_names.put("CKQ", "Varlamore: Aldarin");
+        cached_fairy_ring_names.put("CKQ", "Aldarin");
         cached_fairy_ring_names.put("CKR", "South of Tai Bwo Wannai Village");
         cached_fairy_ring_names.put("CKS", "Canifis");
-        cached_fairy_ring_names.put("CLP", "South of Draynor Village");
+        cached_fairy_ring_names.put("CLP", "Draynor Island");
         cached_fairy_ring_names.put("CLR", "Ape Atoll");
         cached_fairy_ring_names.put("CLS", "Hazelmere's home");
         // "D" Combinations
@@ -120,11 +122,10 @@ public class HouseOverlayPlugin extends Plugin
         cached_fairy_ring_names.put("DKP", "Karambwan fishing spots");
         cached_fairy_ring_names.put("DKR", "Edgeville");
         cached_fairy_ring_names.put("DKS", "Polar Hunter area");
+        cached_fairy_ring_names.put("DLP", "Grimstone");
         cached_fairy_ring_names.put("DLQ", "North of Nardah");
         cached_fairy_ring_names.put("DLR", "Poison Waste south of Isafdar");
         cached_fairy_ring_names.put("DLS", "Myreque hideout under The Hollows");
-
-
     }
 
     public String get_fairy_ring_name(String key)
