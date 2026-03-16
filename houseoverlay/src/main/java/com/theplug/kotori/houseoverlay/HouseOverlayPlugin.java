@@ -162,7 +162,7 @@ public class HouseOverlayPlugin extends Plugin
         fairy_ring_has_staff = false;
     }
 
-    private static final Set<Integer> REGION_IDS = Set.of(7257, 7512, 7513, 7514, 7768, 7769, 7770, 8025, 8026);
+    private static final Set<Integer> REGION_IDS = Set.of(7257, 7535, 7791, 8047, 8303, 7534, 7790, 8046, 8302);
     public boolean inHouse = false;
     public int currentanimation = 0;
     public boolean fairy_ring_has_staff = false;
