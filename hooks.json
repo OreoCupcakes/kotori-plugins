@@ -10,7 +10,7 @@
     {
       "n": "setCheckClick",
       "c": "ep",
-      "p": "bb",
+      "p": "cl",
       "m": 1
     },
     {
@@ -28,7 +28,7 @@
     {
       "n": "setViewportWalking",
       "c": "ep",
-      "p": "cl",
+      "p": "bb",
       "m": 1
     },
     {
@@ -52,7 +52,7 @@
     {
       "n": "getOldNpcOverheadArray",
       "c": "nq",
-      "p": "da",
+      "p": "ec",
       "m": 1
     },
     {
@@ -82,7 +82,7 @@
     {
       "n": "getActorAnimationObject",
       "c": "dj",
-      "p": "cq",
+      "p": "cy",
       "m": 1
     },
     {
@@ -94,7 +94,7 @@
     {
       "n": "menuOptionsCount",
       "c": "vx",
-      "p": "ua",
+      "p": "ah",
       "m": 1759446067
     },
     {
