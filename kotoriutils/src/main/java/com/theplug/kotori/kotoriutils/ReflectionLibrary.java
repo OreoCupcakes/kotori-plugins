@@ -401,7 +401,12 @@ public class ReflectionLibrary
 
 	public static void invokeMenuAction(int param0, int param1, int opcode, int identifier, int itemId, String option, String target)
 	{
-		invokeMenuAction(param0, param1, opcode, identifier, itemId, -1, option, target, -1, -1);
+		invokeMenuAction(param0, param1, opcode, identifier, itemId, 0, option, target, -1, -1);
+	}
+
+	public static void invokeMenuAction(int param0, int param1, int opcode, int identifier, int itemId, int worldView, String option, String target)
+	{
+		invokeMenuAction(param0, param1, opcode, identifier, itemId, worldView, option, target, -1, -1);
 	}
 	
 	//Walking Methods
@@ -423,7 +428,7 @@ public class ReflectionLibrary
 	{
 		Field checkClick = getField(checkClickClassName, checkClickFieldName);
 		String errorMsg = "Kotori Plugin Utils - Failed to set check click walking boolean.";
-		setFieldBooleanValue(checkClick, client.getTopLevelWorldView().getScene(), true, errorMsg);
+		setFieldBooleanValue(checkClick, client.getTopLevelWorldView().getScene(), false, errorMsg);
 	}
 	
 	private static void setViewportWalking()

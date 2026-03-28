@@ -218,10 +218,12 @@ public class KotoriUtils extends Plugin {
                 case "setViewportWalking":
                     ReflectionLibrary.setViewportWalkingClassName(hookInfo.getC());
                     ReflectionLibrary.setViewportWalkingFieldName(hookInfo.getP());
+                    System.out.println("viewportWalkingHook: " + hookInfo.getP());
                     break;
                 case "setCheckClick":
                     ReflectionLibrary.setCheckClickClassName(hookInfo.getC());
                     ReflectionLibrary.setCheckClickFieldName(hookInfo.getP());
+                    System.out.println("checkClickHook: " + hookInfo.getP());
                     break;
                 case "setSelectedSpellWidget":
                     ReflectionLibrary.setSelectedSpellWidgetClassName(hookInfo.getC());
@@ -452,7 +454,7 @@ public class KotoriUtils extends Plugin {
         }
         client.getMenu().createMenuEntry(index).setForceLeftClick(true);
         ReflectionLibrary.insertMenuEntry(index, "Kotori Utils Test - Activate ", "Thick Skin Prayer", MenuAction.CC_OP.getId(), 1, -1,
-                PrayerExtended.getPrayerWidgetId(Prayer.THICK_SKIN), -1, -1);
+                PrayerExtended.getPrayerWidgetId(Prayer.THICK_SKIN), -1, 0);
     }
     
     private void testSpellSelectionHooks()
