@@ -218,12 +218,10 @@ public class KotoriUtils extends Plugin {
                 case "setViewportWalking":
                     ReflectionLibrary.setViewportWalkingClassName(hookInfo.getC());
                     ReflectionLibrary.setViewportWalkingFieldName(hookInfo.getP());
-                    System.out.println("viewportWalkingHook: " + hookInfo.getP());
                     break;
                 case "setCheckClick":
                     ReflectionLibrary.setCheckClickClassName(hookInfo.getC());
                     ReflectionLibrary.setCheckClickFieldName(hookInfo.getP());
-                    System.out.println("checkClickHook: " + hookInfo.getP());
                     break;
                 case "setSelectedSpellWidget":
                     ReflectionLibrary.setSelectedSpellWidgetClassName(hookInfo.getC());
