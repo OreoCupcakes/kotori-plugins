@@ -401,7 +401,7 @@ public class ReflectionLibrary
 
 	public static void invokeMenuAction(int param0, int param1, int opcode, int identifier, int itemId, String option, String target)
 	{
-		invokeMenuAction(param0, param1, opcode, identifier, itemId, 0, option, target, -1, -1);
+		invokeMenuAction(param0, param1, opcode, identifier, itemId, client.getLocalPlayer().getWorldView().getId(), option, target, -1, -1);
 	}
 
 	public static void invokeMenuAction(int param0, int param1, int opcode, int identifier, int itemId, int worldView, String option, String target)
