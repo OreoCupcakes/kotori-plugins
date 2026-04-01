@@ -16,13 +16,13 @@
     {
       "n": "setSelectedSceneTileX",
       "c": "ep",
-      "p": "bv",
+      "p": "xj",
       "m": 1
     },
     {
       "n": "setSelectedSceneTileY",
       "c": "ep",
-      "p": "bz",
+      "p": "vo",
       "m": 1
     },
     {
@@ -76,13 +76,13 @@
     {
       "n": "isMoving",
       "c": "dj",
-      "p": "dj",
+      "p": "cl",
       "m": 1389085133
     },
     {
       "n": "getActorAnimationObject",
       "c": "dj",
-      "p": "cy",
+      "p": "cq",
       "m": 1
     },
     {
@@ -136,13 +136,13 @@
     {
       "n": "menuOptionsArray",
       "c": "vx",
-      "p": "ad",
+      "p": "af",
       "m": 1
     },
     {
       "n": "menuTargetsArray",
       "c": "vx",
-      "p": "af",
+      "p": "ad",
       "m": 1
     }
   ]
