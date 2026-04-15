@@ -10,25 +10,25 @@
     {
       "n": "setCheckClick",
       "c": "ep",
-      "p": "cl",
+      "p": "bb",
       "m": 1
     },
     {
       "n": "setSelectedSceneTileX",
       "c": "ep",
-      "p": "xj",
+      "p": "bv",
       "m": 1
     },
     {
       "n": "setSelectedSceneTileY",
       "c": "ep",
-      "p": "vo",
+      "p": "bz",
       "m": 1
     },
     {
       "n": "setViewportWalking",
       "c": "ep",
-      "p": "bb",
+      "p": "cl",
       "m": 1
     },
     {
@@ -52,7 +52,7 @@
     {
       "n": "getOldNpcOverheadArray",
       "c": "nq",
-      "p": "ec",
+      "p": "dt",
       "m": 1
     },
     {
@@ -76,19 +76,19 @@
     {
       "n": "isMoving",
       "c": "dj",
-      "p": "cl",
+      "p": "dj",
       "m": 1389085133
     },
     {
       "n": "getActorAnimationObject",
       "c": "dj",
-      "p": "cq",
+      "p": "cy",
       "m": 1
     },
     {
       "n": "getActorAnimationId",
       "c": "pc",
-      "p": "ah",
+      "p": "aj",
       "m": -576553293
     },
     {
@@ -136,13 +136,13 @@
     {
       "n": "menuOptionsArray",
       "c": "vx",
-      "p": "af",
+      "p": "ad",
       "m": 1
     },
     {
       "n": "menuTargetsArray",
       "c": "vx",
-      "p": "ad",
+      "p": "af",
       "m": 1
     }
   ]
