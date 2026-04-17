@@ -693,6 +693,12 @@ public final class BossModule implements Module
 			}
 			else if (styleToAvoid == 4)
 			{
+				//Deprioritize the dagger by skipping the checks
+				if (weapon.getWeaponType() == 3)
+				{
+					continue;
+				}
+
 				if (pickedWeapon == null)
 				{
 					pickedWeapon = weapon;
@@ -704,6 +710,12 @@ public final class BossModule implements Module
 			}
 			else
 			{
+				//Deprioritize the dagger by skipping the checks
+				if (weapon.getWeaponType() == 3)
+				{
+					continue;
+				}
+
 				if (styleToAvoid != weapon.getWeaponType())
 				{
 					if (pickedWeapon == null)
