@@ -123,9 +123,9 @@ public final class GraphicIDPlus
     public static final int HUNLLEF_CORRUPTED_RANGE_ATTACK = 1712;
     public static final int HUNLLEF_PRAYER_ATTACK = 1713;
     public static final int HUNLLEF_CORRUPTED_PRAYER_ATTACK = 1714;
-    public static final int HUNLLEF_ECHO_MAGE_ATTACK = 3159;
-    public static final int HUNLLEF_ECHO_RANGE_ATTACK = 3161;
-    public static final int HUNLLEF_ECHO_INVERSION_ATTACK = 3164;
+    public static final int HUNLLEF_ECHO_MAGE_ATTACK = 3682;
+    public static final int HUNLLEF_ECHO_RANGE_ATTACK = 3684;
+    public static final int HUNLLEF_ECHO_INVERSION_ATTACK = 3687;
 
 
     public static final int MOVE_ROCK = 2210;
