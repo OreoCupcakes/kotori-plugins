@@ -1,5 +1,6 @@
 package com.theplug.kotori.zulrahoverlay.constants;
 
+import net.runelite.api.WorldView;
 import net.runelite.api.coords.LocalPoint;
 
 public enum StandLocation
@@ -31,6 +32,6 @@ public enum StandLocation
 
 	public LocalPoint toLocalPoint()
 	{
-		return new LocalPoint(this.localX, this.localY, -1);
+		return new LocalPoint(this.localX, this.localY, WorldView.TOPLEVEL);
 	}
 }
