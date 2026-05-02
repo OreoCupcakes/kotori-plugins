@@ -97,11 +97,11 @@ public class CerberusHelperPlugin extends Plugin
 
 	private static final Set<Integer> CERBERUS_IDS = Set.of(NpcID.CERBERUS_ATTACKING, NpcID.CERBERUS_SITTING, NpcID.CERBERUS_RESETTING);
 
-	private static final int ECHO_PROJECTILE_MAGIC = 3119;
-	private static final int ECHO_PROJECTILE_RANGED = 3122;
-	private static final int ECHO_PROJECTILE_LAVA = 3124;
-	private static final int ECHO_GRAPHIC_LAVA_SPAWNING = 3124;
-	private static final int ECHO_GRAPHIC_LAVA_POOL = 3123;
+	private static final int ECHO_PROJECTILE_MAGIC = 3656;
+	private static final int ECHO_PROJECTILE_RANGED = 3659;
+	private static final int ECHO_PROJECTILE_LAVA = 3661;
+	private static final int ECHO_GRAPHIC_LAVA_SPAWNING = 3661;
+	private static final int ECHO_GRAPHIC_LAVA_POOL = 3660;
 
 	private static final int ANIMATION_GHOST_RANGE_ATTACK = 8530;
 	private static final int ANIMATION_GHOST_MAGIC_ATTACK = 8529;
