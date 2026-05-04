@@ -76,8 +76,8 @@ public class NightmarePlugin extends Plugin
 	private static final int NIGHTMARE_SHADOW = 1767;   // graphics object
 	private static final int NIGHTMARE_REGION_ID = 15515;
 
-	private static final LocalPoint MIDDLE_LOCATION = new LocalPoint(6208, 8128, -1);
-	private static final Set<LocalPoint> PHOSANIS_MIDDLE_LOCATIONS = ImmutableSet.of(new LocalPoint(6208, 7104, -1), new LocalPoint(7232, 7104, -1));
+	private static final LocalPoint MIDDLE_LOCATION = new LocalPoint(6208, 8128, WorldView.TOPLEVEL);
+	private static final Set<LocalPoint> PHOSANIS_MIDDLE_LOCATIONS = ImmutableSet.of(new LocalPoint(6208, 7104, WorldView.TOPLEVEL), new LocalPoint(7232, 7104, WorldView.TOPLEVEL));
 	private static final List<Integer> INACTIVE_TOTEMS = Arrays.asList(9435, 9438, 9441, 9444);
 	private static final List<Integer> ACTIVE_TOTEMS = Arrays.asList(9436, 9439, 9442, 9445);
 	@Getter(AccessLevel.PACKAGE)
