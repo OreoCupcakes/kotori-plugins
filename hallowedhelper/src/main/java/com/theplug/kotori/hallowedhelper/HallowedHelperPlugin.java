@@ -1397,11 +1397,11 @@ public class HallowedHelperPlugin extends Plugin {
         //objects.removeIf(o -> o.getTileObject() == event.getGameObject());
     }
 
-    LocalPoint floor4LeftLocation = new LocalPoint(6016, 8704, -1);
-    LocalPoint floor4RightLocation = new LocalPoint(6016, 9344, -1);
-    LocalPoint floor4BottomLocation1 = new LocalPoint(7296, 8704, -1);
-    LocalPoint floor4BottomLocation2 = new LocalPoint(7296, 9344, -1);
-    LocalPoint floor4BottomLocation3 = new LocalPoint(7040, 8704, -1);
+    LocalPoint floor4LeftLocation = new LocalPoint(6016, 8704, WorldView.TOPLEVEL);
+    LocalPoint floor4RightLocation = new LocalPoint(6016, 9344, WorldView.TOPLEVEL);
+    LocalPoint floor4BottomLocation1 = new LocalPoint(7296, 8704, WorldView.TOPLEVEL);
+    LocalPoint floor4BottomLocation2 = new LocalPoint(7296, 9344, WorldView.TOPLEVEL);
+    LocalPoint floor4BottomLocation3 = new LocalPoint(7040, 8704, WorldView.TOPLEVEL);
     public int floor_4_ticks_since_statue = 0;
     private boolean floor_4_first_fire_detected = false;
     public void Process_Floor_4_WizardSpot(GameObject g)
@@ -1437,8 +1437,8 @@ public class HallowedHelperPlugin extends Plugin {
 
     public GameObject floor5TopLeft;
     public GameObject floor5BottomLeft;
-    LocalPoint floor5TopLeft_lp = new LocalPoint(4096, 9088, -1);
-    LocalPoint floor5BottomLeft_lp = new LocalPoint(5632, 9088, -1);
+    LocalPoint floor5TopLeft_lp = new LocalPoint(4096, 9088, WorldView.TOPLEVEL);
+    LocalPoint floor5BottomLeft_lp = new LocalPoint(5632, 9088, WorldView.TOPLEVEL);
 
     public int floor_5_ticks_since_statue = 0;
     public boolean floor_5_first_fire_detected = false;
@@ -1460,8 +1460,8 @@ public class HallowedHelperPlugin extends Plugin {
     }
     public GameObject floor5_2ATopLeft;
     public GameObject floor5_2AOneUnderTopLeft;
-    LocalPoint floor5_2ATopLeft_lp = new LocalPoint(3840, 9088, -1);
-    LocalPoint floor5_2A1OneUnderTopLeft_lp = new LocalPoint(4096, 9088, -1);
+    LocalPoint floor5_2ATopLeft_lp = new LocalPoint(3840, 9088, WorldView.TOPLEVEL);
+    LocalPoint floor5_2A1OneUnderTopLeft_lp = new LocalPoint(4096, 9088, WorldView.TOPLEVEL);
 
     public int floor5_2A_ticks_since_statue = 0;
     public boolean floor5_2A_first_fire_detected = false;
@@ -1484,8 +1484,8 @@ public class HallowedHelperPlugin extends Plugin {
 
     public GameObject floor5_4BottomLeft;
     public GameObject floor5_4Bottomright;
-    LocalPoint floor5_4BottomLeft_lp = new LocalPoint(8960, 8448, -1);
-    LocalPoint floor5_4BottomRight_lp = new LocalPoint(8960, 9088, -1);
+    LocalPoint floor5_4BottomLeft_lp = new LocalPoint(8960, 8448, WorldView.TOPLEVEL);
+    LocalPoint floor5_4BottomRight_lp = new LocalPoint(8960, 9088, WorldView.TOPLEVEL);
 
     public int floor_5_4_ticks_since_statue = 0;
     public boolean floor_5_4_first_fire_detected = false;
@@ -1508,8 +1508,8 @@ public class HallowedHelperPlugin extends Plugin {
     
     public GameObject floor4_SouthA_BottomLeft;
     public GameObject floor4_SouthA_BottomMiddle;
-    LocalPoint floor4_SouthA_BottomLeft_LP = new LocalPoint(5248,5120, -1);
-    LocalPoint floor4_SouthA_BottomMiddle_LP = new LocalPoint(4736,5120, -1);
+    LocalPoint floor4_SouthA_BottomLeft_LP = new LocalPoint(5248,5120, WorldView.TOPLEVEL);
+    LocalPoint floor4_SouthA_BottomMiddle_LP = new LocalPoint(4736,5120, WorldView.TOPLEVEL);
     public int floor4_SouthA_ticks_since_statue = 0;
     public boolean floor4_SouthA_first_fire_detected = false;
     
@@ -1531,8 +1531,8 @@ public class HallowedHelperPlugin extends Plugin {
     
     public GameObject floor4_SouthB_BottomLeft;
     public GameObject floor4_SouthB_TopLeft;
-    LocalPoint floor4_SouthB_BottomLeft_LP = new LocalPoint(3328,2944, -1);
-    LocalPoint floor4_SouthB_TopLeft_LP = new LocalPoint(3328,3968, -1);
+    LocalPoint floor4_SouthB_BottomLeft_LP = new LocalPoint(3328,2944, WorldView.TOPLEVEL);
+    LocalPoint floor4_SouthB_TopLeft_LP = new LocalPoint(3328,3968, WorldView.TOPLEVEL);
     public int floor4_SouthB_ticks_since_statue = 0;
     public boolean floor4_SouthB_first_fire_detected = false;
     

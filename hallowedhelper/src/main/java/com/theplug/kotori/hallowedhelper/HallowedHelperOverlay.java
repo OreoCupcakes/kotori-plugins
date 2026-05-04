@@ -547,7 +547,7 @@ class HallowedHelperOverlay extends Overlay
         {
             if(wv.getPlane() == 2)
             {
-                LocalPoint lp = new LocalPoint(4160, 7104, -1);
+                LocalPoint lp = new LocalPoint(4160, 7104, WorldView.TOPLEVEL);
                 if(WorldPoint.fromLocal(client, lp).getPlane() != 2)
                 {
                     return;
@@ -1271,14 +1271,14 @@ class HallowedHelperOverlay extends Overlay
 
     public Polygon TileOffsetter(LocalPoint point, int offsetx, int offsety)
     {
-        return Perspective.getCanvasTilePoly(client, new LocalPoint(point.getX() + (offsetx * Perspective.LOCAL_TILE_SIZE), point.getY() + (offsety * Perspective.LOCAL_TILE_SIZE), -1));
+        return Perspective.getCanvasTilePoly(client, new LocalPoint(point.getX() + (offsetx * Perspective.LOCAL_TILE_SIZE), point.getY() + (offsety * Perspective.LOCAL_TILE_SIZE), WorldView.TOPLEVEL));
     }
 
     public void OverlayText(Graphics2D graphics, LocalPoint lp, String text, Color color, int offsetx, int offsety)
     {
         final Point textPoint = Perspective.getCanvasTextLocation(client,
                 graphics,
-                new LocalPoint(lp.getX() + (offsetx * Perspective.LOCAL_TILE_SIZE), lp.getY() + (offsety * Perspective.LOCAL_TILE_SIZE), -1),
+                new LocalPoint(lp.getX() + (offsetx * Perspective.LOCAL_TILE_SIZE), lp.getY() + (offsety * Perspective.LOCAL_TILE_SIZE), WorldView.TOPLEVEL),
                 text,
                 0);
 
@@ -1314,7 +1314,7 @@ class HallowedHelperOverlay extends Overlay
 
     public LocalPoint localpointoffset(LocalPoint lp, int offsetx, int offsety)
     {
-        return new LocalPoint(lp.getX() + (offsetx * Perspective.LOCAL_TILE_SIZE), lp.getY() + (offsety * Perspective.LOCAL_TILE_SIZE), -1);
+        return new LocalPoint(lp.getX() + (offsetx * Perspective.LOCAL_TILE_SIZE), lp.getY() + (offsety * Perspective.LOCAL_TILE_SIZE), WorldView.TOPLEVEL);
     }
 
     private static final int CROSSBOW_STATUE_ANIM_DEFAULT = 8681;
