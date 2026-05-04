@@ -28,6 +28,7 @@ package com.theplug.kotori.multiindicators;
 import net.runelite.api.Client;
 import net.runelite.api.Perspective;
 import net.runelite.api.Point;
+import net.runelite.api.WorldView;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.geometry.Geometry;
 import net.runelite.client.ui.overlay.Overlay;
@@ -94,11 +95,11 @@ public class MultiIndicatorsOverlay extends Overlay
 		}
 		path = Geometry.clipPath(path, viewArea);
 		path = Geometry.filterPath(path, (p1, p2) ->
-			Perspective.localToCanvas(client, new LocalPoint((int) p1[0], (int) p1[1], -1), client.getTopLevelWorldView().getPlane()) != null &&
-				Perspective.localToCanvas(client, new LocalPoint((int) p2[0], (int) p2[1], -1), client.getTopLevelWorldView().getPlane()) != null);
+			Perspective.localToCanvas(client, new LocalPoint((int) p1[0], (int) p1[1], WorldView.TOPLEVEL), client.getTopLevelWorldView().getPlane()) != null &&
+			Perspective.localToCanvas(client, new LocalPoint((int) p2[0], (int) p2[1], WorldView.TOPLEVEL), client.getTopLevelWorldView().getPlane()) != null);
 		path = Geometry.transformPath(path, coords ->
 		{
-			Point point = Perspective.localToCanvas(client, new LocalPoint((int) coords[0], (int) coords[1], -1), client.getTopLevelWorldView().getPlane());
+			Point point = Perspective.localToCanvas(client, new LocalPoint((int) coords[0], (int) coords[1], WorldView.TOPLEVEL), client.getTopLevelWorldView().getPlane());
 			if (point != null)
 			{
 				coords[0] = point.getX();
