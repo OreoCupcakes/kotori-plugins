@@ -16,13 +16,13 @@
     {
       "n": "setSelectedSceneTileX",
       "c": "ev",
-      "p": "bw",
+      "p": "by",
       "m": 1
     },
     {
       "n": "setSelectedSceneTileY",
       "c": "ev",
-      "p": "ba",
+      "p": "ha",
       "m": 1
     },
     {
@@ -76,13 +76,13 @@
     {
       "n": "isMoving",
       "c": "da",
-      "p": "cn",
+      "p": "dm",
       "m": 685222699
     },
     {
       "n": "getActorAnimationObject",
       "c": "da",
-      "p": "cm",
+      "p": "cz",
       "m": 1
     },
     {
