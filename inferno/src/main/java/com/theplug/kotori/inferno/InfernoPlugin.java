@@ -116,7 +116,7 @@ public class InfernoPlugin extends Plugin
 	private WorldPoint lastLocation = new WorldPoint(0, 0, 0);
 
 	@Getter(AccessLevel.PACKAGE)
-	private int currentWaveNumber;
+	private int currentWaveNumber = -1;
 
 	@Getter(AccessLevel.PACKAGE)
 	private final List<InfernoNPC> infernoNpcs = new ArrayList<>();
@@ -1083,6 +1083,7 @@ public class InfernoPlugin extends Plugin
 			case HEALER_JAD:
 				return config.prayerHealerJad();
 			case JAD:
+			case LEAGUE_JAD:
 				return config.prayerJad();
 			default:
 				return false;
@@ -1106,6 +1107,7 @@ public class InfernoPlugin extends Plugin
 			case HEALER_JAD:
 				return config.ticksOnNpcHealerJad();
 			case JAD:
+			case LEAGUE_JAD:
 				return config.ticksOnNpcJad();
 			case ZUK:
 				return config.ticksOnNpcZuk();
