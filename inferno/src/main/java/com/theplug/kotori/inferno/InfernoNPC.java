@@ -203,7 +203,7 @@ class InfernoNPC
 		}
 
 		//Jad animation detection
-		if (this.getType() == Type.JAD && npcAnimationId != -1 && npcAnimationId != this.lastAnimation)
+		if ((this.getType() == Type.JAD || this.getType() == Type.LEAGUE_JAD) && npcAnimationId != -1 && npcAnimationId != this.lastAnimation)
 		{
 			final Attack currentAttack = Attack.attackFromId(npcAnimationId);
 
@@ -239,6 +239,12 @@ class InfernoNPC
 					{
 						// Jad's cycle continuous after his animation + attack but there's no animation to alert it
 						this.updateNextAttack(this.getType().getDefaultAttack(), 8);
+					}
+					break;
+				case LEAGUE_JAD:
+					if (this.getNextAttack() != Attack.UNKNOWN)
+					{
+						this.updateNextAttack(this.getType().getDefaultAttack(), 6);
 					}
 					break;
 				case BLOB:
@@ -390,7 +396,8 @@ class InfernoNPC
 		RANGER(new int[]{NpcID.INFERNO_CREATURE_RANGER, NpcID.INFERNO_RANGER_FINALWAVE}, Attack.RANGED, 4, 98, 2),
 		MAGE(new int[]{NpcID.INFERNO_CREATURE_MAGER, NpcID.INFERNO_MAGER_FINALWAVE}, Attack.MAGIC, 4, 98, 1),
 		JAD(new int[]{NpcID.INFERNO_JAD, NpcID.INFERNO_JAD_FINALWAVE, NpcID.JAD_CHALLENGE_JAD}, Attack.UNKNOWN, 3, 99, 0),
-		HEALER_JAD(new int[]{NpcID.TZHAAR_FIGHTCAVE_SWARM_BOSS_CLERIC, NpcID.INFERNO_JAD_HEALER, NpcID.INFERNO_JAD_HEALER_FINALWAVE}, Attack.MELEE, 4, 1, 6),
+		LEAGUE_JAD(new int[]{ NpcID.JAD_CHALLENGE_MASTER, NpcID.JAD_CHALLENGE_MASTER_1OP, NpcID.JAD_CHALLENGE_MASTER_2OP}, Attack.UNKNOWN, 1, 99, 0),
+		HEALER_JAD(new int[]{NpcID.TZHAAR_FIGHTCAVE_SWARM_BOSS_CLERIC, NpcID.INFERNO_JAD_HEALER, NpcID.INFERNO_JAD_HEALER_FINALWAVE, NpcID.JAD_CHALLENGE_HEALER}, Attack.MELEE, 4, 1, 6),
 		ZUK(new int[]{NpcID.INFERNO_TZKALZUK_PLACEHOLDER}, Attack.UNKNOWN, 10, 99, 99),
 		HEALER_ZUK(new int[]{NpcID.INFERNO_ZUK_HEALER, NpcID.JAD_CHALLENGE_HEALER}, Attack.UNKNOWN, -1, 99, 100);
 
