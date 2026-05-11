@@ -506,7 +506,7 @@ public class InfernoPlugin extends Plugin
 	{
 		for (InfernoNPC infernoNPC : infernoNpcs)
 		{
-			infernoNPC.gameTick(client, lastLocation, finalPhase, ticksSinceFinalPhase);
+			infernoNPC.gameTick(client, config, lastLocation, finalPhase, ticksSinceFinalPhase);
 
 			if (infernoNPC.getType() == InfernoNPC.Type.ZUK && zukShieldCornerTicks == -1)
 			{
@@ -1083,7 +1083,6 @@ public class InfernoPlugin extends Plugin
 			case HEALER_JAD:
 				return config.prayerHealerJad();
 			case JAD:
-			case LEAGUE_JAD:
 				return config.prayerJad();
 			default:
 				return false;
@@ -1107,7 +1106,6 @@ public class InfernoPlugin extends Plugin
 			case HEALER_JAD:
 				return config.ticksOnNpcHealerJad();
 			case JAD:
-			case LEAGUE_JAD:
 				return config.ticksOnNpcJad();
 			case ZUK:
 				return config.ticksOnNpcZuk();

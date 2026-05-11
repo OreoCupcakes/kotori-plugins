@@ -140,6 +140,12 @@ public interface InfernoConfig extends Config
 	)
 	String ZukHealersSection = "Zuk Healers";
 
+	@ConfigSection(
+			name = "Jad Challenges",
+			description = "Configuration options for the Jad Challenges.",
+			position = 14
+	)
+	String JadChallengesSection = "Jad Challenges";
 
 	@ConfigItem(
 		position = 0,
@@ -946,6 +952,18 @@ public interface InfernoConfig extends Config
 		section = ZukSection
 	)
 	default boolean ticksOnNpcZukShield()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+			position = 0,
+			keyName = "sixTickJad",
+			name = "Enable 6 Tick Jads",
+			description = "Changes the attack speed of Jad to 6 ticks for the League's Infinite Jad challenge.",
+			section = JadChallengesSection
+	)
+	default boolean sixTickJad()
 	{
 		return false;
 	}
