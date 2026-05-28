@@ -16,13 +16,13 @@
     {
       "n": "setSelectedSceneTileX",
       "c": "ev",
-      "p": "by",
+      "p": "bw",
       "m": 1
     },
     {
       "n": "setSelectedSceneTileY",
       "c": "ev",
-      "p": "ha",
+      "p": "ba",
       "m": 1
     },
     {
@@ -82,7 +82,7 @@
     {
       "n": "getActorAnimationObject",
       "c": "da",
-      "p": "cz",
+      "p": "cm",
       "m": 1
     },
     {
