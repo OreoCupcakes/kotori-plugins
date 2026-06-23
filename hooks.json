@@ -35,19 +35,19 @@
       "n": "setSelectedSpellWidget",
       "c": "ft",
       "p": "nf",
-      "m": 124
+      "m": 169495907
     },
     {
       "n": "setSelectedSpellChildIndex",
       "c": "client",
       "p": "ni",
-      "m": 78
+      "m": 480695369
     },
     {
       "n": "setSelectedSpellItemId",
       "c": "client",
       "p": "nm",
-      "m": 78
+      "m": 2127909127
     },
     {
       "n": "getOldNpcOverheadArray",
