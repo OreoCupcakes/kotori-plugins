@@ -61,7 +61,6 @@ class DemonicGorilla
 		BOULDER
 	}
 
-	private final Client client;
 	@Getter(AccessLevel.PACKAGE)
 	private final NPC npc;
 
@@ -121,9 +120,8 @@ class DemonicGorilla
 	@Setter(AccessLevel.PACKAGE)
 	private int disabledMeleeMovementForTicks;
 
-	DemonicGorilla(NPC npc, Client client)
+	DemonicGorilla(NPC npc)
 	{
-		this.client = client;
 		this.npc = npc;
 		this.nextPosibleAttackStyles = Arrays.asList(ALL_REGULAR_ATTACK_STYLES);
 		this.nextAttackTick = -100;

@@ -155,7 +155,7 @@ public class DemonicGorillaPlugin extends Plugin
 		{
 			if (isNpcGorilla(npc.getId()))
 			{
-				gorillas.put(npc, new DemonicGorilla(npc, client));
+				gorillas.put(npc, new DemonicGorilla(npc));
 			}
 		}
 	}
@@ -746,7 +746,7 @@ public class DemonicGorillaPlugin extends Plugin
 				resetPlayers();
 			}
 
-			gorillas.put(npc, new DemonicGorilla(npc, client));
+			gorillas.put(npc, new DemonicGorilla(npc));
 		}
 	}
 
