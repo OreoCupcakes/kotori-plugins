@@ -52,7 +52,7 @@
     {
       "n": "getOldNpcOverheadArray",
       "c": "pi",
-      "p": "ea",
+      "p": "dc",
       "m": 1
     },
     {
@@ -76,7 +76,7 @@
     {
       "n": "isMoving",
       "c": "du",
-      "p": "dr",
+      "p": "cc",
       "m": 1538626549
     },
     {
@@ -94,43 +94,43 @@
     {
       "n": "menuOptionsCount",
       "c": "ww",
-      "p": "af",
+      "p": "oe",
       "m": 1968096801
     },
     {
       "n": "menuParam0Array",
       "c": "ww",
-      "p": "ap",
+      "p": "aa",
       "m": 1
     },
     {
       "n": "menuParam1Array",
       "c": "ww",
-      "p": "as",
+      "p": "ax",
       "m": 1
     },
     {
       "n": "menuTypesArray",
       "c": "ww",
-      "p": "al",
+      "p": "ae",
       "m": 1
     },
     {
       "n": "menuIdentifiersArray",
       "c": "ww",
-      "p": "aa",
+      "p": "al",
       "m": 1
     },
     {
       "n": "menuItemIdsArray",
       "c": "ww",
-      "p": "ax",
+      "p": "as",
       "m": 1
     },
     {
       "n": "menuWorldViewIdsArray",
       "c": "ww",
-      "p": "ae",
+      "p": "ap",
       "m": 1
     },
     {
