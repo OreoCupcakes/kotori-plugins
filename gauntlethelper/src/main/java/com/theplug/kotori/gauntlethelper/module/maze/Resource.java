@@ -61,8 +61,8 @@ public enum Resource
 	RAW_PADDLEFISH("Raw paddlefish", ItemID.GAUNTLET_RAW_FOOD, "You manage to catch a fish\\.", false),
 
 	//23866 23824
-	CRYSTAL_SHARDS("Crystal shards", ItemID.GAUNTLET_CRYSTAL_SHARD, "You find (\\d+) crystal shards\\.", false),
-	CORRUPTED_SHARDS("Corrupted shards", ItemID.GAUNTLET_CRYSTAL_SHARD_HM, "You find (\\d+) corrupted shards\\.", true),
+	CRYSTAL_SHARDS("Crystal shards", ItemID.GAUNTLET_CRYSTAL_SHARD, "You (?:find|gather) (?<quantity>\\d+) (?:crystal shards\\.|Crystal Shards)", false),
+	CORRUPTED_SHARDS("Corrupted shards", ItemID.GAUNTLET_CRYSTAL_SHARD_HM, "You (?:find|gather) (?<quantity>\\d+) (?:corrupted shards\\.|Crystal Shards)", true),
 
 	//23877 23837
 	CRYSTAL_ORE("Crystal ore", ItemID.GAUNTLET_ORE, "You manage to mine some ore\\.", false),
@@ -132,7 +132,7 @@ public enum Resource
 				continue;
 			}
 
-			final int itemCount = matcher.groupCount() == 1 ? Integer.parseInt(matcher.group(1)) : 1;
+			final int itemCount = matcher.groupCount() == 1 ? Integer.parseInt(matcher.group("quantity")) : 1;
 
 			return new AbstractMap.SimpleImmutableEntry<>(resource, itemCount);
 		}

@@ -43,6 +43,7 @@ import java.util.regex.Pattern;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
+import net.runelite.api.ChatMessageType;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.ui.overlay.infobox.InfoBox;
 import net.runelite.client.ui.overlay.infobox.InfoBoxManager;
@@ -53,7 +54,7 @@ import net.runelite.client.util.Text;
 @Singleton
 class ResourceManager
 {
-	private static final Pattern PATTERN_RESOURCE_DROP = Pattern.compile("^.+ drop:\\s+((?<quantity>\\d+) x )?(?<name>.+)$");
+	private static final Pattern PATTERN_RESOURCE_DROP = Pattern.compile("^.+ (?:drop:|gather)\\s+((?<quantity>\\d+) x )?(?<name>.+)$");
 	private static final int SHARD_COUNT_BREAK_DOWN = 80;
 	private final EnumMap<Resource, ResourceCounter> counterByResource = new EnumMap<>(Resource.class);
 
