@@ -10,25 +10,25 @@
     {
       "n": "setCheckClick",
       "c": "ez",
-      "p": "cz",
+      "p": "bi",
       "m": 1
     },
     {
       "n": "setSelectedSceneTileX",
       "c": "ez",
-      "p": "bj",
+      "p": "rs",
       "m": 1
     },
     {
       "n": "setSelectedSceneTileY",
       "c": "ez",
-      "p": "qc",
+      "p": "yn",
       "m": 1
     },
     {
       "n": "setViewportWalking",
       "c": "ez",
-      "p": "bi",
+      "p": "cz",
       "m": 1
     },
     {
@@ -76,19 +76,19 @@
     {
       "n": "isMoving",
       "c": "dh",
-      "p": "bb",
+      "p": "db",
       "m": -1798356091
     },
     {
       "n": "getActorAnimationObject",
       "c": "dh",
-      "p": "cw",
+      "p": "cn",
       "m": 1
     },
     {
       "n": "getActorAnimationId",
       "c": "qr",
-      "p": "af",
+      "p": "ax",
       "m": 1684838611
     },
     {
@@ -100,7 +100,7 @@
     {
       "n": "menuParam0Array",
       "c": "wz",
-      "p": "as",
+      "p": "ac",
       "m": 1
     },
     {
@@ -112,13 +112,13 @@
     {
       "n": "menuTypesArray",
       "c": "wz",
-      "p": "ac",
+      "p": "as",
       "m": 1
     },
     {
       "n": "menuIdentifiersArray",
       "c": "wz",
-      "p": "ag",
+      "p": "ab",
       "m": 1
     },
     {
@@ -130,7 +130,7 @@
     {
       "n": "menuWorldViewIdsArray",
       "c": "wz",
-      "p": "ab",
+      "p": "ag",
       "m": 1
     },
     {
