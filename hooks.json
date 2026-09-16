@@ -16,13 +16,13 @@
     {
       "n": "setSelectedSceneTileX",
       "c": "ez",
-      "p": "bw",
+      "p": "sa",
       "m": 1
     },
     {
       "n": "setSelectedSceneTileY",
       "c": "ez",
-      "p": "bb",
+      "p": "vb",
       "m": 1
     },
     {
@@ -52,7 +52,7 @@
     {
       "n": "getOldNpcOverheadArray",
       "c": "pl",
-      "p": "en",
+      "p": "dk",
       "m": 1
     },
     {
@@ -88,7 +88,7 @@
     {
       "n": "getActorAnimationId",
       "c": "qr",
-      "p": "ag",
+      "p": "af",
       "m": 1684838611
     },
     {
