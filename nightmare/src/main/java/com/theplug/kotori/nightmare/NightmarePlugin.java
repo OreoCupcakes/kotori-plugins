@@ -614,6 +614,6 @@ public class NightmarePlugin extends Plugin
 	
 	private boolean inNightmareRegion()
 	{
-		return MiscUtilities.getPlayerRegionID() == NIGHTMARE_REGION_ID;
+		return MiscUtilities.isInMappedRegions(NIGHTMARE_REGION_ID);
 	}
 }
