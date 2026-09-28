@@ -11,6 +11,7 @@ import net.runelite.client.chat.QueuedMessage;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.util.Collections;
 
 public class MiscUtilities
 {
@@ -90,5 +91,17 @@ public class MiscUtilities
 	public static int getPlayerRegionID()
 	{
 		return WorldPoint.fromLocalInstance(client, client.getLocalPlayer().getLocalLocation()).getRegionID();
+	}
+
+	public static boolean isInMappedRegions(int regionId)
+	{
+		for (int id : client.getTopLevelWorldView().getMapRegions())
+		{
+			if (id == regionId)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 }
