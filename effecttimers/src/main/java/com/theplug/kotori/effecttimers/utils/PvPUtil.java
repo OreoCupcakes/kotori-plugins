@@ -132,7 +132,7 @@ public class PvPUtil
         return wildernessLevel != 0 && Math.abs(client.getLocalPlayer().getCombatLevel() - player.getCombatLevel()) <= wildernessLevel;
     }
 
-    public static int calculateRisk(Client client, ItemManager itemManager)
+    public static long calculateRisk(Client client, ItemManager itemManager)
     {
         ItemContainer equipment = client.getItemContainer(InventoryID.WORN);
         ItemContainer inventory = client.getItemContainer(InventoryID.INV);
@@ -146,11 +146,11 @@ public class PvPUtil
         }
         Item[] items = ArrayUtils.addAll(Objects.requireNonNull(client.getItemContainer(InventoryID.WORN)).getItems(),
                 Objects.requireNonNull(client.getItemContainer(InventoryID.INV)).getItems());
-        TreeMap<Integer, Item> priceMap = new TreeMap<>(Comparator.comparingInt(Integer::intValue));
+        TreeMap<Long, Item> priceMap = new TreeMap<>(Comparator.comparingLong(Long::longValue));
         int wealth = 0;
         for (Item i : items)
         {
-            int value = (itemManager.getItemPrice(i.getId()) * i.getQuantity());
+            long value = (itemManager.getItemPrice(i.getId()) * i.getQuantity());
 
             final ItemComposition itemComposition = itemManager.getItemComposition(i.getId());
             if (!itemComposition.isTradeable() && value == 0)
@@ -168,7 +168,6 @@ public class PvPUtil
             }
             wealth += value;
         }
-        return Integer.parseInt(QuantityFormatter.quantityToRSDecimalStack(priceMap.keySet().stream().mapToInt(Integer::intValue).sum()));
-
+        return Long.parseLong(QuantityFormatter.formatNumber(priceMap.keySet().stream().mapToLong(Long::longValue).sum()));
     }
 }
