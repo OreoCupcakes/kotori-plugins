@@ -52,7 +52,7 @@
     {
       "n": "getOldNpcOverheadArray",
       "c": "ps",
-      "p": "dq",
+      "p": "ex",
       "m": 1
     },
     {
@@ -136,13 +136,13 @@
     {
       "n": "menuOptionsArray",
       "c": "wk",
-      "p": "ag",
+      "p": "ak",
       "m": 1
     },
     {
       "n": "menuTargetsArray",
       "c": "wk",
-      "p": "ak",
+      "p": "ag",
       "m": 1
     }
   ]
