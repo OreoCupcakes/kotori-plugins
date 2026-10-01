@@ -1,13 +1,16 @@
 package com.theplug.kotori.kotoriutils;
 
 import com.google.gson.*;
+import com.google.inject.Module;
 import com.google.inject.Provides;
+import com.google.inject.util.Providers;
 import com.theplug.kotori.kotoriutils.gson.HookInfo;
 import com.theplug.kotori.kotoriutils.gson.Hooks;
 import com.theplug.kotori.kotoriutils.methods.MiscUtilities;
 import com.theplug.kotori.kotoriutils.methods.PrayerInteractions;
 import com.theplug.kotori.kotoriutils.rlapi.PrayerExtended;
 import com.theplug.kotori.kotoriutils.rlapi.WidgetInfoPlus;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.api.coords.WorldPoint;
@@ -47,8 +50,11 @@ public class KotoriUtils extends Plugin {
     private ConfigManager configManager;
     @Inject
     private ClientThread clientThread;
+    @Inject
+    private KotoriUtilsServiceImpl kotoriUtilsService;
 
     private Gson gson;
+    @Getter
     private Hooks rsHooks;
     private boolean hooksLoaded;
 
@@ -56,6 +62,12 @@ public class KotoriUtils extends Plugin {
     KotoriUtilsConfig provideConfig(ConfigManager configManager)
     {
         return configManager.getConfig(KotoriUtilsConfig.class);
+    }
+
+    @Override
+    public Module getPublicModule()
+    {
+        return b -> b.bind(KotoriUtilsPluginService.class).toProvider(Providers.of(kotoriUtilsService));
     }
 
     @Override
